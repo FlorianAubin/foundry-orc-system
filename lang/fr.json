@@ -1,6 +1,6 @@
 {
   "orc": {
-    "damagetypes": {
+    "damagetypelist": {
       "none": "",
       "piercing": "Perçant",
       "slashing": "Tranchant",

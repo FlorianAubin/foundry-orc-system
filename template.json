@@ -12,7 +12,7 @@
       "templates": ["itemDescription"],
       "damage": 0,
       "damageType": "piercing",
-      "range": "cac",
+      "range": 0,
       "effects": "",
       "ammo": 0,
       "weight": 0,

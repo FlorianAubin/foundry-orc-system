@@ -1,8 +1,8 @@
-export const orc = {};
+export const ORC = {};
 
-orc.damageTypes = {
+ORC.damageTypeList = {
   none: "",
-  piercing: "orc.damagetypes.piercing",
-  slashing: "orc.damagetypes.slashing",
-  blunt: "orc.damagetypes.blunt",
+  piercing: "orc.damagetypelist.piercing",
+  slashing: "orc.damagetypelist.slashing",
+  blunt: "orc.damagetypelist.blunt",
 };

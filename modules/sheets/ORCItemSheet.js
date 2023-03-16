@@ -3,11 +3,12 @@ export default class ORCItemSheet extends ItemSheet {
     return `systems/orc/templates/sheets/${this.item.type}-sheet.html`;
   }
 
-  getData() {
-    const data = super.getData();
+  getData(options) {
+    const data = super.getData(options);
 
-    data.config = CONFIG.orc;
+    data.config = CONFIG.ORC;
 
+    //console.log(data);
     return data;
   }
 }

@@ -26,42 +26,52 @@
       </tr>
       <tr>
         <td>
-          <select name="data.damageType">
-            {{#select data.damageType}} {{#each config.damageTypes as |name
-            type|}}
-            <option value="{{type}}">{{name}}</option>
-            {{/each}} {{/select}}
-          </select>
+          <div class="form-group">
+            <select name="system.damageType">
+              {{#select item.system.damageType}} {{#each config.damageTypeList
+              as |name type|}}
+              <option value="{{type}}">{{name}}</option>
+              {{/each}} {{/select}}
+            </select>
+          </div>
         </td>
         <td>
           <input
-            name="data.damage"
+            name="system.damage"
             type="text"
-            value="{{data.damage}}"
+            value="{{item.system.damage}}"
             data-dtype="Number"
-          />
-        </td>
-        <td>
-          <input name="data.range" type="text" value="{{data.range}}" />
-        </td>
-        <td>
-          <input
-            name="data.weight"
-            type="text"
-            value="{{data.weight}}"
-            data-dtype="Number"
+            placeholder="0"
           />
         </td>
         <td>
           <input
-            name="data.checkbox"
+            name="system.range"
+            type="text"
+            value="{{item.system.range}}"
+            data-dtype="Number"
+            placeholder="0"
+          />
+        </td>
+        <td>
+          <input
+            name="system.weight"
+            type="text"
+            value="{{item.system.weight}}"
+            data-dtype="Number"
+            placeholder="0"
+          />
+        </td>
+        <td>
+          <input
+            name="system.checkbox"
             type="checkbox"
             {{checked
-            data.checkbox}}
+            item.system.checkbox}}
           />
         </td>
       </tr>
     </table>
-    <textarea name="data.description"> {{data.description}} </textarea>
+    <textarea name="system.description">{{item.system.description}}</textarea>
   </div>
 </form>
