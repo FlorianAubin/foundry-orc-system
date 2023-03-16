@@ -1,0 +1,18 @@
+{
+  "orc": {
+    "damagetypes": {
+      "none": "",
+      "piercing": "Perçant",
+      "slashing": "Tranchant",
+      "blunt": "Contendant"
+    },
+    "weapon": {
+      "damage": "Dégâts",
+      "damageType": "Type de dégâts",
+      "range": "Portée",
+      "effects": "Effets",
+      "ammo": "Nombre de munitions",
+      "weight": "Poids"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "Actor": {},
+
+  "Item": {
+    "types": ["weapon", "armor"],
+    "templates": {
+      "itemDescription": {
+        "description": ""
+      }
+    },
+    "weapon": {
+      "templates": ["itemDescription"],
+      "damage": 0,
+      "damageType": "piercing",
+      "range": "cac",
+      "effects": "",
+      "ammo": 0,
+      "weight": 0,
+      "checkbox": false
+    },
+    "armor": {
+      "templates": ["itemDescription"],
+      "armorValue": 0,
+      "weight": 0
+    }
+  }
+}
