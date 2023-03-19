@@ -64,14 +64,15 @@
         </td>
         <td>
           <input
-            name="system.checkbox"
+            name="system.useammo"
             type="checkbox"
             {{checked
-            item.system.checkbox}}
+            item.system.useammo}}
           />
         </td>
       </tr>
     </table>
-    <textarea name="system.description">{{item.system.description}}</textarea>
+    {{editor content=item.system.description target="system.description"
+    button=true owner=owner editable=editable}}
   </div>
 </form>

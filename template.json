@@ -1,27 +1,168 @@
 {
-  "Actor": {},
+  "Actor": {
+    "types": ["character"],
+    "character": {
+      "carac": {
+        "physics": 0,
+        "social": 0,
+        "intel": 0
+      },
+      "hp": {
+        "value": 0,
+        "max": 0
+      },
+      "mp": {
+        "value": 0,
+        "max": 0
+      },
+      "ap": {
+        "native": 0,
+        "value": 0
+      },
+      "weight": {
+        "native": 0,
+        "value": 0
+      },
+      "defense": 0,
+      "reaction": 0,
+      "posture": {
+        "name": "default",
+        "defenceModif": 0,
+        "reactionModif": 0,
+        "damageModif": 0
+      },
+      "details": {
+        "race": "",
+        "job": "",
+        "lvl": "",
+        "faction": ""
+      },
+      "passives": [],
+      "actives": [],
+      "weapons": [],
+      "ammo": [],
+      "armor": [],
+      "generalitem": [],
+      "status": {
+        "burn": 0,
+        "bleed": 0,
+        "poison": 0,
+        "onfire": false
+      },
+      "wounds": [],
+      "diseases": [],
+      "mutation": [],
+      "description": ""
+    }
+  },
 
   "Item": {
-    "types": ["weapon", "armor"],
+    "types": [
+      "weapon",
+      "ammo",
+      "armor",
+      "consumable",
+      "generalitem",
+      "enchant",
+      "spell",
+      "active",
+      "passive",
+      "wound",
+      "disease",
+      "mutation"
+    ],
     "templates": {
       "itemDescription": {
         "description": ""
+      },
+      "itemEffect": {
+        "effect": ""
+      },
+      "itemweight": {
+        "weight": 0
       }
     },
     "weapon": {
-      "templates": ["itemDescription"],
       "damage": 0,
       "damageType": "piercing",
       "range": 0,
-      "effects": "",
-      "ammo": 0,
-      "weight": 0,
-      "checkbox": false
+      "defence": 0,
+      "reaction": 0,
+      "hand": 1,
+      "useammo": false,
+      "attackscore": 0,
+      "enchant": [],
+      "templates": ["itemDescription", "itemEffect", "weight"]
+    },
+    "ammo": {
+      "damage": 0,
+      "templates": ["itemDescription", "itemEffect", "weight"]
     },
     "armor": {
-      "templates": ["itemDescription"],
-      "armorValue": 0,
-      "weight": 0
+      "PA": 0,
+      "defence": 0,
+      "reaction": 0,
+      "enchant": [],
+      "localisation": "head",
+      "templates": ["itemDescription", "weight"]
+    },
+    "consumable": {
+      "duration": 0,
+      "templates": ["itemDescription", "itemEffect"]
+    },
+    "generalitem": {
+      "templates": ["itemDescription"]
+    },
+    "enchant": {
+      "damageModif": 0,
+      "HPModif": 0,
+      "MPModif": 0,
+      "PAModif": 0,
+      "defenceModif": 0,
+      "reactionModif": 0,
+      "caracModif": {
+        "physics": 0,
+        "social": 0,
+        "intel": 0
+      },
+      "attackScoreModif": 0,
+      "templates": ["itemDescription", "itemEffect"]
+    },
+    "spell": {
+      "MPcost": 0,
+      "actionCost": 0,
+      "damage": 0,
+      "damageType": "",
+      "duration": 0,
+      "templates": ["itemDescription", "itemEffect"]
+    },
+    "active": {
+      "duration": 0,
+      "damage": 0,
+      "templates": ["itemDescription"]
+    },
+    "passive": {
+      "roll": 0,
+      "templates": ["itemDescription"]
+    },
+    "wound": {
+      "caracModif": {
+        "physics": 0,
+        "social": 0,
+        "intel": 0
+      },
+      "templates": ["itemDescription", "itemEffect"]
+    },
+    "disease": {
+      "caracModif": {
+        "physics": 0,
+        "social": 0,
+        "intel": 0
+      },
+      "templates": ["itemDescription", "itemEffect"]
+    },
+    "mutation": {
+      "templates": ["itemDescription", "itemEffect"]
     }
   }
 }

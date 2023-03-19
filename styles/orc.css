@@ -1,0 +1,12 @@
+.orc.sheet.item form {
+  display: flex;
+  flex-direction: column;
+}
+.orc.sheet.item .sheet-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.orc.sheet.item .editor {
+  height: 100%;
+}

@@ -8,19 +8,19 @@
       "flags": {}
     }
   ],
-  "version": 0.03,
+  "version": 0.061,
   "compatibility": {
     "minimum": "10",
     "verified": "10"
   },
-  "esmodules": ["orc.js"],
-  "styles": ["styles/orc.css"],
+  "esmodules": ["./modules/orc.js"],
+  "styles": ["./styles/orc.css"],
   "packs": [],
   "languages": [
     {
       "lang": "fr",
       "name": "Français",
-      "path": "lang/fr.json"
+      "path": "./lang/fr.json"
     }
   ],
   "gridDistance": 2,

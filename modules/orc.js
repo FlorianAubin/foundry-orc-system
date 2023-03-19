@@ -1,7 +1,7 @@
-import { ORC } from "./modules/config.js";
-import ORCItemSheet from "./modules/sheets/ORCItemSheet.js";
+import { ORC } from "./config.js";
+import ORCItemSheet from "./sheets/ORCItemSheet.js";
 
-Hooks.once("init", function () {
+Hooks.once("init", async function () {
   console.log("orc | Initialising the ORC system");
 
   CONFIG.ORC = ORC;
