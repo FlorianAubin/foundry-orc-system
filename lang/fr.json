@@ -12,6 +12,12 @@
       "effects": "Effets",
       "ammo": "Nombre de munitions",
       "weight": "Poids"
-    }
+    },
+    "name": "Nom",
+    "race": "Race",
+    "job": "Job",
+    "lvl": "Niveau",
+    "faction": "Faction",
+    "hp": "HP"
   }
 }

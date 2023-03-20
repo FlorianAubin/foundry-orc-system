@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "gulp-less": "^5.0.0",
-    "gulp-sass": "^5.1.0"
-  }
-}

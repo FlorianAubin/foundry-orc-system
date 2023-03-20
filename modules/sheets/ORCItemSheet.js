@@ -16,7 +16,7 @@ export default class ORCItemSheet extends ItemSheet {
 
     data.config = CONFIG.ORC;
 
-    //console.log(data);
+    console.log(data);
     return data;
   }
 }
