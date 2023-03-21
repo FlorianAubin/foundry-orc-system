@@ -46,9 +46,8 @@
   flex-direction: column;
   margin: 0 0 1em 0;
 }
-.orc.sheet.actor .main .content .editor {
+.orc.sheet.actor .editor {
   height: 100%;
-  width: 100%;
   box-shadow: inset 0 0 6px black;
 }
 .orc.sheet.item textarea {
@@ -68,8 +67,7 @@
   flex-direction: column;
   height: 100%;
 }
-.orc.sheet.item .main .editor {
+.orc.sheet.item .editor {
   height: 100%;
-  width: 100%;
   box-shadow: inset 0 0 6px black;
 }
