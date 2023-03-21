@@ -11,12 +11,42 @@ export default class ORCItemSheet extends ItemSheet {
     return `systems/orc/templates/sheets/${this.item.type}-sheet.html`;
   }
 
-  getData() {
-    const data = super.getData();
+  /** @override **/
+
+  getData(options) {
+    const data = super.getData(options);
 
     data.config = CONFIG.ORC;
 
-    console.log(data);
+    data.unlocked = this.item.getFlag(game.system.id, "SheetUnlocked");
+
+    //console.log(data);
     return data;
+  }
+
+  activateListeners(html) {
+    super.activateListeners(html);
+
+    html.find(".sheet-change-lock").click(this._onSheetChangelock.bind(this));
+  }
+
+  /*********/
+
+  /**
+   * Manage the lock/unlock button on the sheet
+   */
+  async _onSheetChangelock(event) {
+    event.preventDefault();
+
+    let flagData = await this.item.getFlag(game.system.id, "SheetUnlocked");
+    flagData
+      ? await this.item.unsetFlag(game.system.id, "SheetUnlocked")
+      : await this.item.setFlag(
+          game.system.id,
+          "SheetUnlocked",
+          "SheetUnlocked"
+        );
+
+    this.item.sheet.render(true);
   }
 }

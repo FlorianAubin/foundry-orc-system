@@ -1,78 +1,110 @@
 <form class="{{cssClass}}" autocomplete="off">
-  <header class="sheet-header">
-    <img
-      src="{{item.img}}"
-      data-edit="img"
-      title="{{item.name}}"
-      height="64"
-      width="64"
-    />
-    <h1>
-      <input
-        name="name"
-        type="text"
-        value="{{item.name}}"
-        placeholder="{{ localize 'Name' }}"
+  <div class="main">
+    <div class="header">
+      <div class="right-icon">
+        <a class="sheet-change-lock" title="lock/unlock sheet">
+          {{#if unlocked}}
+          <i class="fas fa-lock-open"></i>
+          {{else}}
+          <i class="fas fa-lock"></i>
+          {{/if}}
+        </a>
+      </div>
+      <img
+        src="{{item.img}}"
+        data-edit="img"
+        title="{{item.name}}"
+        height="64"
+        width="64"
       />
-    </h1>
-  </header>
-  <div>
-    <table>
-      <tr>
-        <th>{{localize "orc.weapon.damageType"}}</th>
-        <th>{{localize "orc.weapon.damage"}}</th>
-        <th>{{localize "orc.weapon.range"}}</th>
-        <th>{{localize "orc.weapon.weight"}}</th>
-      </tr>
-      <tr>
-        <td>
-          <div class="form-group">
+      <h1 align="center">
+        <input
+          name="name"
+          type="text"
+          value="{{item.name}}"
+          placeholder="{{localize 'Name'}}"
+        />
+      </h1>
+    </div>
+    <div class="content">
+      <table>
+        <tr>
+          <th>{{localize "orc.weapon.damageType"}}</th>
+          <th>{{localize "orc.weapon.damage"}}</th>
+          <th>{{localize "orc.weapon.range"}}</th>
+          <th>{{localize "orc.weapon.weight"}}</th>
+        </tr>
+        <tr>
+          <td align="center">
+            {{#if unlocked}}
             <select name="system.damageType">
               {{#select item.system.damageType}} {{#each config.damageTypeList
               as |name type|}}
-              <option value="{{type}}">{{name}}</option>
+              <option value="{{type}}">{{localize name}}</option>
               {{/each}} {{/select}}
             </select>
-          </div>
-        </td>
-        <td>
-          <input
-            name="system.damage"
-            type="text"
-            value="{{item.system.damage}}"
-            data-dtype="Number"
-            placeholder="0"
-          />
-        </td>
-        <td>
-          <input
-            name="system.range"
-            type="text"
-            value="{{item.system.range}}"
-            data-dtype="Number"
-            placeholder="0"
-          />
-        </td>
-        <td>
-          <input
-            name="system.weight"
-            type="text"
-            value="{{item.system.weight}}"
-            data-dtype="Number"
-            placeholder="0"
-          />
-        </td>
-        <td>
-          <input
-            name="system.useammo"
-            type="checkbox"
-            {{checked
-            item.system.useammo}}
-          />
-        </td>
-      </tr>
-    </table>
-    {{editor content=item.system.description target="system.description"
-    button=true owner=owner editable=editable}}
+            {{else}}
+            <span>{{localize item.system.damageType}}</span>
+            {{/if}}
+          </td>
+          <td align="center">
+            {{#if unlocked}}
+            <input
+              name="system.damage"
+              type="text"
+              value="{{item.system.damage}}"
+              placeholder="0"
+            />
+            {{else}}
+            <span>{{item.system.damage}}</span>
+            {{/if}}
+          </td>
+          <td align="center">
+            {{#if unlocked}}
+            <input
+              name="system.range"
+              type="Number"
+              value="{{item.system.range}}"
+              placeholder="0"
+            />
+            {{else}}
+            <span>{{item.system.range}}</span>
+            {{/if}}
+          </td>
+          <td align="center">
+            {{#if unlocked}}
+            <input
+              name="system.weight"
+              type="Number"
+              value="{{item.system.weight}}"
+              placeholder="0"
+            />
+            {{else}}
+            <span>{{item.system.weight}}</span>
+            {{/if}}
+          </td>
+          <td align="center">
+            {{#if unlocked}}
+            <input
+              name="system.useammo"
+              type="checkbox"
+              {{checked
+              item.system.useammo}}
+            />
+            {{else}}
+            <input
+              name="system.useammo"
+              type="checkbox"
+              {{checked
+              item.system.useammo}}
+              onclick="return false;"
+            />
+            {{/if}}
+          </td>
+        </tr>
+      </table>
+      {{editor item.system.description target="system.description" button=true
+      owner=owner editable=editable}}
+    </div>
   </div>
 </form>

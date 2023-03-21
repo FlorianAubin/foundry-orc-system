@@ -1,4 +1,7 @@
 {
+  "piercing": "Perçant",
+  "slashing": "Tranchant",
+  "blunt": "Contendant",
   "orc": {
     "damagetypelist": {
       "piercing": "Perçant",
@@ -18,6 +21,7 @@
     "job": "Job",
     "lvl": "Niveau",
     "faction": "Faction",
-    "hp": "HP"
+    "hp": "HP",
+    "mp": "MP"
   }
 }

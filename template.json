@@ -16,12 +16,18 @@
           "value": 0
         }
       },
+      "roll": {
+        "limitSuccessCrit": 1,
+        "limitFailCrit": 100
+      },
       "hp": {
         "value": 0,
+        "valueMaxBase": 0,
         "valueMax": 0
       },
       "mp": {
         "value": 0,
+        "valueMaxBase": 0,
         "valueMax": 0
       },
       "ap": {
@@ -47,21 +53,12 @@
         "lvl": 0,
         "faction": ""
       },
-      "passives": [],
-      "actives": [],
-      "weapons": [],
-      "ammo": [],
-      "armor": [],
-      "generalitem": [],
       "status": {
         "burn": 0,
         "bleed": 0,
         "poison": 0,
         "onfire": false
       },
-      "wounds": [],
-      "diseases": [],
-      "mutation": [],
       "arms": 2,
       "description": ""
     }
@@ -102,7 +99,6 @@
       "hand": 1,
       "useammo": false,
       "attackscore": 0,
-      "enchant": [],
       "templates": ["itemDescription", "itemEffect", "weight"]
     },
     "ammo": {
@@ -113,7 +109,6 @@
       "PA": 0,
       "defence": 0,
       "reaction": 0,
-      "enchant": [],
       "localisation": "head",
       "templates": ["itemDescription", "weight"]
     },

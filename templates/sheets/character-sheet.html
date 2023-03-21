@@ -1,127 +1,206 @@
 <form class="{{ccsClass}}" autocomplete="off">
-  <section class="flexrow">
-    <img
-      style="max-width: 200px; margin-left: 15px; margin-right: 15px"
-      src="{{actor.img}}"
-      data-edit="img"
-      title="{{actor.name}}"
-      height="150"
-      width="200"
-    />
-    <table>
-      <th colspan="4">
-        <h1 class="name" align="center">
-          <input
-            name="name"
-            type="text"
-            value="{{actor.name}}"
-            placeholder="{{localize 'orc.name'}}"
-            onClick="this.select();"
-          />
-        </h1>
-      </th>
-      <tr>
-        <td>
-          {{localize "orc.race"}}
-          <h4 class="details-race">
+  <div class="main">
+    <div class="header">
+      <div class="right-icon">
+        <a class="sheet-change-lock" title="lock/unlock sheet">
+          {{#if unlocked}}
+          <i class="fas fa-lock-open"></i>
+          {{else}}
+          <i class="fas fa-lock"></i>
+          {{/if}}
+        </a>
+      </div>
+      <div>
+        <img
+          style="max-width: 200px; margin-left: 15px; margin-right: 15px"
+          src="{{actor.img}}"
+          data-edit="img"
+          title="{{actor.name}}"
+          height="150"
+          width="200"
+        />
+      </div>
+      <div class="info">
+        <div class="name">
+          <h1 class="name" align="center">
+            {{#if unlocked}}
             <input
+              name="name"
               type="text"
-              name="system.details.race"
-              value="{{actor.system.details.race}}"
-              placeholder="{{localize 'orc.race'}}"
+              value="{{actor.name}}"
+              placeholder="{{localize 'orc.name'}}"
               onClick="this.select();"
             />
-          </h4>
-        </td>
-        <td>
-          {{localize "orc.job"}}
-          <h4 class="details-job">
-            <input
-              type="text"
-              name="system.details.job"
-              value="{{actor.system.details.job}}"
-              placeholder="{{localize 'orc.job'}}"
-              onClick="this.select();"
-            />
-          </h4>
-        </td>
-        <td>
-          {{localize "orc.lvl"}}
-          <h4 class="details-lvl">
-            <input
-              type="number"
-              name="system.details.lvl"
-              value="{{actor.system.details.lvl}}"
-              placeholder="{{localize 'orc.lvl'}}"
-              onClick="this.select();"
-            />
-          </h4>
-        </td>
-        <td>
-          {{localize "orc.faction"}}
-          <h4 class="details-faction">
-            <input
-              type="text"
-              name="system.details.faction"
-              value="{{actor.system.details.faction}}"
-              placeholder="{{localize 'orc.faction'}}"
-              onClick="this.select();"
-            />
-          </h4>
-        </td>
-      </tr>
-    </table>
-  </section>
-  <table>
-    <td>
-      <table style="width: 230px">
-        <tr>
-          <th>{{localize "orc.hp"}}</th>
-          <th>
-            <input
-              type="number"
-              name="system.hp.value"
-              value="{{actor.system.hp.value}}"
-              placeholder="{{localize 'orc.hp'}}"
-              onClick="this.select();"
-            />
-          </th>
-          <th>/</th>
-          <th>
-            <input
-              type="number"
-              name="system.hp.valueMax"
-              value="{{actor.system.hp.valueMax}}"
-              placeholder="{{localize 'orc.hp'}}"
-              onClick="this.select();"
-            />
-          </th>
-        </tr>
-      </table>
-    </td>
-    <table>
-      <section class="weapon-list">
-        {{#each weapons as |item id|}}
-        <tr class="item flexrow" data-item-id="{{item._id}}">
-          <td>
-            <h4>{{item.name}}</h4>
-          </td>
-          <td>{{item.system.damage}}</td>
-          <td>{{item.system.range}}</td>
-          <td>
-            <a class="item-edit" title="Edit Item">
-              <i class="fas fa-edit"></i
-            ></a>
-            <a class="item-delete" title="Delete Item"
-              ><i class="fas fa-trash"></i
-            ></a>
-          </td>
-        </tr>
-        {{/each}}
-      </section>
-    </table>
-  </table>
+            {{else}}
+            <span>{{actor.name}}</span>
+            {{/if}}
+          </h1>
+        </div>
+        <div class="details" align="center">
+          <table>
+            <tr>
+              <th>{{localize "orc.race"}}</th>
+              <th>{{localize "orc.job"}}</th>
+              <th>{{localize "orc.lvl"}}</th>
+              <th>{{localize "orc.faction"}}</th>
+            </tr>
+            <tr>
+              <td>
+                <h4 class="details-race" align="center">
+                  {{#if unlocked}}
+                  <input
+                    type="text"
+                    name="system.details.race"
+                    value="{{actor.system.details.race}}"
+                    placeholder="{{localize 'orc.race'}}"
+                    onClick="this.select();"
+                  />
+                  {{else}}
+                  <span align="center">{{actor.system.details.race}}</span>
+                  {{/if}}
+                </h4>
+              </td>
+              <td>
+                <h4 class="details-job" align="center">
+                  {{#if unlocked}}
+                  <input
+                    type="text"
+                    name="system.details.job"
+                    value="{{actor.system.details.job}}"
+                    placeholder="{{localize 'orc.job'}}"
+                    onClick="this.select();"
+                  />
+                  {{else}}
+                  <span align="center">{{actor.system.details.job}}</span>
+                  {{/if}}
+                </h4>
+              </td>
 
-  {{editor content=actor.system.description target="system.description"
-  button=true owner=owner editable=editable}}
+              <td>
+                <h4 class="details-lvl" align="center">
+                  {{#if unlocked}}
+                  <input
+                    type="number"
+                    name="system.details.lvl"
+                    value="{{actor.system.details.lvl}}"
+                    placeholder="{{localize 'orc.lvl'}}"
+                    onClick="this.select();"
+                  />
+                  {{else}}
+                  <span align="center">{{actor.system.details.lvl}}</span>
+                  {{/if}}
+                </h4>
+              </td>
+              <td>
+                <h4 class="details-faction" align="center">
+                  {{#if unlocked}}
+                  <input
+                    type="text"
+                    name="system.details.faction"
+                    value="{{actor.system.details.faction}}"
+                    placeholder="{{localize 'orc.faction'}}"
+                    onClick="this.select();"
+                  />
+                  {{else}}
+                  <span align="center">{{actor.system.details.faction}}</span>
+                  {{/if}}
+                </h4>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="leftcolumn" align="center">
+        <table style="width: 200px">
+          <tr>
+            <th>{{localize "orc.hp"}}</th>
+            <td>
+              <input
+                type="number"
+                name="system.hp.value"
+                value="{{actor.system.hp.value}}"
+                placeholder="{{localize 'orc.hp'}}"
+                onClick="this.select();"
+                style="width: 30px"
+              />
+            </td>
+            <td>
+              <span>/</span>
+              {{#if unlocked}}
+              <input
+                type="number"
+                name="system.hp.valueMaxBase"
+                value="{{actor.system.hp.valueMaxBase}}"
+                placeholder="{{localize 'orc.hp'}}"
+                onClick="this.select();"
+                style="width: 30px"
+              />
+              {{else}}
+              <span>{{actor.system.hp.valueMax}}</span>
+              {{/if}}
+            </td>
+          </tr>
+          <tr>
+            <tr>
+              <th>{{localize "orc.mp"}}</th>
+              <td>
+                <input
+                  type="number"
+                  name="system.mp.value"
+                  value="{{actor.system.mp.value}}"
+                  placeholder="{{localize 'orc.mp'}}"
+                  onClick="this.select();"
+                  style="width: 30px"
+                />
+              </td>
+              <td>
+                <span>/</span>
+                {{#if unlocked}}
+                <input
+                  type="number"
+                  name="system.mp.valueMaxBase"
+                  value="{{actor.system.mp.valueMaxBase}}"
+                  placeholder="{{localize 'orc.mp'}}"
+                  onClick="this.select();"
+                  style="width: 30px"
+                />
+                {{else}}
+                <span>{{actor.system.mp.valueMax}}</span>
+                {{/if}}
+              </td>
+            </tr> 
+          </tr>
+        </table>
+      </div>
+      <div class="central">
+        <table>
+          <section class="weapon-list">
+            {{#each weapons as |item id|}}
+            <tr class="item flexrow" data-item-id="{{item._id}}">
+              <td>
+                <h4>{{item.name}}</h4>
+              </td>
+              <td>{{item.system.damage}}</td>
+              <td>{{item.system.range}}</td>
+              {{#if ../unlocked}}
+              <td>
+                <a class="item-edit" title="Edit Item">
+                  <i class="fas fa-edit"></i
+                ></a>
+                <a class="item-delete" title="Delete Item"
+                  ><i class="fas fa-trash"></i
+                ></a>
+              </td>
+              {{/if}}
+            </tr>
+            {{/each}}
+          </section>
+        </table>
+      </div>
+    </div>
+    {{editor actor.system.description target="system.description" button=true
+    owner=owner editable=editable}}
+  </div>
 </form>

@@ -1,24 +1,75 @@
-.orc.sheet.item form {
-  display: flex;
-  flex-direction: column;
-}
-.orc.sheet.item .sheet-content {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-.orc.sheet.item .editor {
-  height: 100%;
+.orc.sheet.actor textarea {
+  resize: none;
 }
 .orc.sheet.actor form {
   display: flex;
   flex-direction: column;
 }
-.orc.sheet.actor .sheet-content {
+.orc.sheet.actor .main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.orc.sheet.actor .main .header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.orc.sheet.actor .main .header .info {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.orc.sheet.actor .main .header .info .details {
+  display: flex;
+  width: 100%;
+}
+.orc.sheet.actor .main .content {
+  display: flex;
+  flex-direction: row;
+}
+.orc.sheet.actor .main .content .leftcolumn {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 235px;
+  margin-right: 50px;
+}
+.orc.sheet.actor .main .content .central {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.orc.sheet.actor .main .content .central .weapon-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 1em 0;
+}
+.orc.sheet.actor .main .content .editor {
   height: 100%;
+  width: 100%;
+  box-shadow: inset 0 0 6px black;
+}
+.orc.sheet.item textarea {
+  resize: none;
+}
+.orc.sheet.item form {
   display: flex;
   flex-direction: column;
 }
-.orc.sheet.actor .editor {
+.orc.sheet.item .main .header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.orc.sheet.item .main .content {
+  display: flex;
+  flex-direction: column;
   height: 100%;
+}
+.orc.sheet.item .main .editor {
+  height: 100%;
+  width: 100%;
+  box-shadow: inset 0 0 6px black;
 }
