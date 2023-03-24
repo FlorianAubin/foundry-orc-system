@@ -11,13 +11,14 @@ export default class ORCItemSheet extends ItemSheet {
     return `systems/orc/templates/sheets/${this.item.type}-sheet.html`;
   }
 
-  /** @override **/
+  /* -------------------------------------------- */
+  /*  Override general functions                  */
+  /* -------------------------------------------- */
 
   getData(options) {
     const data = super.getData(options);
 
     data.config = CONFIG.ORC;
-
     data.unlocked = this.item.getFlag(game.system.id, "SheetUnlocked");
 
     //console.log(data);
@@ -30,11 +31,12 @@ export default class ORCItemSheet extends ItemSheet {
     html.find(".sheet-change-lock").click(this._onSheetChangelock.bind(this));
   }
 
-  /*********/
+  /* -------------------------------------------- */
 
-  /**
-   * Manage the lock/unlock button on the sheet
-   */
+  /* -------------------------------------------- */
+  /*  Manage the lock/unlock button on the sheet  */
+  /* -------------------------------------------- */
+
   async _onSheetChangelock(event) {
     event.preventDefault();
 
@@ -49,4 +51,6 @@ export default class ORCItemSheet extends ItemSheet {
 
     this.item.sheet.render(true);
   }
+
+  /* -------------------------------------------- */
 }

@@ -1,0 +1,65 @@
+.orc.attribute-roll {
+  display: flex;
+  flex-direction: column;
+  .title {
+    display: flex;
+    flex-direction: column;
+    font-size: var(--font-size-15);
+    font-weight: bold;
+  }
+  .add-info {
+    display: flex;
+    flex-direction: column;
+    .header {
+      text-align: left;
+    }
+    .value {
+      text-align: right;
+    }
+  }
+  .dice-formula {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--color-border-light-2);
+    border-radius: 3px;
+    box-shadow: 0 0 2px #fff inset;
+  }
+  .dice-total {
+    display: flex;
+    flex-direction: column;
+    font-size: var(--font-size-20);
+    font-weight: bold;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--color-border-light-2);
+    border-radius: 3px;
+    box-shadow: 0 0 2px #fff inset;
+  }
+  .dice-total.critical {
+    color: rgb(0, 190, 0);
+  }
+  .dice-total.fumble {
+    color: red;
+  }
+  .dice-excess {
+    display: flex;
+    flex-direction: column;
+    font-size: var(--font-size-20);
+    font-weight: bold;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--color-border-light-2);
+    border-radius: 3px;
+    box-shadow: 0 0 2px #fff inset;
+  }
+  .dice-excess.positive {
+    display: flex;
+    color: rgb(10, 100, 10);
+  }
+  .dice-excess.negative {
+    display: flex;
+    color: rgb(100, 10, 10);
+  }
+}

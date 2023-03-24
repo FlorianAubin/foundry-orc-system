@@ -1,8 +1,16 @@
+import * as Dice from "../commons/dice.js";
 export default class ORCCharacterSheet extends ActorSheet {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       template: "systems/orc/templates/sheet/character-sheet.html",
       classes: ["orc", "sheet", "actor"],
+      tabs: [
+        {
+          navSelector: ".sheet-tabs",
+          contentSelector: ".sheet-body",
+          initial: "biography", //initial default tab
+        },
+      ],
     });
   }
 
@@ -37,7 +45,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     html.find(".item-edit").click(this._onItemEdit.bind(this));
     html.find(".item-delete").click(this._onItemDelete.bind(this));
 
-    html.find(".rollable").click(this._onRoll.bind(this));
+    html.find(".attribute-roll").click(this._onAttributeRoll.bind(this));
   }
 
   prepareData() {
@@ -85,13 +93,25 @@ export default class ORCCharacterSheet extends ActorSheet {
   /**
    *
    */
-  _onRoll(event) {}
+  async _onAttributeRoll(event) {
+    Dice.AttributeRoll({
+      actor: this.actor,
+      attribute: event.currentTarget.dataset,
+    });
+  }
 
   /**
    * Calulated derived values
    */
   _prepareCharacterData(actorData) {
-    actorData.hp.valueMax = actorData.hp.valueMaxBase + 10;
-    actorData.mp.valueMax = actorData.mp.valueMaxBase;
+    actorData.hp.valueMax =
+      actorData.hp.valueMaxBase + actorData.hp.valueMaxModif;
+    actorData.mp.valueMax =
+      actorData.mp.valueMaxBase + actorData.mp.valueMaxModif;
+    actorData.ap.value = actorData.ap.native + actorData.ap.valueModif;
+
+    for (let [key, attribut] of Object.entries(actorData.attributes)) {
+      attribut.value = attribut.valueBase + attribut.valueModif;
+    }
   }
 }

@@ -10,15 +10,27 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    height: 100%;
     .header {
       display: flex;
       flex-direction: row;
       width: 100%;
+      .image {
+        display: flex;
+        margin-left: -5px;
+        margin-right: -5px;
+      }
       .info {
         display: flex;
         flex-direction: column;
         width: 100%;
+        margin-left: 5px;
+        margin-right: 10px;
         .details {
+          display: flex;
+          width: 100%;
+        }
+        .attributes {
           display: flex;
           width: 100%;
         }
@@ -27,25 +39,57 @@
     .content {
       display: flex;
       flex-direction: row;
+      height: 100%;
       .leftcolumn {
         display: flex;
         flex-direction: column;
         flex-grow: 0;
         flex-shrink: 0;
         width: 235px;
-        margin-right: 50px;
+        margin-left: 10px;
+        margin-right: -5px;
       }
       .central {
         display: flex;
         flex-direction: column;
         width: 100%;
-        .weapon-list {
+        margin-right: 10px;
+        .sheet-body {
           display: flex;
           flex-direction: column;
-          margin: 0 0 1em 0;
+          height: 100%;
+          .inventory {
+            height: 100%;
+            .weapon-list {
+              display: flex;
+              flex-direction: column;
+              margin: 0 0 1em 0;
+            }
+          }
+          .biography {
+            height: 100%;
+          }
         }
       }
     }
+  }
+  .attribute-roll {
+    display: table-cell;
+    width: 100px;
+    height: 100%;
+  }
+  .attribute-roll:hover,
+  .attribute-roll:focus {
+    color: #000;
+    box-shadow: inset 0 0 6px rgb(180, 18, 18);
+    cursor: pointer;
+  }
+  .attribute-value {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    height: 100%;
+    box-shadow: inset 0 0 6px #484242;
   }
   .editor {
     height: 100%;

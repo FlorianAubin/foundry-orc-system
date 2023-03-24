@@ -10,21 +10,30 @@
           {{/if}}
         </a>
       </div>
-      <img
-        src="{{item.img}}"
-        data-edit="img"
-        title="{{item.name}}"
-        height="64"
-        width="64"
-      />
-      <h1 align="center">
-        <input
-          name="name"
-          type="text"
-          value="{{item.name}}"
-          placeholder="{{localize 'Name'}}"
+      <div>
+        <img
+          src="{{item.img}}"
+          data-edit="img"
+          title="{{item.name}}"
+          height="64"
+          width="64"
         />
-      </h1>
+      </div>
+      <div class="name">
+        <h1 class="name" align="center">
+          {{#if unlocked}}
+          <input
+            name="name"
+            type="text"
+            value="{{item.name}}"
+            placeholder="{{localize 'orc.name'}}"
+            onClick="this.select();"
+          />
+          {{else}}
+          <span>{{item.name}}</span>
+          {{/if}}
+        </h1>
+      </div>
     </div>
     <div class="content">
       <table>
@@ -36,16 +45,12 @@
         </tr>
         <tr>
           <td align="center">
-            {{#if unlocked}}
-            <select name="system.damageType">
+            <select name="system.damageType" align="center" {{#if unlocked}} {{else}} disabled="true" {{/if}}>
               {{#select item.system.damageType}} {{#each config.damageTypeList
-              as |name type|}}
-              <option value="{{type}}">{{localize name}}</option>
+              as |damagetype type|}}
+              <option value="{{type}}">{{localize damagetype}}</option>
               {{/each}} {{/select}}
             </select>
-            {{else}}
-            <span>{{localize item.system.damageType}}</span>
-            {{/if}}
           </td>
           <td align="center">
             {{#if unlocked}}

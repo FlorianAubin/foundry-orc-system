@@ -9,24 +9,37 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 100%;
 }
 .orc.sheet.actor .main .header {
   display: flex;
   flex-direction: row;
   width: 100%;
 }
+.orc.sheet.actor .main .header .image {
+  display: flex;
+  margin-left: -5px;
+  margin-right: -5px;
+}
 .orc.sheet.actor .main .header .info {
   display: flex;
   flex-direction: column;
   width: 100%;
+  margin-left: 5px;
+  margin-right: 10px;
 }
 .orc.sheet.actor .main .header .info .details {
+  display: flex;
+  width: 100%;
+}
+.orc.sheet.actor .main .header .info .attributes {
   display: flex;
   width: 100%;
 }
 .orc.sheet.actor .main .content {
   display: flex;
   flex-direction: row;
+  height: 100%;
 }
 .orc.sheet.actor .main .content .leftcolumn {
   display: flex;
@@ -34,17 +47,47 @@
   flex-grow: 0;
   flex-shrink: 0;
   width: 235px;
-  margin-right: 50px;
+  margin-left: 10px;
+  margin-right: -5px;
 }
 .orc.sheet.actor .main .content .central {
   display: flex;
   flex-direction: column;
   width: 100%;
+  margin-right: 10px;
 }
-.orc.sheet.actor .main .content .central .weapon-list {
+.orc.sheet.actor .main .content .central .sheet-body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.orc.sheet.actor .main .content .central .sheet-body .inventory {
+  height: 100%;
+}
+.orc.sheet.actor .main .content .central .sheet-body .inventory .weapon-list {
   display: flex;
   flex-direction: column;
   margin: 0 0 1em 0;
+}
+.orc.sheet.actor .main .content .central .sheet-body .biography {
+  height: 100%;
+}
+.orc.sheet.actor .attribute-roll {
+  display: table-cell;
+  width: 100px;
+  height: 100%;
+}
+.orc.sheet.actor .attribute-roll:hover,
+.orc.sheet.actor .attribute-roll:focus {
+  color: #000;
+  box-shadow: inset 0 0 6px #b41212;
+  cursor: pointer;
+}
+.orc.sheet.actor .attribute-value {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-shadow: inset 0 0 6px #484242;
 }
 .orc.sheet.actor .editor {
   height: 100%;
@@ -62,6 +105,11 @@
   flex-direction: row;
   width: 100%;
 }
+.orc.sheet.item .main .header .name {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
 .orc.sheet.item .main .content {
   display: flex;
   flex-direction: column;
@@ -70,4 +118,69 @@
 .orc.sheet.item .editor {
   height: 100%;
   box-shadow: inset 0 0 6px black;
+}
+.orc.attribute-roll {
+  display: flex;
+  flex-direction: column;
+}
+.orc.attribute-roll .title {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--font-size-15);
+  font-weight: bold;
+}
+.orc.attribute-roll .add-info {
+  display: flex;
+  flex-direction: column;
+}
+.orc.attribute-roll .add-info .header {
+  text-align: left;
+}
+.orc.attribute-roll .add-info .value {
+  text-align: right;
+}
+.orc.attribute-roll .dice-formula {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--color-border-light-2);
+  border-radius: 3px;
+  box-shadow: 0 0 2px #fff inset;
+}
+.orc.attribute-roll .dice-total {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--font-size-20);
+  font-weight: bold;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--color-border-light-2);
+  border-radius: 3px;
+  box-shadow: 0 0 2px #fff inset;
+}
+.orc.attribute-roll .dice-total.critical {
+  color: #00be00;
+}
+.orc.attribute-roll .dice-total.fumble {
+  color: red;
+}
+.orc.attribute-roll .dice-excess {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--font-size-20);
+  font-weight: bold;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--color-border-light-2);
+  border-radius: 3px;
+  box-shadow: 0 0 2px #fff inset;
+}
+.orc.attribute-roll .dice-excess.positive {
+  display: flex;
+  color: #0a640a;
+}
+.orc.attribute-roll .dice-excess.negative {
+  display: flex;
+  color: #640a0a;
 }

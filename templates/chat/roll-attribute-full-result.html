@@ -1,0 +1,23 @@
+<div class="orc attribute-roll dice-roll">
+  <div class="title">{{title}}</div>
+  <div class="dice-formula">{{roll.formula}}</div>
+  <div class="dice-total">{{roll.total}}</div>
+  <div class="add-info">
+    <table>
+      <tr>
+        <td class="header">{{localize "orc.dialog.attribute.base"}}</td>
+        <td class="value">{{attributeValue.base}}</td>
+      </tr>
+      <tr>
+        <td class="header">{{localize "orc.dialog.attribute.modif"}}</td>
+        <td class="value">{{attributeValue.modif}}</td>
+      </tr>
+      <tr>
+        <td class="header">{{localize "orc.dialog.attribute.value"}}</td>
+        <td class="value">{{attributeValue.value}}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="text">{{localize "orc.dialog.attribute.excess"}}</div>
+  <div class="dice-excess">{{attributeValue.diff}}</div>
+</div>

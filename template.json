@@ -2,44 +2,67 @@
   "Actor": {
     "types": ["character"],
     "character": {
-      "carac": {
-        "physics": {
+      "attributes": {
+        "physical": {
+          "name": "orc.character.attributes.physical",
           "valueBase": 0,
+          "valueModif": 0,
           "value": 0
         },
         "social": {
+          "name": "orc.character.attributes.social",
           "valueBase": 0,
+          "valueModif": 0,
           "value": 0
         },
         "intel": {
+          "name": "orc.character.attributes.intel",
           "valueBase": 0,
+          "valueModif": 0,
           "value": 0
         }
       },
       "roll": {
-        "limitSuccessCrit": 1,
-        "limitFailCrit": 100
+        "limitCritical": 1,
+        "limitFumble": 100
       },
       "hp": {
         "value": 0,
         "valueMaxBase": 0,
+        "valueMaxModif": 0,
         "valueMax": 0
       },
       "mp": {
         "value": 0,
         "valueMaxBase": 0,
+        "valueMaxModif": 0,
         "valueMax": 0
       },
       "ap": {
         "native": 0,
+        "valueModif": 0,
         "value": 0
       },
       "weight": {
         "native": 0,
+        "valueModif": 0,
         "value": 0
       },
-      "defense": 0,
-      "reaction": 0,
+      "defense": {
+        "native": 0,
+        "valueModif": 0,
+        "value": 0
+      },
+      "reaction": {
+        "native": 0,
+        "valueModif": 0,
+        "value": 0
+      },
+      "attackBonus": {
+        "native": 0,
+        "valueModif": 0,
+        "value": 0
+      },
       "combat": {
         "style": "standard",
         "defenceModif": 0,
@@ -59,7 +82,6 @@
         "poison": 0,
         "onfire": false
       },
-      "arms": 2,
       "description": ""
     }
   },
@@ -71,7 +93,6 @@
       "armor",
       "consumable",
       "generalitem",
-      "enchant",
       "spell",
       "active",
       "passive",
@@ -119,21 +140,6 @@
     "generalitem": {
       "templates": ["itemDescription"]
     },
-    "enchant": {
-      "damageModif": 0,
-      "HPModif": 0,
-      "MPModif": 0,
-      "PAModif": 0,
-      "defenceModif": 0,
-      "reactionModif": 0,
-      "caracModif": {
-        "physics": 0,
-        "social": 0,
-        "intel": 0
-      },
-      "attackScoreModif": 0,
-      "templates": ["itemDescription", "itemEffect"]
-    },
     "spell": {
       "MPcost": 0,
       "actionCost": 0,
@@ -152,16 +158,16 @@
       "templates": ["itemDescription"]
     },
     "wound": {
-      "caracModif": {
-        "physics": 0,
+      "attributesModif": {
+        "physical": 0,
         "social": 0,
         "intel": 0
       },
       "templates": ["itemDescription", "itemEffect"]
     },
     "disease": {
-      "caracModif": {
-        "physics": 0,
+      "attributesModif": {
+        "physical": 0,
         "social": 0,
         "intel": 0
       },

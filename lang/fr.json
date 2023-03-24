@@ -1,12 +1,21 @@
 {
-  "piercing": "Perçant",
-  "slashing": "Tranchant",
-  "blunt": "Contendant",
   "orc": {
-    "damagetypelist": {
-      "piercing": "Perçant",
-      "slashing": "Tranchant",
-      "blunt": "Contendant"
+    "name": "Nom",
+    "character": {
+      "race": "Race",
+      "job": "Job",
+      "lvl": "Niveau",
+      "faction": "Faction",
+      "hp": "HP",
+      "mp": "MP",
+      "ap": "Armure",
+      "attributes": {
+        "physical": "Physique",
+        "social": "Social",
+        "intel": "Intel"
+      },
+      "inventory": "Inventaire",
+      "biography": "Biographie"
     },
     "weapon": {
       "damage": "Dégâts",
@@ -16,12 +25,19 @@
       "ammo": "Nombre de munitions",
       "weight": "Poids"
     },
-    "name": "Nom",
-    "race": "Race",
-    "job": "Job",
-    "lvl": "Niveau",
-    "faction": "Faction",
-    "hp": "HP",
-    "mp": "MP"
+    "damagetypelist": {
+      "piercing": "Perçant",
+      "slashing": "Tranchant",
+      "blunt": "Contendant"
+    },
+    "dialog": {
+      "attribute": {
+        "title": "{charName} fait un jet de {attributeName} !",
+        "base": "Valeur de base :",
+        "modif": "  +/- Modificateurs :",
+        "value": "Valeur effective :",
+        "excess": "Succès exédentaires :"
+      }
+    }
   }
 }
