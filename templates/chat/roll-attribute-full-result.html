@@ -1,7 +1,12 @@
 <div class="orc attribute-roll dice-roll">
   <div class="title">{{title}}</div>
-  <div class="dice-formula">{{roll.formula}}</div>
-  <div class="dice-total">{{roll.total}}</div>
+  {{{tooltip}}}
+  <table class="results">
+    <tr class="dice-total">
+      <td>{{roll.total}}</td>
+      <td>{{localize message}}</td>
+    </tr>
+  </table>
   <div class="add-info">
     <table>
       <tr>

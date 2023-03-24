@@ -20,21 +20,26 @@ export const highlightSuccessFailure = function (message, html, data) {
 
     // Highlight positive and negative excess
     const excess = roll.options.attributeValue - d.total;
-    if (excess >= 0) {
-      html.find(`.dice-excess`)[i].classList.add("positive");
-    } else {
-      html.find(`.dice-excess`)[i].classList.add("negative");
+    const excessHtml = html.find(`.dice-excess`)[i];
+    if (excessHtml) {
+      if (excess >= 0) {
+        excessHtml.classList.add("positive");
+      } else {
+        excessHtml.classList.add("negative");
+      }
     }
 
     // Highlight successes and failures
     const critical = roll.options.actorLimitCritical;
     const fumble = roll.options.actorLimitFumble;
-    if (d.total <= critical) {
-      html.find(`.dice-total`)[i].classList.add("critical");
-    } else if (d.total >= fumble) {
-      html.find(`.dice-total`)[i].classList.add("fumble");
+    const totalHtml = html.find(`.dice-total`)[i];
+    if (totalHtml) {
+      if (d.total <= critical) {
+        totalHtml.classList.add("critical");
+      } else if (d.total >= fumble) {
+        totalHtml.classList.add("fumble");
+      }
     }
-
     i++;
   }
 };

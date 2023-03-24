@@ -31,8 +31,12 @@
       "blunt": "Contendant"
     },
     "dialog": {
+      "Success": "Réussite",
+      "Failure": "Échec",
+      "criticalSuccess": "Réussite critique !",
+      "fumbleFailure": "Échec critique !",
       "attribute": {
-        "title": "{charName} fait un jet de {attributeName} !",
+        "title": "{charName} fait un jet de {attributeName} :",
         "base": "Valeur de base :",
         "modif": "  +/- Modificateurs :",
         "value": "Valeur effective :",

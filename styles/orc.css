@@ -148,7 +148,7 @@
   border-radius: 3px;
   box-shadow: 0 0 2px #fff inset;
 }
-.orc.attribute-roll .dice-total {
+.orc.attribute-roll .results .dice-total {
   display: flex;
   flex-direction: column;
   font-size: var(--font-size-20);
@@ -159,10 +159,10 @@
   border-radius: 3px;
   box-shadow: 0 0 2px #fff inset;
 }
-.orc.attribute-roll .dice-total.critical {
+.orc.attribute-roll .results .dice-total.critical {
   color: #00be00;
 }
-.orc.attribute-roll .dice-total.fumble {
+.orc.attribute-roll .results .dice-total.fumble {
   color: red;
 }
 .orc.attribute-roll .dice-excess {

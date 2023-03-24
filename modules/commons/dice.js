@@ -28,6 +28,16 @@ export function AttributeRoll({
     diff: attribute.attributevalue - rollResult.total,
   };
 
+  if (rollResult.total <= rollResult.options.actorLimitCritical) {
+    extraMessageData.message = "orc.dialog.criticalSuccess";
+  } else if (rollResult.total >= rollResult.options.actorLimitFumble) {
+    extraMessageData.message = "orc.dialog.fumbleFailure";
+  } else if (rollResult.total <= rollResult.options.attributeValue) {
+    extraMessageData.message = "orc.dialog.Success";
+  } else if (rollResult.total > rollResult.options.attributeValue) {
+    extraMessageData.message = "orc.dialog.Failure";
+  }
+
   //Display a limited message if the player is not allowed to see the form
   if (rollOptions.visibleByPlayers == 0) {
     AttributeRollToCustomLimitedMessage(rollResult, {
@@ -65,7 +75,8 @@ export async function AttributeRollToCustomFullMessage(rollResult, extraData) {
     chatData.type = CONST.CHAT_MESSAGE_TYPES.BLIND;
   }
 
-  await ChatMessage.create(chatData);
+  let mes = await ChatMessage.create(chatData);
+  console.log(chatData);
 }
 
 export async function AttributeRollToCustomLimitedMessage(
