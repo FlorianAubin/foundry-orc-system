@@ -75,6 +75,7 @@
   }
   .attribute-roll {
     display: table-cell;
+    font-size: var(--font-size-15);
     width: 100px;
     height: 100%;
   }
@@ -87,9 +88,25 @@
   .attribute-value {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    height: 100%;
+    min-height: 25px;
+    font-size: var(--font-size-20);
+    width: 100%;
     box-shadow: inset 0 0 6px #484242;
+  }
+  .defence {
+    font-size: large;
+  }
+  .damageBonus-roll {
+    display: table-cell;
+    font-size: var(--font-size-15);
+    width: 100px;
+    height: 100%;
+  }
+  .damageBonus-roll:hover,
+  .damageBonus-roll:focus {
+    color: #000;
+    box-shadow: inset 0 0 6px rgb(180, 18, 18);
+    cursor: pointer;
   }
   .editor {
     height: 100%;

@@ -55,6 +55,12 @@
         "valueModifSum": 0,
         "value": 0
       },
+      "attack": {
+        "native": 0,
+        "valueModif": {},
+        "valueModifSum": 0,
+        "value": 0
+      },
       "defence": {
         "native": 0,
         "valueModif": {},
@@ -68,7 +74,7 @@
         "valueModifSum": 0,
         "value": 0
       },
-      "attackBonus": {
+      "damageBonus": {
         "native": "",
         "valueModif": {},
         "valueModifSum": "",

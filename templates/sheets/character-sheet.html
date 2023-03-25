@@ -244,22 +244,44 @@
               </select>
             </td>
           </tr>
-          <tr>
-            <th>{{localize "orc.character.defence"}}</th>
-            <td align="center"><span>{{actor.system.defence.value}}</span></td>
+          <tr align="center">
+            <th>{{localize "orc.character.attack"}}</th>
+            <td
+              class="attribute-roll fas fa-dice"
+              data-attributename="{{localize 'orc.character.attack'}}"
+              data-attributevalue="{{actor.system.attack.value}}"
+              data-attributevaluebase="{{actor.system.attack.native}}"
+              data-attributevaluemodif="{{actor.system.attack.valueModifSum}}"
+            >
+              {{actor.system.attack.value}}
+            </td>
           </tr>
-          {{#if actor.system.dodge.enable}}
-          <tr>
+          {{#if actor.system.defence.value}}
+          <tr align="center">
+            <th>{{localize "orc.character.defence"}}</th>
+            <td class="defence">{{actor.system.defence.value}}</td>
+          </tr>
+          {{/if}} {{#if actor.system.dodge.enable}}
+          <tr align="center">
             <th>{{localize "orc.character.dodge"}}</th>
             <td
               class="attribute-roll fas fa-dice"
-              data-attributename="{{localize 'orc.combatStyleList.dodge'}}"
+              data-attributename="{{localize 'orc.character.dodge'}}"
               data-attributevalue="{{actor.system.dodge.value}}"
               data-attributevaluebase="{{actor.system.dodge.native}}"
               data-attributevaluemodif="{{actor.system.dodge.valueModifSum}}"
-              align="center"
             >
               {{actor.system.dodge.value}}
+            </td>
+          </tr>
+          {{/if}} {{#if actor.system.damageBonus.value}}
+          <tr align="center">
+            <th>{{localize "orc.character.damageBonus"}}</th>
+            <td
+              class="damageBonus-roll fas fa-dice"
+              data-formula="{{localize actor.system.damageBonus.value}}"
+            >
+              {{actor.system.damageBonus.value}}
             </td>
           </tr>
           {{/if}}

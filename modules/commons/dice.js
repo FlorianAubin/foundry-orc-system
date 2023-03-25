@@ -75,7 +75,7 @@ export async function AttributeRollToCustomFullMessage(rollResult, extraData) {
     chatData.type = CONST.CHAT_MESSAGE_TYPES.BLIND;
   }
 
-  let mes = await ChatMessage.create(chatData);
+  await ChatMessage.create(chatData);
 }
 
 export async function AttributeRollToCustomLimitedMessage(
@@ -95,6 +95,44 @@ export async function AttributeRollToCustomLimitedMessage(
     user: game.user._id,
     speaker: ChatMessage.getSpeaker(),
     roll: rollResult,
+    content: await renderTemplate(template, templateContext),
+    type: CONST.CHAT_MESSAGE_TYPES.ROLL,
+  };
+
+  await ChatMessage.create(chatData);
+}
+
+export function DamageRoll() {}
+
+export function BonusDamageRoll({ actor = null, extraMessageData = {} } = {}) {
+  let rollFormula = actor.system.damageBonus.value;
+  let rollData = {};
+  let rollOptions = {};
+
+  let roll = new Roll(rollFormula, rollData, rollOptions);
+  let rollResult = roll.roll({ async: false });
+
+  extraMessageData.title = game.i18n.format("orc.dialog.damageBonus.title", {});
+
+  DamageRollToCustomMessage(rollResult, {
+    ...extraMessageData,
+  });
+}
+
+export async function DamageRollToCustomMessage(rollResult, extraData) {
+  const template = "systems/orc/templates/chat/roll-damageBonus-result.html";
+
+  let templateContext = {
+    ...extraData,
+    roll: rollResult,
+    tooltip: await rollResult.getTooltip(),
+  };
+
+  let chatData = {
+    user: game.user._id,
+    speaker: ChatMessage.getSpeaker(),
+    roll: rollResult,
+    sound: CONFIG.sounds.dice,
     content: await renderTemplate(template, templateContext),
     type: CONST.CHAT_MESSAGE_TYPES.ROLL,
   };

@@ -44,6 +44,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     html.find(".item-delete").click(this._onItemDelete.bind(this));
 
     html.find(".attribute-roll").click(this._onAttributeRoll.bind(this));
+    html.find(".damageBonus-roll").click(this._onBonusDamageRoll.bind(this));
   }
 
   prepareData() {
@@ -96,6 +97,11 @@ export default class ORCCharacterSheet extends ActorSheet {
     });
   }
 
+  async _onBonusDamageRoll(event) {
+    Dice.BonusDamageRoll({
+      actor: this.actor,
+    });
+  }
   /**
    * Calulated derived values
    */
@@ -107,79 +113,114 @@ export default class ORCCharacterSheet extends ActorSheet {
 
   applyCombatStyle(actorData) {
     if (actorData.combatStyle === "standard") {
-      actorData.attributes.physical.valueModif.style = 0;
+      actorData.attack.valueModif.style = 0;
       actorData.defence.valueModif.style = 0;
+      actorData.dodge.valueModif.style = 0;
       actorData.dodge.enable = false;
-      actorData.attackBonus.valueModif.style = "";
+      actorData.damageBonus.valueModif.style = "";
     } else if (actorData.combatStyle === "offensive") {
-      actorData.attributes.physical.valueModif.style = +10;
+      actorData.attack.valueModif.style = +10;
       actorData.defence.valueModif.style = -10;
+      actorData.dodge.valueModif.style = 0;
       actorData.dodge.enable = false;
-      actorData.attackBonus.valueModif.style = "";
+      actorData.damageBonus.valueModif.style = "";
     } else if (actorData.combatStyle === "defensive") {
-      actorData.attributes.physical.valueModif.style = -15;
+      actorData.attack.valueModif.style = -15;
       actorData.defence.valueModif.style = +10;
+      actorData.dodge.valueModif.style = 0;
       actorData.dodge.enable = false;
-      actorData.attackBonus.valueModif.style = "";
+      actorData.damageBonus.valueModif.style = "";
     } else if (actorData.combatStyle === "dodge") {
-      actorData.attributes.physical.valueModif.style = -10;
+      actorData.attack.valueModif.style = -10;
       actorData.defence.valueModif.style = -10;
+      actorData.dodge.valueModif.style = 0;
       actorData.dodge.enable = true;
-      actorData.attackBonus.valueModif.style = "";
+      actorData.damageBonus.valueModif.style = "";
     } else if (actorData.combatStyle === "aggressive") {
-      actorData.attributes.physical.valueModif.style = -10;
+      actorData.attack.valueModif.style = -10;
       actorData.defence.valueModif.style = -10;
+      actorData.dodge.valueModif.style = 0;
       actorData.dodge.enable = false;
-      actorData.attackBonus.valueModif.style = "+2d10";
+      actorData.damageBonus.valueModif.style = "2d10";
     }
   }
 
-  calculateEffectiveValues(actorData) {
-    //HP
+  initModifValues(actorData) {
     actorData.hp.valueMaxModifSum = 0;
+    actorData.mp.valueMaxModifSum = 0;
+    actorData.ap.valueModifSum = 0;
+    actorData.attack.valueModifSum = 0;
+    actorData.defence.valueModifSum = 0;
+    actorData.dodge.valueModifSum = 0;
+    actorData.damageBonus.valueModifSum = "";
+  }
+
+  calculateEffectiveValues(actorData) {
+    this.initModifValues(actorData);
+
+    //HP
     for (let [key, modificator] of Object.entries(actorData.hp.valueMaxModif)) {
-      actorData.hp.valueMaxModifSum += modificator;
+      if (modificator) actorData.hp.valueMaxModifSum += modificator;
     }
     actorData.hp.valueMax =
       actorData.hp.valueMaxBase + actorData.hp.valueMaxModifSum;
     //MP
-    actorData.mp.valueMaxModifSum = 0;
     for (let [key, modificator] of Object.entries(actorData.mp.valueMaxModif)) {
-      actorData.mp.valueMaxModifSum += modificator;
+      if (modificator) actorData.mp.valueMaxModifSum += modificator;
     }
     actorData.mp.valueMax =
       actorData.mp.valueMaxBase + actorData.mp.valueMaxModifSum;
     //AP
-    actorData.ap.valueModifSum = 0;
     for (let [key, modificator] of Object.entries(actorData.ap.valueModif)) {
-      actorData.ap.valueModifSum += modificator;
+      if (modificator) actorData.ap.valueModifSum += modificator;
     }
     actorData.ap.value = actorData.ap.native + actorData.ap.valueModifSum;
 
     //Attributes
     for (let [key, attribut] of Object.entries(actorData.attributes)) {
       for (let [key, modificator] of Object.entries(attribut.valueModif)) {
-        attribut.valueModifSum += modificator;
+        if (modificator) attribut.valueModifSum += modificator;
       }
       attribut.value = attribut.valueBase + attribut.valueModifSum;
     }
+
+    //Attack
+    actorData.attack.native = actorData.attributes.physical.value;
+    for (let [key, modificator] of Object.entries(
+      actorData.attack.valueModif
+    )) {
+      if (modificator) actorData.attack.valueModifSum += modificator;
+    }
+    actorData.attack.value =
+      actorData.attack.native + actorData.attack.valueModifSum;
     //Defence
-    actorData.defence.valueModifSum = 0;
     for (let [key, modificator] of Object.entries(
       actorData.defence.valueModif
     )) {
-      actorData.defence.valueModifSum += modificator;
+      if (modificator) actorData.defence.valueModifSum += modificator;
     }
     actorData.defence.value =
       actorData.defence.native + actorData.defence.valueModifSum;
-
     //Dodge
-    actorData.dodge.native = actorData.attributes.physical.value;
-    actorData.dodge.valueModifSum = 0;
+    actorData.dodge.native = actorData.attributes.physical.value - 20;
     for (let [key, modificator] of Object.entries(actorData.dodge.valueModif)) {
-      actorData.dodge.valueModifSum += modificator;
+      if (modificator) actorData.dodge.valueModifSum += modificator;
     }
     actorData.dodge.value =
       actorData.dodge.native + actorData.dodge.valueModifSum;
+    //Damage bonus
+    for (let [key, modificator] of Object.entries(
+      actorData.damageBonus.valueModif
+    )) {
+      if (modificator) {
+        if (!actorData.damageBonus.valueModifSum)
+          actorData.damageBonus.valueModifSum += modificator;
+        else {
+          actorData.damageBonus.valueModifSum += " + " + modificator;
+        }
+      }
+    }
+    actorData.damageBonus.value =
+      actorData.damageBonus.native + actorData.damageBonus.valueModifSum;
   }
 }

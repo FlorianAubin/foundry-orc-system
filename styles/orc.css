@@ -74,6 +74,7 @@
 }
 .orc.sheet.actor .attribute-roll {
   display: table-cell;
+  font-size: var(--font-size-15);
   width: 100px;
   height: 100%;
 }
@@ -86,8 +87,25 @@
 .orc.sheet.actor .attribute-value {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  min-height: 25px;
+  font-size: var(--font-size-20);
+  width: 100%;
   box-shadow: inset 0 0 6px #484242;
+}
+.orc.sheet.actor .defence {
+  font-size: large;
+}
+.orc.sheet.actor .damageBonus-roll {
+  display: table-cell;
+  font-size: var(--font-size-15);
+  width: 100px;
+  height: 100%;
+}
+.orc.sheet.actor .damageBonus-roll:hover,
+.orc.sheet.actor .damageBonus-roll:focus {
+  color: #000;
+  box-shadow: inset 0 0 6px #b41212;
+  cursor: pointer;
 }
 .orc.sheet.actor .editor {
   height: 100%;
@@ -119,26 +137,32 @@
   height: 100%;
   box-shadow: inset 0 0 6px black;
 }
+.orc.attackBonus-roll,
 .orc.attribute-roll {
   display: flex;
   flex-direction: column;
 }
+.orc.attackBonus-roll .title,
 .orc.attribute-roll .title {
   display: flex;
   flex-direction: column;
   font-size: var(--font-size-15);
   font-weight: bold;
 }
+.orc.attackBonus-roll .add-info,
 .orc.attribute-roll .add-info {
   display: flex;
   flex-direction: column;
 }
+.orc.attackBonus-roll .add-info .header,
 .orc.attribute-roll .add-info .header {
   text-align: left;
 }
+.orc.attackBonus-roll .add-info .value,
 .orc.attribute-roll .add-info .value {
   text-align: right;
 }
+.orc.attackBonus-roll .dice-formula,
 .orc.attribute-roll .dice-formula {
   display: flex;
   flex-direction: column;
@@ -148,6 +172,7 @@
   border-radius: 3px;
   box-shadow: 0 0 2px #fff inset;
 }
+.orc.attackBonus-roll .results .dice-total,
 .orc.attribute-roll .results .dice-total {
   display: flex;
   flex-direction: column;
@@ -159,12 +184,15 @@
   border-radius: 3px;
   box-shadow: 0 0 2px #fff inset;
 }
+.orc.attackBonus-roll .results .dice-total.critical,
 .orc.attribute-roll .results .dice-total.critical {
   color: #00be00;
 }
+.orc.attackBonus-roll .results .dice-total.fumble,
 .orc.attribute-roll .results .dice-total.fumble {
   color: red;
 }
+.orc.attackBonus-roll .dice-excess,
 .orc.attribute-roll .dice-excess {
   display: flex;
   flex-direction: column;
@@ -176,10 +204,12 @@
   border-radius: 3px;
   box-shadow: 0 0 2px #fff inset;
 }
+.orc.attackBonus-roll .dice-excess.positive,
 .orc.attribute-roll .dice-excess.positive {
   display: flex;
   color: #0a640a;
 }
+.orc.attackBonus-roll .dice-excess.negative,
 .orc.attribute-roll .dice-excess.negative {
   display: flex;
   color: #640a0a;

@@ -15,8 +15,10 @@
         "intel": "Intel"
       },
       "combatStyle": "Style de combat",
+      "attack": "Attaque",
       "defence": "Défense",
       "dodge": "Esquive",
+      "damageBonus": "Bonus de dégâts",
       "inventory": "Inventaire",
       "biography": "Biographie"
     },
@@ -51,6 +53,9 @@
         "modif": "  +/- Modificateurs :",
         "value": "Valeur effective :",
         "excess": "Succès exédentaires :"
+      },
+      "damageBonus": {
+        "title": "Jet de dégâts bonus :"
       }
     }
   }
