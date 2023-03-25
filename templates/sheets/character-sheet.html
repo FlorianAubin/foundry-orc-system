@@ -119,7 +119,7 @@
                 data-attributename="{{localize attribute.name}}"
                 data-attributevalue="{{attribute.value}}"
                 data-attributevaluebase="{{attribute.valueBase}}"
-                data-attributevaluemodif="{{attribute.valueModif}}"
+                data-attributevaluemodif="{{attribute.valueModifSum}}"
                 align="center"
               >
                 {{localize attribute.name}}
@@ -231,6 +231,38 @@
               {{/if}}
             </td>
           </tr>
+        </table>
+        <table style="width: 200px">
+          <tr>
+            <th>{{localize "orc.character.combatStyle"}}</th>
+            <td align="center">
+              <select name="system.combatStyle" align="center">
+                {{#select actor.system.combatStyle}} {{#each
+                config.combatStyleList as |combatstyle style|}}
+                <option value="{{style}}">{{localize combatstyle}}</option>
+                {{/each}} {{/select}}
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <th>{{localize "orc.character.defence"}}</th>
+            <td align="center"><span>{{actor.system.defence.value}}</span></td>
+          </tr>
+          {{#if actor.system.dodge.enable}}
+          <tr>
+            <th>{{localize "orc.character.dodge"}}</th>
+            <td
+              class="attribute-roll fas fa-dice"
+              data-attributename="{{localize 'orc.combatStyleList.dodge'}}"
+              data-attributevalue="{{actor.system.dodge.value}}"
+              data-attributevaluebase="{{actor.system.dodge.native}}"
+              data-attributevaluemodif="{{actor.system.dodge.valueModifSum}}"
+              align="center"
+            >
+              {{actor.system.dodge.value}}
+            </td>
+          </tr>
+          {{/if}}
         </table>
       </div>
       {{!-- Sheet Central --}}

@@ -6,19 +6,22 @@
         "physical": {
           "name": "orc.character.attributes.physical",
           "valueBase": 0,
-          "valueModif": 0,
+          "valueModif": {},
+          "valueModifSum": 0,
           "value": 0
         },
         "social": {
           "name": "orc.character.attributes.social",
           "valueBase": 0,
-          "valueModif": 0,
+          "valueModif": {},
+          "valueModifSum": 0,
           "value": 0
         },
         "intel": {
           "name": "orc.character.attributes.intel",
           "valueBase": 0,
-          "valueModif": 0,
+          "valueModif": {},
+          "valueModifSum": 0,
           "value": 0
         }
       },
@@ -29,47 +32,49 @@
       "hp": {
         "value": 0,
         "valueMaxBase": 0,
-        "valueMaxModif": 0,
+        "valueMaxModif": {},
+        "valueMaxModifSum": 0,
         "valueMax": 0
       },
       "mp": {
         "value": 0,
         "valueMaxBase": 0,
-        "valueMaxModif": 0,
+        "valueMaxModif": {},
+        "valueMaxModifSum": 0,
         "valueMax": 0
       },
       "ap": {
         "native": 0,
-        "valueModif": 0,
+        "valueModif": {},
+        "valueModifSum": 0,
         "value": 0
       },
       "weight": {
         "native": 0,
-        "valueModif": 0,
+        "valueModif": {},
+        "valueModifSum": 0,
         "value": 0
       },
-      "defense": {
+      "defence": {
         "native": 0,
-        "valueModif": 0,
+        "valueModif": {},
+        "valueModifSum": 0,
         "value": 0
       },
-      "reaction": {
+      "dodge": {
+        "enable": false,
         "native": 0,
-        "valueModif": 0,
+        "valueModif": {},
+        "valueModifSum": 0,
         "value": 0
       },
       "attackBonus": {
-        "native": 0,
-        "valueModif": 0,
-        "value": 0
+        "native": "",
+        "valueModif": {},
+        "valueModifSum": "",
+        "value": ""
       },
-      "combat": {
-        "style": "standard",
-        "defenceModif": 0,
-        "reactionModif": 0,
-        "attackModif": 0,
-        "damageModif": 0
-      },
+      "combatStyle": "standard",
       "details": {
         "race": "",
         "job": "",
@@ -128,8 +133,6 @@
     },
     "armor": {
       "PA": 0,
-      "defence": 0,
-      "reaction": 0,
       "localisation": "head",
       "templates": ["itemDescription", "weight"]
     },

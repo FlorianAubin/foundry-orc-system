@@ -14,6 +14,9 @@
         "social": "Social",
         "intel": "Intel"
       },
+      "combatStyle": "Style de combat",
+      "defence": "Défense",
+      "dodge": "Esquive",
       "inventory": "Inventaire",
       "biography": "Biographie"
     },
@@ -25,10 +28,17 @@
       "ammo": "Nombre de munitions",
       "weight": "Poids"
     },
-    "damagetypelist": {
+    "damageTypeList": {
       "piercing": "Perçant",
       "slashing": "Tranchant",
       "blunt": "Contendant"
+    },
+    "combatStyleList": {
+      "standard": "Standard",
+      "offensive": "Offensif",
+      "defensive": "Défensif",
+      "dodge": "Esquive",
+      "aggressive": "Agressif"
     },
     "dialog": {
       "Success": "Réussite",

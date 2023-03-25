@@ -18,8 +18,6 @@ export default class ORCCharacterSheet extends ActorSheet {
     return `systems/orc/templates/sheets/${this.actor.type}-sheet.html`;
   }
 
-  /** @override **/
-
   getData(options) {
     const data = super.getData(options);
     const actor = data.actor;
@@ -51,8 +49,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   prepareData() {
     super.prepareData();
   }
-
-  /*********/
 
   /**
    * Manage the lock/unlock button on the sheet
@@ -104,14 +100,86 @@ export default class ORCCharacterSheet extends ActorSheet {
    * Calulated derived values
    */
   _prepareCharacterData(actorData) {
-    actorData.hp.valueMax =
-      actorData.hp.valueMaxBase + actorData.hp.valueMaxModif;
-    actorData.mp.valueMax =
-      actorData.mp.valueMaxBase + actorData.mp.valueMaxModif;
-    actorData.ap.value = actorData.ap.native + actorData.ap.valueModif;
+    this.applyCombatStyle(actorData);
 
-    for (let [key, attribut] of Object.entries(actorData.attributes)) {
-      attribut.value = attribut.valueBase + attribut.valueModif;
+    this.calculateEffectiveValues(actorData);
+  }
+
+  applyCombatStyle(actorData) {
+    if (actorData.combatStyle === "standard") {
+      actorData.attributes.physical.valueModif.style = 0;
+      actorData.defence.valueModif.style = 0;
+      actorData.dodge.enable = false;
+      actorData.attackBonus.valueModif.style = "";
+    } else if (actorData.combatStyle === "offensive") {
+      actorData.attributes.physical.valueModif.style = +10;
+      actorData.defence.valueModif.style = -10;
+      actorData.dodge.enable = false;
+      actorData.attackBonus.valueModif.style = "";
+    } else if (actorData.combatStyle === "defensive") {
+      actorData.attributes.physical.valueModif.style = -15;
+      actorData.defence.valueModif.style = +10;
+      actorData.dodge.enable = false;
+      actorData.attackBonus.valueModif.style = "";
+    } else if (actorData.combatStyle === "dodge") {
+      actorData.attributes.physical.valueModif.style = -10;
+      actorData.defence.valueModif.style = -10;
+      actorData.dodge.enable = true;
+      actorData.attackBonus.valueModif.style = "";
+    } else if (actorData.combatStyle === "aggressive") {
+      actorData.attributes.physical.valueModif.style = -10;
+      actorData.defence.valueModif.style = -10;
+      actorData.dodge.enable = false;
+      actorData.attackBonus.valueModif.style = "+2d10";
     }
+  }
+
+  calculateEffectiveValues(actorData) {
+    //HP
+    actorData.hp.valueMaxModifSum = 0;
+    for (let [key, modificator] of Object.entries(actorData.hp.valueMaxModif)) {
+      actorData.hp.valueMaxModifSum += modificator;
+    }
+    actorData.hp.valueMax =
+      actorData.hp.valueMaxBase + actorData.hp.valueMaxModifSum;
+    //MP
+    actorData.mp.valueMaxModifSum = 0;
+    for (let [key, modificator] of Object.entries(actorData.mp.valueMaxModif)) {
+      actorData.mp.valueMaxModifSum += modificator;
+    }
+    actorData.mp.valueMax =
+      actorData.mp.valueMaxBase + actorData.mp.valueMaxModifSum;
+    //AP
+    actorData.ap.valueModifSum = 0;
+    for (let [key, modificator] of Object.entries(actorData.ap.valueModif)) {
+      actorData.ap.valueModifSum += modificator;
+    }
+    actorData.ap.value = actorData.ap.native + actorData.ap.valueModifSum;
+
+    //Attributes
+    for (let [key, attribut] of Object.entries(actorData.attributes)) {
+      for (let [key, modificator] of Object.entries(attribut.valueModif)) {
+        attribut.valueModifSum += modificator;
+      }
+      attribut.value = attribut.valueBase + attribut.valueModifSum;
+    }
+    //Defence
+    actorData.defence.valueModifSum = 0;
+    for (let [key, modificator] of Object.entries(
+      actorData.defence.valueModif
+    )) {
+      actorData.defence.valueModifSum += modificator;
+    }
+    actorData.defence.value =
+      actorData.defence.native + actorData.defence.valueModifSum;
+
+    //Dodge
+    actorData.dodge.native = actorData.attributes.physical.value;
+    actorData.dodge.valueModifSum = 0;
+    for (let [key, modificator] of Object.entries(actorData.dodge.valueModif)) {
+      actorData.dodge.valueModifSum += modificator;
+    }
+    actorData.dodge.value =
+      actorData.dodge.native + actorData.dodge.valueModifSum;
   }
 }

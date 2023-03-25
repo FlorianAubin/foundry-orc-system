@@ -76,7 +76,6 @@ export async function AttributeRollToCustomFullMessage(rollResult, extraData) {
   }
 
   let mes = await ChatMessage.create(chatData);
-  console.log(chatData);
 }
 
 export async function AttributeRollToCustomLimitedMessage(
