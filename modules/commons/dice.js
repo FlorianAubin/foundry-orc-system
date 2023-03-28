@@ -102,7 +102,33 @@ export async function AttributeRollToCustomLimitedMessage(
   await ChatMessage.create(chatData);
 }
 
-export function DamageRoll() {}
+export function AttackRoll({
+  actor = null,
+  attribute = null,
+  extraMessageData = {},
+}) {
+  this.AttributeRoll({
+    actor,
+    attribute,
+    extraMessageData,
+  });
+}
+
+export function DodgeRoll({
+  actor = null,
+  attribute = null,
+  extraMessageData = {},
+}) {
+  this.AttributeRoll({
+    actor,
+    attribute,
+    extraMessageData,
+  });
+}
+
+export function DamageRoll({ actor = null, extraMessageData = {} } = {}) {
+  return;
+}
 
 export function BonusDamageRoll({ actor = null, extraMessageData = {} } = {}) {
   let rollFormula = actor.system.damageBonus.value;
@@ -136,6 +162,99 @@ export async function DamageRollToCustomMessage(rollResult, extraData) {
     content: await renderTemplate(template, templateContext),
     type: CONST.CHAT_MESSAGE_TYPES.ROLL,
   };
+
+  await ChatMessage.create(chatData);
+}
+
+export function BleedPoisonRoll({
+  actor = null,
+  type = null,
+  extraMessageData = {},
+}) {
+  let ndice = 0;
+  if (type === "bleed") {
+    ndice = actor.system.status.bleed;
+    extraMessageData.title = game.i18n.format("orc.dialog.bleed.title", {
+      charName: actor.name,
+    });
+  } else if (type === "poison") {
+    ndice = actor.system.status.poison;
+    extraMessageData.title = game.i18n.format("orc.dialog.poison.title", {
+      charName: actor.name,
+    });
+  } else {
+    return;
+  }
+
+  let rollFormula = ndice + "d6";
+  let rollData = {}; //for some reasons, rollData are not conserved on ChatMessage, use rollOptions instead
+  let rollOptions = {
+    actorName: actor.name,
+    visibleByPlayers: actor.ownership.default,
+  };
+
+  let roll = new Roll(rollFormula, rollData, rollOptions);
+  let rollResult = roll.roll({ async: false });
+
+  StatusRollToCustomMessage(rollResult, {
+    ...extraMessageData,
+  });
+
+  return rollResult.total;
+}
+
+export function BurnRoll({ actor = null, extraMessageData = {} }) {
+  let rollFormula = "1d100";
+  let rollData = {}; //for some reasons, rollData are not conserved on ChatMessage, use rollOptions instead
+  let rollOptions = {
+    actorName: actor.name,
+    visibleByPlayers: actor.ownership.default,
+  };
+
+  let roll = new Roll(rollFormula, rollData, rollOptions);
+  let rollResult = roll.roll({ async: false });
+
+  extraMessageData.title = game.i18n.format("orc.dialog.burn.title", {
+    charName: actor.name,
+  });
+  if (rollResult.total <= actor.system.status.burn) {
+    extraMessageData.info = game.i18n.format("orc.dialog.burn.onFire", {
+      charName: actor.name,
+    });
+  }
+
+  StatusRollToCustomMessage(rollResult, {
+    ...extraMessageData,
+  });
+
+  return rollResult.total;
+}
+
+export async function StatusRollToCustomMessage(rollResult, extraData) {
+  const template = "systems/orc/templates/chat/roll-status-result.html";
+
+  let templateContext = {
+    ...extraData,
+    roll: rollResult,
+    tooltip: await rollResult.getTooltip(),
+  };
+
+  let chatData = {
+    user: game.user._id,
+    speaker: ChatMessage.getSpeaker(),
+    roll: rollResult,
+    sound: CONFIG.sounds.dice,
+    content: await renderTemplate(template, templateContext),
+    type: CONST.CHAT_MESSAGE_TYPES.ROLL,
+  };
+  //only visible to the GM and GM assistants
+  if (rollResult.options.visibleByPlayers == 0) {
+    chatData.blind = true;
+    chatData.whisper = game.users.filter(function (user) {
+      return user.role > 2;
+    });
+    chatData.type = CONST.CHAT_MESSAGE_TYPES.BLIND;
+  }
 
   await ChatMessage.create(chatData);
 }

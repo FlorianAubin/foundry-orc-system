@@ -140,7 +140,6 @@
                     onClick="this.select();"
                   />
                   {{else}}
-
                   <span class="attribute-value" align="center"
                     >{{attribute.value}}</span
                   >
@@ -160,17 +159,17 @@
         <table style="width: 200px">
           <tr>
             <th>{{localize "orc.character.hp"}}</th>
-            <td>
+            <td align="center">
               <input
                 type="number"
                 name="system.hp.value"
                 value="{{actor.system.hp.value}}"
                 placeholder="0"
                 onClick="this.select();"
-                style="width: 30px"
+                style="width: 40px"
               />
             </td>
-            <td>
+            <td align="center">
               <span>/</span>
               {{#if unlocked}}
               <input
@@ -179,7 +178,7 @@
                 value="{{actor.system.hp.valueMaxBase}}"
                 placeholder="0"
                 onClick="this.select();"
-                style="width: 30px"
+                style="width: 40px"
               />
               {{else}}
               <span>{{actor.system.hp.valueMax}}</span>
@@ -188,17 +187,17 @@
           </tr>
           <tr>
             <th>{{localize "orc.character.mp"}}</th>
-            <td>
+            <td align="center">
               <input
                 type="number"
                 name="system.mp.value"
                 value="{{actor.system.mp.value}}"
                 placeholder="0"
                 onClick="this.select();"
-                style="width: 30px"
+                style="width: 40px"
               />
             </td>
-            <td>
+            <td align="center">
               <span>/</span>
               {{#if unlocked}}
               <input
@@ -207,7 +206,7 @@
                 value="{{actor.system.mp.valueMaxBase}}"
                 placeholder="0"
                 onClick="this.select();"
-                style="width: 30px"
+                style="width: 40px"
               />
               {{else}}
               <span>{{actor.system.mp.valueMax}}</span>
@@ -216,7 +215,7 @@
           </tr>
           <tr>
             <th>{{localize "orc.character.ap"}}</th>
-            <td>
+            <td align="center">
               {{#if unlocked}}
               <input
                 type="number"
@@ -224,7 +223,7 @@
                 value="{{actor.system.ap.native}}"
                 placeholder="0"
                 onClick="this.select();"
-                style="width: 30px"
+                style="width: 40px"
               />
               {{else}}
               <span>{{actor.system.ap.value}}</span>
@@ -235,7 +234,7 @@
         <table style="width: 200px">
           <tr>
             <th>{{localize "orc.character.combatStyle"}}</th>
-            <td align="center">
+            <td align="center" colspan="2">
               <select name="system.combatStyle" align="center">
                 {{#select actor.system.combatStyle}} {{#each
                 config.combatStyleList as |combatstyle style|}}
@@ -246,15 +245,14 @@
           </tr>
           <tr align="center">
             <th>{{localize "orc.character.attack"}}</th>
+            <td>{{actor.system.attack.value}}</td>
             <td
-              class="attribute-roll fas fa-dice"
+              class="attack-roll fas fa-dice"
               data-attributename="{{localize 'orc.character.attack'}}"
               data-attributevalue="{{actor.system.attack.value}}"
               data-attributevaluebase="{{actor.system.attack.native}}"
               data-attributevaluemodif="{{actor.system.attack.valueModifSum}}"
-            >
-              {{actor.system.attack.value}}
-            </td>
+            ></td>
           </tr>
           {{#if actor.system.defence.value}}
           <tr align="center">
@@ -264,33 +262,109 @@
           {{/if}} {{#if actor.system.dodge.enable}}
           <tr align="center">
             <th>{{localize "orc.character.dodge"}}</th>
+            <td>{{actor.system.dodge.value}}</td>
             <td
-              class="attribute-roll fas fa-dice"
+              class="dodge-roll fas fa-dice"
               data-attributename="{{localize 'orc.character.dodge'}}"
               data-attributevalue="{{actor.system.dodge.value}}"
               data-attributevaluebase="{{actor.system.dodge.native}}"
               data-attributevaluemodif="{{actor.system.dodge.valueModifSum}}"
-            >
-              {{actor.system.dodge.value}}
-            </td>
+            ></td>
           </tr>
           {{/if}} {{#if actor.system.damageBonus.value}}
           <tr align="center">
             <th>{{localize "orc.character.damageBonus"}}</th>
+            <td>{{actor.system.damageBonus.value}}</td>
             <td
               class="damageBonus-roll fas fa-dice"
               data-formula="{{localize actor.system.damageBonus.value}}"
-            >
-              {{actor.system.damageBonus.value}}
-            </td>
+            ></td>
           </tr>
           {{/if}}
+        </table>
+        <table style="width: 200px">
+          <tr>
+            <th colspan="2">{{localize "orc.character.bleed"}}</th>
+            <td align="center">
+              <input
+                type="number"
+                name="system.status.bleed"
+                value="{{actor.system.status.bleed}}"
+                placeholder="0"
+                onClick="this.select();"
+                style="width: 30px"
+                align="center"
+              />
+            </td>
+            {{#if actor.system.status.bleed}}
+            <td
+              class="bleed-poison-roll fas fa-dice"
+              data-type="bleed"
+              align="center"
+            ></td>
+            {{/if}}
+          </tr>
+          <tr>
+            <th colspan="2">{{localize "orc.character.poison"}}</th>
+            <td align="center">
+              <input
+                type="number"
+                name="system.status.poison"
+                value="{{actor.system.status.poison}}"
+                placeholder="0"
+                onClick="this.select();"
+                style="width: 30px"
+                align="center"
+              />
+            </td>
+            {{#if actor.system.status.poison}}
+            <td
+              class="bleed-poison-roll fas fa-dice"
+              data-type="poison"
+              align="center"
+            ></td>
+            {{/if}}
+          </tr>
+          <tr>
+            <th>{{localize "orc.character.burn"}}</th>
+            {{#if actor.system.status.burn}} {{#if actor.system.status.onfire}}
+            <td class="burn-off fas fa-fire-extinguisher" align="center"></td>
+            {{else}}
+            <td class="burn-roll fas fa-dice" align="center"></td>
+            {{/if}} {{else}}
+            <td></td>
+            {{/if}}
+            <td align="center">
+              <input
+                type="number"
+                name="system.status.burn"
+                value="{{actor.system.status.burn}}"
+                placeholder="0"
+                onClick="this.select();"
+                style="width: 30px"
+                align="center"
+              />
+            </td>
+            {{#if actor.system.status.burn}} {{#if actor.system.status.onfire}}
+            <td class="burn-damage fas fa-fire" align="center"></td>
+            {{/if}} {{/if}}
+          </tr>
         </table>
       </div>
       {{!-- Sheet Central --}}
       <div class="central">
         {{!-- Sheet Tab Navigation --}}
         <nav class="sheet-tabs tabs flexshrink" data-group="primary">
+          <a class="item" data-tab="shortcut"
+            >{{localize 'orc.character.shortcut'}}</a
+          >
+          <a class="item" data-tab="gear">{{localize 'orc.character.gear'}}</a>
+          <a class="item" data-tab="magic"
+            >{{localize 'orc.character.magic'}}</a
+          >
+          <a class="item" data-tab="passive"
+            >{{localize 'orc.character.passive'}}</a
+          >
           <a class="item" data-tab="inventory"
             >{{localize 'orc.character.inventory'}}</a
           >
@@ -300,6 +374,26 @@
         </nav>
         {{!-- Sheet Body --}}
         <section class="sheet-body">
+          {{!-- Summary Tab --}}
+          <div class="tab summary" data-group="primary" data-tab="shortcut">
+            {{> systems/orc/templates/actors/tabs/actor-shortcut.html
+            sections=summary}}
+          </div>
+          {{!-- Weapon and armor Tab --}}
+          <div class="tab gear" data-group="primary" data-tab="gear">
+            {{> systems/orc/templates/actors/tabs/actor-gear.html
+            sections=gear}}
+          </div>
+          {{!-- magic Tab --}}
+          <div class="tab magic" data-group="primary" data-tab="magic">
+            {{> systems/orc/templates/actors/tabs/actor-magic.html
+            sections=magic}}
+          </div>
+          {{!-- Passive effect Tab --}}
+          <div class="tab passive" data-group="primary" data-tab="passive">
+            {{> systems/orc/templates/actors/tabs/actor-passive.html
+            sections=passive}}
+          </div>
           {{!-- Inventory Tab --}}
           <div class="tab inventory" data-group="primary" data-tab="inventory">
             {{> systems/orc/templates/actors/tabs/actor-inventory.html

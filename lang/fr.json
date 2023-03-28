@@ -19,6 +19,13 @@
       "defence": "Défense",
       "dodge": "Esquive",
       "damageBonus": "Bonus de dégâts",
+      "bleed": "Saignement",
+      "poison": "Poison",
+      "burn": "Brûlure",
+      "shortcut": "Raccourcis",
+      "gear": "Équipement",
+      "magic": "Magie",
+      "passive": "Passifs",
       "inventory": "Inventaire",
       "biography": "Biographie"
     },
@@ -56,6 +63,16 @@
       },
       "damageBonus": {
         "title": "Jet de dégâts bonus :"
+      },
+      "bleed": {
+        "title": "{charName} saigne !"
+      },
+      "poison": {
+        "title": "{charName} souffre d'empoisonnement !"
+      },
+      "burn": {
+        "title": "{charName} menace de prendre feu...",
+        "onFire": "{charName} s'enflamme !"
       }
     }
   }

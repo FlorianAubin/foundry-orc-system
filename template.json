@@ -123,18 +123,19 @@
       }
     },
     "weapon": {
-      "damage": 0,
+      "damage": "",
       "damageType": "piercing",
       "range": 0,
-      "defence": 0,
-      "reaction": 0,
       "hand": 1,
       "useammo": false,
-      "attackscore": 0,
+      "ammo": "",
+      "defenceModif": 0,
+      "reactionModif": 0,
+      "attackModif": 0,
       "templates": ["itemDescription", "itemEffect", "weight"]
     },
     "ammo": {
-      "damage": 0,
+      "damage": "",
       "templates": ["itemDescription", "itemEffect", "weight"]
     },
     "armor": {
