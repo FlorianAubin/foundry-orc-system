@@ -18,6 +18,7 @@
 }
 .orc.sheet.actor .main .header .image {
   display: flex;
+  max-width: 220px;
   margin-left: -5px;
   margin-right: -5px;
 }
@@ -28,13 +29,19 @@
   margin-left: 5px;
   margin-right: 10px;
 }
-.orc.sheet.actor .main .header .info .details {
+.orc.sheet.actor .main .header .info .detail {
   display: flex;
   width: 100%;
+}
+.orc.sheet.actor .main .header .info .detail .details {
+  display: flex;
+  flex-direction: column;
+  min-width: 100px;
 }
 .orc.sheet.actor .main .header .info .attributes {
   display: flex;
   width: 100%;
+  min-width: 100px;
 }
 .orc.sheet.actor .main .content {
   display: flex;
@@ -54,12 +61,57 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  min-width: 400px;
   margin-right: 10px;
 }
 .orc.sheet.actor .main .content .central .sheet-body {
   display: flex;
   flex-direction: column;
+  width: 100%;
   height: 100%;
+}
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .globalTable {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0 0 1em 0;
+}
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .globalTable th,
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .globalTable td {
+  width: 250px;
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
+}
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .damageTable,
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .healTable {
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  margin: 0 0 0 0;
+  border-bottom: 0;
+}
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .damageTable th,
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .healTable th,
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .damageTable td,
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .healTable td {
+  border-left: 0;
+  border-right: 0;
+}
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .takeDamage,
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .takeHeal {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  min-width: 70px;
+}
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .takeDamage .choice,
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .takeHeal .choice {
+  display: flex;
+  text-align: center;
+  place-content: center;
+  align-items: center;
+  width: 100%;
+  min-width: 60px;
 }
 .orc.sheet.actor .main .content .central .sheet-body .inventory {
   height: 100%;
@@ -86,34 +138,41 @@
   width: 100px;
   height: 100%;
 }
-.orc.sheet.actor .attack-roll,
-.orc.sheet.actor .dodge-roll,
-.orc.sheet.actor .damageBonus-roll,
-.orc.sheet.actor .bleed-poison-roll,
-.orc.sheet.actor .burn-roll,
-.orc.sheet.actor .burn-damage,
-.orc.sheet.actor .burn-off {
+.orc.sheet.actor .fas {
   display: table-cell;
+  align-self: center;
+  place-content: center;
   font-size: var(--font-size-15);
-  width: 30px;
   height: 100%;
 }
+.orc.sheet.actor .take-damage:hover,
+.orc.sheet.actor .take-heal:hover,
 .orc.sheet.actor .attribute-roll:hover,
 .orc.sheet.actor .attack-roll:hover,
 .orc.sheet.actor .dodge-roll:hover,
 .orc.sheet.actor .damageBonus-roll:hover,
-.orc.sheet.actor .bleed-poison-roll:hover,
+.orc.sheet.actor .bleed-roll:hover,
+.orc.sheet.actor .bleed-off:hover,
+.orc.sheet.actor .poison-roll:hover,
+.orc.sheet.actor .poison-off:hover,
 .orc.sheet.actor .burn-roll:hover,
 .orc.sheet.actor .burn-damage:hover,
 .orc.sheet.actor .burn-off:hover,
+.orc.sheet.actor .new-day:hover,
+.orc.sheet.actor .take-damage:focus,
+.orc.sheet.actor .take-heal:focus,
 .orc.sheet.actor .attribute-roll:focus,
 .orc.sheet.actor .attack-roll:focus,
 .orc.sheet.actor .dodge-roll:focus,
 .orc.sheet.actor .damageBonus-roll:focus,
-.orc.sheet.actor .bleed-poison-roll:focus,
+.orc.sheet.actor .bleed-roll:focus,
+.orc.sheet.actor .bleed-off:focus,
+.orc.sheet.actor .poison-roll:focus,
+.orc.sheet.actor .poison-off:focus,
 .orc.sheet.actor .burn-roll:focus,
 .orc.sheet.actor .burn-damage:focus,
-.orc.sheet.actor .burn-off:focus {
+.orc.sheet.actor .burn-off:focus,
+.orc.sheet.actor .new-day:focus {
   color: #000;
   box-shadow: inset 0 0 6px #b41212;
   cursor: pointer;

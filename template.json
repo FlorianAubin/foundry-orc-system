@@ -34,16 +34,21 @@
         "valueMaxBase": 0,
         "valueMaxModif": {},
         "valueMaxModifSum": 0,
-        "valueMax": 0
+        "valueMax": 0,
+        "surplus": 0
       },
       "mp": {
         "value": 0,
         "valueMaxBase": 0,
         "valueMaxModif": {},
         "valueMaxModifSum": 0,
-        "valueMax": 0
+        "valueMax": 0,
+        "surplus": 0
       },
       "ap": {
+        "nativeBase": 0,
+        "nativeModif": {},
+        "nativeModifSum": 0,
         "native": 0,
         "valueModif": {},
         "valueModifSum": 0,
@@ -92,6 +97,26 @@
         "bleed": 0,
         "poison": 0,
         "onfire": false
+      },
+      "nutrition": {
+        "foodDay": 0,
+        "drinkDay": 0,
+        "foodMax": 5,
+        "drinkMax": 8
+      },
+      "takeDamage": {
+        "damage": 0,
+        "applyArmor": true,
+        "onMP": false
+      },
+      "takeHeal": {
+        "heal": 0,
+        "multiplier": {
+          "native": 1,
+          "valueModif": {},
+          "valueModifSum": 0,
+          "value": 0
+        }
       },
       "description": ""
     }

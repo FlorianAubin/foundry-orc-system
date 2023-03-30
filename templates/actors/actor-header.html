@@ -1,0 +1,148 @@
+<img
+  class="image"
+  style="max-width: 200px; margin-left: 15px; margin-right: 15px"
+  src="{{actor.img}}"
+  data-edit="img"
+  title="{{actor.name}}"
+  height="200"
+  width="250"
+/>
+<div class="right-icon">
+  <a class="sheet-change-lock" title="lock/unlock sheet">
+    {{#if unlocked}}
+    <i class="fas fa-lock-open"></i>
+    {{else}}
+    <i class="fas fa-lock"></i>
+    {{/if}}
+  </a>
+</div>
+<div class="info">
+  <div class="name">
+    <h1 class="name" align="center">
+      {{#if unlocked}}
+      <input
+        name="name"
+        type="text"
+        value="{{actor.name}}"
+        placeholder="{{localize 'orc.name'}}"
+        onClick="this.select();"
+      />
+      {{else}}
+      <span>{{actor.name}}</span>
+      {{/if}}
+    </h1>
+  </div>
+  <div class="detail" align="center">
+    <table>
+      <tr>
+        <th>{{localize "orc.character.race"}}</th>
+        <th>{{localize "orc.character.job"}}</th>
+        <th>{{localize "orc.character.lvl"}}</th>
+        <th>{{localize "orc.character.faction"}}</th>
+      </tr>
+      <tr>
+        <td>
+          <h4 class="details race" align="center">
+            {{#if unlocked}}
+            <input
+              type="text"
+              name="system.details.race"
+              value="{{actor.system.details.race}}"
+              placeholder="{{localize 'orc.character.race'}}"
+              onClick="this.select();"
+            />
+            {{else}}
+            <span>{{actor.system.details.race}}</span>
+            {{/if}}
+          </h4>
+        </td>
+        <td>
+          <h4 class="details job" align="center">
+            {{#if unlocked}}
+            <input
+              type="text"
+              name="system.details.job"
+              value="{{actor.system.details.job}}"
+              placeholder="{{localize 'orc.character.job'}}"
+              onClick="this.select();"
+            />
+            {{else}}
+            <span>{{actor.system.details.job}}</span>
+            {{/if}}
+          </h4>
+        </td>
+
+        <td>
+          <h4 class="details lvl" align="center">
+            {{#if unlocked}}
+            <input
+              type="number"
+              name="system.details.lvl"
+              value="{{actor.system.details.lvl}}"
+              placeholder="{{localize 'orc.character.lvl'}}"
+              onClick="this.select();"
+            />
+            {{else}}
+            <span>{{actor.system.details.lvl}}</span>
+            {{/if}}
+          </h4>
+        </td>
+        <td>
+          <h4 class="details faction" align="center">
+            {{#if unlocked}}
+            <input
+              type="text"
+              name="system.details.faction"
+              value="{{actor.system.details.faction}}"
+              placeholder="{{localize 'orc.character.faction'}}"
+              onClick="this.select();"
+            />
+            {{else}}
+            <span>{{actor.system.details.faction}}</span>
+            {{/if}}
+          </h4>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="attributes" align="center">
+    <table>
+      <tr>
+        {{#each actor.system.attributes as |attribute a|}}
+        <th
+          class="attribute-roll fas fa-dice"
+          data-attributename="{{localize attribute.name}}"
+          data-attributevalue="{{attribute.value}}"
+          data-attributevaluebase="{{attribute.valueBase}}"
+          data-attributevaluemodif="{{attribute.valueModifSum}}"
+          align="center"
+        >
+          {{localize attribute.name}}
+        </th>
+        {{/each}}
+      </tr>
+      <tr>
+        {{#each actor.system.attributes as |attribute a|}}
+        <td>
+          <h4 class="attributes-name box-title" align="center">
+            {{#if ../unlocked}}
+            <input
+              class="attributes-score"
+              type="number"
+              name="system.attributes.{{a}}.valueBase"
+              value="{{attribute.valueBase}}"
+              placeholder="0"
+              onClick="this.select();"
+            />
+            {{else}}
+            <span class="attribute-value" align="center"
+              >{{attribute.value}}</span
+            >
+            {{/if}}
+          </h4>
+        </td>
+        {{/each}}
+      </tr>
+    </table>
+  </div>
+</div>

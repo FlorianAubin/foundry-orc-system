@@ -4,6 +4,8 @@ import * as Chat from "./commons/chat.js";
 import ORCItemSheet from "./sheets/ORCItemSheet.js";
 import ORCCharacterSheet from "./sheets/ORCCharacterSheet.js";
 import { preloadHandlebarsTemplates } from "./commons/templates.js";
+import { RegisterHandlebars } from "./commons/handlebars.mjs";
+
 //import ORCActiveEffect from "./effects/ORCActiveEffect.js";
 //import ORCActiveEffectConfig from "./effects/ORCActiveEffectConfig.js";
 
@@ -23,6 +25,8 @@ Hooks.once("init", async function () {
   Items.registerSheet("orc", ORCItemSheet, { makeDefault: true });
 
   preloadHandlebarsTemplates();
+
+  RegisterHandlebars();
 });
 
 Hooks.on("renderChatMessage", (app, html, data) => {

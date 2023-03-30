@@ -1,0 +1,292 @@
+<table style="width: 200px">
+  <th></th>
+  <th>{{localize "orc.effective"}}</th>
+  <th>{{localize "orc.max"}}</th>
+  <tr>
+    <th>{{localize "orc.character.hp"}}</th>
+    <td align="center">
+      <input
+        type="number"
+        name="system.hp.value"
+        value="{{actor.system.hp.value}}"
+        placeholder="0"
+        onClick="this.select();"
+        style="width: 40px"
+      />
+    </td>
+    <td align="center">
+      {{#if unlocked}}
+      <input
+        type="number"
+        name="system.hp.valueMaxBase"
+        value="{{actor.system.hp.valueMaxBase}}"
+        placeholder="0"
+        onClick="this.select();"
+        style="width: 40px"
+      />
+      {{else}} {{#if (eq actor.system.hp.value actor.system.hp.surplus)}}
+      <span align="center" class="fas fa-skull-crossbones"></span>
+      {{else}} {{#if (isLowerThan actor.system.hp.value 1)}}
+      <span align="center" class="fas fa-face-dizzy"></span>
+      {{/if}} {{/if}}
+      <span>{{actor.system.hp.valueMax}}</span>
+      {{/if}}
+    </td>
+  </tr>
+  <tr>
+    <th>{{localize "orc.character.mp"}}</th>
+    <td align="center">
+      <input
+        type="number"
+        name="system.mp.value"
+        value="{{actor.system.mp.value}}"
+        placeholder="0"
+        onClick="this.select();"
+        style="width: 40px"
+      />
+    </td>
+    <td align="center">
+      {{#if unlocked}}
+      <input
+        type="number"
+        name="system.mp.valueMaxBase"
+        value="{{actor.system.mp.valueMaxBase}}"
+        placeholder="0"
+        onClick="this.select();"
+        style="width: 40px"
+      />
+      {{else}}
+      <span>{{actor.system.mp.valueMax}}</span>
+      {{/if}}
+    </td>
+  </tr>
+  <th></th>
+  {{#if unlocked}}
+  <th colspan="2">{{localize "orc.native"}}</th>
+  {{else}}
+  <th colspan="2">{{localize "orc.effective"}}</th>
+  {{/if}}
+  <tr>
+    <th>{{localize "orc.character.ap"}}</th>
+    {{#if unlocked}}
+    <td align="center" colspan="2">
+      <input
+        type="number"
+        name="system.ap.nativeBase"
+        value="{{actor.system.ap.nativeBase}}"
+        placeholder="0"
+        onClick="this.select();"
+        style="width: 40px"
+      />
+    </td>
+    {{else}}
+    <td align="center" colspan="2">
+      <span>{{actor.system.ap.value}}</span>
+    </td>
+    {{/if}}
+  </tr>
+</table>
+<table style="width: 200px">
+  <tr>
+    <th>{{localize "orc.character.combatStyle"}}</th>
+    <td align="center" colspan="2">
+      <select name="system.combatStyle" align="center">
+        {{#select actor.system.combatStyle}} {{#each config.combatStyleList as
+        |combatstyle style|}}
+        <option value="{{style}}">{{localize combatstyle}}</option>
+        {{/each}} {{/select}}
+      </select>
+    </td>
+  </tr>
+  <tr align="center">
+    <th>{{localize "orc.character.attack"}}</th>
+    <td>{{actor.system.attack.value}}</td>
+    <td
+      class="attack-roll fas fa-dice"
+      data-attributename="{{localize 'orc.character.attack'}}"
+      data-attributevalue="{{actor.system.attack.value}}"
+      data-attributevaluebase="{{actor.system.attack.native}}"
+      data-attributevaluemodif="{{actor.system.attack.valueModifSum}}"
+    ></td>
+  </tr>
+  {{#if actor.system.defence.value}}
+  <tr align="center">
+    <th>{{localize "orc.character.defence"}}</th>
+    <td class="defence">{{actor.system.defence.value}}</td>
+  </tr>
+  {{/if}} {{#if actor.system.dodge.enable}}
+  <tr align="center">
+    <th>{{localize "orc.character.dodge"}}</th>
+    <td>{{actor.system.dodge.value}}</td>
+    <td
+      class="dodge-roll fas fa-dice"
+      data-attributename="{{localize 'orc.character.dodge'}}"
+      data-attributevalue="{{actor.system.dodge.value}}"
+      data-attributevaluebase="{{actor.system.dodge.native}}"
+      data-attributevaluemodif="{{actor.system.dodge.valueModifSum}}"
+    ></td>
+  </tr>
+  {{/if}} {{#if actor.system.damageBonus.value}}
+  <tr align="center">
+    <th>{{localize "orc.character.damageBonus"}}</th>
+    <td>{{actor.system.damageBonus.value}}</td>
+    <td
+      class="damageBonus-roll fas fa-dice"
+      data-formula="{{localize actor.system.damageBonus.value}}"
+    ></td>
+  </tr>
+  {{/if}}
+</table>
+<table style="width: 200px">
+  <th></th>
+  {{#if (or actor.system.status.bleed actor.system.status.poison
+  actor.system.status.onfire)}}
+  <th>{{localize "orc.cure"}}</th>
+  {{else}}
+  <th></th>
+  {{/if}}
+  <th>{{localize "orc.stack"}}</th>
+  {{#if (or actor.system.status.bleed actor.system.status.poison
+  actor.system.status.burn actor.system.status.onfire)}}
+  <th>{{localize "orc.effect"}}</th>
+  {{else}}
+  <th></th>
+  {{/if}}
+  <tr>
+    <th>{{localize "orc.character.bleed"}}</th>
+    {{#if actor.system.status.bleed}}
+    <td class="bleed-off fas fa-bandage" align="center"></td>
+    {{else}}
+    <td></td>
+    {{/if}}
+    <td align="center">
+      <input
+        type="number"
+        name="system.status.bleed"
+        value="{{actor.system.status.bleed}}"
+        placeholder="0"
+        onClick="this.select();"
+        style="width: 30px"
+        align="center"
+      />
+    </td>
+    {{#if actor.system.status.bleed}}
+    <td class="bleed-roll fas fa-droplet" data-type="bleed" align="center"></td>
+    {{/if}}
+  </tr>
+  <tr>
+    <th>{{localize "orc.character.poison"}}</th>
+    {{#if actor.system.status.poison}}
+    <td class="poison-off fas fa-flask-round-potion" align="center"></td>
+    {{else}}
+    <td></td>
+    {{/if}}
+    <td align="center">
+      <input
+        type="number"
+        name="system.status.poison"
+        value="{{actor.system.status.poison}}"
+        placeholder="0"
+        onClick="this.select();"
+        style="width: 30px"
+        align="center"
+      />
+    </td>
+    {{#if actor.system.status.poison}}
+    <td
+      class="poison-roll fas fa-flask-round-poison"
+      data-type="poison"
+      align="center"
+    ></td>
+    {{/if}}
+  </tr>
+  <tr>
+    <th>{{localize "orc.character.burn"}}</th>
+    {{#if actor.system.status.onfire}}
+    <td class="burn-off fas fa-fire-extinguisher" align="center"></td>
+    {{else}}
+    <td></td>
+    {{/if}}
+    <td align="center">
+      <input
+        type="number"
+        name="system.status.burn"
+        value="{{actor.system.status.burn}}"
+        placeholder="0"
+        onClick="this.select();"
+        style="width: 30px"
+        align="center"
+      />
+    </td>
+    {{#if actor.system.status.burn}} {{#if actor.system.status.onfire}}
+    <td class="burn-damage fas fa-fire" align="center"></td>
+    {{else}}
+    <td class="burn-roll fas fa-dice" align="center"></td>
+
+    {{/if}} {{/if}}
+  </tr>
+</table>
+<table style="width: 200px">
+  <th></th>
+  <th>{{localize "orc.day"}}</th>
+  <th>{{localize "orc.max"}}</th>
+  <tr>
+    <th>{{localize "orc.character.food"}}</th>
+    <td align="center">
+      <input
+        type="number"
+        name="system.nutrition.foodDay"
+        value="{{actor.system.nutrition.foodDay}}"
+        placeholder="0"
+        onClick="this.select();"
+        style="width: 40px"
+      />
+    </td>
+    <td align="center">
+      {{#if unlocked}}
+      <input
+        type="number"
+        name="system.nutrition.foodMax"
+        value="{{actor.system.nutrition.foodMax}}"
+        placeholder="0"
+        onClick="this.select();"
+        style="width: 40px"
+      />
+      {{else}}
+      <span>{{actor.system.nutrition.foodMax}}</span>
+      {{/if}}
+    </td>
+  </tr>
+  <tr>
+    <th>{{localize "orc.character.drink"}}</th>
+    <td align="center">
+      <input
+        type="number"
+        name="system.nutrition.drinkDay"
+        value="{{actor.system.nutrition.drinkDay}}"
+        placeholder="0"
+        onClick="this.select();"
+        style="width: 40px"
+      />
+    </td>
+    <td align="center">
+      {{#if unlocked}}
+      <input
+        type="number"
+        name="system.nutrition.drinkMax"
+        value="{{actor.system.nutrition.drinkMax}}"
+        placeholder="0"
+        onClick="this.select();"
+        style="width: 40px"
+      />
+      {{else}}
+      <span>{{actor.system.nutrition.drinkMax}}</span>
+      {{/if}}
+    </td>
+  </tr>
+</table>
+<table style="width: 200px">
+  <th class="new-day fas fa-calendar-days" align="center">
+    {{localize "orc.newDay"}}
+  </th>
+</table>
