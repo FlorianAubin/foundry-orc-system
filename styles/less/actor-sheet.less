@@ -11,121 +11,13 @@
     flex-direction: column;
     width: 100%;
     height: 100%;
-    .header {
-      display: flex;
-      flex-direction: row;
-      width: 100%;
-      .image {
-        display: flex;
-        max-width: 220px;
-        margin-left: -5px;
-        margin-right: -5px;
-      }
-      .info {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        margin-left: 5px;
-        margin-right: 10px;
-        .detail {
-          display: flex;
-          width: 100%;
-          .details {
-            display: flex;
-            flex-direction: column;
-            min-width: 100px;
-          }
-        }
-        .attributes {
-          display: flex;
-          width: 100%;
-          min-width: 100px;
-        }
-      }
-    }
     .content {
       display: flex;
       flex-direction: row;
       height: 100%;
-      .leftcolumn {
-        display: flex;
-        flex-direction: column;
-        flex-grow: 0;
-        flex-shrink: 0;
-        width: 235px;
-        margin-left: 10px;
-        margin-right: -5px;
-      }
-      .central {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        min-width: 400px;
-        margin-right: 10px;
-        .sheet-body {
-          display: flex;
-          flex-direction: column;
-          width: 100%;
-          height: 100%;
-          .shortcut {
-            .global {
-              .globalTable {
-                display: flex;
-                flex-direction: column;
-                width: 100%;
-                margin: 0 0 1em 0;
-                th,
-                td {
-                  width: 250px;
-                  border-left: 1px solid #000;
-                  border-right: 1px solid #000;
-                }
-              }
-              .damageTable,
-              .healTable {
-                display: flex;
-                flex-direction: column;
-                width: 250px;
-                margin: 0 0 0 0;
-                border-bottom: 0;
-                th,
-                td {
-                  border-left: 0;
-                  border-right: 0;
-                }
-              }
-              .takeDamage,
-              .takeHeal {
-                display: flex;
-                flex-direction: row;
-                width: 100%;
-                min-width: 70px;
-                .choice {
-                  display: flex;
-                  text-align: center;
-                  place-content: center;
-                  align-items: center;
-                  width: 100%;
-                  min-width: 60px;
-                }
-              }
-            }
-          }
-          .inventory {
-            height: 100%;
-            .weapon-list {
-              display: flex;
-              flex-direction: column;
-              margin: 0 0 1em 0;
-            }
-          }
-          .biography {
-            height: 100%;
-          }
-        }
-      }
     }
   }
+
   .attribute-value {
     display: flex;
     flex-direction: column;
@@ -140,46 +32,21 @@
     width: 100px;
     height: 100%;
   }
-  .fas {
+  .button {
     display: table-cell;
     align-self: center;
     place-content: center;
     font-size: var(--font-size-15);
     height: 100%;
   }
-  .take-damage:hover,
-  .take-heal:hover,
-  .attribute-roll:hover,
-  .attack-roll:hover,
-  .dodge-roll:hover,
-  .damageBonus-roll:hover,
-  .bleed-roll:hover,
-  .bleed-off:hover,
-  .poison-roll:hover,
-  .poison-off:hover,
-  .burn-roll:hover,
-  .burn-damage:hover,
-  .burn-off:hover,
-  .new-day:hover,
-  .take-damage:focus,
-  .take-heal:focus,
-  .attribute-roll:focus,
-  .attack-roll:focus,
-  .dodge-roll:focus,
-  .damageBonus-roll:focus,
-  .bleed-roll:focus,
-  .bleed-off:focus,
-  .poison-roll:focus,
-  .poison-off:focus,
-  .burn-roll:focus,
-  .burn-damage:focus,
-  .burn-off:focus,
-  .new-day:focus {
+  .button:hover,
+  .button:focus {
     color: #000;
     box-shadow: inset 0 0 6px rgb(180, 18, 18);
     cursor: pointer;
   }
   .editor {
+    min-height: 50px;
     height: 100%;
     box-shadow: inset 0 0 6px black;
   }

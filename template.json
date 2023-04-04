@@ -7,21 +7,18 @@
           "name": "orc.character.attributes.physical",
           "valueBase": 0,
           "valueModif": {},
-          "valueModifSum": 0,
           "value": 0
         },
         "social": {
           "name": "orc.character.attributes.social",
           "valueBase": 0,
           "valueModif": {},
-          "valueModifSum": 0,
           "value": 0
         },
         "intel": {
           "name": "orc.character.attributes.intel",
           "valueBase": 0,
           "valueModif": {},
-          "valueModifSum": 0,
           "value": 0
         }
       },
@@ -33,7 +30,6 @@
         "value": 0,
         "valueMaxBase": 0,
         "valueMaxModif": {},
-        "valueMaxModifSum": 0,
         "valueMax": 0,
         "surplus": 0
       },
@@ -41,55 +37,49 @@
         "value": 0,
         "valueMaxBase": 0,
         "valueMaxModif": {},
-        "valueMaxModifSum": 0,
         "valueMax": 0,
         "surplus": 0
       },
       "ap": {
         "nativeBase": 0,
         "nativeModif": {},
-        "nativeModifSum": 0,
         "native": 0,
         "valueModif": {},
-        "valueModifSum": 0,
         "value": 0
       },
-      "weight": {
-        "native": 0,
+      "encumbrance": {
         "valueModif": {},
-        "valueModifSum": 0,
-        "value": 0
+        "value": 0,
+        "limitMultiplier": 0.5,
+        "limitModif": {},
+        "limit": 0
       },
       "attack": {
         "native": 0,
         "valueModif": {},
-        "valueModifSum": 0,
         "value": 0
       },
       "defence": {
         "native": 0,
         "valueModif": {},
-        "valueModifSum": 0,
         "value": 0
       },
       "dodge": {
         "enable": false,
         "native": 0,
         "valueModif": {},
-        "valueModifSum": 0,
         "value": 0
       },
       "damageBonus": {
         "native": "",
         "valueModif": {},
-        "valueModifSum": "",
         "value": ""
       },
       "combatStyle": "standard",
       "details": {
         "race": "",
         "job": "",
-        "lvl": 0,
+        "lvl": 1,
         "faction": ""
       },
       "status": {
@@ -102,23 +92,28 @@
         "foodDay": 0,
         "drinkDay": 0,
         "foodMax": 5,
-        "drinkMax": 8
+        "drinkMax": 8,
+        "foodNeededDay": 1,
+        "drinkNeededDay": 1,
+        "tipsiness": 0
       },
       "takeDamage": {
         "damage": 0,
         "applyArmor": true,
         "onMP": false
       },
-      "takeHeal": {
+      "recoverHP": {
         "heal": 0,
         "multiplier": {
           "native": 1,
           "valueModif": {},
-          "valueModifSum": 0,
           "value": 0
         }
       },
-      "description": ""
+      "recoverMP": {
+        "heal": 0
+      },
+      "biography": ""
     }
   },
 
@@ -129,6 +124,7 @@
       "armor",
       "consumable",
       "generalitem",
+      "bag",
       "spell",
       "active",
       "passive",
@@ -136,44 +132,53 @@
       "disease",
       "mutation"
     ],
-    "templates": {
-      "itemDescription": {
-        "description": ""
-      },
-      "itemEffect": {
-        "effect": ""
-      },
-      "itemweight": {
-        "weight": 0
-      }
-    },
     "weapon": {
       "damage": "",
-      "damageType": "piercing",
+      "damageType": "",
       "range": 0,
-      "hand": 1,
-      "useammo": false,
+      "useAmmo": false,
       "ammo": "",
       "defenceModif": 0,
-      "reactionModif": 0,
       "attackModif": 0,
-      "templates": ["itemDescription", "itemEffect", "weight"]
+      "precise": false,
+      "weight": 0,
+      "effect": "",
+      "description": "",
+      "equipped": false
     },
     "ammo": {
       "damage": "",
-      "templates": ["itemDescription", "itemEffect", "weight"]
+      "weight": 0,
+      "effect": "",
+      "stock": 0,
+      "description": ""
     },
     "armor": {
       "PA": 0,
-      "localisation": "head",
-      "templates": ["itemDescription", "weight"]
+      "localisation": "",
+      "weight": 0,
+      "description": ""
+    },
+    "food": {
+      "hp": 0,
+      "mp": 0,
+      "tipsiness": 0,
+      "description": ""
     },
     "consumable": {
+      "hp": 0,
+      "mp": 0,
       "duration": 0,
-      "templates": ["itemDescription", "itemEffect"]
+      "weight": 0,
+      "description": ""
     },
     "generalitem": {
-      "templates": ["itemDescription"]
+      "weight": 0,
+      "description": ""
+    },
+    "bag": {
+      "capacity": 0,
+      "description": ""
     },
     "spell": {
       "MPcost": 0,
@@ -181,16 +186,16 @@
       "damage": 0,
       "damageType": "",
       "duration": 0,
-      "templates": ["itemDescription", "itemEffect"]
+      "description": ""
     },
     "active": {
       "duration": 0,
       "damage": 0,
-      "templates": ["itemDescription"]
+      "effect": "",
+      "description": ""
     },
     "passive": {
-      "roll": 0,
-      "templates": ["itemDescription"]
+      "description": ""
     },
     "wound": {
       "attributesModif": {
@@ -198,7 +203,7 @@
         "social": 0,
         "intel": 0
       },
-      "templates": ["itemDescription", "itemEffect"]
+      "description": ""
     },
     "disease": {
       "attributesModif": {
@@ -206,10 +211,10 @@
         "social": 0,
         "intel": 0
       },
-      "templates": ["itemDescription", "itemEffect"]
+      "description": ""
     },
     "mutation": {
-      "templates": ["itemDescription", "itemEffect"]
+      "description": ""
     }
   }
 }

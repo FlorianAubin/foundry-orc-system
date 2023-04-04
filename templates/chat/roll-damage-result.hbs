@@ -1,0 +1,24 @@
+<div class="orc attack-roll dice-roll">
+  <table class="results weapon-damage">
+  <tr class="title"><th>{{title}}</th></tr>
+  {{#if (eq ammoTag 2)}}
+    <tr class="ammo"><td>{{ammo}}</td></tr>
+  {{else}}
+    {{#if (eq ammoTag 1)}}
+    <tr class="ammo"><td>{{ammo}}</td></tr>
+    {{/if}}
+      <tr class="dice-formula">
+        <td>{{roll.formula}}</td>
+      </tr>
+      <tr class="dice-total">
+        <td>{{roll.total}}</td>
+      </tr>
+      {{#if effect}}
+        <tr class="effects">
+          <td>{{effect}}</td>
+        </tr>
+      {{/if}}
+    </table>
+    {{{tooltip}}}
+  {{/if}}
+</div>

@@ -1,0 +1,158 @@
+<div class="global">
+  <table class="global-table">
+    <tr class="header flexrow">
+      <th>{{localize "orc.damageTaken"}}</th>
+      <th>{{localize "orc.recoverHP"}}</th>
+      <th>{{localize "orc.recoverMP"}}</th>
+    </tr>
+    <tr class="column-container flexrow">
+      <td class="table-container">
+        <table class="take-damage-table">
+          <tr class="take-damage-row">
+            <td class="choice">{{localize "orc.damage"}}</td>
+            <td class="choice">{{localize "orc.character.ap"}}</td>
+            <td class="choice">{{localize "orc.character.mp"}}</td>
+            <td class="choice"></td>
+          </tr>
+          <tr class="take-damage-row">
+            <td class="choice">
+              <input
+                type="text"
+                name="system.takeDamage.damage"
+                value="{{actor.system.takeDamage.damage}}"
+                placeholder="0"
+                onClick="this.select();"
+                style="width: 40px"
+              />
+            </td>
+            <td class="choice">
+              <input
+                name="system.takeDamage.applyArmor"
+                type="checkbox"
+                {{checked actor.system.takeDamage.applyArmor}}
+              />
+            </td>
+            <td class="choice">
+              <input
+                name="system.takeDamage.onMP"
+                type="checkbox"
+                {{checked actor.system.takeDamage.onMP}}
+              />
+            </td>
+            <td
+              class="choice button take-damage fas fa-heart-crack"
+              data-damage="{{actor.system.takeDamage.damage}}"
+              data-applyArmor="{{actor.system.takeDamage.applyArmor}}"
+              data-onmp="{{actor.system.takeDamage.onMP}}"
+              align="center"
+            ></td>
+          </tr>
+        </table>
+      </td>
+      <td class="table-container">
+        <table class="heal-table">
+          <tr class="heal-hp-row">
+            <td class="choice">{{localize "orc.character.hp"}}</td>
+            <td class="choice">{{localize "orc.multiplier"}}</td>
+            <td class="choice"></td>
+          </tr>
+          <tr class="heal-hp-row">
+            <td class="choice">
+              <input
+                type="text"
+                name="system.recoverHP.heal"
+                value="{{actor.system.recoverHP.heal}}"
+                placeholder="0"
+                onClick="this.select();"
+                style="width: 40px"
+              />
+            </td>
+            {{#if unlocked}}
+              <td class="choice">
+                <input
+                  type="number"
+                  name="system.recoverHP.multiplier.native"
+                  value="{{actor.system.recoverHP.multiplier.native}}"
+                  placeholder="0"
+                  onClick="this.select();"
+                  style="width: 40px"
+                />
+              </td>
+            {{else}}
+              <td
+                class="choice"
+              >{{actor.system.recoverHP.multiplier.value}}</td>
+            {{/if}}
+            <td
+              class="choice button recover-hp fas fa-medkit"
+              data-heal="{{actor.system.recoverHP.heal}}"
+              data-multiplier="{{actor.system.recoverHP.multiplier.value}}"
+              align="center"
+            ></td>
+          </tr>
+        </table>
+      </td>
+      <td class="table-container">
+        <table class="heal-table">
+          <tr class="heal-mp-row">
+            <td class="choice">{{localize "orc.character.mp"}}</td>
+            <td class="choice"></td>
+          </tr>
+          <tr class="heal-mp-row">
+            <td class="choice">
+              <input
+                type="text"
+                name="system.recoverMP.heal"
+                value="{{actor.system.recoverMP.heal}}"
+                placeholder="0"
+                onClick="this.select();"
+                style="width: 40px"
+              />
+            </td>
+            <td
+              class="choice button recover-mp fas fa-sparkles"
+              data-heal="{{actor.system.recoverMP.heal}}"
+              align="center"
+            ></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <table class="item-list weapon-list">
+    <tr class="header flexrow">
+      <th class="content">{{localize "orc.weapons"}}</th>
+    </tr>
+    <tr class="header flexrow">
+      <th></th>
+      <th>Munition</th>
+      <th class="content">{{localize "orc.character.attack"}}</th>
+    </tr>
+    {{#each weapons as |item id|}}
+      {{#if item.system.equipped}}
+        <tr class="item flexrow" data-item-id="{{item._id}}">
+          <td class="content">{{item.name}}</td>
+          <td class="content">
+            {{#if item.system.useAmmo}}
+              <select class="weapon-choose-ammo" name="system.ammo" align="center">
+              {{#select item.system.ammo}} 
+              {{#each ../ammo as |munition|}}
+              <option value="{{munition._id}}">{{munition.name}}</option>
+              {{/each}} 
+              {{/select}}
+            </select>
+            {{/if}}
+          </td>
+          <td
+            class="content attack-with-weapon-roll button fas fa-dice"
+            data-attributename="{{localize 'orc.character.attack'}}"
+            data-attributevalue="{{../actor.system.attack.value}}"
+            data-attributevaluebase="{{../actor.system.attack.native}}"
+            data-attributevaluemodiflocal="{{item.system.attackModif}}"
+            data-weaponid="{{item._id}}"
+          ></td>
+        </tr>
+      {{/if}}
+    {{/each}}
+  </table>
+</div>

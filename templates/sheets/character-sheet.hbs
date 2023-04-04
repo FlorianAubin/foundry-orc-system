@@ -2,13 +2,13 @@
   <div class="main">
     {{!-- Sheet Header --}}
     <div class="header">
-      {{> systems/orc/templates/actors/actor-header.html}}
+      {{> systems/orc/templates/actors/actor-header.hbs}}
     </div>
     {{!-- Sheet Content --}}
     <div class="content">
       {{!-- Sheet Left Column --}}
       <div class="leftcolumn" align="center" style="width: 220px">
-        {{> systems/orc/templates/actors/actor-left-column.html}}
+        {{> systems/orc/templates/actors/actor-left-column.hbs}}
       </div>
       {{!-- Sheet Central --}}
       <div class="central">
@@ -34,27 +34,27 @@
         <section class="sheet-body">
           {{!-- Summary Tab --}}
           <div class="tab shortcut" data-group="primary" data-tab="shortcut">
-            {{> systems/orc/templates/actors/tabs/actor-shortcut.html
+            {{> systems/orc/templates/actors/tabs/actor-shortcut.hbs
             sections=summary}}
           </div>
           {{!-- Inventory Tab --}}
           <div class="tab inventory" data-group="primary" data-tab="inventory">
-            {{> systems/orc/templates/actors/tabs/actor-inventory.html
+            {{> systems/orc/templates/actors/tabs/actor-inventory.hbs
             sections=inventory}}
           </div>
           {{!-- magic Tab --}}
           <div class="tab magic" data-group="primary" data-tab="magic">
-            {{> systems/orc/templates/actors/tabs/actor-magic.html
+            {{> systems/orc/templates/actors/tabs/actor-magic.hbs
             sections=magic}}
           </div>
           {{!-- Capacity effect Tab --}}
           <div class="tab capacity" data-group="primary" data-tab="capacity">
-            {{> systems/orc/templates/actors/tabs/actor-capacity.html
+            {{> systems/orc/templates/actors/tabs/actor-capacity.hbs
             sections=capacity}}
           </div>
           {{!-- Biography Tab --}}
           <div class="tab biography" data-group="primary" data-tab="biography">
-            {{> systems/orc/templates/actors/tabs/actor-biography.html
+            {{> systems/orc/templates/actors/tabs/actor-biography.hbs
             sections=biography}}
           </div>
         </section>

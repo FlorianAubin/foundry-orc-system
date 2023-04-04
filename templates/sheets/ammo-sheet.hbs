@@ -1,0 +1,93 @@
+<form class="{{cssClass}} ammo" autocomplete="off">
+  <div class="main">
+    <div class="header">
+      <div class="lock-icon">
+        <a class="sheet-change-lock" title="lock/unlock sheet">
+          {{#if unlocked}}
+            <i class="button fas fa-lock-open"></i>
+          {{else}}
+            <i class="button fas fa-lock"></i>
+          {{/if}}
+        </a>
+      </div>
+      <div>
+        <img
+          src="{{item.img}}"
+          data-edit="img"
+          title="{{item.name}}"
+          height="64"
+          width="64"
+        />
+      </div>
+      <div class="name">
+        <h1 class="name" align="center">
+          {{#if unlocked}}
+            <input
+              name="name"
+              type="text"
+              value="{{item.name}}"
+              placeholder="{{localize 'orc.name'}}"
+              onClick="this.select();"
+            />
+          {{else}}
+            <span>{{item.name}}</span>
+          {{/if}}
+        </h1>
+      </div>
+    </div>
+    <div class="content">
+      <table>
+        <tr>
+          <th>{{localize "orc.weapon.damage"}}</th>
+          <th>{{localize "orc.weapon.effect"}}</th>
+          <th>{{localize "orc.ammo.stock"}}</th>
+        </tr>
+        <tr>
+          <td align="center">
+            {{#if unlocked}}
+              <input
+                name="system.damage"
+                type="text"
+                value="{{item.system.damage}}"
+                placeholder="0"
+              />
+            {{else}}
+              <span>{{item.system.damage}}</span>
+            {{/if}}
+          </td>
+          <td align="center">
+            {{#if unlocked}}
+              <input
+                name="system.effect"
+                type="text"
+                value="{{item.system.effect}}"
+                placeholder=""
+              />
+            {{else}}
+              <span>{{item.system.effect}}</span>
+            {{/if}}
+          </td>
+          <td align="center">
+            {{#if unlocked}}
+              <input
+                name="system.stock"
+                type="number"
+                value="{{item.system.stock}}"
+                placeholder="0"
+              />
+            {{else}}
+              <span>{{item.system.stock}}</span>
+            {{/if}}
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  {{editor
+    descriptionHTML
+    target="system.description"
+    button=true
+    owner=owner
+    editable=editable
+  }}
+</form>

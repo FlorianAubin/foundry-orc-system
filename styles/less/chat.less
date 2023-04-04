@@ -1,4 +1,4 @@
-.orc.attackBonus-roll,
+.orc.attack-roll,
 .orc.attribute-roll {
   display: flex;
   flex-direction: column;
@@ -18,26 +18,18 @@
       text-align: right;
     }
   }
-  .dice-formula {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    background: rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--color-border-light-2);
-    border-radius: 3px;
-    box-shadow: 0 0 2px #fff inset;
-  }
   .results {
+    .dice-formula {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      place-content: center;
+      height: 20px;
+    }
     .dice-total {
       display: flex;
       flex-direction: column;
-      font-size: var(--font-size-20);
-      font-weight: bold;
-      text-align: center;
-      background: rgba(0, 0, 0, 0.1);
-      border: 1px solid var(--color-border-light-2);
-      border-radius: 3px;
-      box-shadow: 0 0 2px #fff inset;
+      place-content: center;
     }
     .dice-total.critical {
       color: rgb(0, 190, 0);
@@ -54,8 +46,6 @@
     text-align: center;
     background: rgba(0, 0, 0, 0.1);
     border: 1px solid var(--color-border-light-2);
-    border-radius: 3px;
-    box-shadow: 0 0 2px #fff inset;
   }
   .dice-excess.positive {
     display: flex;

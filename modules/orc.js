@@ -1,7 +1,8 @@
 import { ORC } from "./commons/config.js";
 import * as Macros from "./commons/macros.js";
 import * as Chat from "./commons/chat.js";
-import ORCItemSheet from "./sheets/ORCItemSheet.js";
+import ORCAmmoSheet from "./sheets/ORCAmmoSheet.js";
+import ORCWeaponSheet from "./sheets/ORCWeaponSheet.js";
 import ORCCharacterSheet from "./sheets/ORCCharacterSheet.js";
 import { preloadHandlebarsTemplates } from "./commons/templates.js";
 import { RegisterHandlebars } from "./commons/handlebars.mjs";
@@ -19,10 +20,20 @@ Hooks.once("init", async function () {
   };
 
   Actors.unregisterSheet("core", ActorSheet);
-  Actors.registerSheet("orc", ORCCharacterSheet, { makeDefault: true });
+  Actors.registerSheet("character", ORCCharacterSheet, {
+    types: ["character"],
+    makeDefault: true,
+  });
 
   Items.unregisterSheet("core", ItemSheet);
-  Items.registerSheet("orc", ORCItemSheet, { makeDefault: true });
+  Items.registerSheet("weapon", ORCWeaponSheet, {
+    types: ["weapon"],
+    makeDefault: true,
+  });
+  Items.registerSheet("ammo", ORCAmmoSheet, {
+    types: ["ammo"],
+    makeDefault: true,
+  });
 
   preloadHandlebarsTemplates();
 

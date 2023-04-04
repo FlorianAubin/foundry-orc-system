@@ -2,12 +2,10 @@
   "orc": {
     "name": "Nom",
     "damageTaken": "Subir des dégâts",
-    "healTaken": "Subir un soin",
+    "recoverHP": "Récupérer des HP",
+    "recoverMP": "Récupérer des MP",
     "damage": "Dégâts",
-    "armor": "Armure",
-    "onMP": "MP",
-    "heal": "Soins",
-    "healMultiplier": "Multiplicateur",
+    "multiplier": "Multiplicateur",
     "effective": "Effective",
     "max": "Max.",
     "native": "Native",
@@ -24,6 +22,7 @@
       "hp": "HP",
       "mp": "MP",
       "ap": "Armure",
+      "encumbrance": "Encombrement",
       "attributes": {
         "physical": "Physique",
         "social": "Social",
@@ -39,6 +38,7 @@
       "burn": "Brûlure",
       "food": "Nourriture",
       "drink": "Boisson",
+      "tipsiness": "Ivresse",
       "shortcut": "Raccourcis",
       "gear": "Équipement",
       "magic": "Magie",
@@ -46,13 +46,20 @@
       "inventory": "Inventaire",
       "biography": "Biographie"
     },
+    "weapons": "Armes",
     "weapon": {
       "damage": "Dégâts",
       "damageType": "Type de dégâts",
-      "range": "Portée",
+      "range": "Portée (m)",
       "effects": "Effets",
-      "ammo": "Nombre de munitions",
-      "weight": "Poids"
+      "useAmmo": "Utilise des munitions ?",
+      "ammo": "Munition",
+      "defenceModif": "Modificateur de défense",
+      "attackModif": "Modificateur d'attaque",
+      "precise": "Arme précise",
+      "weight": "Poids",
+      "effect": "Effets",
+      "equipped": "Équipé"
     },
     "damageTypeList": {
       "piercing": "Perçant",
@@ -76,7 +83,12 @@
         "base": "Valeur de base :",
         "modif": "  +/- Modificateurs :",
         "value": "Valeur effective :",
-        "excess": "Succès exédentaires :"
+        "excess": "Succès excédentaires :"
+      },
+      "damageFromWeapon": {
+        "title": "Jet de dégâts avec {weaponName} :",
+        "ammo": "Munition utilisée : {ammoName}",
+        "notEnoughAmmo": "Pas assez de {ammoName} !"
       },
       "damageBonus": {
         "title": "Jet de dégâts bonus :"
