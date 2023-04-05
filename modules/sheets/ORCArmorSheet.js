@@ -1,9 +1,9 @@
 export default class ORCArmorSheet extends ItemSheet {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
-      width: 530,
-      height: 354,
-      classes: ["orc", "sheet", "item"],
+      width: 600,
+      height: 500,
+      classes: ["orc", "sheet", "item", "armor"],
     });
   }
 

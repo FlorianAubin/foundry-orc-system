@@ -113,7 +113,7 @@
           class="attribute-roll button fas fa-dice"
           data-attributename="{{localize attribute.name}}"
           data-attributevalue="{{attribute.value}}"
-          data-attributevaluebase="{{attribute.valueBase}}"
+          data-attributevaluebase="{{attribute.native}}"
           align="center"
         >
           {{localize attribute.name}}
@@ -128,8 +128,8 @@
             <input
               class="attributes-score"
               type="number"
-              name="system.attributes.{{a}}.valueBase"
-              value="{{attribute.valueBase}}"
+              name="system.attributes.{{a}}.native"
+              value="{{attribute.native}}"
               placeholder="0"
               onClick="this.select();"
             />

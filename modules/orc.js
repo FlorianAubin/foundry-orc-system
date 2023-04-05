@@ -5,6 +5,11 @@ import ORCCharacterSheet from "./sheets/ORCCharacterSheet.js";
 import ORCWeaponSheet from "./sheets/ORCWeaponSheet.js";
 import ORCAmmoSheet from "./sheets/ORCAmmoSheet.js";
 import ORCArmorSheet from "./sheets/ORCArmorSheet.js";
+import ORCFoodSheet from "./sheets/ORCFoodSheet.js";
+import ORCConsumableSheet from "./sheets/ORCConsumableSheet.js";
+import ORCEquipableItemSheet from "./sheets/ORCEquipableItemSheet.js";
+import ORCGeneralItemSheet from "./sheets/ORCGeneralItemSheet.js";
+import ORCBagSheet from "./sheets/ORCBagSheet.js";
 import { preloadHandlebarsTemplates } from "./commons/templates.js";
 import { RegisterHandlebars } from "./commons/handlebars.mjs";
 
@@ -37,6 +42,26 @@ Hooks.once("init", async function () {
   });
   Items.registerSheet("armor", ORCArmorSheet, {
     types: ["armor"],
+    makeDefault: true,
+  });
+  Items.registerSheet("food", ORCFoodSheet, {
+    types: ["food"],
+    makeDefault: true,
+  });
+  Items.registerSheet("consumable", ORCConsumableSheet, {
+    types: ["consumable"],
+    makeDefault: true,
+  });
+  Items.registerSheet("equipableitem", ORCEquipableItemSheet, {
+    types: ["equipableitem"],
+    makeDefault: true,
+  });
+  Items.registerSheet("generalitem", ORCGeneralItemSheet, {
+    types: ["generalitem"],
+    makeDefault: true,
+  });
+  Items.registerSheet("bag", ORCBagSheet, {
+    types: ["bag"],
     makeDefault: true,
   });
 

@@ -95,7 +95,7 @@
         <table>
           <tr>
             <th>{{localize "orc.ammo.stock"}}</th>
-            <th>{{localize "orc.ammo.weight"}}</th>
+            <th>{{localize "orc.ammo.weightIndiv"}}</th>
           </tr>
           <tr>
             <td align="center">
@@ -113,13 +113,13 @@
             <td align="center">
               {{#if unlocked}}
                 <input
-                  name="system.weight"
+                  name="system.weight.indiv"
                   type="number"
-                  value="{{item.system.weight}}"
+                  value="{{item.system.weight.indiv}}"
                   placeholder="0"
                 />
               {{else}}
-                <span>{{item.system.weight}}</span>
+                <span>{{item.system.weight.indiv}}</span>
               {{/if}}
             </td>
           </tr>

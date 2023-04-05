@@ -3,7 +3,7 @@ export default class ORCCharacterSheet extends ActorSheet {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       template: "systems/orc/templates/sheet/character-sheet.hbs",
-      classes: ["orc", "sheet", "actor"],
+      classes: ["orc", "sheet", "actor", "character"],
       tabs: [
         {
           navSelector: ".sheet-tabs",
@@ -57,11 +57,12 @@ export default class ORCCharacterSheet extends ActorSheet {
     html.find(".item-edit").click(this._onItemEdit.bind(this));
     html.find(".item-delete").click(this._onItemDelete.bind(this));
 
-    html.find(".weapon-equipped").click(this._onWeaponEquipped.bind(this));
+    html.find(".item-equipped").click(this._onItemEquipped.bind(this));
     html
       .find(".weapon-choose-ammo")
       .change(this._onWeaponChooseAmmo.bind(this));
     html.find(".ammo-update-stock").change(this._onAmmoUpdateStock.bind(this));
+    html.find(".armor-equipped").change(this._onArmorEquipped.bind(this));
     html.find(".armor-update-ap").change(this._onArmorUpdateAP.bind(this));
 
     html.find(".take-damage").click(this._onTakeDamage.bind(this));
@@ -89,10 +90,6 @@ export default class ORCCharacterSheet extends ActorSheet {
       .click(this._onAttackWithWeaponRoll.bind(this));
 
     super.activateListeners(html);
-  }
-
-  prepareData() {
-    super.prepareData();
   }
 
   /**
@@ -140,25 +137,55 @@ export default class ORCCharacterSheet extends ActorSheet {
     item.delete();
   }
 
-  _onWeaponEquipped(event) {
+  _onItemEquipped(event) {
     event.preventDefault();
     let element = event.currentTarget;
     let itemId = element.closest(".item").dataset.itemId;
     let item = this.actor.items.get(itemId);
-    if (item.type != "weapon") return;
+    if (item == null) return;
 
-    //If the weapon needs ammo, there is no linked ammo, and the actor has ammo, use the first one by default
+    //Check if the item can be equipped
+    if (item.system.equipped == null) return;
+
+    //If the item (weapon) needs ammo, if there is no linked ammo, and if the actor has ammo, use the first one by default
     if (item.system.useAmmo && item.system.ammo == "") {
       const defaultAmmo = this.getData().ammos[0];
       if (defaultAmmo) item.update({ system: { ammo: defaultAmmo._id } });
     }
 
-    let maj = {
-      system: {
-        equipped: !item.system.equipped,
-      },
-    };
-    return item.update(maj);
+    return item.update({
+      system: { equipped: true, enchant: { activate: true } },
+    });
+  }
+
+  _onArmorEquipped(event) {
+    event.preventDefault();
+    let element = event.currentTarget;
+    let itemId = element.value;
+    let items = this.actor.items;
+
+    //Un-equipped all armors related to this body part
+    let slotBodyPart = element.slot;
+    for (let it of items) {
+      if (it.type == "armor")
+        if (it.system.bodyPart == slotBodyPart) {
+          it.update({
+            system: { equipped: false, enchant: { activate: false } },
+          });
+        }
+    }
+
+    //Recover the armor to equipped
+    let item = items.get(itemId);
+    if (item == null) return;
+    if (item.type != "armor") return;
+
+    //Check if the item can be equipped
+    if (item.system.equipped == null) return;
+
+    return item.update({
+      system: { equipped: true, enchant: { activate: true } },
+    });
   }
 
   _onWeaponChooseAmmo(event) {
@@ -179,7 +206,19 @@ export default class ORCCharacterSheet extends ActorSheet {
     let item = this.actor.items.get(itemId);
     if (item.type != "ammo") return;
 
-    let maj = { system: { stock: parseFloat(event.currentTarget.value) } };
+    let maj = {
+      system: {
+        stock: parseFloat(event.currentTarget.value),
+        weight: {
+          total:
+            Math.floor(
+              100 *
+                item.system.weight.indiv *
+                parseFloat(event.currentTarget.value)
+            ) / 100,
+        },
+      },
+    };
     return item.update(maj);
   }
 
@@ -400,10 +439,10 @@ export default class ORCCharacterSheet extends ActorSheet {
     if (newValueMP > limitValueMP) newValueMP = limitValueMP;
 
     const food = this.actor.system.nutrition.foodDay;
-    const foodNeeded = this.actor.system.nutrition.foodNeededDay;
+    const foodNeeded = this.actor.system.nutrition.foodNeededDay.value;
     let newFood = food >= foodNeeded ? 0 : food - foodNeeded;
     const drink = this.actor.system.nutrition.drinkDay;
-    const drinkNeeded = this.actor.system.nutrition.drinkNeededDay;
+    const drinkNeeded = this.actor.system.nutrition.drinkNeededDay.value;
     let newDrink = drink >= drinkNeeded ? 0 : drink - drinkNeeded;
 
     let maj = {
@@ -421,84 +460,52 @@ export default class ORCCharacterSheet extends ActorSheet {
   }
 
   /**
-   * Calulated derived values
+   * Calulated the actor derived values
    */
   _prepareCharacterData(data) {
-    this.applyCombatStyle(data);
+    //Init the actor derived values
+    this.calculateValues(data);
 
-    this.calculateEffectiveValues(data);
+    //Apply some modifiers, and recalculate the actor derived values if need !!! Must be done in this order !!!
+    //Combat style
+    if (this.applyCombatStyle(data)) this.calculateValues(data);
+    //Modifiers from owned items
+    if (this.applyModifFromItems(data)) this.calculateValues(data);
+    //Encumbrance
+    if (this.checkEncumbrance(data)) this.calculateValues(data);
+    //Bad nutrition
+    if (this.checkBadNutrition(data)) this.calculateValues(data);
 
-    if (this.applyModifFromItems(data)) this.calculateEffectiveValues(data);
+    //Calculate the HP and MP surplus
+    this.calculateSurplus(data);
 
-    if (this.checkEncumbrance(data)) this.calculateEffectiveValues(data);
-    if (this.checkBadNutrition(data)) this.calculateEffectiveValues(data);
-
-    this.initSurplus(data);
+    //Check if some effective values are higher the minimal or the maximal allowed values
     this.checkExcessValues(data);
 
+    //Update the owned weapon effective values (damage, effect and attack)
     this.updateWeaponsEffectiveValues(data);
   }
 
-  applyCombatStyle(data) {
-    const actor = data.actor;
-    const actorData = actor.system;
-    const style = actorData.combatStyle;
-    if (style === "standard") {
-      actorData.attack.valueModif.style = 0;
-      actorData.defence.valueModif.style = 0;
-      actorData.dodge.valueModif.style = 0;
-      actorData.dodge.enable = false;
-      actorData.damageBonus.valueModif.style = "";
-    } else if (style === "offensive") {
-      actorData.attack.valueModif.style = +10;
-      actorData.defence.valueModif.style = -10;
-      actorData.dodge.valueModif.style = 0;
-      actorData.dodge.enable = false;
-      actorData.damageBonus.valueModif.style = "";
-    } else if (style === "defensive") {
-      actorData.attack.valueModif.style = -15;
-      actorData.defence.valueModif.style = +10;
-      actorData.dodge.valueModif.style = 0;
-      actorData.dodge.enable = false;
-      actorData.damageBonus.valueModif.style = "";
-    } else if (style === "dodge") {
-      actorData.attack.valueModif.style = -10;
-      actorData.defence.valueModif.style = -10;
-      actorData.dodge.valueModif.style = 0;
-      actorData.dodge.enable = true;
-      actorData.damageBonus.valueModif.style = "";
-    } else if (style === "aggressive") {
-      actorData.attack.valueModif.style = -10;
-      actorData.defence.valueModif.style = -10;
-      actorData.dodge.valueModif.style = 0;
-      actorData.dodge.enable = false;
-      actorData.damageBonus.valueModif.style = "2d10";
-    }
-  }
-
-  calculateEffectiveValues(data) {
+  calculateValues(data) {
     const actor = data.actor;
     const actorData = actor.system;
 
     //HP
-    actorData.hp.valueMax = actorData.hp.valueMaxBase;
+    actorData.hp.valueMax = actorData.hp.valueMaxNative;
     for (let [key, modificator] of Object.entries(actorData.hp.valueMaxModif))
       if (modificator) actorData.hp.valueMax += modificator;
     //MP
-    actorData.mp.valueMax = actorData.mp.valueMaxBase;
+    actorData.mp.valueMax = actorData.mp.valueMaxNative;
     for (let [key, modificator] of Object.entries(actorData.mp.valueMaxModif))
       if (modificator) actorData.mp.valueMax += modificator;
     //AP
-    actorData.ap.native = actorData.ap.nativeBase;
-    for (let [key, modificator] of Object.entries(actorData.ap.nativeModif))
-      if (modificator) actorData.ap.native += modificator;
     actorData.ap.value = actorData.ap.native;
     for (let [key, modificator] of Object.entries(actorData.ap.valueModif))
       if (modificator) actorData.ap.value += modificator;
 
     //Attributes
     for (let [key, attribut] of Object.entries(actorData.attributes)) {
-      attribut.value = attribut.valueBase;
+      attribut.value = attribut.native;
       for (let [key, modificator] of Object.entries(attribut.valueModif))
         if (modificator) attribut.value += modificator;
     }
@@ -551,6 +558,20 @@ export default class ORCCharacterSheet extends ActorSheet {
       }
     }
 
+    //Roll limits
+    //Critical
+    actorData.roll.limitCritical.value = actorData.roll.limitCritical.native;
+    for (let [key, modificator] of Object.entries(
+      actorData.roll.limitCritical.valueModif
+    ))
+      if (modificator) actorData.roll.limitCritical.value += modificator;
+    //Fumble
+    actorData.roll.limitFumble.value = actorData.roll.limitFumble.native;
+    for (let [key, modificator] of Object.entries(
+      actorData.roll.limitFumble.valueModif
+    ))
+      if (modificator) actorData.roll.limitFumble.value += modificator;
+
     //Healing multiplier
     actorData.recoverHP.multiplier.value =
       actorData.recoverHP.multiplier.native;
@@ -558,17 +579,252 @@ export default class ORCCharacterSheet extends ActorSheet {
       actorData.recoverHP.multiplier.valueModif
     ))
       if (modificator) actorData.recoverHP.multiplier.value += modificator;
+
+    //Nutrition need day
+    //Food
+    actorData.nutrition.foodNeededDay.value =
+      actorData.nutrition.foodNeededDay.native;
+    for (let [key, modificator] of Object.entries(
+      actorData.nutrition.foodNeededDay.valueModif
+    ))
+      if (modificator) actorData.nutrition.foodNeededDay.value += modificator;
+    //Drink
+    actorData.nutrition.drinkNeededDay.value =
+      actorData.nutrition.drinkNeededDay.native;
+    for (let [key, modificator] of Object.entries(
+      actorData.nutrition.drinkNeededDay.valueModif
+    ))
+      if (modificator) actorData.nutrition.drinkNeededDay.value += modificator;
+  }
+
+  applyCombatStyle(data) {
+    const actor = data.actor;
+    const actorData = actor.system;
+    const style = actorData.combatStyle;
+    if (style === "standard") {
+      actorData.attack.valueModif.style = 0;
+      actorData.defence.valueModif.style = 0;
+      actorData.dodge.valueModif.style = 0;
+      actorData.dodge.enable = false;
+      actorData.damageBonus.valueModif.style = "";
+    } else if (style === "offensive") {
+      actorData.attack.valueModif.style = +10;
+      actorData.defence.valueModif.style = -10;
+      actorData.dodge.valueModif.style = 0;
+      actorData.dodge.enable = false;
+      actorData.damageBonus.valueModif.style = "";
+    } else if (style === "defensive") {
+      actorData.attack.valueModif.style = -15;
+      actorData.defence.valueModif.style = +10;
+      actorData.dodge.valueModif.style = 0;
+      actorData.dodge.enable = false;
+      actorData.damageBonus.valueModif.style = "";
+    } else if (style === "dodge") {
+      actorData.attack.valueModif.style = -10;
+      actorData.defence.valueModif.style = -10;
+      actorData.dodge.valueModif.style = 0;
+      actorData.dodge.enable = true;
+      actorData.damageBonus.valueModif.style = "";
+    } else if (style === "aggressive") {
+      actorData.attack.valueModif.style = -10;
+      actorData.defence.valueModif.style = -10;
+      actorData.dodge.valueModif.style = 0;
+      actorData.dodge.enable = false;
+      actorData.damageBonus.valueModif.style = "2d10";
+    }
+
+    return true;
+  }
+
+  applyModifFromItems(data) {
+    const actor = data.actor;
+    const actorData = actor.system;
+    const items = data.items;
+    let updated = false;
+
+    let modif = {
+      phyisical: 0,
+      social: 0,
+      intel: 0,
+      hpMax: 0,
+      mpMax: 0,
+      ap: 0,
+      attack: 0,
+      defence: 0,
+      dodge: 0,
+      encumbranceLimit: 0,
+      limitCritical: 0,
+      limitFumble: 0,
+      damageBonus: "",
+
+      encumbrance: 0,
+    };
+
+    for (let [key, item] of Object.entries(items)) {
+      //Weapons
+      if (item.type == "weapon" && item.system.equipped) {
+        if (item.system.defenceModif) modif.defence += item.system.defenceModif;
+      }
+      //Armors
+      if (item.type == "armor") {
+        if (item.system.equipped)
+          if (item.system.ap) modif.ap += item.system.ap;
+      }
+      //Bag
+      if (item.type == "bag") {
+        if (actorData.encumbrance.equippedBag == item._id) {
+          if (item.system.capacity)
+            modif.encumbranceLimit += item.system.capacity;
+          if (item.system.modifPhysical)
+            modif.phyisical += item.system.modifPhysical;
+        }
+      }
+      //All items with weight
+      if (item.system.weight) {
+        modif.encumbrance +=
+          item.system.weight.total != null
+            ? item.system.weight.total
+            : item.system.weight;
+      }
+      //Add the enchant
+      let enchant = item.system.enchant;
+      if (enchant && enchant.activate) {
+        if (enchant.physicalModif != 0) modif.physical += enchant.physicalModif;
+        if (enchant.socialModif != 0) modif.social += enchant.socialModif;
+        if (enchant.intelModif != 0) modif.intel += enchant.intelModif;
+        if (enchant.hpMaxModif != 0) modif.hpMax += enchant.hpMaxModif;
+        if (enchant.mpMaxModif != 0) modif.mpMax += enchant.mpMaxModif;
+        if (enchant.apModif != 0) modif.ap += enchant.apModif;
+        if (enchant.encumbranceLimitModif != 0)
+          modif.encumbranceLimit += enchant.encumbranceLimitModif;
+        if (enchant.attackModif != 0) modif.attack += enchant.attackModif;
+        if (enchant.defenceModif != 0) modif.defence += enchant.defenceModif;
+        if (enchant.dodgeModif != 0) modif.dodge += enchant.dodgeModif;
+        if (enchant.limitCriticalModif != 0)
+          modif.limitCritical += enchant.limitCriticalModif;
+        if (enchant.limitFumbleModif != 0)
+          modif.limitFumble += enchant.limitFumbleModif;
+        if (enchant.damageBonusModif != 0)
+          modif.damageBonus += "+" + enchant.damageBonusModif;
+      }
+    }
+
+    if (modif.phyisical != 0) {
+      actorData.attributes.physical.valueModif.items = modif.phyisical;
+      updated = true;
+    }
+    if (modif.social != 0) {
+      actorData.attributes.social.valueModif.items = modif.social;
+      updated = true;
+    }
+    if (modif.intel != 0) {
+      actorData.attributes.intel.valueModif.items = modif.intel;
+      updated = true;
+    }
+    if (modif.hp != 0) {
+      actorData.hp.valueMaxModif.items = modif.hp;
+      updated = true;
+    }
+    if (modif.mp != 0) {
+      actorData.mp.valueMaxModif.items = modif.mp;
+      updated = true;
+    }
+    if (modif.ap != 0) {
+      actorData.ap.valueModif.items = modif.ap;
+      updated = true;
+    }
+    if (modif.attack != 0) {
+      actorData.attack.valueModif.items = modif.attack;
+      updated = true;
+    }
+    if (modif.defence != 0) {
+      actorData.defence.valueModif.items = modif.defence;
+      updated = true;
+    }
+    if (modif.dodge != 0) {
+      actorData.dodge.valueModif.items = modif.dodge;
+      updated = true;
+    }
+    if (modif.encumbranceLimit != 0) {
+      actorData.encumbrance.limitModif.items = modif.encumbranceLimit;
+      updated = true;
+    }
+    if (modif.limitCritical != 0) {
+      actorData.roll.limitCritical.valueModif.items = modif.limitCritical;
+      updated = true;
+    }
+    if (modif.limitFumble != 0) {
+      actorData.roll.limitFumble.valueModif.items = modif.limitFumble;
+      updated = true;
+    }
+    if (modif.damageBonus != "") {
+      actorData.damageBonus.valueModif.items = modif.damageBonus;
+      updated = true;
+    }
+
+    if (modif.encumbrance != 0) {
+      actorData.encumbrance.valueModif.items = modif.encumbrance;
+      updated = true;
+    }
+
+    return updated;
+  }
+
+  checkEncumbrance(data) {
+    const actor = data.actor;
+    const actorData = actor.system;
+    const encumbrance = actorData.encumbrance.value;
+    const limit = actorData.encumbrance.limit;
+    let updated = false;
+
+    if (encumbrance > 1 * limit) {
+      //Malus in phyisical
+      actorData.attributes.physical.valueModif.encumbrance =
+        -5 * Math.floor(10 * (encumbrance / limit - 1 + 0.1));
+      updated = true;
+    }
+    if (encumbrance > 1.2 * limit) {
+      //Malus in defence
+      actorData.defence.valueModif.encumbrance =
+        -5 * Math.floor(10 * (encumbrance / limit - 1.2 + 0.1));
+      updated = true;
+    }
+    if (encumbrance > 1.4 * limit) {
+      //+1 drink needed per day
+      actorData.nutrition.drinkNeededDay.valueModif.encumbrance = 1;
+      //No dodge
+      actorData.dodge.valueModif.encumbrance = -100;
+      updated = true;
+    }
+    if (encumbrance > 1.6 * limit) {
+      //+1 food needed per day
+      actorData.nutrition.foodNeededDay.valueModif.encumbrance = 1;
+      //Automatically hit
+      actorData.defence.valueModif.encumbrance = -100;
+      updated = true;
+    }
+    if (encumbrance > 1.8 * limit) {
+      //+2 drink needed per day
+      actorData.nutrition.drinkNeededDay.valueModif.encumbrance = 2;
+      updated = true;
+    }
+    if (encumbrance > 2 * limit) {
+      //No attack
+      actorData.attack.valueModif.encumbrance = -100;
+      updated = true;
+    }
+    return updated;
   }
 
   checkBadNutrition(data) {
     const actor = data.actor;
     const actorData = actor.system;
-    let out = 0;
+    let updated = false;
 
     //Food
     const food = actorData.nutrition.foodDay;
     if (food < 0) {
-      out = 1;
+      updated = true;
       if (food == -1) {
         actorData.attributes.physical.valueModif.food = -5;
       } else if (food == -2) {
@@ -584,7 +840,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     //Drink
     const drink = actorData.nutrition.drinkDay;
     if (drink < 0) {
-      out = 1;
+      updated = true;
       if (drink == -1) {
         actorData.attributes.physical.valueModif.drink = -10;
       } else if (drink == -2) {
@@ -601,7 +857,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     //Tipsiness
     const tipsiness = actorData.nutrition.tipsiness;
     if (tipsiness > 0) {
-      out = 1;
+      updated = true;
       if (tipsiness == 1) {
         actorData.attributes.social.valueModif.tipsiness = +5;
         actorData.attributes.intel.valueModif.tipsiness = -5;
@@ -613,85 +869,15 @@ export default class ORCCharacterSheet extends ActorSheet {
       }
     }
 
-    return out;
+    return updated;
   }
 
-  checkEncumbrance(data) {
-    const actor = data.actor;
-    const actorData = actor.system;
-    const encumbrance = actorData.encumbrance.value;
-    const limit = actorData.encumbrance.limit;
-
-    if (encumbrance <= limit) {
-      return 0;
-    } else if (encumbrance <= 1.1 * limit) {
-      actorData.attributes.physical.valueModif.encumbrance = -5;
-    } else if (encumbrance <= 1.2 * limit) {
-      actorData.attributes.physical.valueModif.encumbrance = -10;
-    } else if (encumbrance <= 1.4 * limit) {
-      actorData.attributes.physical.valueModif.encumbrance = -20;
-    } else if (encumbrance <= 1.6 * limit) {
-      actorData.attributes.physical.valueModif.encumbrance = -30;
-    } else if (encumbrance <= 1.8 * limit) {
-      actorData.attributes.physical.valueModif.encumbrance = -50;
-    } else {
-      actorData.attributes.physical.valueModif.encumbrance = -100;
-    }
-    return 1;
-  }
-
-  applyModifFromItems(data) {
-    const actor = data.actor;
-    const actorData = actor.system;
-    const items = data.items;
-    let encumbranceModif = 0;
-    let defenceModif = 0;
-    let apModif = 0;
-    let out = 0;
-
-    for (let [key, item] of Object.entries(items)) {
-      //Weapons
-      if (item.type == "weapon" && item.system.equipped) {
-        if (item.system.defenceModif) defenceModif += item.system.defenceModif;
-      }
-      //Armors
-      if (item.type == "armor") {
-        let equipped = false;
-        for (let [key, bodyPart] of Object.entries(actorData.ap.bodyParts))
-          if (bodyPart == item._id) equipped = true;
-        if (item.system.ap && equipped) apModif += item.system.ap;
-      }
-      //All items with weight
-      if (item.system.weight) {
-        encumbranceModif +=
-          item.system.stock == null
-            ? item.system.weight
-            : item.system.weight * item.system.stock;
-      }
-    }
-
-    if (defenceModif != 0) {
-      actorData.defence.valueModif.weapons = defenceModif;
-      out = 1;
-    }
-    if (apModif != 0) {
-      actorData.ap.valueModif.armors = apModif;
-      out = 1;
-    }
-    if (encumbranceModif != 0) {
-      actorData.encumbrance.valueModif.weapons = encumbranceModif;
-      out = 1;
-    }
-
-    return out;
-  }
-
-  initSurplus(data) {
+  calculateSurplus(data) {
     const actor = data.actor;
     const actorData = actor.system;
 
-    actorData.hp.surplus = -Math.floor(actorData.hp.valueMaxBase / 5);
-    actorData.mp.surplus = -Math.floor(actorData.mp.valueMaxBase / 5);
+    actorData.hp.surplus = -Math.floor(actorData.hp.valueMaxNative / 5);
+    actorData.mp.surplus = -Math.floor(actorData.mp.valueMaxNative / 5);
   }
 
   checkExcessValues(data) {
@@ -711,6 +897,8 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     //Attack
     if (actorData.attack.value < 0) actorData.attack.value = 0;
+    //Defence
+    if (actorData.defence.value < -100) actorData.defence.value = -100;
     //Dodge
     if (actorData.dodge.value < 0) actorData.dodge.value = 0;
 

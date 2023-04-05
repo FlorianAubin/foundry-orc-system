@@ -5,44 +5,50 @@
       "attributes": {
         "physical": {
           "name": "orc.character.attributes.physical",
-          "valueBase": 0,
+          "native": 0,
           "valueModif": {},
           "value": 0
         },
         "social": {
           "name": "orc.character.attributes.social",
-          "valueBase": 0,
+          "native": 0,
           "valueModif": {},
           "value": 0
         },
         "intel": {
           "name": "orc.character.attributes.intel",
-          "valueBase": 0,
+          "native": 0,
           "valueModif": {},
           "value": 0
         }
       },
       "roll": {
-        "limitCritical": 1,
-        "limitFumble": 100
+        "limitCritical": {
+          "native": 1,
+          "valueModif": {},
+          "value": 0
+        },
+        "limitFumble": {
+          "native": 100,
+          "valueModif": {},
+          "value": 0
+        }
       },
       "hp": {
         "value": 0,
-        "valueMaxBase": 0,
+        "valueMaxNative": 0,
         "valueMaxModif": {},
         "valueMax": 0,
         "surplus": 0
       },
       "mp": {
         "value": 0,
-        "valueMaxBase": 0,
+        "valueMaxNative": 0,
         "valueMaxModif": {},
         "valueMax": 0,
         "surplus": 0
       },
       "ap": {
-        "nativeBase": 0,
-        "nativeModif": {},
         "native": 0,
         "valueModif": {},
         "value": 0,
@@ -59,6 +65,7 @@
         "value": 0,
         "limitMultiplier": 0.5,
         "limitModif": {},
+        "equippedBag": "",
         "limit": 0
       },
       "attack": {
@@ -100,8 +107,16 @@
         "drinkDay": 0,
         "foodMax": 4,
         "drinkMax": 6,
-        "foodNeededDay": 1,
-        "drinkNeededDay": 1,
+        "foodNeededDay": {
+          "native": 1,
+          "valueModif": {},
+          "value": 0
+        },
+        "drinkNeededDay": {
+          "native": 1,
+          "valueModif": {},
+          "value": 0
+        },
         "tipsiness": 0
       },
       "takeDamage": {
@@ -129,7 +144,9 @@
       "weapon",
       "ammo",
       "armor",
+      "food",
       "consumable",
+      "equipableitem",
       "generalitem",
       "bag",
       "spell",
@@ -139,8 +156,30 @@
       "disease",
       "mutation"
     ],
+    "templates": {
+      "enchant": {
+        "enchant": {
+          "activate": false,
+          "physicalModif": 0,
+          "socialModif": 0,
+          "intelModif": 0,
+          "hpMaxModif": 0,
+          "mpMaxModif": 0,
+          "apModif": 0,
+          "encumbranceLimitModif": 0,
+          "attackModif": 0,
+          "defenceModif": 0,
+          "dodgeModif": 0,
+          "limitCriticalModif": 0,
+          "limitFumbleModif": 0,
+          "damageBonusModif": "",
+          "roll": "",
+          "addEffect": ""
+        }
+      }
+    },
     "weapon": {
-      "damage": "",
+      "damage": "0",
       "damageType": "",
       "range": 0,
       "useAmmo": false,
@@ -156,41 +195,67 @@
         "damage": "",
         "effect": "",
         "attack": 0
-      }
+      },
+      "templates": ["enchant"]
     },
     "ammo": {
       "damage": "",
       "precise": false,
-      "weight": 0,
+      "weight": {
+        "indiv": 0,
+        "total": 0
+      },
       "effect": "",
-      "stock": 0,
+      "stock": 1,
       "description": ""
     },
     "armor": {
       "ap": 0,
       "bodyPart": "",
       "weight": 0,
-      "description": ""
+      "description": "",
+      "equipped": false,
+      "templates": ["enchant"]
+    },
+    "equipableitem": {
+      "equipped": false,
+      "weight": 0,
+      "description": "",
+      "templates": ["enchant"]
     },
     "food": {
       "hp": 0,
       "mp": 0,
       "tipsiness": 0,
+      "weight": {
+        "indiv": 0,
+        "total": 0
+      },
+      "stock": 0,
       "description": ""
     },
     "consumable": {
       "hp": 0,
       "mp": 0,
       "duration": 0,
-      "weight": 0,
+      "weight": {
+        "indiv": 0,
+        "total": 0
+      },
+      "stock": 0,
       "description": ""
     },
     "generalitem": {
-      "weight": 0,
+      "weight": {
+        "indiv": 0,
+        "total": 0
+      },
+      "stock": 1,
       "description": ""
     },
     "bag": {
       "capacity": 0,
+      "modifPhysical": 0,
       "description": ""
     },
     "spell": {

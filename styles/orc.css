@@ -96,6 +96,13 @@
   margin-left: 10px;
   margin-right: -5px;
 }
+.orc.sheet.actor .main .content .leftcolumn .equipped-armor-bodypart {
+  font-style: italic;
+}
+.orc.sheet.actor .main .content .leftcolumn .equipped-armor {
+  width: 50%;
+  font-size: small;
+}
 .orc.sheet.actor .main .content .central {
   display: flex;
   flex-direction: column;
@@ -288,6 +295,154 @@
   cursor: pointer;
 }
 .orc.sheet.item .armor .editor {
+  min-height: 50px;
+  height: 100%;
+  box-shadow: inset 0 0 6px black;
+}
+.orc.sheet.item .food .main .header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.orc.sheet.item .food .main .header .name {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.orc.sheet.item .food .main .content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.orc.sheet.item .food .main .content th,
+.orc.sheet.item .food .main .content td {
+  width: 100px;
+}
+.orc.sheet.item .food .button {
+  display: table-cell;
+  align-self: center;
+  place-content: center;
+  font-size: var(--font-size-15);
+  height: 100%;
+}
+.orc.sheet.item .food .button:hover,
+.orc.sheet.item .food .button:focus {
+  color: #000;
+  box-shadow: inset 0 0 6px #b41212;
+  cursor: pointer;
+}
+.orc.sheet.item .food .editor {
+  min-height: 50px;
+  height: 100%;
+  box-shadow: inset 0 0 6px black;
+}
+.orc.sheet.item .consumable .main .header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.orc.sheet.item .consumable .main .header .name {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.orc.sheet.item .consumable .main .content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.orc.sheet.item .consumable .main .content th,
+.orc.sheet.item .consumable .main .content td {
+  width: 100px;
+}
+.orc.sheet.item .consumable .button {
+  display: table-cell;
+  align-self: center;
+  place-content: center;
+  font-size: var(--font-size-15);
+  height: 100%;
+}
+.orc.sheet.item .consumable .button:hover,
+.orc.sheet.item .consumable .button:focus {
+  color: #000;
+  box-shadow: inset 0 0 6px #b41212;
+  cursor: pointer;
+}
+.orc.sheet.item .consumable .editor {
+  min-height: 50px;
+  height: 100%;
+  box-shadow: inset 0 0 6px black;
+}
+.orc.sheet.item .generalitem .main .header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.orc.sheet.item .generalitem .main .header .name {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.orc.sheet.item .generalitem .main .content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.orc.sheet.item .generalitem .main .content th,
+.orc.sheet.item .generalitem .main .content td {
+  width: 100px;
+}
+.orc.sheet.item .generalitem .button {
+  display: table-cell;
+  align-self: center;
+  place-content: center;
+  font-size: var(--font-size-15);
+  height: 100%;
+}
+.orc.sheet.item .generalitem .button:hover,
+.orc.sheet.item .generalitem .button:focus {
+  color: #000;
+  box-shadow: inset 0 0 6px #b41212;
+  cursor: pointer;
+}
+.orc.sheet.item .generalitem .editor {
+  min-height: 50px;
+  height: 100%;
+  box-shadow: inset 0 0 6px black;
+}
+.orc.sheet.item .bag .main .header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.orc.sheet.item .bag .main .header .name {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.orc.sheet.item .bag .main .content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.orc.sheet.item .bag .main .content th,
+.orc.sheet.item .bag .main .content td {
+  width: 100px;
+}
+.orc.sheet.item .bag .button {
+  display: table-cell;
+  align-self: center;
+  place-content: center;
+  font-size: var(--font-size-15);
+  height: 100%;
+}
+.orc.sheet.item .bag .button:hover,
+.orc.sheet.item .bag .button:focus {
+  color: #000;
+  box-shadow: inset 0 0 6px #b41212;
+  cursor: pointer;
+}
+.orc.sheet.item .bag .editor {
   min-height: 50px;
   height: 100%;
   box-shadow: inset 0 0 6px black;

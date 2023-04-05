@@ -18,8 +18,8 @@
       {{#if unlocked}}
         <input
           type="number"
-          name="system.hp.valueMaxBase"
-          value="{{actor.system.hp.valueMaxBase}}"
+          name="system.hp.valueMaxNative"
+          value="{{actor.system.hp.valueMaxNative}}"
           placeholder="0"
           onClick="this.select();"
           style="width: 40px"
@@ -52,8 +52,8 @@
       {{#if unlocked}}
         <input
           type="number"
-          name="system.mp.valueMaxBase"
-          value="{{actor.system.mp.valueMaxBase}}"
+          name="system.mp.valueMaxNative"
+          value="{{actor.system.mp.valueMaxNative}}"
           placeholder="0"
           onClick="this.select();"
           style="width: 40px"
@@ -75,8 +75,8 @@
       <td align="center" colspan="2">
         <input
           type="number"
-          name="system.ap.nativeBase"
-          value="{{actor.system.ap.nativeBase}}"
+          name="system.ap.native"
+          value="{{actor.system.ap.native}}"
           placeholder="0"
           onClick="this.select();"
           style="width: 40px"
@@ -91,14 +91,19 @@
       <td
         class="ap-deploy button fas fa-arrow-down-short-wide"
         align="center"
+        style="width: 25px"
       ></td>
     {{else}}
-      <td class="ap-deploy button fas fa-arrow-up-to-line" align="center"></td>
+      <td 
+      class="ap-deploy button fas fa-arrow-up-to-line" 
+      align="center"
+      style="width: 25px"
+      ></td>
       <tr>
-        <td align="center">{{localize config.bodyPartList.head}}</td>
+        <td align="center" class="equipped-armor-bodypart">{{localize config.bodyPartList.head}}</td>
         {{#each armors as |armor|}}
           {{#if (eq armor._id ../actor.system.ap.bodyParts.head)}}
-            <td colspan="2" align="center">{{armor.name}}</td>
+            <td colspan="2" align="center" class="equipped-armor">{{armor.name}}</td>
             <td align="center" class="item flexrow" data-item-id="{{armor._id}}">
               <input
                 class="armor-update-ap"
@@ -107,17 +112,17 @@
                 value="{{armor.system.ap}}"
                 placeholder="0"
                 onClick="this.select();"
-                style="width: 30px"
+                style="width: 25px"
               />     
             </td>
           {{/if}}
         {{/each}}
       </tr>
       <tr>
-        <td align="center">{{localize config.bodyPartList.chest}}</td>
+        <td align="center" class="equipped-armor-bodypart">{{localize config.bodyPartList.chest}}</td>
         {{#each armors as |armor|}}
           {{#if (eq armor._id ../actor.system.ap.bodyParts.chest)}}
-            <td colspan="2" align="center">{{armor.name}}</td>
+            <td colspan="2" align="center" class="equipped-armor">{{armor.name}}</td>
             <td align="center" class="item flexrow" data-item-id="{{armor._id}}">
               <input
                 class="armor-update-ap"
@@ -126,17 +131,17 @@
                 value="{{armor.system.ap}}"
                 placeholder="0"
                 onClick="this.select();"
-                style="width: 30px"
+                style="width: 25px"
               />     
             </td>
           {{/if}}
         {{/each}}
       </tr>
       <tr>
-        <td align="center">{{localize config.bodyPartList.arms}}</td>
+        <td align="center" class="equipped-armor-bodypart">{{localize config.bodyPartList.arms}}</td>
         {{#each armors as |armor|}}
           {{#if (eq armor._id ../actor.system.ap.bodyParts.arms)}}
-            <td colspan="2" align="center">{{armor.name}}</td>
+            <td colspan="2" align="center" class="equipped-armor">{{armor.name}}</td>
             <td align="center" class="item flexrow" data-item-id="{{armor._id}}">
               <input
                 class="armor-update-ap"
@@ -145,17 +150,17 @@
                 value="{{armor.system.ap}}"
                 placeholder="0"
                 onClick="this.select();"
-                style="width: 30px"
+                style="width: 25px"
               />     
             </td>
           {{/if}}
         {{/each}}
       </tr>
       <tr>
-        <td align="center">{{localize config.bodyPartList.legs}}</td>
+        <td align="center" class="equipped-armor-bodypart">{{localize config.bodyPartList.legs}}</td>
         {{#each armors as |armor|}}
           {{#if (eq armor._id ../actor.system.ap.bodyParts.legs)}}
-            <td colspan="2" align="center">{{armor.name}}</td>
+            <td colspan="2" align="center" class="equipped-armor">{{armor.name}}</td>
             <td align="center" class="item flexrow" data-item-id="{{armor._id}}">
               <input
                 class="armor-update-ap"
@@ -164,7 +169,7 @@
                 value="{{armor.system.ap}}"
                 placeholder="0"
                 onClick="this.select();"
-                style="width: 30px"
+                style="width: 25px"
               />     
             </td>
           {{/if}}
@@ -331,7 +336,7 @@
 </table>
 <table style="width: 200px">
   <tr>
-    <th></th>
+    <th colspan="2"></th>
     {{#if unlocked}}
       <th colspan="2">{{localize "orc.multiplier"}}</th>
     {{else}}
@@ -340,7 +345,7 @@
     {{/if}}
   </tr>
   <tr>
-    <th>{{localize "orc.character.encumbrance"}}</th>
+    <th colspan="2">{{localize "orc.character.encumbrance"}}</th>
     {{#if unlocked}}
       <td align="center" colspan="2">
         <input
@@ -362,9 +367,9 @@
     {{/if}}
   </tr>
   <tr>
-
     <th></th>
     <th>{{localize "orc.day"}}</th>
+    <th>{{localize "orc.needed"}}</th>
     <th>{{localize "orc.max"}}</th>
   </tr>
   <tr>
@@ -376,8 +381,22 @@
         value="{{actor.system.nutrition.foodDay}}"
         placeholder="0"
         onClick="this.select();"
-        style="width: 40px"
+        style="width: 30px"
       />
+    </td>
+    <td align="center">
+      {{#if unlocked}}
+        <input
+          type="number"
+          name="system.nutrition.foodNeededDay.native"
+          value="{{actor.system.nutrition.foodNeededDay.native}}"
+          placeholder="0"
+          onClick="this.select();"
+          style="width: 30px"
+        />
+      {{else}}
+        <span>{{actor.system.nutrition.foodNeededDay.value}}</span>
+      {{/if}}
     </td>
     <td align="center">
       {{#if unlocked}}
@@ -387,7 +406,7 @@
           value="{{actor.system.nutrition.foodMax}}"
           placeholder="0"
           onClick="this.select();"
-          style="width: 40px"
+          style="width: 30px"
         />
       {{else}}
         <span>{{actor.system.nutrition.foodMax}}</span>
@@ -403,8 +422,22 @@
         value="{{actor.system.nutrition.drinkDay}}"
         placeholder="0"
         onClick="this.select();"
-        style="width: 40px"
+        style="width: 30px"
       />
+    </td>
+    <td align="center">
+      {{#if unlocked}}
+        <input
+          type="number"
+          name="system.nutrition.drinkNeededDay.native"
+          value="{{actor.system.nutrition.drinkNeededDay.native}}"
+          placeholder="0"
+          onClick="this.select();"
+          style="width: 30px"
+        />
+      {{else}}
+        <span>{{actor.system.nutrition.drinkNeededDay.value}}</span>
+      {{/if}}
     </td>
     <td align="center">
       {{#if unlocked}}
@@ -414,7 +447,7 @@
           value="{{actor.system.nutrition.drinkMax}}"
           placeholder="0"
           onClick="this.select();"
-          style="width: 40px"
+          style="width: 30px"
         />
       {{else}}
         <span>{{actor.system.nutrition.drinkMax}}</span>
@@ -430,7 +463,7 @@
         value="{{actor.system.nutrition.tipsiness}}"
         placeholder="0"
         onClick="this.select();"
-        style="width: 40px"
+        style="width: 30px"
       />
     </td>
   </tr>

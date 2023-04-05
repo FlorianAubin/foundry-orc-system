@@ -9,8 +9,8 @@ export function AttributeRoll({
     attributeName: attribute.attributename,
     attributeValue: attribute.attributevalue,
     actorName: actor.name,
-    actorLimitCritical: actor.system.roll.limitCritical,
-    actorLimitFumble: actor.system.roll.limitFumble,
+    actorLimitCritical: actor.system.roll.limitCritical.value,
+    actorLimitFumble: actor.system.roll.limitFumble.value,
     visibleByPlayers: actor.ownership.default,
   };
 

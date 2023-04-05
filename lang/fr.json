@@ -13,6 +13,7 @@
     "stack": "Stacks",
     "effect": "Effet",
     "day": "Jour",
+    "needed": "Besoin",
     "newDay": "Nouveau jour",
     "character": {
       "race": "Race",
@@ -67,13 +68,36 @@
       "damage": "Dégâts",
       "effect": "Effets",
       "precise": "Munition précise",
-      "stock": "Stock",
-      "weight": "Poids"
+      "stock": "Quantité",
+      "weight": "Poids",
+      "weightIndiv": "Poids par munition"
     },
     "armor": {
       "bodyPart": "Partie du corps",
       "valueAP": "Valeur d'armure",
       "weight": "Poids"
+    },
+    "food": {
+      "stock": "Quantité",
+      "weight": "Poids",
+      "weightIndiv": "Poids par nourriture"
+    },
+    "consumable": {
+      "stock": "Quantité",
+      "weight": "Poids",
+      "weightIndiv": "Poids par consommable"
+    },
+    "equipableitem": {
+      "weight": "Poids"
+    },
+    "generalItem": {
+      "stock": "Quantité",
+      "weight": "Poids",
+      "weightIndiv": "Poids par objet"
+    },
+    "bag": {
+      "capacity": "Capacité",
+      "modifPhysical": "Malus de Physique"
     },
     "damageTypeList": {
       "piercing": "Perçant",

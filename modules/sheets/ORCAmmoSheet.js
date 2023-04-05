@@ -1,9 +1,9 @@
 export default class ORCAmmoSheet extends ItemSheet {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
-      width: 530,
-      height: 354,
-      classes: ["orc", "sheet", "item"],
+      width: 600,
+      height: 500,
+      classes: ["orc", "sheet", "item", "ammo"],
     });
   }
 
@@ -31,6 +31,8 @@ export default class ORCAmmoSheet extends ItemSheet {
       async: false,
       relativeTo: this.item,
     });
+
+    this.updateTotalWeight(data);
 
     //console.log(data);
     return data;
@@ -64,4 +66,17 @@ export default class ORCAmmoSheet extends ItemSheet {
   }
 
   /* -------------------------------------------- */
+
+  updateTotalWeight(data) {
+    const item = data.item;
+    const itemData = item.system;
+
+    const stock = itemData.stock;
+    const indivWeight = itemData.weight.indiv;
+    item.update({
+      system: {
+        weight: { total: Math.floor(100 * indivWeight * stock) / 100 },
+      },
+    });
+  }
 }

@@ -1,4 +1,4 @@
-<form class="{{cssClass}} armor" autocomplete="off">
+<form class="{{cssClass}} consumable" autocomplete="off">
   <div class="main">
     <div class="header">
       <div class="lock-icon">
@@ -38,50 +38,32 @@
     <div class="content">
       <table>
         <tr>
-          <th>{{localize "orc.armor.valueAP"}}</th>
-          <th>{{localize "orc.armor.weight"}}</th>
+          <th>{{localize "orc.consumable.stock"}}</th>
+          <th>{{localize "orc.consumable.weightIndiv"}}</th>
         </tr>
         <tr>
           <td align="center">
             {{#if unlocked}}
               <input
-                name="system.ap"
+                name="system.stock"
                 type="number"
-                value="{{item.system.ap}}"
+                value="{{item.system.stock}}"
                 placeholder="0"
               />
             {{else}}
-              <span>{{item.system.ap}}</span>
+              <span>{{item.system.stock}}</span>
             {{/if}}
           </td>
           <td align="center">
             {{#if unlocked}}
               <input
-                name="system.weight"
+                name="system.weight.indiv"
                 type="number"
-                value="{{item.system.weight}}"
+                value="{{item.system.weight.indiv}}"
                 placeholder="0"
               />
             {{else}}
-              <span>{{item.system.weight}}</span>
-            {{/if}}
-          </td>
-        </tr>
-        <tr>
-          <th colspan="2">{{localize "orc.armor.bodyPart"}}</th>
-        </tr>
-        <tr>
-          <td colspan="2" align="center">
-            {{#if unlocked}}
-              <select name="system.bodyPart" align="center">
-                {{#select item.system.bodyPart}}
-                  {{#each config.bodyPartList as |bodyPart part|}}
-                    <option value="{{bodyPart}}">{{localize bodyPart}}</option>
-                  {{/each}}
-                {{/select}}
-              </select>
-            {{else}}
-              <span>{{localize item.system.bodyPart}}</span>
+              <span>{{item.system.weight.indiv}}</span>
             {{/if}}
           </td>
         </tr>

@@ -1,16 +1,14 @@
-import * as Dice from "../commons/dice.js";
-
-export default class ORCWeaponSheet extends ItemSheet {
+export default class ORCConsumableSheet extends ItemSheet {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       width: 600,
       height: 500,
-      classes: ["orc", "sheet", "item", "weapon"],
+      classes: ["orc", "sheet", "item", "consumable"],
     });
   }
 
   get template() {
-    return `systems/orc/templates/sheets/weapon-sheet.hbs`;
+    return `systems/orc/templates/sheets/consumable-sheet.hbs`;
   }
 
   /* -------------------------------------------- */
@@ -22,18 +20,10 @@ export default class ORCWeaponSheet extends ItemSheet {
 
     //If default img, change for sword
     if (data.item.img == "icons/svg/item-bag.svg")
-      data.item.img = "icons/weapons/swords/greatsword-crossguard-steel.webp";
+      data.item.img = "icons/consumables/potions/bottle-pear-corked-blue.webp";
 
     data.config = CONFIG.ORC;
     data.unlocked = this.item.getFlag(game.system.id, "SheetUnlocked");
-
-    //Recover the list of ammo of the owner
-    const parent = data.item.parent;
-    if (parent) {
-      data.ammos = parent.items.filter(function (item) {
-        return item.type == "ammo";
-      });
-    }
 
     //Enrich the html to be able to link objects
     data.descriptionHTML = TextEditor.enrichHTML(data.item.system.description, {
@@ -41,6 +31,8 @@ export default class ORCWeaponSheet extends ItemSheet {
       async: false,
       relativeTo: this.item,
     });
+
+    this.updateTotalWeight(data);
 
     //console.log(data);
     return data;
@@ -50,8 +42,6 @@ export default class ORCWeaponSheet extends ItemSheet {
     super.activateListeners(html);
 
     html.find(".sheet-change-lock").click(this._onSheetChangelock.bind(this));
-
-    html.find(".damage-roll").click(this._onDamageRoll.bind(this));
   }
 
   /* -------------------------------------------- */
@@ -75,9 +65,16 @@ export default class ORCWeaponSheet extends ItemSheet {
     this.item.sheet.render(true);
   }
 
-  /* -------------------------------------------- */
+  updateTotalWeight(data) {
+    const item = data.item;
+    const itemData = item.system;
 
-  async _onDamageRoll(event) {
-    Dice.DamageRoll({ weapon: this.item });
+    const stock = itemData.stock;
+    const indivWeight = itemData.weight.indiv;
+    item.update({
+      system: {
+        weight: { total: Math.floor(100 * indivWeight * stock) / 100 },
+      },
+    });
   }
 }

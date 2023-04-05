@@ -23,9 +23,9 @@
       <td class="content">{{weapon.system.effect}}</td>
       <td class="content">{{weapon.system.weight}}</td>
       {{#if weapon.system.equipped}}
-        <td class="content weapon-equipped button fas fa-check"></td>
+        <td class="content item-equipped button fas fa-check"></td>
       {{else}}
-        <td class="content weapon-equipped button fas fa-xmark"></td>
+        <td class="content item-equipped button fas fa-xmark"></td>
       {{/if}}
       <td align="center">
         <a class="item-edit" align="center" title="Edit Item">
@@ -50,7 +50,8 @@
   <tr class="header flexrow">
     <td class="content">
       <select
-        class="bodyPart-choose-armor"
+        class="bodyPart-choose-armor armor-equipped"
+        slot="{{config.bodyPartList.head}}"
         name="system.ap.bodyParts.head"
         align="center"
       >
@@ -66,7 +67,8 @@
     </td>
     <td class="content">
       <select
-        class="bodyPart-choose-armor"
+        class="bodyPart-choose-armor armor-equipped"
+        slot="{{config.bodyPartList.chest}}"
         name="system.ap.bodyParts.chest"
         align="center"
       >
@@ -82,7 +84,8 @@
     </td>
     <td class="content">
       <select
-        class="bodyPart-choose-armor"
+        class="bodyPart-choose-armor armor-equipped"
+        slot="{{config.bodyPartList.arms}}"
         name="system.ap.bodyParts.arms"
         align="center"
       >
@@ -98,7 +101,8 @@
     </td>
     <td class="content">
       <select
-        class="bodyPart-choose-armor"
+        class="bodyPart-choose-armor armor-equipped"
+        slot="{{config.bodyPartList.legs}}"
         name="system.ap.bodyParts.legs"
         align="center"
       >
@@ -174,7 +178,7 @@
           style="width: 30px"
         />
       </td>
-      <td class="content">{{ammo.system.weight}}</td>
+      <td class="content">{{ammo.system.weight.total}}</td>
       <td align="center">
         <a class="item-edit" align="center" title="Edit Item">
           <i class="button fas fa-edit"></i></a>
