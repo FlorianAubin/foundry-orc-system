@@ -98,8 +98,8 @@
       "nutrition": {
         "foodDay": 0,
         "drinkDay": 0,
-        "foodMax": 5,
-        "drinkMax": 8,
+        "foodMax": 4,
+        "drinkMax": 6,
         "foodNeededDay": 1,
         "drinkNeededDay": 1,
         "tipsiness": 0
@@ -160,6 +160,7 @@
     },
     "ammo": {
       "damage": "",
+      "precise": false,
       "weight": 0,
       "effect": "",
       "stock": 0,

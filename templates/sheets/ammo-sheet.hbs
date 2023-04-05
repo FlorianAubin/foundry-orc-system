@@ -41,7 +41,9 @@
           <tr>
             <th>{{localize "orc.ammo.damage"}}</th>
             <th>{{localize "orc.ammo.effect"}}</th>
-            <th>{{localize "orc.ammo.stock"}}</th>
+            {{#if (or unlocked item.system.precise)}}
+              <th>{{localize "orc.ammo.precise"}}</th>
+            {{/if}}
           </tr>
           <tr>
             <td align="center">
@@ -68,6 +70,34 @@
                 <span>{{item.system.effect}}</span>
               {{/if}}
             </td>
+            {{#if unlocked}}
+              <td align="center">
+                <input
+                  name="system.precise"
+                  type="checkbox"
+                  {{checked item.system.precise}}
+                />
+              </td>
+            {{else}}
+              {{#if item.system.precise}}
+                <td align="center">
+                  <input
+                    name="system.precise"
+                    type="checkbox"
+                    {{checked item.system.precise}}
+                    disabled="true"
+                  />
+                </td>
+              {{/if}}
+            {{/if}}
+          </tr>
+        </table>
+        <table>
+          <tr>
+            <th>{{localize "orc.ammo.stock"}}</th>
+            <th>{{localize "orc.ammo.weight"}}</th>
+          </tr>
+          <tr>
             <td align="center">
               {{#if unlocked}}
                 <input
@@ -80,13 +110,6 @@
                 <span>{{item.system.stock}}</span>
               {{/if}}
             </td>
-          </tr>
-        </table>
-        <table>
-          <tr>
-            <th>{{localize "orc.ammo.weight"}}</th>
-          </tr>
-          <tr>
             <td align="center">
               {{#if unlocked}}
                 <input

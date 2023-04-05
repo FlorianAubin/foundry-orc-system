@@ -1,6 +1,6 @@
 import * as Dice from "../commons/dice.js";
 
-export default class ORCItemSheet extends ItemSheet {
+export default class ORCWeaponSheet extends ItemSheet {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       width: 530,

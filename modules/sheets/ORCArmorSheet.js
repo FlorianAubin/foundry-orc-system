@@ -1,4 +1,4 @@
-export default class ORCItemSheet extends ItemSheet {
+export default class ORCArmorSheet extends ItemSheet {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       width: 530,

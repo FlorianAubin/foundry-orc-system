@@ -56,8 +56,8 @@
       "range": "Portée (m)",
       "useAmmo": "Utilise des munitions ?",
       "ammo": "Munition",
-      "defenceModif": "Modificateur de défense",
-      "attackModif": "Modificateur d'attaque",
+      "defenceModif": "Modif. défense",
+      "attackModif": "Modif. attaque",
       "precise": "Arme précise",
       "weight": "Poids",
       "effect": "Effets",
@@ -66,6 +66,7 @@
     "ammo": {
       "damage": "Dégâts",
       "effect": "Effets",
+      "precise": "Munition précise",
       "stock": "Stock",
       "weight": "Poids"
     },

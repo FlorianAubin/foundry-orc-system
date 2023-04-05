@@ -147,6 +147,7 @@ export function DamageRoll({
   extraMessageData.effect = "";
   let rollData = {};
   let rollOptions = {};
+  let precise = false;
   let damageMin = 0;
 
   //If neither an actor or a weapon is provided, exit the function
@@ -178,6 +179,7 @@ export function DamageRoll({
     rollFormula += weapon.system.damage;
     //Add the weapon effects to the message
     extraMessageData.effect += weapon.system.effect;
+    precise = precise || weapon.system.precise;
 
     //If it is an actor that does the roll, add the extra damage and effects
     if (actor) {
@@ -199,6 +201,7 @@ export function DamageRoll({
           //Add the weapon effects to the message
           if (ammo.system.effect)
             extraMessageData.effect += " " + ammo.system.effect;
+          precise = precise || ammo.system.precise;
           //Remove one ammo
           let maj = { system: { stock: ammoStock - 1 } };
           ammo.update(maj);
@@ -222,7 +225,7 @@ export function DamageRoll({
           );
         }
       }
-      //If the weapon don't use ammo,
+      //If the weapon don't use ammo
       else {
         //Tag the message as "no ammo used"
         extraMessageData.ammoTag = 0;
@@ -232,8 +235,8 @@ export function DamageRoll({
       }
     }
 
-    //If the weapon is tagged as "precise", set a min damage
-    if (weapon.system.precise) {
+    //If precise attack, set a min damage
+    if (precise) {
       //Split the formula between the "+"
       let formulaSplitPlus = rollFormula.split("+");
       for (let i = 0; i < formulaSplitPlus.length; i++) {
