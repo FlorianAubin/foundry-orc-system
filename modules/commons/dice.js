@@ -32,25 +32,6 @@ export function AttributeRoll({
       parseFloat(attribute.attributevalue) - parseFloat(rollResult.total)
     ).toString(),
   };
-  //Add a local modifier (mainly for attack from weapon)
-  if (attribute.attributevaluemodiflocal) {
-    extraMessageData.attributeValue.modif = (
-      parseFloat(extraMessageData.attributeValue.modif) +
-      parseFloat(attribute.attributevaluemodiflocal)
-    ).toString();
-    extraMessageData.attributeValue.value = (
-      parseFloat(extraMessageData.attributeValue.value) +
-      parseFloat(attribute.attributevaluemodiflocal)
-    ).toString();
-    rollOptions.attributeValue = (
-      parseFloat(rollOptions.attributeValue) +
-      parseFloat(attribute.attributevaluemodiflocal)
-    ).toString();
-    extraMessageData.attributeValue.diff = (
-      parseFloat(extraMessageData.attributeValue.value) -
-      parseFloat(rollResult.total)
-    ).toString();
-  }
 
   if (rollResult.total <= rollResult.options.actorLimitCritical) {
     extraMessageData.message = "orc.dialog.criticalSuccess";
@@ -209,6 +190,7 @@ export function DamageRoll({
           .filter(function (item) {
             return item._id == weapon.system.ammo;
           })[0];
+
         const ammoStock = ammo.system.stock;
         if (ammoStock > 0) {
           if (ammo.system.damage)

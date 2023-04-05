@@ -47,11 +47,13 @@
       "biography": "Biographie"
     },
     "weapons": "Armes",
+    "ammos": "Munitions",
+    "armors": "Armures",
+    "weaponsEquipped": "Armes équipées",
     "weapon": {
       "damage": "Dégâts",
       "damageType": "Type de dégâts",
       "range": "Portée (m)",
-      "effects": "Effets",
       "useAmmo": "Utilise des munitions ?",
       "ammo": "Munition",
       "defenceModif": "Modificateur de défense",
@@ -60,6 +62,17 @@
       "weight": "Poids",
       "effect": "Effets",
       "equipped": "Équipé"
+    },
+    "ammo": {
+      "damage": "Dégâts",
+      "effect": "Effets",
+      "stock": "Stock",
+      "weight": "Poids"
+    },
+    "armor": {
+      "bodyPart": "Partie du corps",
+      "valueAP": "Valeur d'armure",
+      "weight": "Poids"
     },
     "damageTypeList": {
       "piercing": "Perçant",
@@ -72,6 +85,12 @@
       "defensive": "Défensif",
       "dodge": "Esquive",
       "aggressive": "Agressif"
+    },
+    "bodyPartList": {
+      "head": "Tête",
+      "chest": "Torse",
+      "arms": "Bras",
+      "legs": "Jambes"
     },
     "dialog": {
       "Success": "Réussite",

@@ -121,35 +121,40 @@
   </table>
   <table class="item-list weapon-list">
     <tr class="header flexrow">
-      <th class="content">{{localize "orc.weapons"}}</th>
+      <th class="content">{{localize "orc.weaponsEquipped"}}</th>
     </tr>
     <tr class="header flexrow">
       <th></th>
-      <th>Munition</th>
+      <th>{{localize "orc.weapon.ammo"}}</th>
+      <th>{{localize "orc.weapon.damage"}}</th>
+      <th>{{localize "orc.weapon.effect"}}</th>
       <th class="content">{{localize "orc.character.attack"}}</th>
+      <th></th>
     </tr>
-    {{#each weapons as |item id|}}
-      {{#if item.system.equipped}}
-        <tr class="item flexrow" data-item-id="{{item._id}}">
-          <td class="content">{{item.name}}</td>
+    {{#each weapons as |weapon id|}}
+      {{#if weapon.system.equipped}}
+        <tr class="item flexrow" data-item-id="{{weapon._id}}">
+          <td class="content">{{weapon.name}}</td>
           <td class="content">
-            {{#if item.system.useAmmo}}
+            {{#if weapon.system.useAmmo}}
               <select class="weapon-choose-ammo" name="system.ammo" align="center">
-              {{#select item.system.ammo}} 
-              {{#each ../ammo as |munition|}}
-              <option value="{{munition._id}}">{{munition.name}}</option>
+              {{#select weapon.system.ammo}} 
+              {{#each ../ammos as |ammo|}}
+              <option value="{{ammo._id}}">{{ammo.name}}</option>
               {{/each}} 
               {{/select}}
             </select>
             {{/if}}
           </td>
+          <td class="content">{{weapon.system.effective.damage}}</td>
+          <td class="content">{{weapon.system.effective.effect}}</td>
+          <td class="content">{{weapon.system.effective.attack}}</td>
           <td
             class="content attack-with-weapon-roll button fas fa-dice"
             data-attributename="{{localize 'orc.character.attack'}}"
-            data-attributevalue="{{../actor.system.attack.value}}"
+            data-attributevalue="{{weapon.system.effective.attack}}"
             data-attributevaluebase="{{../actor.system.attack.native}}"
-            data-attributevaluemodiflocal="{{item.system.attackModif}}"
-            data-weaponid="{{item._id}}"
+            data-weaponid="{{weapon._id}}"
           ></td>
         </tr>
       {{/if}}

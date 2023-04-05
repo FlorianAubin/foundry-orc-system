@@ -8,19 +8,21 @@
     <th class="content">{{localize "orc.weapon.range"}}</th>
     <th class="content">{{localize "orc.weapon.defenceModif"}}</th>
     <th class="content">{{localize "orc.weapon.attackModif"}}</th>
-    <th class="content">{{localize "orc.weapon.effects"}}</th>
+    <th class="content">{{localize "orc.weapon.effect"}}</th>
+    <th class="content">{{localize "orc.weapon.weight"}}</th>
     <th class="content">{{localize "orc.weapon.equipped"}}</th>
     <th class="content"></th>
   </tr>
-  {{#each weapons as |item id|}}
-    <tr class="item flexrow" data-item-id="{{item._id}}">
-      <td class="content">{{item.name}}</td>
-      <td class="content">{{item.system.damage}}</td>
-      <td class="content">{{item.system.range}}</td>
-      <td class="content">{{item.system.defenceModif}}</td>
-      <td class="content">{{item.system.attackModif}}</td>
-      <td class="content">{{item.system.effect}}</td>
-      {{#if item.system.equipped}}
+  {{#each weapons as |weapon id|}}
+    <tr class="item flexrow" data-item-id="{{weapon._id}}">
+      <td class="content">{{weapon.name}}</td>
+      <td class="content">{{weapon.system.damage}}</td>
+      <td class="content">{{weapon.system.range}}</td>
+      <td class="content">{{weapon.system.defenceModif}}</td>
+      <td class="content">{{weapon.system.attackModif}}</td>
+      <td class="content">{{weapon.system.effect}}</td>
+      <td class="content">{{weapon.system.weight}}</td>
+      {{#if weapon.system.equipped}}
         <td class="content weapon-equipped button fas fa-check"></td>
       {{else}}
         <td class="content weapon-equipped button fas fa-xmark"></td>
@@ -34,10 +36,145 @@
     </tr>
   {{/each}}
 </table>
+<table class="item-list armor-list">
+  <tr class="header-main flexrow">
+    <th class="content">{{localize "orc.armors"}}</th>
+  </tr>
+  <tr class="header flexrow">
+    {{#each config.bodyPartList as |bodyPart part|}}
+      {{#if (isNotEmptyString bodyPart)}}
+        <th class="content">{{localize bodyPart}}</th>
+      {{/if}}
+    {{/each}}
+  </tr>
+  <tr class="header flexrow">
+    <td class="content">
+      <select
+        class="bodyPart-choose-armor"
+        name="system.ap.bodyParts.head"
+        align="center"
+      >
+        {{#select actor.system.ap.bodyParts.head}}
+          <option value=""></option>
+          {{#each armors as |armor id|}}
+            {{#if (eq armor.system.bodyPart ../config.bodyPartList.head)}}
+              <option value="{{armor._id}}">{{armor.name}}</option>
+            {{/if}}
+          {{/each}}
+        {{/select}}
+      </select>
+    </td>
+    <td class="content">
+      <select
+        class="bodyPart-choose-armor"
+        name="system.ap.bodyParts.chest"
+        align="center"
+      >
+        {{#select actor.system.ap.bodyParts.chest}}
+          <option value=""></option>
+          {{#each armors as |armor id|}}
+            {{#if (eq armor.system.bodyPart ../config.bodyPartList.chest)}}
+              <option value="{{armor._id}}">{{armor.name}}</option>
+            {{/if}}
+          {{/each}}
+        {{/select}}
+      </select>
+    </td>
+    <td class="content">
+      <select
+        class="bodyPart-choose-armor"
+        name="system.ap.bodyParts.arms"
+        align="center"
+      >
+        {{#select actor.system.ap.bodyParts.arms}}
+          <option value=""></option>
+          {{#each armors as |armor id|}}
+            {{#if (eq armor.system.bodyPart ../config.bodyPartList.arms)}}
+              <option value="{{armor._id}}">{{armor.name}}</option>
+            {{/if}}
+          {{/each}}
+        {{/select}}
+      </select>
+    </td>
+    <td class="content">
+      <select
+        class="bodyPart-choose-armor"
+        name="system.ap.bodyParts.legs"
+        align="center"
+      >
+        {{#select actor.system.ap.bodyParts.legs}}
+          <option value=""></option>
+          {{#each armors as |armor id|}}
+            {{#if (eq armor.system.bodyPart ../config.bodyPartList.legs)}}
+              <option value="{{armor._id}}">{{armor.name}}</option>
+            {{/if}}
+          {{/each}}
+        {{/select}}
+      </select>
+    </td>
+    <!--
+    <select class="bodyPart-choose-armor" name="system.ap.bodyParts" align="center">
+      {{#select ../actor.system.ap.bodyParts}}
+        {{#each ../armors as |armor id|}}
+          {{#if (eq armor.system.bodyPart bodyPart)}}
+            <option value="{{armor._id}}">{{localize armor.name}}</option>
+          {{/if}}
+        {{/each}}
+      {{/select}}
+    </select>
+      -->
 
+  </tr>
+  <tr class="header flexrow">
+    <th class="content"></th>
+    <th class="content">{{localize "orc.armor.bodyPart"}}</th>
+    <th class="content">{{localize "orc.armor.valueAP"}}</th>
+    <th class="content">{{localize "orc.armor.weight"}}</th>
+    <th class="content"></th>
+  </tr>
+  {{#each armors as |armor id|}}
+    <tr class="item flexrow" data-item-id="{{armor._id}}">
+      <td class="content">{{armor.name}}</td>
+      <td class="content">{{localize armor.system.bodyPart}}</td>
+      <td class="content">{{armor.system.ap}}</td>
+      <td class="content">{{armor.system.weight}}</td>
+      <td align="center">
+        <a class="item-edit" align="center" title="Edit Item">
+          <i class="button fas fa-edit"></i></a>
+        <a class="item-delete" align="center" title="Delete Item">
+          <i class="button fas fa-trash"></i></a>
+      </td>
+    </tr>{{/each}}
+</table>
 <table class="item-list ammo-list">
-  {{#each ammo as |item id|}}
-    <tr class="item flexrow" data-item-id="{{item._id}}">
+  <tr class="header-main flexrow">
+    <th class="content">{{localize "orc.ammos"}}</th>
+  </tr>
+  <tr class="header flexrow">
+    <th class="content"></th>
+    <th class="content">{{localize "orc.ammo.damage"}}</th>
+    <th class="content">{{localize "orc.ammo.effect"}}</th>
+    <th class="content">{{localize "orc.ammo.stock"}}</th>
+    <th class="content">{{localize "orc.ammo.weight"}}</th>
+    <th class="content"></th>
+  </tr>
+  {{#each ammos as |ammo id|}}
+    <tr class="item flexrow" data-item-id="{{ammo._id}}">
+      <td class="content">{{ammo.name}}</td>
+      <td class="content">{{ammo.system.damage}}</td>
+      <td class="content">{{ammo.system.effect}}</td>
+      <td class="content" align="center">
+        <input
+          class="ammo-update-stock"
+          type="number"
+          name="ammo.system.stock"
+          value="{{ammo.system.stock}}"
+          placeholder="0"
+          onClick="this.select();"
+          style="width: 30px"
+        />
+      </td>
+      <td class="content">{{ammo.system.weight}}</td>
       <td align="center">
         <a class="item-edit" align="center" title="Edit Item">
           <i class="button fas fa-edit"></i></a>

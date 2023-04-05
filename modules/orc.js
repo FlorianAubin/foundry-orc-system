@@ -1,9 +1,10 @@
 import { ORC } from "./commons/config.js";
 import * as Macros from "./commons/macros.js";
 import * as Chat from "./commons/chat.js";
-import ORCAmmoSheet from "./sheets/ORCAmmoSheet.js";
-import ORCWeaponSheet from "./sheets/ORCWeaponSheet.js";
 import ORCCharacterSheet from "./sheets/ORCCharacterSheet.js";
+import ORCWeaponSheet from "./sheets/ORCWeaponSheet.js";
+import ORCAmmoSheet from "./sheets/ORCAmmoSheet.js";
+import ORCArmorSheet from "./sheets/ORCArmorSheet.js";
 import { preloadHandlebarsTemplates } from "./commons/templates.js";
 import { RegisterHandlebars } from "./commons/handlebars.mjs";
 
@@ -32,6 +33,10 @@ Hooks.once("init", async function () {
   });
   Items.registerSheet("ammo", ORCAmmoSheet, {
     types: ["ammo"],
+    makeDefault: true,
+  });
+  Items.registerSheet("armor", ORCArmorSheet, {
+    types: ["armor"],
     makeDefault: true,
   });
 

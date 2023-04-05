@@ -22,11 +22,15 @@ export default class ORCCharacterSheet extends ActorSheet {
     const data = super.getData(options);
 
     data.config = CONFIG.ORC;
+    //Recover the onwed items
     data.weapons = data.items.filter(function (item) {
       return item.type == "weapon";
     });
-    data.ammo = data.items.filter(function (item) {
+    data.ammos = data.items.filter(function (item) {
       return item.type == "ammo";
+    });
+    data.armors = data.items.filter(function (item) {
+      return item.type == "armor";
     });
 
     //Enrich the html to be able to link objects
@@ -40,12 +44,14 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     this._prepareCharacterData(data);
 
-    console.log(data);
+    //console.log(data);
     return data;
   }
 
   activateListeners(html) {
     html.find(".sheet-change-lock").click(this._onSheetChangelock.bind(this));
+
+    html.find(".ap-deploy").click(this._onAPDeploy.bind(this));
 
     //html.find(".item-create").click(this._onItemCreate.bind(this));
     html.find(".item-edit").click(this._onItemEdit.bind(this));
@@ -55,6 +61,8 @@ export default class ORCCharacterSheet extends ActorSheet {
     html
       .find(".weapon-choose-ammo")
       .change(this._onWeaponChooseAmmo.bind(this));
+    html.find(".ammo-update-stock").change(this._onAmmoUpdateStock.bind(this));
+    html.find(".armor-update-ap").change(this._onArmorUpdateAP.bind(this));
 
     html.find(".take-damage").click(this._onTakeDamage.bind(this));
     html.find(".recover-hp").click(this._onRecoverHP.bind(this));
@@ -105,6 +113,15 @@ export default class ORCCharacterSheet extends ActorSheet {
     this.actor.sheet.render(true);
   }
 
+  async _onAPDeploy(event) {
+    event.preventDefault();
+
+    let maj = {
+      system: { ap: { optionDeploy: !this.actor.system.ap.optionDeploy } },
+    };
+    this.actor.update(maj);
+  }
+
   /**
    * Edit owned item
    */
@@ -128,8 +145,19 @@ export default class ORCCharacterSheet extends ActorSheet {
     let element = event.currentTarget;
     let itemId = element.closest(".item").dataset.itemId;
     let item = this.actor.items.get(itemId);
+    if (item.type != "weapon") return;
 
-    let maj = { system: { equipped: !item.system.equipped } };
+    //If the weapon needs ammo, there is no linked ammo, and the actor has ammo, use the first one by default
+    if (item.system.useAmmo && item.system.ammo == "") {
+      const defaultAmmo = this.getData().ammos[0];
+      if (defaultAmmo) item.update({ system: { ammo: defaultAmmo._id } });
+    }
+
+    let maj = {
+      system: {
+        equipped: !item.system.equipped,
+      },
+    };
     return item.update(maj);
   }
 
@@ -138,8 +166,31 @@ export default class ORCCharacterSheet extends ActorSheet {
     let element = event.currentTarget;
     let itemId = element.closest(".item").dataset.itemId;
     let item = this.actor.items.get(itemId);
+    if (item.type != "weapon") return;
 
     let maj = { system: { ammo: event.currentTarget.value } };
+    return item.update(maj);
+  }
+
+  _onAmmoUpdateStock(event) {
+    event.preventDefault();
+    let element = event.currentTarget;
+    let itemId = element.closest(".item").dataset.itemId;
+    let item = this.actor.items.get(itemId);
+    if (item.type != "ammo") return;
+
+    let maj = { system: { stock: parseFloat(event.currentTarget.value) } };
+    return item.update(maj);
+  }
+
+  _onArmorUpdateAP(event) {
+    event.preventDefault();
+    let element = event.currentTarget;
+    let itemId = element.closest(".item").dataset.itemId;
+    let item = this.actor.items.get(itemId);
+    if (item.type != "armor") return;
+
+    let maj = { system: { ap: parseFloat(event.currentTarget.value) } };
     return item.update(maj);
   }
 
@@ -384,6 +435,8 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     this.initSurplus(data);
     this.checkExcessValues(data);
+
+    this.updateWeaponsEffectiveValues(data);
   }
 
   applyCombatStyle(data) {
@@ -593,18 +646,36 @@ export default class ORCCharacterSheet extends ActorSheet {
     const items = data.items;
     let encumbranceModif = 0;
     let defenceModif = 0;
+    let apModif = 0;
     let out = 0;
 
     for (let [key, item] of Object.entries(items)) {
       //Weapons
-      if (item.type == "weapon" && item.system.equipped)
+      if (item.type == "weapon" && item.system.equipped) {
         if (item.system.defenceModif) defenceModif += item.system.defenceModif;
+      }
+      //Armors
+      if (item.type == "armor") {
+        let equipped = false;
+        for (let [key, bodyPart] of Object.entries(actorData.ap.bodyParts))
+          if (bodyPart == item._id) equipped = true;
+        if (item.system.ap && equipped) apModif += item.system.ap;
+      }
       //All items with weight
-      if (item.system.weight) encumbranceModif += item.system.weight;
+      if (item.system.weight) {
+        encumbranceModif +=
+          item.system.stock == null
+            ? item.system.weight
+            : item.system.weight * item.system.stock;
+      }
     }
 
     if (defenceModif != 0) {
       actorData.defence.valueModif.weapons = defenceModif;
+      out = 1;
+    }
+    if (apModif != 0) {
+      actorData.ap.valueModif.armors = apModif;
       out = 1;
     }
     if (encumbranceModif != 0) {
@@ -649,5 +720,42 @@ export default class ORCCharacterSheet extends ActorSheet {
     //Drink
     if (actorData.nutrition.drinkDay > actorData.nutrition.drinkMax)
       actorData.nutrition.drinkDay = actorData.nutrition.drinkMax;
+  }
+
+  updateWeaponsEffectiveValues(data) {
+    const actor = data.actor;
+    const weapons = data.weapons;
+    const ammos = data.ammos;
+
+    for (let [key, weapon] of Object.entries(weapons)) {
+      let item = actor.items.get(weapon._id);
+
+      let effectiveDamage = item.system.damage;
+      let effectiveEffect = item.system.effect;
+      let effectiveAttack = actor.system.attack.value + item.system.attackModif;
+
+      if (item.system.useAmmo) {
+        let ammo = ammos.filter(function (i) {
+          return i._id == item.system.ammo;
+        })[0];
+        if (ammo) {
+          effectiveDamage += "+" + ammo.system.damage;
+          effectiveEffect += " " + ammo.system.effect;
+        }
+      } else if (actor.system.damageBonus.value != "") {
+        effectiveDamage += "+" + actor.system.damageBonus.value;
+      }
+
+      let maj = {
+        system: {
+          effective: {
+            damage: effectiveDamage,
+            effect: effectiveEffect,
+            attack: effectiveAttack,
+          },
+        },
+      };
+      item.update(maj);
+    }
   }
 }

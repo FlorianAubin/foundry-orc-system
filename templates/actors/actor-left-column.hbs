@@ -87,36 +87,89 @@
         <span>{{actor.system.ap.value}}</span>
       </td>
     {{/if}}
-  </tr>
-  <tr>
-    <th></th>
-    {{#if unlocked}}
-      <th colspan="2">{{localize "orc.multiplier"}}</th>
+    {{#if (not actor.system.ap.optionDeploy)}}
+      <td
+        class="ap-deploy button fas fa-arrow-down-short-wide"
+        align="center"
+      ></td>
     {{else}}
-      <th>{{localize "orc.effective"}}</th>
-      <th>{{localize "orc.max"}}</th>
-    {{/if}}
-  </tr>
-  <tr>
-    <th>{{localize "orc.character.encumbrance"}}</th>
-    {{#if unlocked}}
-      <td align="center" colspan="2">
-        <input
-          type="number"
-          name="system.encumbrance.limitMultiplier"
-          value="{{actor.system.encumbrance.limitMultiplier}}"
-          placeholder="0"
-          onClick="this.select();"
-          style="width: 40px"
-        />
-      </td>
-    {{else}}
-      <td align="center">
-        <span>{{actor.system.encumbrance.value}}</span>
-      </td>
-      <td align="center">
-        <span>{{actor.system.encumbrance.limit}}</span>
-      </td>
+      <td class="ap-deploy button fas fa-arrow-up-to-line" align="center"></td>
+      <tr>
+        <td align="center">{{localize config.bodyPartList.head}}</td>
+        {{#each armors as |armor|}}
+          {{#if (eq armor._id ../actor.system.ap.bodyParts.head)}}
+            <td colspan="2" align="center">{{armor.name}}</td>
+            <td align="center" class="item flexrow" data-item-id="{{armor._id}}">
+              <input
+                class="armor-update-ap"
+                type="number"
+                name="armor.system.ap"
+                value="{{armor.system.ap}}"
+                placeholder="0"
+                onClick="this.select();"
+                style="width: 30px"
+              />     
+            </td>
+          {{/if}}
+        {{/each}}
+      </tr>
+      <tr>
+        <td align="center">{{localize config.bodyPartList.chest}}</td>
+        {{#each armors as |armor|}}
+          {{#if (eq armor._id ../actor.system.ap.bodyParts.chest)}}
+            <td colspan="2" align="center">{{armor.name}}</td>
+            <td align="center" class="item flexrow" data-item-id="{{armor._id}}">
+              <input
+                class="armor-update-ap"
+                type="number"
+                name="armor.system.ap"
+                value="{{armor.system.ap}}"
+                placeholder="0"
+                onClick="this.select();"
+                style="width: 30px"
+              />     
+            </td>
+          {{/if}}
+        {{/each}}
+      </tr>
+      <tr>
+        <td align="center">{{localize config.bodyPartList.arms}}</td>
+        {{#each armors as |armor|}}
+          {{#if (eq armor._id ../actor.system.ap.bodyParts.arms)}}
+            <td colspan="2" align="center">{{armor.name}}</td>
+            <td align="center" class="item flexrow" data-item-id="{{armor._id}}">
+              <input
+                class="armor-update-ap"
+                type="number"
+                name="armor.system.ap"
+                value="{{armor.system.ap}}"
+                placeholder="0"
+                onClick="this.select();"
+                style="width: 30px"
+              />     
+            </td>
+          {{/if}}
+        {{/each}}
+      </tr>
+      <tr>
+        <td align="center">{{localize config.bodyPartList.legs}}</td>
+        {{#each armors as |armor|}}
+          {{#if (eq armor._id ../actor.system.ap.bodyParts.legs)}}
+            <td colspan="2" align="center">{{armor.name}}</td>
+            <td align="center" class="item flexrow" data-item-id="{{armor._id}}">
+              <input
+                class="armor-update-ap"
+                type="number"
+                name="armor.system.ap"
+                value="{{armor.system.ap}}"
+                placeholder="0"
+                onClick="this.select();"
+                style="width: 30px"
+              />     
+            </td>
+          {{/if}}
+        {{/each}}
+      </tr>
     {{/if}}
   </tr>
 </table>
@@ -211,7 +264,6 @@
         placeholder="0"
         onClick="this.select();"
         style="width: 30px"
-        align="center"
       />
     </td>
     {{#if actor.system.status.bleed}}
@@ -240,7 +292,6 @@
         placeholder="0"
         onClick="this.select();"
         style="width: 30px"
-        align="center"
       />
     </td>
     {{#if actor.system.status.poison}}
@@ -266,7 +317,6 @@
         placeholder="0"
         onClick="this.select();"
         style="width: 30px"
-        align="center"
       />
     </td>
     {{#if actor.system.status.burn}}
@@ -280,9 +330,43 @@
   </tr>
 </table>
 <table style="width: 200px">
-  <th></th>
-  <th>{{localize "orc.day"}}</th>
-  <th>{{localize "orc.max"}}</th>
+  <tr>
+    <th></th>
+    {{#if unlocked}}
+      <th colspan="2">{{localize "orc.multiplier"}}</th>
+    {{else}}
+      <th>{{localize "orc.effective"}}</th>
+      <th>{{localize "orc.max"}}</th>
+    {{/if}}
+  </tr>
+  <tr>
+    <th>{{localize "orc.character.encumbrance"}}</th>
+    {{#if unlocked}}
+      <td align="center" colspan="2">
+        <input
+          type="number"
+          name="system.encumbrance.limitMultiplier"
+          value="{{actor.system.encumbrance.limitMultiplier}}"
+          placeholder="0"
+          onClick="this.select();"
+          style="width: 40px"
+        />
+      </td>
+    {{else}}
+      <td align="center">
+        <span>{{actor.system.encumbrance.value}}</span>
+      </td>
+      <td align="center">
+        <span>{{actor.system.encumbrance.limit}}</span>
+      </td>
+    {{/if}}
+  </tr>
+  <tr>
+
+    <th></th>
+    <th>{{localize "orc.day"}}</th>
+    <th>{{localize "orc.max"}}</th>
+  </tr>
   <tr>
     <th>{{localize "orc.character.food"}}</th>
     <td align="center">

@@ -1,9 +1,12 @@
 export const RegisterHandlebars = function () {
   Handlebars.registerHelper("isLowerThan", function (value, compare) {
-    let result = false;
+    if (value < compare) return true;
+    return false;
+  });
 
-    if (value < compare) result = true;
-
-    return result;
+  Handlebars.registerHelper("isNotEmptyString", function (value) {
+    if (value === null) return false;
+    if (value === "") return false;
+    return true;
   });
 };

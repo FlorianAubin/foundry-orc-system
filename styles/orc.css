@@ -135,6 +135,7 @@
   text-align: center;
   place-content: center;
   align-items: center;
+  width: 100px;
 }
 .orc.sheet.actor .main .content .central .sheet-body .shortcut .weapon-list .header .content {
   align-self: center;
@@ -148,21 +149,32 @@
   width: 100%;
   height: 100%;
 }
-.orc.sheet.actor .main .content .central .sheet-body .inventory .weapon-list {
+.orc.sheet.actor .main .content .central .sheet-body .inventory td {
+  width: 100px;
+}
+.orc.sheet.actor .main .content .central .sheet-body .inventory .weapon-list,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-list,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .armor-list {
   display: flex;
   flex-direction: column;
   width: 100%;
   margin: 0 0 1em 0;
 }
-.orc.sheet.actor .main .content .central .sheet-body .inventory .weapon-list .header-main .content {
+.orc.sheet.actor .main .content .central .sheet-body .inventory .weapon-list .header-main .content,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-list .header-main .content,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .armor-list .header-main .content {
   align-self: center;
   place-content: center;
 }
-.orc.sheet.actor .main .content .central .sheet-body .inventory .weapon-list .header .content {
+.orc.sheet.actor .main .content .central .sheet-body .inventory .weapon-list .header .content,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-list .header .content,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .armor-list .header .content {
   align-self: center;
   place-content: center;
 }
-.orc.sheet.actor .main .content .central .sheet-body .inventory .weapon-list .item .content {
+.orc.sheet.actor .main .content .central .sheet-body .inventory .weapon-list .item .content,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-list .item .content,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .armor-list .item .content {
   align-self: center;
   place-content: center;
 }
@@ -183,6 +195,10 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+.orc.sheet.item .weapon .main .content th,
+.orc.sheet.item .weapon .main .content td {
+  width: 100px;
 }
 .orc.sheet.item .weapon .button {
   display: table-cell;
@@ -217,6 +233,10 @@
   flex-direction: column;
   height: 100%;
 }
+.orc.sheet.item .ammo .main .content th,
+.orc.sheet.item .ammo .main .content td {
+  width: 100px;
+}
 .orc.sheet.item .ammo .button {
   display: table-cell;
   align-self: center;
@@ -231,6 +251,43 @@
   cursor: pointer;
 }
 .orc.sheet.item .ammo .editor {
+  min-height: 50px;
+  height: 100%;
+  box-shadow: inset 0 0 6px black;
+}
+.orc.sheet.item .armor .main .header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.orc.sheet.item .armor .main .header .name {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.orc.sheet.item .armor .main .content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.orc.sheet.item .armor .main .content th,
+.orc.sheet.item .armor .main .content td {
+  width: 100px;
+}
+.orc.sheet.item .armor .button {
+  display: table-cell;
+  align-self: center;
+  place-content: center;
+  font-size: var(--font-size-15);
+  height: 100%;
+}
+.orc.sheet.item .armor .button:hover,
+.orc.sheet.item .armor .button:focus {
+  color: #000;
+  box-shadow: inset 0 0 6px #b41212;
+  cursor: pointer;
+}
+.orc.sheet.item .armor .editor {
   min-height: 50px;
   height: 100%;
   box-shadow: inset 0 0 6px black;

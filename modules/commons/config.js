@@ -14,3 +14,11 @@ ORC.combatStyleList = {
   dodge: "orc.combatStyleList.dodge",
   aggressive: "orc.combatStyleList.aggressive",
 };
+
+ORC.bodyPartList = {
+  none: "",
+  head: "orc.bodyPartList.head",
+  chest: "orc.bodyPartList.chest",
+  arms: "orc.bodyPartList.arms",
+  legs: "orc.bodyPartList.legs",
+};

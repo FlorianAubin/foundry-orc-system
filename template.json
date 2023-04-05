@@ -45,7 +45,14 @@
         "nativeModif": {},
         "native": 0,
         "valueModif": {},
-        "value": 0
+        "value": 0,
+        "bodyParts": {
+          "head": "",
+          "chest": "",
+          "arms": "",
+          "legs": ""
+        },
+        "optionDeploy": false
       },
       "encumbrance": {
         "valueModif": {},
@@ -144,7 +151,12 @@
       "weight": 0,
       "effect": "",
       "description": "",
-      "equipped": false
+      "equipped": false,
+      "effective": {
+        "damage": "",
+        "effect": "",
+        "attack": 0
+      }
     },
     "ammo": {
       "damage": "",
@@ -154,8 +166,8 @@
       "description": ""
     },
     "armor": {
-      "PA": 0,
-      "localisation": "",
+      "ap": 0,
+      "bodyPart": "",
       "weight": 0,
       "description": ""
     },
