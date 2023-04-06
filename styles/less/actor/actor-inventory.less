@@ -9,13 +9,35 @@
             td {
               width: 100px;
             }
+
+            .ammo-equipableitem,
+            .food-consumable {
+              display: flex;
+              flex-direction: row;
+              width: 100%;
+              .ammo,
+              .equipableitem,
+              .food,
+              .consumable {
+                display: flex;
+                flex-direction: row;
+                float: left;
+                width: 100%;
+              }
+            }
+
             .weapon-list,
+            .armor-list,
             .ammo-list,
-            .armor-list {
+            .equipableitem-list,
+            .food-list,
+            .consumable-list {
               display: flex;
               flex-direction: column;
               width: 100%;
               margin: 0 0 1em 0;
+              border-left: 1px solid #000;
+              border-right: 1px solid #000;
               .header-main {
                 .content {
                   align-self: center;

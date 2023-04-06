@@ -58,6 +58,8 @@ export function AttributeRoll({
   Chat.AttributeRollToCustomFullMessage(rollResult, {
     ...extraMessageData,
   });
+
+  return rollResult.total;
 }
 
 export function AttackRoll({
@@ -65,7 +67,7 @@ export function AttackRoll({
   attribute = null,
   extraMessageData = {},
 }) {
-  this.AttributeRoll({
+  return this.AttributeRoll({
     actor,
     attribute,
     extraMessageData,
@@ -77,11 +79,26 @@ export function DodgeRoll({
   attribute = null,
   extraMessageData = {},
 }) {
-  this.AttributeRoll({
+  return this.AttributeRoll({
     actor,
     attribute,
     extraMessageData,
   });
+}
+
+export function StatusResistRoll({ actor = null, modif = 0 }) {
+  let difficulty = actor.system.attributes.physical.value + modif;
+  let attribute = {
+    attributename: "Physical",
+    attributevalue: difficulty,
+    attributevaluebase: actor.system.attributes.physical.native,
+  };
+  return (
+    this.AttributeRoll({
+      actor: actor,
+      attribute: attribute,
+    }) > difficulty
+  );
 }
 
 export function DamageRoll({
@@ -240,7 +257,7 @@ export function BleedPoisonRoll({
       charName: actor.name,
     });
   } else {
-    return;
+    return 0;
   }
 
   let rollFormula = ndice + "d6";
@@ -334,5 +351,5 @@ export function EnchantRoll({
     ...extraMessageData,
   });
 
-  return;
+  return rollResult.total;
 }

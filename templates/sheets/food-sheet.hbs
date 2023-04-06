@@ -38,6 +38,85 @@
     <div class="content">
       <table>
         <tr>
+          <th>{{localize "orc.food.hp"}}</th>
+          <th>{{localize "orc.food.mp"}}</th>
+          <th>{{localize "orc.food.tipsiness"}}</th>
+        </tr>
+        <tr>
+          <td align="center">
+            {{#if unlocked}}
+              <input
+                name="system.hp"
+                type="number"
+                value="{{item.system.hp}}"
+                placeholder="0"
+              />
+            {{else}}
+              <span>{{item.system.hp}}</span>
+            {{/if}}
+          </td>
+          <td align="center">
+            {{#if unlocked}}
+              <input
+                name="system.mp"
+                type="number"
+                value="{{item.system.mp}}"
+                placeholder="0"
+              />
+            {{else}}
+              <span>{{item.system.mp}}</span>
+            {{/if}}
+          </td>
+          <td align="center">
+            {{#if unlocked}}
+              <input
+                name="system.tipsiness"
+                type="number"
+                value="{{item.system.tipsiness}}"
+                placeholder="0"
+              />
+            {{else}}
+              <span>{{item.system.tipsiness}}</span>
+            {{/if}}
+          </td>
+        </tr>
+      </table>
+      <table>
+        <tr>
+          <th>{{localize "orc.food.type.food"}}</th>
+          <th>{{localize "orc.food.type.drink"}}</th>
+        </tr>
+        <tr>
+          <td align="center">
+            {{#if unlocked}}
+              <input
+                name="system.type.food"
+                type="checkbox"
+                {{checked item.system.type.food}}
+              />
+            {{else}}
+              {{#if item.system.type.food}}
+                <span class="fas fa-check"></span>
+              {{/if}}
+            {{/if}}
+          </td>
+          <td align="center">
+            {{#if unlocked}}
+              <input
+                name="system.type.drink"
+                type="checkbox"
+                {{checked item.system.type.drink}}
+              />
+            {{else}}
+              {{#if item.system.type.drink}}
+                <span class="fas fa-check"></span>
+              {{/if}}
+            {{/if}}
+          </td>
+        </tr>
+      </table>
+      <table>
+        <tr>
           <th>{{localize "orc.food.stock"}}</th>
           <th>{{localize "orc.food.weightIndiv"}}</th>
         </tr>

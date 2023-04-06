@@ -50,6 +50,9 @@
     "weapons": "Armes",
     "ammos": "Munitions",
     "armors": "Armures",
+    "foods": "Nourritures et boissons",
+    "equipableitems": "Objets équipables",
+    "consumables": "Consommables",
     "weaponsEquipped": "Armes équipées",
     "weapon": {
       "damage": "Dégâts",
@@ -81,10 +84,18 @@
       "descripton": "Description"
     },
     "food": {
+      "hp": "HP",
+      "mp": "MP",
+      "tipsiness": "Ivresse",
       "stock": "Quantité",
       "weight": "Poids",
       "weightIndiv": "Poids par nourriture",
-      "descripton": "Description"
+      "consume": "Consommer",
+      "descripton": "Description",
+      "type": {
+        "food": "Nourriture",
+        "drink": "Boisson"
+      }
     },
     "consumable": {
       "stock": "Quantité",
@@ -94,6 +105,7 @@
     },
     "equipableitem": {
       "weight": "Poids",
+      "equipped": "Équipé",
       "descripton": "Description"
     },
     "generalItem": {

@@ -72,7 +72,7 @@
   <tr>
     <th>{{localize "orc.character.ap"}}</th>
     {{#if unlocked}}
-      <td align="center" colspan="2">
+      <td align="center">
         <input
           type="number"
           name="system.ap.native"
@@ -83,7 +83,7 @@
         />
       </td>
     {{else}}
-      <td align="center" colspan="2">
+      <td align="center">
         <span>{{actor.system.ap.value}}</span>
       </td>
     {{/if}}
@@ -375,14 +375,18 @@
   <tr>
     <th>{{localize "orc.character.food"}}</th>
     <td align="center">
-      <input
-        type="number"
-        name="system.nutrition.foodDay"
-        value="{{actor.system.nutrition.foodDay}}"
-        placeholder="0"
-        onClick="this.select();"
-        style="width: 30px"
-      />
+      {{#if unlocked}}
+        <input
+          type="number"
+          name="system.nutrition.foodDay"
+          value="{{actor.system.nutrition.foodDay}}"
+          placeholder="0"
+          onClick="this.select();"
+          style="width: 30px"
+        />
+      {{else}}
+        <span>{{actor.system.nutrition.foodDay}}</span>
+      {{/if}}
     </td>
     <td align="center">
       {{#if unlocked}}
@@ -416,14 +420,18 @@
   <tr>
     <th>{{localize "orc.character.drink"}}</th>
     <td align="center">
-      <input
-        type="number"
-        name="system.nutrition.drinkDay"
-        value="{{actor.system.nutrition.drinkDay}}"
-        placeholder="0"
-        onClick="this.select();"
-        style="width: 30px"
-      />
+      {{#if unlocked}}
+        <input
+          type="number"
+          name="system.nutrition.drinkDay"
+          value="{{actor.system.nutrition.drinkDay}}"
+          placeholder="0"
+          onClick="this.select();"
+          style="width: 30px"
+        />
+      {{else}}
+        <span>{{actor.system.nutrition.drinkDay}}</span>
+      {{/if}}
     </td>
     <td align="center">
       {{#if unlocked}}
@@ -466,6 +474,28 @@
         style="width: 30px"
       />
     </td>
+    <td></td>
+    {{#if (not actor.system.nutrition.optionDeploy)}}
+      <td
+        class="nutrition-deploy button fas fa-arrow-down-short-wide"
+        align="center"
+        style="width: 25px"
+      ></td>
+    {{else}}
+      <td 
+        class="nutrition-deploy button fas fa-arrow-up-to-line" 
+        align="center"
+        style="width: 25px"
+      ></td>
+      {{#each foods as |food|}}
+        {{#if food.system.stock}}
+          <tr class="item" data-item-id="{{food._id}}">
+            <td colspan="2" align="center">{{food.name}}</td>
+            <td class="content item-consume button fas fa-meat"></td>
+          </tr>
+        {{/if}}
+      {{/each}}
+    {{/if}}
   </tr>
 </table>
 <table style="width: 200px">

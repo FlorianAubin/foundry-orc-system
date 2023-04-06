@@ -105,8 +105,8 @@
       "nutrition": {
         "foodDay": 0,
         "drinkDay": 0,
-        "foodMax": 4,
-        "drinkMax": 6,
+        "foodMax": 5,
+        "drinkMax": 8,
         "foodNeededDay": {
           "native": 1,
           "valueModif": {},
@@ -117,7 +117,8 @@
           "valueModif": {},
           "value": 0
         },
-        "tipsiness": 0
+        "tipsiness": 0,
+        "optionDeploy": false
       },
       "takeDamage": {
         "damage": 0,
@@ -234,6 +235,10 @@
       "weight": {
         "indiv": 0,
         "total": 0
+      },
+      "type": {
+        "food": false,
+        "drink": false
       },
       "stock": 0,
       "description": ""

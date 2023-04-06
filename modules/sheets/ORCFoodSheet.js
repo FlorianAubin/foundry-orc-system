@@ -72,6 +72,7 @@ export default class ORCFoodSheet extends ItemSheet {
 
     const stock = itemData.stock;
     const indivWeight = itemData.weight.indiv;
+
     item.update({
       system: {
         weight: { total: Math.floor(100 * indivWeight * stock) / 100 },

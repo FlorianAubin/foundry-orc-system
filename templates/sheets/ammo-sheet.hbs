@@ -37,93 +37,91 @@
     </div>
     <div class="content">
       <table>
-        <table>
-          <tr>
-            <th>{{localize "orc.ammo.damage"}}</th>
-            <th>{{localize "orc.ammo.effect"}}</th>
-            {{#if (or unlocked item.system.precise)}}
-              <th>{{localize "orc.ammo.precise"}}</th>
-            {{/if}}
-          </tr>
-          <tr>
-            <td align="center">
-              {{#if unlocked}}
-                <input
-                  name="system.damage"
-                  type="text"
-                  value="{{item.system.damage}}"
-                  placeholder="0"
-                />
-              {{else}}
-                <span>{{item.system.damage}}</span>
-              {{/if}}
-            </td>
-            <td align="center">
-              {{#if unlocked}}
-                <input
-                  name="system.effect"
-                  type="text"
-                  value="{{item.system.effect}}"
-                  placeholder=""
-                />
-              {{else}}
-                <span>{{item.system.effect}}</span>
-              {{/if}}
-            </td>
+        <tr>
+          <th>{{localize "orc.ammo.damage"}}</th>
+          <th>{{localize "orc.ammo.effect"}}</th>
+          {{#if (or unlocked item.system.precise)}}
+            <th>{{localize "orc.ammo.precise"}}</th>
+          {{/if}}
+        </tr>
+        <tr>
+          <td align="center">
             {{#if unlocked}}
+              <input
+                name="system.damage"
+                type="text"
+                value="{{item.system.damage}}"
+                placeholder="0"
+              />
+            {{else}}
+              <span>{{item.system.damage}}</span>
+            {{/if}}
+          </td>
+          <td align="center">
+            {{#if unlocked}}
+              <input
+                name="system.effect"
+                type="text"
+                value="{{item.system.effect}}"
+                placeholder=""
+              />
+            {{else}}
+              <span>{{item.system.effect}}</span>
+            {{/if}}
+          </td>
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.precise"
+                type="checkbox"
+                {{checked item.system.precise}}
+              />
+            </td>
+          {{else}}
+            {{#if item.system.precise}}
               <td align="center">
                 <input
                   name="system.precise"
                   type="checkbox"
                   {{checked item.system.precise}}
+                  disabled="true"
                 />
               </td>
-            {{else}}
-              {{#if item.system.precise}}
-                <td align="center">
-                  <input
-                    name="system.precise"
-                    type="checkbox"
-                    {{checked item.system.precise}}
-                    disabled="true"
-                  />
-                </td>
-              {{/if}}
             {{/if}}
-          </tr>
-        </table>
-        <table>
-          <tr>
-            <th>{{localize "orc.ammo.stock"}}</th>
-            <th>{{localize "orc.ammo.weightIndiv"}}</th>
-          </tr>
-          <tr>
-            <td align="center">
-              {{#if unlocked}}
-                <input
-                  name="system.stock"
-                  type="number"
-                  value="{{item.system.stock}}"
-                  placeholder="0"
-                />
-              {{else}}
-                <span>{{item.system.stock}}</span>
-              {{/if}}
-            </td>
-            <td align="center">
-              {{#if unlocked}}
-                <input
-                  name="system.weight.indiv"
-                  type="number"
-                  value="{{item.system.weight.indiv}}"
-                  placeholder="0"
-                />
-              {{else}}
-                <span>{{item.system.weight.indiv}}</span>
-              {{/if}}
-            </td>
-          </tr>
-        </table>
+          {{/if}}
+        </tr>
+      </table>
+      <table>
+        <tr>
+          <th>{{localize "orc.ammo.stock"}}</th>
+          <th>{{localize "orc.ammo.weightIndiv"}}</th>
+        </tr>
+        <tr>
+          <td align="center">
+            {{#if unlocked}}
+              <input
+                name="system.stock"
+                type="number"
+                value="{{item.system.stock}}"
+                placeholder="0"
+              />
+            {{else}}
+              <span>{{item.system.stock}}</span>
+            {{/if}}
+          </td>
+          <td align="center">
+            {{#if unlocked}}
+              <input
+                name="system.weight.indiv"
+                type="number"
+                value="{{item.system.weight.indiv}}"
+                placeholder="0"
+              />
+            {{else}}
+              <span>{{item.system.weight.indiv}}</span>
+            {{/if}}
+          </td>
+        </tr>
       </table>
     </div>
   </div>

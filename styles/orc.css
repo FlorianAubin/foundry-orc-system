@@ -139,6 +139,11 @@
   align-items: center;
   width: 100px;
 }
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .weapon-list,
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .enchant-list {
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
+}
 .orc.sheet.actor .main .content .central .sheet-body .shortcut .weapon-list .header .content,
 .orc.sheet.actor .main .content .central .sheet-body .shortcut .enchant-list .header .content {
   align-self: center;
@@ -156,29 +161,62 @@
 .orc.sheet.actor .main .content .central .sheet-body .inventory td {
   width: 100px;
 }
+.orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-equipableitem,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .food-consumable {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-equipableitem .ammo,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .food-consumable .ammo,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-equipableitem .equipableitem,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .food-consumable .equipableitem,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-equipableitem .food,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .food-consumable .food,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-equipableitem .consumable,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .food-consumable .consumable {
+  display: flex;
+  flex-direction: row;
+  float: left;
+  width: 100%;
+}
 .orc.sheet.actor .main .content .central .sheet-body .inventory .weapon-list,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .armor-list,
 .orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-list,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .armor-list {
+.orc.sheet.actor .main .content .central .sheet-body .inventory .equipableitem-list,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .food-list,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .consumable-list {
   display: flex;
   flex-direction: column;
   width: 100%;
   margin: 0 0 1em 0;
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
 }
 .orc.sheet.actor .main .content .central .sheet-body .inventory .weapon-list .header-main .content,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .armor-list .header-main .content,
 .orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-list .header-main .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .armor-list .header-main .content {
+.orc.sheet.actor .main .content .central .sheet-body .inventory .equipableitem-list .header-main .content,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .food-list .header-main .content,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .consumable-list .header-main .content {
   align-self: center;
   place-content: center;
 }
 .orc.sheet.actor .main .content .central .sheet-body .inventory .weapon-list .header .content,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .armor-list .header .content,
 .orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-list .header .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .armor-list .header .content {
+.orc.sheet.actor .main .content .central .sheet-body .inventory .equipableitem-list .header .content,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .food-list .header .content,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .consumable-list .header .content {
   align-self: center;
   place-content: center;
 }
 .orc.sheet.actor .main .content .central .sheet-body .inventory .weapon-list .item .content,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .armor-list .item .content,
 .orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-list .item .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .armor-list .item .content {
+.orc.sheet.actor .main .content .central .sheet-body .inventory .equipableitem-list .item .content,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .food-list .item .content,
+.orc.sheet.actor .main .content .central .sheet-body .inventory .consumable-list .item .content {
   align-self: center;
   place-content: center;
 }
@@ -195,6 +233,8 @@
   flex-direction: column;
   width: 100%;
   margin: 0 0 1em 0;
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
 }
 .orc.sheet.actor .main .content .central .sheet-body .magic .spell-list .header-main .content,
 .orc.sheet.actor .main .content .central .sheet-body .magic .enchant-list .header-main .content {

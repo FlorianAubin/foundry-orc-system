@@ -33,6 +33,15 @@ export default class ORCCharacterSheet extends ActorSheet {
     data.armors = data.items.filter(function (item) {
       return item.type == "armor";
     });
+    data.equipableitems = data.items.filter(function (item) {
+      return item.type == "equipableitem";
+    });
+    data.foods = data.items.filter(function (item) {
+      return item.type == "food";
+    });
+    data.consumables = data.items.filter(function (item) {
+      return item.type == "consumable";
+    });
 
     //Enrich the html to be able to link objects
     data.biographyHTML = TextEditor.enrichHTML(data.actor.system.biography, {
@@ -53,6 +62,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     html.find(".sheet-change-lock").click(this._onSheetChangelock.bind(this));
 
     html.find(".ap-deploy").click(this._onAPDeploy.bind(this));
+    html.find(".nutrition-deploy").click(this._onNutritionDeploy.bind(this));
 
     //html.find(".item-create").click(this._onItemCreate.bind(this));
     html.find(".item-edit").click(this._onItemEdit.bind(this));
@@ -62,7 +72,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     html
       .find(".weapon-choose-ammo")
       .change(this._onWeaponChooseAmmo.bind(this));
-    html.find(".ammo-update-stock").change(this._onAmmoUpdateStock.bind(this));
+    html.find(".update-stock").change(this._onUpdateStock.bind(this));
     html.find(".armor-equipped").change(this._onArmorEquipped.bind(this));
     html.find(".armor-update-ap").change(this._onArmorUpdateAP.bind(this));
 
@@ -91,6 +101,7 @@ export default class ORCCharacterSheet extends ActorSheet {
       .click(this._onAttackWithWeaponRoll.bind(this));
     html.find(".enchant-deploy").click(Enchant._onEnchantDeploy.bind(this));
     html.find(".enchant-roll").click(Enchant._onEnchantRoll.bind(this));
+    html.find(".item-consume").click(this._onItemConsume.bind(this));
 
     super.activateListeners(html);
   }
@@ -118,6 +129,17 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     let maj = {
       system: { ap: { optionDeploy: !this.actor.system.ap.optionDeploy } },
+    };
+    this.actor.update(maj);
+  }
+
+  async _onNutritionDeploy(event) {
+    event.preventDefault();
+
+    let maj = {
+      system: {
+        nutrition: { optionDeploy: !this.actor.system.nutrition.optionDeploy },
+      },
     };
     this.actor.update(maj);
   }
@@ -205,12 +227,12 @@ export default class ORCCharacterSheet extends ActorSheet {
     return item.update(maj);
   }
 
-  _onAmmoUpdateStock(event) {
+  _onUpdateStock(event) {
     event.preventDefault();
     let element = event.currentTarget;
     let itemId = element.closest(".item").dataset.itemId;
     let item = this.actor.items.get(itemId);
-    if (item.type != "ammo") return;
+    if (item.system.stock == null) return;
 
     let maj = {
       system: {
@@ -359,6 +381,73 @@ export default class ORCCharacterSheet extends ActorSheet {
     await Dice.DamageRoll({
       actor: this.actor,
       attribute: event.currentTarget.dataset,
+    });
+  }
+
+  async _onItemConsume(event) {
+    event.preventDefault();
+    let element = event.currentTarget;
+    let itemId = element.closest(".item").dataset.itemId;
+    let actor = this.actor;
+    let item = this.actor.items.get(itemId);
+    let weightIndiv = item.system.weight.indiv;
+    let weightTotal = item.system.weight.total;
+    let stock = item.system.stock;
+    //Not enough items
+    if (stock <= 0) return;
+
+    //New values
+    let newValues = {
+      foodDay: actor.system.nutrition.foodDay,
+      drinkDay: actor.system.nutrition.drinkDay,
+      tipsiness: actor.system.nutrition.tipsiness,
+      hp: actor.system.hp.value,
+      mp: actor.system.mp.value,
+    };
+    if (item.system.type.food) newValues.foodDay += 1;
+    if (item.system.type.drink) newValues.drinkDay += 1;
+    //daily food or drink to the max
+    if (
+      newValues.foodDay > actor.system.nutrition.foodMax ||
+      newValues.drinkDay > actor.system.nutrition.drinkMax
+    )
+      return;
+    //Do a physical roll and increase the actor tipsiness in case of failure
+    if (item.system.tipsiness) {
+      if (Dice.StatusResistRoll({ actor: actor }))
+        newValues.tipsiness += item.system.tipsiness;
+    }
+    //HP or MP recovery through food only applies from the second meal
+    if (item.system.hp)
+      if (
+        item.type != "food" ||
+        (item.system.type.food && actor.system.nutrition.foodDay > 0) ||
+        (item.system.type.drink && actor.system.nutrition.drinkDay > 0)
+      ) {
+        newValues.hp += item.system.hp;
+        newValues.mp += item.system.mp;
+      }
+
+    //Update the actor
+    let maj = {
+      system: {
+        hp: { value: newValues.hp },
+        mp: { value: newValues.mp },
+        nutrition: {
+          tipsiness: newValues.tipsiness,
+          foodDay: newValues.foodDay,
+          drinkDay: newValues.drinkDay,
+        },
+      },
+    };
+    this.actor.update(maj);
+
+    //Update the item
+    item.update({
+      system: {
+        stock: stock - 1,
+        weight: { total: Math.floor(100 * (weightTotal - weightIndiv)) / 100 },
+      },
     });
   }
 
