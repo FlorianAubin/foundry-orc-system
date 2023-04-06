@@ -56,12 +56,36 @@
         </tr>
       </table>
     </div>
+    <div class="enchant">
+      <h2 class="enchant-header">
+        {{#if (not item.system.enchant.optionDeploy)}}
+          <div 
+            class="enchant-deploy button fas fa-arrow-down-short-wide"
+            align="center"
+            style="width: 25px"
+          ></div>
+        {{else}}
+          <div 
+            class="enchant-deploy button fas fa-arrow-up-to-line" 
+            align="center"
+            style="width: 25px"
+          ></div>
+        {{/if}}
+        <div class="title" align="center">{{localize "orc.enchant.title"}}</div>
+      </h2>
+      {{#if item.system.enchant.optionDeploy}}
+        {{> systems/orc/templates/sheets/enchant-sheet.hbs}}
+      {{/if}}
+    </div>
   </div>
-  {{editor
-    descriptionHTML
-    target="system.description"
-    button=true
-    owner=owner
-    editable=editable
-  }}
+  <div class="descripton">
+    <h2 align="center">{{localize "orc.weapon.descripton"}}</h2>
+    {{editor
+      descriptionHTML
+      target="system.description"
+      button=true
+      owner=owner
+      editable=editable
+    }}
+  </div>
 </form>

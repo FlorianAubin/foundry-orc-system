@@ -1,3 +1,56 @@
+export async function AttributeRollToCustomFullMessage(rollResult, extraData) {
+  const template = "systems/orc/templates/chat/roll-attribute-full-result.hbs";
+
+  let templateContext = {
+    ...extraData,
+    roll: rollResult,
+    tooltip: await rollResult.getTooltip(),
+  };
+
+  let chatData = {
+    user: game.user._id,
+    speaker: ChatMessage.getSpeaker(),
+    roll: rollResult,
+    sound: CONFIG.sounds.dice,
+    content: await renderTemplate(template, templateContext),
+    type: CONST.CHAT_MESSAGE_TYPES.ROLL,
+  };
+  //only visible to the GM and GM assistants
+  if (rollResult.options.visibleByPlayers == 0) {
+    chatData.blind = true;
+    chatData.whisper = game.users.filter(function (user) {
+      return user.role > 2;
+    });
+    chatData.type = CONST.CHAT_MESSAGE_TYPES.BLIND;
+  }
+
+  await ChatMessage.create(chatData);
+}
+
+export async function AttributeRollToCustomLimitedMessage(
+  rollResult,
+  extraData
+) {
+  const template =
+    "systems/orc/templates/chat/roll-attribute-limited-result.hbs";
+
+  let templateContext = {
+    ...extraData,
+    roll: rollResult,
+    tooltip: await rollResult.getTooltip(),
+  };
+
+  let chatData = {
+    user: game.user._id,
+    speaker: ChatMessage.getSpeaker(),
+    roll: rollResult,
+    content: await renderTemplate(template, templateContext),
+    type: CONST.CHAT_MESSAGE_TYPES.ROLL,
+  };
+
+  await ChatMessage.create(chatData);
+}
+
 export const highlightSuccessFailure = function (message, html, data) {
   if (!message.isContentVisible) {
     return;
@@ -43,3 +96,82 @@ export const highlightSuccessFailure = function (message, html, data) {
     i++;
   }
 };
+
+export async function StatusRollToCustomMessage(rollResult, extraData) {
+  const template = "systems/orc/templates/chat/roll-status-result.hbs";
+
+  let templateContext = {
+    ...extraData,
+    roll: rollResult,
+    tooltip: await rollResult.getTooltip(),
+  };
+
+  let chatData = {
+    user: game.user._id,
+    speaker: ChatMessage.getSpeaker(),
+    roll: rollResult,
+    sound: CONFIG.sounds.dice,
+    content: await renderTemplate(template, templateContext),
+    type: CONST.CHAT_MESSAGE_TYPES.ROLL,
+  };
+  //only visible to the GM and GM assistants
+  if (rollResult.options.visibleByPlayers == 0) {
+    chatData.blind = true;
+    chatData.whisper = game.users.filter(function (user) {
+      return user.role > 2;
+    });
+    chatData.type = CONST.CHAT_MESSAGE_TYPES.BLIND;
+  }
+
+  await ChatMessage.create(chatData);
+}
+
+export async function DamageRollToCustomMessage(rollResult, extraData) {
+  const template = "systems/orc/templates/chat/roll-damage-result.hbs";
+
+  let templateContext = {
+    ...extraData,
+    roll: rollResult,
+    tooltip: rollResult ? await rollResult.getTooltip() : null,
+  };
+
+  let chatData = {
+    user: game.user._id,
+    speaker: ChatMessage.getSpeaker(),
+    roll: rollResult,
+    sound: CONFIG.sounds.dice,
+    content: await renderTemplate(template, templateContext),
+    type: CONST.CHAT_MESSAGE_TYPES.ROLL,
+  };
+
+  await ChatMessage.create(chatData);
+}
+
+export async function EnchantRollToCustomMessage(rollResult, extraData) {
+  const template = "systems/orc/templates/chat/roll-enchant-result.hbs";
+
+  let templateContext = {
+    ...extraData,
+    roll: rollResult,
+    tooltip: await rollResult.getTooltip(),
+  };
+
+  let chatData = {
+    user: game.user._id,
+    speaker: ChatMessage.getSpeaker(),
+    roll: rollResult,
+    sound: CONFIG.sounds.dice,
+    content: await renderTemplate(template, templateContext),
+    type: CONST.CHAT_MESSAGE_TYPES.ROLL,
+  };
+  //only visible to the GM and GM assistants
+  if (rollResult.options.visibleByPlayers == 0) {
+    chatData.blind = true;
+    chatData.whisper = game.users.filter(function (user) {
+      return user.role > 2;
+    });
+    chatData.type = CONST.CHAT_MESSAGE_TYPES.BLIND;
+  }
+
+  await ChatMessage.create(chatData);
+}

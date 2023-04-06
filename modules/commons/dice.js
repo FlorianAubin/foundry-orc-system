@@ -1,3 +1,5 @@
+import * as Chat from "./chat.js";
+
 export function AttributeRoll({
   actor = null,
   attribute = null,
@@ -49,66 +51,13 @@ export function AttributeRoll({
 
   //Display a limited message if the player is not allowed to see the form
   if (rollOptions.visibleByPlayers == 0) {
-    AttributeRollToCustomLimitedMessage(rollResult, {
+    Chat.AttributeRollToCustomLimitedMessage(rollResult, {
       ...extraMessageData,
     });
   }
-  AttributeRollToCustomFullMessage(rollResult, {
+  Chat.AttributeRollToCustomFullMessage(rollResult, {
     ...extraMessageData,
   });
-}
-
-export async function AttributeRollToCustomFullMessage(rollResult, extraData) {
-  const template = "systems/orc/templates/chat/roll-attribute-full-result.hbs";
-
-  let templateContext = {
-    ...extraData,
-    roll: rollResult,
-    tooltip: await rollResult.getTooltip(),
-  };
-
-  let chatData = {
-    user: game.user._id,
-    speaker: ChatMessage.getSpeaker(),
-    roll: rollResult,
-    sound: CONFIG.sounds.dice,
-    content: await renderTemplate(template, templateContext),
-    type: CONST.CHAT_MESSAGE_TYPES.ROLL,
-  };
-  //only visible to the GM and GM assistants
-  if (rollResult.options.visibleByPlayers == 0) {
-    chatData.blind = true;
-    chatData.whisper = game.users.filter(function (user) {
-      return user.role > 2;
-    });
-    chatData.type = CONST.CHAT_MESSAGE_TYPES.BLIND;
-  }
-
-  await ChatMessage.create(chatData);
-}
-
-export async function AttributeRollToCustomLimitedMessage(
-  rollResult,
-  extraData
-) {
-  const template =
-    "systems/orc/templates/chat/roll-attribute-limited-result.hbs";
-
-  let templateContext = {
-    ...extraData,
-    roll: rollResult,
-    tooltip: await rollResult.getTooltip(),
-  };
-
-  let chatData = {
-    user: game.user._id,
-    speaker: ChatMessage.getSpeaker(),
-    roll: rollResult,
-    content: await renderTemplate(template, templateContext),
-    type: CONST.CHAT_MESSAGE_TYPES.ROLL,
-  };
-
-  await ChatMessage.create(chatData);
 }
 
 export function AttackRoll({
@@ -267,32 +216,11 @@ export function DamageRoll({
   if (rollResult._total < damageMin) rollResult._total = damageMin;
 
   //Display the message
-  DamageRollToCustomMessage(rollResult, {
+  Chat.DamageRollToCustomMessage(rollResult, {
     ...extraMessageData,
   });
 
   return rollResult.total;
-}
-
-export async function DamageRollToCustomMessage(rollResult, extraData) {
-  const template = "systems/orc/templates/chat/roll-damage-result.hbs";
-
-  let templateContext = {
-    ...extraData,
-    roll: rollResult,
-    tooltip: rollResult ? await rollResult.getTooltip() : null,
-  };
-
-  let chatData = {
-    user: game.user._id,
-    speaker: ChatMessage.getSpeaker(),
-    roll: rollResult,
-    sound: CONFIG.sounds.dice,
-    content: await renderTemplate(template, templateContext),
-    type: CONST.CHAT_MESSAGE_TYPES.ROLL,
-  };
-
-  await ChatMessage.create(chatData);
 }
 
 export function BleedPoisonRoll({
@@ -325,7 +253,7 @@ export function BleedPoisonRoll({
   let roll = new Roll(rollFormula, rollData, rollOptions);
   let rollResult = roll.roll({ async: false });
 
-  StatusRollToCustomMessage(rollResult, {
+  Chat.StatusRollToCustomMessage(rollResult, {
     ...extraMessageData,
   });
 
@@ -352,38 +280,59 @@ export function BurnRoll({ actor = null, extraMessageData = {} }) {
     });
   }
 
-  StatusRollToCustomMessage(rollResult, {
+  Chat.StatusRollToCustomMessage(rollResult, {
     ...extraMessageData,
   });
 
   return rollResult.total;
 }
 
-export async function StatusRollToCustomMessage(rollResult, extraData) {
-  const template = "systems/orc/templates/chat/roll-status-result.hbs";
-
-  let templateContext = {
-    ...extraData,
-    roll: rollResult,
-    tooltip: await rollResult.getTooltip(),
-  };
-
-  let chatData = {
-    user: game.user._id,
-    speaker: ChatMessage.getSpeaker(),
-    roll: rollResult,
-    sound: CONFIG.sounds.dice,
-    content: await renderTemplate(template, templateContext),
-    type: CONST.CHAT_MESSAGE_TYPES.ROLL,
-  };
-  //only visible to the GM and GM assistants
-  if (rollResult.options.visibleByPlayers == 0) {
-    chatData.blind = true;
-    chatData.whisper = game.users.filter(function (user) {
-      return user.role > 2;
-    });
-    chatData.type = CONST.CHAT_MESSAGE_TYPES.BLIND;
+export function EnchantRoll({
+  actor = null,
+  item = null,
+  attribute = null,
+  extraMessageData = {},
+} = {}) {
+  //If neither an actor or a item is provided, exit the function
+  if (!actor && !item) {
+    return 0;
   }
 
-  await ChatMessage.create(chatData);
+  //If an actor and a item id is provided, recover his weapon
+  if (actor && attribute.itemid) {
+    //Recover the item
+    item = actor.items.filter(function (item) {
+      return item._id == attribute.itemid;
+    })[0];
+  }
+
+  //No item?
+  if (!item) return 0;
+
+  let enchant = item.system.enchant;
+  let rollFormula = enchant.roll;
+  let rollData = {};
+  let rollOptions = {};
+  let roll = new Roll(rollFormula, rollData, rollOptions);
+  let rollResult = roll.roll({ async: false });
+
+  if (actor) {
+    extraMessageData.title = game.i18n.format("orc.dialog.enchant.title", {
+      charName: actor.name,
+      enchantName: enchant.name,
+    });
+  } else {
+    extraMessageData.title = game.i18n.format(
+      "orc.dialog.enchant.titleNoActor",
+      {
+        enchantName: enchant.name,
+      }
+    );
+  }
+
+  Chat.EnchantRollToCustomMessage(rollResult, {
+    ...extraMessageData,
+  });
+
+  return;
 }

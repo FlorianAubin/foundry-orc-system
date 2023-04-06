@@ -43,11 +43,6 @@
   box-shadow: inset 0 0 6px #b41212;
   cursor: pointer;
 }
-.orc.sheet.actor .editor {
-  min-height: 50px;
-  height: 100%;
-  box-shadow: inset 0 0 6px black;
-}
 .orc.sheet.actor textarea {
   resize: none;
 }
@@ -144,11 +139,13 @@
   align-items: center;
   width: 100px;
 }
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .weapon-list .header .content {
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .weapon-list .header .content,
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .enchant-list .header .content {
   align-self: center;
   place-content: center;
 }
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .weapon-list .item .content {
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .weapon-list .item .content,
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .enchant-list .item .content {
   align-self: center;
   place-content: center;
 }
@@ -182,6 +179,35 @@
 .orc.sheet.actor .main .content .central .sheet-body .inventory .weapon-list .item .content,
 .orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-list .item .content,
 .orc.sheet.actor .main .content .central .sheet-body .inventory .armor-list .item .content {
+  align-self: center;
+  place-content: center;
+}
+.orc.sheet.actor .main .content .central .sheet-body .magic {
+  width: 100%;
+  height: 100%;
+}
+.orc.sheet.actor .main .content .central .sheet-body .magic td {
+  width: 100px;
+}
+.orc.sheet.actor .main .content .central .sheet-body .magic .spell-list,
+.orc.sheet.actor .main .content .central .sheet-body .magic .enchant-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0 0 1em 0;
+}
+.orc.sheet.actor .main .content .central .sheet-body .magic .spell-list .header-main .content,
+.orc.sheet.actor .main .content .central .sheet-body .magic .enchant-list .header-main .content {
+  align-self: center;
+  place-content: center;
+}
+.orc.sheet.actor .main .content .central .sheet-body .magic .spell-list .header .content,
+.orc.sheet.actor .main .content .central .sheet-body .magic .enchant-list .header .content {
+  align-self: center;
+  place-content: center;
+}
+.orc.sheet.actor .main .content .central .sheet-body .magic .spell-list .item .content,
+.orc.sheet.actor .main .content .central .sheet-body .magic .enchant-list .item .content {
   align-self: center;
   place-content: center;
 }
@@ -221,7 +247,7 @@
   cursor: pointer;
 }
 .orc.sheet.item .weapon .editor {
-  min-height: 50px;
+  min-height: 100px;
   height: 100%;
   box-shadow: inset 0 0 6px black;
 }
@@ -257,11 +283,6 @@
   box-shadow: inset 0 0 6px #b41212;
   cursor: pointer;
 }
-.orc.sheet.item .ammo .editor {
-  min-height: 50px;
-  height: 100%;
-  box-shadow: inset 0 0 6px black;
-}
 .orc.sheet.item .armor .main .header {
   display: flex;
   flex-direction: row;
@@ -293,11 +314,6 @@
   color: #000;
   box-shadow: inset 0 0 6px #b41212;
   cursor: pointer;
-}
-.orc.sheet.item .armor .editor {
-  min-height: 50px;
-  height: 100%;
-  box-shadow: inset 0 0 6px black;
 }
 .orc.sheet.item .food .main .header {
   display: flex;
@@ -331,11 +347,6 @@
   box-shadow: inset 0 0 6px #b41212;
   cursor: pointer;
 }
-.orc.sheet.item .food .editor {
-  min-height: 50px;
-  height: 100%;
-  box-shadow: inset 0 0 6px black;
-}
 .orc.sheet.item .consumable .main .header {
   display: flex;
   flex-direction: row;
@@ -367,11 +378,6 @@
   color: #000;
   box-shadow: inset 0 0 6px #b41212;
   cursor: pointer;
-}
-.orc.sheet.item .consumable .editor {
-  min-height: 50px;
-  height: 100%;
-  box-shadow: inset 0 0 6px black;
 }
 .orc.sheet.item .generalitem .main .header {
   display: flex;
@@ -405,11 +411,6 @@
   box-shadow: inset 0 0 6px #b41212;
   cursor: pointer;
 }
-.orc.sheet.item .generalitem .editor {
-  min-height: 50px;
-  height: 100%;
-  box-shadow: inset 0 0 6px black;
-}
 .orc.sheet.item .bag .main .header {
   display: flex;
   flex-direction: row;
@@ -442,38 +443,59 @@
   box-shadow: inset 0 0 6px #b41212;
   cursor: pointer;
 }
-.orc.sheet.item .bag .editor {
-  min-height: 50px;
+.editor {
+  min-height: 200px;
   height: 100%;
   box-shadow: inset 0 0 6px black;
 }
+.enchant .enchant-header {
+  display: flex;
+}
+.enchant .title {
+  width: 100%;
+}
+.enchant .enchant-deploy {
+  flex-grow: 1;
+}
 .orc.attack-roll,
-.orc.attribute-roll {
+.orc.attribute-roll,
+.orc.status-roll,
+.orc.enchant-roll {
   display: flex;
   flex-direction: column;
 }
 .orc.attack-roll .title,
-.orc.attribute-roll .title {
+.orc.attribute-roll .title,
+.orc.status-roll .title,
+.orc.enchant-roll .title {
   display: flex;
   flex-direction: column;
   font-size: var(--font-size-15);
   font-weight: bold;
 }
 .orc.attack-roll .add-info,
-.orc.attribute-roll .add-info {
+.orc.attribute-roll .add-info,
+.orc.status-roll .add-info,
+.orc.enchant-roll .add-info {
   display: flex;
   flex-direction: column;
 }
 .orc.attack-roll .add-info .header,
-.orc.attribute-roll .add-info .header {
+.orc.attribute-roll .add-info .header,
+.orc.status-roll .add-info .header,
+.orc.enchant-roll .add-info .header {
   text-align: left;
 }
 .orc.attack-roll .add-info .value,
-.orc.attribute-roll .add-info .value {
+.orc.attribute-roll .add-info .value,
+.orc.status-roll .add-info .value,
+.orc.enchant-roll .add-info .value {
   text-align: right;
 }
 .orc.attack-roll .results .dice-formula,
-.orc.attribute-roll .results .dice-formula {
+.orc.attribute-roll .results .dice-formula,
+.orc.status-roll .results .dice-formula,
+.orc.enchant-roll .results .dice-formula {
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -481,21 +503,29 @@
   height: 20px;
 }
 .orc.attack-roll .results .dice-total,
-.orc.attribute-roll .results .dice-total {
+.orc.attribute-roll .results .dice-total,
+.orc.status-roll .results .dice-total,
+.orc.enchant-roll .results .dice-total {
   display: flex;
   flex-direction: column;
   place-content: center;
 }
 .orc.attack-roll .results .dice-total.critical,
-.orc.attribute-roll .results .dice-total.critical {
+.orc.attribute-roll .results .dice-total.critical,
+.orc.status-roll .results .dice-total.critical,
+.orc.enchant-roll .results .dice-total.critical {
   color: #00be00;
 }
 .orc.attack-roll .results .dice-total.fumble,
-.orc.attribute-roll .results .dice-total.fumble {
+.orc.attribute-roll .results .dice-total.fumble,
+.orc.status-roll .results .dice-total.fumble,
+.orc.enchant-roll .results .dice-total.fumble {
   color: red;
 }
 .orc.attack-roll .dice-excess,
-.orc.attribute-roll .dice-excess {
+.orc.attribute-roll .dice-excess,
+.orc.status-roll .dice-excess,
+.orc.enchant-roll .dice-excess {
   display: flex;
   flex-direction: column;
   font-size: var(--font-size-20);
@@ -505,12 +535,16 @@
   border: 1px solid var(--color-border-light-2);
 }
 .orc.attack-roll .dice-excess.positive,
-.orc.attribute-roll .dice-excess.positive {
+.orc.attribute-roll .dice-excess.positive,
+.orc.status-roll .dice-excess.positive,
+.orc.enchant-roll .dice-excess.positive {
   display: flex;
   color: #0a640a;
 }
 .orc.attack-roll .dice-excess.negative,
-.orc.attribute-roll .dice-excess.negative {
+.orc.attribute-roll .dice-excess.negative,
+.orc.status-roll .dice-excess.negative,
+.orc.enchant-roll .dice-excess.negative {
   display: flex;
   color: #640a0a;
 }

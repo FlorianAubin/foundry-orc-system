@@ -57,12 +57,13 @@
       "range": "Portée (m)",
       "useAmmo": "Utilise des munitions ?",
       "ammo": "Munition",
-      "defenceModif": "Modif. défense",
-      "attackModif": "Modif. attaque",
+      "defenceModif": "Défense",
+      "attackModif": "Attaque",
       "precise": "Arme précise",
       "weight": "Poids",
       "effect": "Effets",
-      "equipped": "Équipé"
+      "equipped": "Équipé",
+      "descripton": "Description"
     },
     "ammo": {
       "damage": "Dégâts",
@@ -70,35 +71,68 @@
       "precise": "Munition précise",
       "stock": "Quantité",
       "weight": "Poids",
-      "weightIndiv": "Poids par munition"
+      "weightIndiv": "Poids par munition",
+      "descripton": "Description"
     },
     "armor": {
       "bodyPart": "Partie du corps",
       "valueAP": "Valeur d'armure",
-      "weight": "Poids"
+      "weight": "Poids",
+      "descripton": "Description"
     },
     "food": {
       "stock": "Quantité",
       "weight": "Poids",
-      "weightIndiv": "Poids par nourriture"
+      "weightIndiv": "Poids par nourriture",
+      "descripton": "Description"
     },
     "consumable": {
       "stock": "Quantité",
       "weight": "Poids",
-      "weightIndiv": "Poids par consommable"
+      "weightIndiv": "Poids par consommable",
+      "descripton": "Description"
     },
     "equipableitem": {
-      "weight": "Poids"
+      "weight": "Poids",
+      "descripton": "Description"
     },
     "generalItem": {
       "stock": "Quantité",
       "weight": "Poids",
-      "weightIndiv": "Poids par objet"
+      "weightIndiv": "Poids par objet",
+      "descripton": "Description"
     },
     "bag": {
       "capacity": "Capacité",
-      "modifPhysical": "Malus de Physique"
+      "modifPhysical": "Malus de Physique",
+      "descripton": "Description"
     },
+    "enchants": "Enchantements",
+    "enchantsActivated": "Enchantements actifs",
+    "enchant": {
+      "title": "Enchantement",
+      "name": "Nom",
+      "item": "Objet lié",
+      "passives": "Effets passifs",
+      "physicalModif": "Physique",
+      "socialModif": "Social",
+      "intelModif": "Intel",
+      "hpMaxModif": "HP max.",
+      "mpMaxModif": "MP max.",
+      "apModif": "Armor",
+      "attackModif": "Attaque",
+      "defenceModif": "Défense",
+      "dodgeModif": "Esquive",
+      "encumbranceLimitModif": "Encombrement max.",
+      "foodNeededDayModif": "Nourriture nécessaire par jour",
+      "drinkNeededDayModif": "Boisson nécessaire par jour",
+      "limitCriticalModif": "Limite réussite critique",
+      "limitFumbleModif": "Limite échec critique",
+      "damageBonusModif": "Dégâts bonus",
+      "roll": "Jet",
+      "addEffect": "Effets additionnels"
+    },
+    "spells": "Sorts",
     "damageTypeList": {
       "piercing": "Perçant",
       "slashing": "Tranchant",
@@ -146,6 +180,10 @@
       "burn": {
         "title": "{charName} menace de prendre feu...",
         "onFire": "{charName} s'enflamme !"
+      },
+      "enchant": {
+        "title": "{charName} fait un jet d'enchantement de {enchantName}",
+        "titleNoActor": "Jet d'enchantement de {enchantName}"
       }
     }
   }

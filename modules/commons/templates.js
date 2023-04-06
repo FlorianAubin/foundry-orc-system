@@ -9,6 +9,8 @@ export const preloadHandlebarsTemplates = async function () {
     "systems/orc/templates/actors/tabs/actor-magic.hbs",
     "systems/orc/templates/actors/tabs/actor-capacity.hbs",
     "systems/orc/templates/actors/tabs/actor-biography.hbs",
+
+    "systems/orc/templates/sheets/enchant-sheet.hbs",
   ];
 
   // Load the template parts

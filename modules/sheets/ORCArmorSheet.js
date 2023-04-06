@@ -1,3 +1,4 @@
+import * as Enchant from "../commons/enchant.js";
 export default class ORCArmorSheet extends ItemSheet {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
@@ -41,6 +42,9 @@ export default class ORCArmorSheet extends ItemSheet {
     super.activateListeners(html);
 
     html.find(".sheet-change-lock").click(this._onSheetChangelock.bind(this));
+
+    html.find(".enchant-deploy").click(Enchant._onEnchantDeploy.bind(this));
+    html.find(".enchant-roll").click(Enchant._onEnchantRoll.bind(this));
   }
 
   /* -------------------------------------------- */

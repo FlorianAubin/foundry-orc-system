@@ -1,4 +1,5 @@
 import * as Dice from "../commons/dice.js";
+import * as Enchant from "../commons/enchant.js";
 export default class ORCCharacterSheet extends ActorSheet {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
@@ -88,6 +89,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     html
       .find(".attack-with-weapon-roll")
       .click(this._onAttackWithWeaponRoll.bind(this));
+    html.find(".enchant-roll").click(Enchant._onEnchantRoll.bind(this));
 
     super.activateListeners(html);
   }
@@ -154,7 +156,10 @@ export default class ORCCharacterSheet extends ActorSheet {
     }
 
     return item.update({
-      system: { equipped: true, enchant: { activate: true } },
+      system: {
+        equipped: !item.system.equipped,
+        enchant: { activated: !item.system.enchant.activated },
+      },
     });
   }
 
@@ -170,7 +175,7 @@ export default class ORCCharacterSheet extends ActorSheet {
       if (it.type == "armor")
         if (it.system.bodyPart == slotBodyPart) {
           it.update({
-            system: { equipped: false, enchant: { activate: false } },
+            system: { equipped: false, enchant: { activated: false } },
           });
         }
     }
@@ -184,7 +189,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     if (item.system.equipped == null) return;
 
     return item.update({
-      system: { equipped: true, enchant: { activate: true } },
+      system: { equipped: true, enchant: { activated: true } },
     });
   }
 
@@ -643,7 +648,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     let updated = false;
 
     let modif = {
-      phyisical: 0,
+      physical: 0,
       social: 0,
       intel: 0,
       hpMax: 0,
@@ -653,10 +658,11 @@ export default class ORCCharacterSheet extends ActorSheet {
       defence: 0,
       dodge: 0,
       encumbranceLimit: 0,
+      foodNeededDay: 0,
+      drinkNeededDay: 0,
       limitCritical: 0,
       limitFumble: 0,
       damageBonus: "",
-
       encumbrance: 0,
     };
 
@@ -676,7 +682,7 @@ export default class ORCCharacterSheet extends ActorSheet {
           if (item.system.capacity)
             modif.encumbranceLimit += item.system.capacity;
           if (item.system.modifPhysical)
-            modif.phyisical += item.system.modifPhysical;
+            modif.physical += item.system.modifPhysical;
         }
       }
       //All items with weight
@@ -688,7 +694,7 @@ export default class ORCCharacterSheet extends ActorSheet {
       }
       //Add the enchant
       let enchant = item.system.enchant;
-      if (enchant && enchant.activate) {
+      if (enchant && enchant.activated) {
         if (enchant.physicalModif != 0) modif.physical += enchant.physicalModif;
         if (enchant.socialModif != 0) modif.social += enchant.socialModif;
         if (enchant.intelModif != 0) modif.intel += enchant.intelModif;
@@ -704,13 +710,17 @@ export default class ORCCharacterSheet extends ActorSheet {
           modif.limitCritical += enchant.limitCriticalModif;
         if (enchant.limitFumbleModif != 0)
           modif.limitFumble += enchant.limitFumbleModif;
+        if (enchant.foodNeededDayModif != 0)
+          modif.foodNeededDay += enchant.foodNeededDayModif;
+        if (enchant.drinkNeededDayModif != 0)
+          modif.drinkNeededDay += enchant.drinkNeededDayModif;
         if (enchant.damageBonusModif != 0)
           modif.damageBonus += "+" + enchant.damageBonusModif;
       }
     }
 
-    if (modif.phyisical != 0) {
-      actorData.attributes.physical.valueModif.items = modif.phyisical;
+    if (modif.physical != 0) {
+      actorData.attributes.physical.valueModif.items = modif.physical;
       updated = true;
     }
     if (modif.social != 0) {
@@ -722,11 +732,11 @@ export default class ORCCharacterSheet extends ActorSheet {
       updated = true;
     }
     if (modif.hp != 0) {
-      actorData.hp.valueMaxModif.items = modif.hp;
+      actorData.hp.valueMaxModif.items = modif.hpMax;
       updated = true;
     }
     if (modif.mp != 0) {
-      actorData.mp.valueMaxModif.items = modif.mp;
+      actorData.mp.valueMaxModif.items = modif.mpMax;
       updated = true;
     }
     if (modif.ap != 0) {
@@ -747,6 +757,15 @@ export default class ORCCharacterSheet extends ActorSheet {
     }
     if (modif.encumbranceLimit != 0) {
       actorData.encumbrance.limitModif.items = modif.encumbranceLimit;
+      updated = true;
+    }
+    if (modif.foodNeededDay != 0) {
+      actorData.nutrition.foodNeededDay.valueModif.items = modif.foodNeededDay;
+      updated = true;
+    }
+    if (modif.drinkNeededDay != 0) {
+      actorData.nutrition.drinkNeededDay.valueModif.items =
+        modif.drinkNeededDay;
       updated = true;
     }
     if (modif.limitCritical != 0) {
@@ -778,7 +797,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     let updated = false;
 
     if (encumbrance > 1 * limit) {
-      //Malus in phyisical
+      //Malus in physical
       actorData.attributes.physical.valueModif.encumbrance =
         -5 * Math.floor(10 * (encumbrance / limit - 1 + 0.1));
       updated = true;

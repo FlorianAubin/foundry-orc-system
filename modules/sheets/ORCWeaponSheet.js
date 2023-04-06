@@ -1,4 +1,5 @@
 import * as Dice from "../commons/dice.js";
+import * as Enchant from "../commons/enchant.js";
 
 export default class ORCWeaponSheet extends ItemSheet {
   static get defaultOptions() {
@@ -52,6 +53,9 @@ export default class ORCWeaponSheet extends ItemSheet {
     html.find(".sheet-change-lock").click(this._onSheetChangelock.bind(this));
 
     html.find(".damage-roll").click(this._onDamageRoll.bind(this));
+
+    html.find(".enchant-deploy").click(Enchant._onEnchantDeploy.bind(this));
+    html.find(".enchant-roll").click(Enchant._onEnchantRoll.bind(this));
   }
 
   /* -------------------------------------------- */

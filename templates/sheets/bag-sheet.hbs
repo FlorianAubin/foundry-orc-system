@@ -70,11 +70,14 @@
       </table>
     </div>
   </div>
-  {{editor
-    descriptionHTML
-    target="system.description"
-    button=true
-    owner=owner
-    editable=editable
-  }}
+  <div class="descripton">
+    <h2 align="center">{{localize "orc.weapon.descripton"}}</h2>
+    {{editor
+      descriptionHTML
+      target="system.description"
+      button=true
+      owner=owner
+      editable=editable
+    }}
+  </div>
 </form>

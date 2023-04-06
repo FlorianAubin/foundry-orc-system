@@ -159,17 +159,21 @@
     "templates": {
       "enchant": {
         "enchant": {
-          "activate": false,
+          "name": "",
+          "optionDeploy": false,
+          "activated": false,
           "physicalModif": 0,
           "socialModif": 0,
           "intelModif": 0,
           "hpMaxModif": 0,
           "mpMaxModif": 0,
           "apModif": 0,
-          "encumbranceLimitModif": 0,
           "attackModif": 0,
           "defenceModif": 0,
           "dodgeModif": 0,
+          "encumbranceLimitModif": 0,
+          "foodNeededDayModif": 0,
+          "drinkNeededDayModif": 0,
           "limitCriticalModif": 0,
           "limitFumbleModif": 0,
           "damageBonusModif": "",

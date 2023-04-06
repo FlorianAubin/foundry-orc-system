@@ -1,0 +1,346 @@
+<form class="{{cssClass}} enchant" autocomplete="off">
+  <div class="name">
+    <h3 class="name" align="center">
+      {{#if unlocked}}
+        <input
+          name="system.enchant.name"
+          type="text"
+          value="{{item.system.enchant.name}}"
+          placeholder="{{localize 'orc.name'}}"
+          onClick="this.select();"
+        />
+      {{else}}
+        <span>{{item.system.enchant.name}}</span>
+      {{/if}}
+    </h3>
+  </div>
+  <div class="content">
+    <table>
+      <tr>
+        {{#if (or unlocked item.system.enchant.physicalModif)}}
+          <th>{{localize "orc.enchant.physicalModif"}}</th>
+        {{/if}}
+        {{#if (or unlocked item.system.enchant.socialModif)}}
+          <th>{{localize "orc.enchant.socialModif"}}</th>
+        {{/if}}
+        {{#if (or unlocked item.system.enchant.intelModif)}}
+          <th>{{localize "orc.enchant.intelModif"}}</th>
+        {{/if}}
+      </tr>
+      <tr>
+        {{#if unlocked}}
+          <td align="center">
+            <input
+              name="system.enchant.physicalModif"
+              type="number"
+              value="{{item.system.enchant.physicalModif}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.enchant.socialModif"
+              type="number"
+              value="{{item.system.enchant.socialModif}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.enchant.intelModif"
+              type="number"
+              value="{{item.system.enchant.intelModif}}"
+              placeholder="0"
+            />
+          </td>
+        {{else}}
+          {{#if item.system.enchant.physicalModif}}
+            <td align="center">
+              <span>{{item.system.enchant.physicalModif}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.enchant.socialModif}}
+            <td align="center">
+              <span>{{item.system.enchant.socialModif}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.enchant.intelModif}}
+            <td align="center">
+              <span>{{item.system.enchant.intelModif}}</span>
+            </td>
+          {{/if}}
+        {{/if}}
+      </tr>
+
+      <tr>
+        {{#if (or unlocked item.system.enchant.hpMaxModif)}}
+          <th>{{localize "orc.enchant.hpMaxModif"}}</th>
+        {{/if}}
+        {{#if (or unlocked item.system.enchant.mpMaxModif)}}
+          <th>{{localize "orc.enchant.mpMaxModif"}}</th>
+        {{/if}}
+        {{#if (or unlocked item.system.enchant.apModif)}}
+          <th>{{localize "orc.enchant.apModif"}}</th>
+        {{/if}}
+      </tr>
+      <tr>
+        {{#if unlocked}}
+          <td align="center">
+            <input
+              name="system.enchant.hpMaxModif"
+              type="number"
+              value="{{item.system.enchant.hpMaxModif}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.enchant.mpMaxModif"
+              type="number"
+              value="{{item.system.enchant.mpMaxModif}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.enchant.apModif"
+              type="number"
+              value="{{item.system.enchant.apModif}}"
+              placeholder="0"
+            />
+          </td>
+        {{else}}
+          {{#if item.system.enchant.hpMaxModif}}
+            <td align="center">
+              <span>{{item.system.enchant.hpMaxModif}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.enchant.mpMaxModif}}
+            <td align="center">
+              <span>{{item.system.enchant.mpMaxModif}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.enchant.apModif}}
+            <td align="center">
+              <span>{{item.system.enchant.apModif}}</span>
+            </td>
+          {{/if}}
+        {{/if}}
+      </tr>
+
+      <tr>
+        {{#if (or unlocked item.system.enchant.attackModif)}}
+          <th>{{localize "orc.enchant.attackModif"}}</th>
+        {{/if}}
+        {{#if (or unlocked item.system.enchant.defenceModif)}}
+          <th>{{localize "orc.enchant.defenceModif"}}</th>
+        {{/if}}
+        {{#if (or unlocked item.system.enchant.dodgeModif)}}
+          <th>{{localize "orc.enchant.dodgeModif"}}</th>
+        {{/if}}
+      </tr>
+      <tr>
+        {{#if unlocked}}
+          <td align="center">
+            <input
+              name="system.enchant.attackModif"
+              type="number"
+              value="{{item.system.enchant.attackModif}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.enchant.defenceModif"
+              type="number"
+              value="{{item.system.enchant.defenceModif}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.enchant.dodgeModif"
+              type="number"
+              value="{{item.system.enchant.dodgeModif}}"
+              placeholder="0"
+            />
+          </td>
+        {{else}}
+          {{#if item.system.enchant.attackModif}}
+            <td align="center">
+              <span>{{item.system.enchant.attackModif}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.enchant.defenceModif}}
+            <td align="center">
+              <span>{{item.system.enchant.defenceModif}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.enchant.dodgeModif}}
+            <td align="center">
+              <span>{{item.system.enchant.dodgeModif}}</span>
+            </td>
+          {{/if}}
+        {{/if}}
+      </tr>
+
+      <tr>
+        {{#if (or unlocked item.system.enchant.encumbranceLimitModif)}}
+          <th>{{localize "orc.enchant.encumbranceLimitModif"}}</th>
+        {{/if}}
+        {{#if (or unlocked item.system.enchant.foodNeededDayModif)}}
+          <th>{{localize "orc.enchant.foodNeededDayModif"}}</th>
+        {{/if}}
+        {{#if (or unlocked item.system.enchant.drinkNeededDayModif)}}
+          <th>{{localize "orc.enchant.drinkNeededDayModif"}}</th>
+        {{/if}}
+      </tr>
+      <tr>
+        {{#if unlocked}}
+          <td align="center">
+            <input
+              name="system.enchant.encumbranceLimitModif"
+              type="number"
+              value="{{item.system.enchant.encumbranceLimitModif}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.enchant.foodNeededDayModif"
+              type="number"
+              value="{{item.system.enchant.foodNeededDayModif}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.enchant.drinkNeededDayModif"
+              type="number"
+              value="{{item.system.enchant.drinkNeededDayModif}}"
+              placeholder="0"
+            />
+          </td>
+        {{else}}
+          {{#if item.system.enchant.encumbranceLimitModif}}
+            <td align="center">
+              <span>{{item.system.enchant.encumbranceLimitModif}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.enchant.foodNeededDayModif}}
+            <td align="center">
+              <span>{{item.system.enchant.foodNeededDayModif}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.enchant.drinkNeededDayModif}}
+            <td align="center">
+              <span>{{item.system.enchant.drinkNeededDayModif}}</span>
+            </td>
+          {{/if}}
+        {{/if}}
+      </tr>
+
+      <tr>
+        {{#if (or unlocked item.system.enchant.limitCriticalModif)}}
+          <th>{{localize "orc.enchant.limitCriticalModif"}}</th>
+        {{/if}}
+        {{#if (or unlocked item.system.enchant.limitFumbleModif)}}
+          <th>{{localize "orc.enchant.limitFumbleModif"}}</th>
+        {{/if}}
+        {{#if
+          (or unlocked (isNotEmptyString item.system.enchant.damageBonusModif))
+        }}
+          <th>{{localize "orc.enchant.damageBonusModif"}}</th>
+        {{/if}}
+      </tr>
+      <tr>
+        {{#if unlocked}}
+          <td align="center">
+            <input
+              name="system.enchant.limitCriticalModif"
+              type="number"
+              value="{{item.system.enchant.limitCriticalModif}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.enchant.limitFumbleModif"
+              type="number"
+              value="{{item.system.enchant.limitFumbleModif}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.enchant.damageBonusModif"
+              type="text"
+              value="{{item.system.enchant.damageBonusModif}}"
+              placeholder=""
+            />
+          </td>
+        {{else}}
+          {{#if item.system.enchant.limitCriticalModif}}
+            <td align="center">
+              <span>{{item.system.enchant.limitCriticalModif}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.enchant.limitFumbleModif}}
+            <td align="center">
+              <span>{{item.system.enchant.limitFumbleModif}}</span>
+            </td>
+          {{/if}}
+          {{#if (isNotEmptyString item.system.enchant.damageBonusModif)}}
+            <td align="center">
+              <span>{{item.system.enchant.damageBonusModif}}</span>
+            </td>
+          {{/if}}
+        {{/if}}
+      </tr>
+
+      <tr>
+        {{#if (or unlocked (isNotEmptyString item.system.enchant.roll))}}
+          <th>{{localize "orc.enchant.roll"}}</th>
+        {{/if}}
+        {{#if (or unlocked (isNotEmptyString item.system.enchant.addEffect))}}
+          <th>{{localize "orc.enchant.addEffect"}}</th>
+        {{/if}}
+      </tr>
+      <tr>
+        {{#if unlocked}}
+          <td align="center">
+            <input
+              name="system.enchant.roll"
+              type="text"
+              value="{{item.system.enchant.roll}}"
+              placeholder=""
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.enchant.addEffect"
+              type="text"
+              value="{{item.system.enchant.addEffect}}"
+              placeholder=""
+            />
+          </td>
+        {{else}}
+          {{#if (isNotEmptyString item.system.enchant.roll)}}
+            <td align="center">
+              <span>{{item.system.enchant.roll}}</span>
+              <span
+                class="enchant-roll button fas fa-dice"
+                data-itemid="{{item._id}}"
+              ></span>
+            </td>
+          {{/if}}
+          {{#if (isNotEmptyString item.system.enchant.addEffect)}}
+            <td align="center">
+              <span>{{item.system.enchant.addEffect}}</span>
+            </td>
+          {{/if}}
+        {{/if}}
+      </tr>
+    </table>
+  </div>
+</form>
