@@ -168,26 +168,35 @@
     <tr class="header flexrow">
       <th class="content">{{localize "orc.enchant.name"}}</th>
       <th class="content">{{localize "orc.enchant.roll"}}</th>
-      <th class="content">{{localize "orc.enchant.addEffect"}}</th>
+      <th class="content" style="min-width:300px">{{localize "orc.enchant.addEffect"}}</th>
     </tr>
     {{#each items as |item id|}}
-      {{#if (and item.system.enchant.activated (or (isNotEmptyString item.system.enchant.roll) (isNotEmptyString item.system.enchant.addEffect)) )}}
+      {{#if
+        (and
+          item.system.enchant.activated
+          (isNotEmptyString item.system.enchant.name)
+          (or
+            (isNotEmptyString item.system.enchant.roll)
+            (isNotEmptyString item.system.enchant.addEffect)
+          )
+        )
+      }}
         <tr class="item flexrow" data-item-id="{{item._id}}">
           <td class="content">{{item.system.enchant.name}}</td>
-            <td align="center">
+          <td align="center">
             {{#if (isNotEmptyString item.system.enchant.roll)}}
               <span>{{item.system.enchant.roll}}</span>
-              <span 
+              <span
                 class="enchant-roll button fas fa-dice"
                 data-itemid="{{item._id}}"
               ></span>
             {{/if}}
-            </td>
-            <td align="center">
+          </td>
+          <td align="center" style="min-width:300px">
             {{#if (isNotEmptyString item.system.enchant.addEffect)}}
               <span>{{item.system.enchant.addEffect}}</span>
             {{/if}}
-            </td>
+          </td>
         </tr>
       {{/if}}
     {{/each}}

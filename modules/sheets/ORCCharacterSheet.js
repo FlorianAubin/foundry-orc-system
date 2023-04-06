@@ -89,6 +89,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     html
       .find(".attack-with-weapon-roll")
       .click(this._onAttackWithWeaponRoll.bind(this));
+    html.find(".enchant-deploy").click(Enchant._onEnchantDeploy.bind(this));
     html.find(".enchant-roll").click(Enchant._onEnchantRoll.bind(this));
 
     super.activateListeners(html);

@@ -201,15 +201,53 @@
   align-self: center;
   place-content: center;
 }
+.orc.sheet.actor .main .content .central .sheet-body .magic .spell-list .header,
+.orc.sheet.actor .main .content .central .sheet-body .magic .enchant-list .header {
+  display: flex;
+  flex-direction: row;
+}
 .orc.sheet.actor .main .content .central .sheet-body .magic .spell-list .header .content,
 .orc.sheet.actor .main .content .central .sheet-body .magic .enchant-list .header .content {
   align-self: center;
   place-content: center;
+  width: 100%;
+  max-width: 200px;
+}
+.orc.sheet.actor .main .content .central .sheet-body .magic .spell-list .header .effect-list,
+.orc.sheet.actor .main .content .central .sheet-body .magic .enchant-list .header .effect-list {
+  align-self: center;
+  place-content: center;
+  width: 100%;
+}
+.orc.sheet.actor .main .content .central .sheet-body .magic .spell-list .header .edit-button,
+.orc.sheet.actor .main .content .central .sheet-body .magic .enchant-list .header .edit-button {
+  width: 50px;
+}
+.orc.sheet.actor .main .content .central .sheet-body .magic .spell-list .item,
+.orc.sheet.actor .main .content .central .sheet-body .magic .enchant-list .item {
+  display: flex;
+  flex-direction: row;
 }
 .orc.sheet.actor .main .content .central .sheet-body .magic .spell-list .item .content,
 .orc.sheet.actor .main .content .central .sheet-body .magic .enchant-list .item .content {
   align-self: center;
   place-content: center;
+  width: 100%;
+  max-width: 200px;
+}
+.orc.sheet.actor .main .content .central .sheet-body .magic .spell-list .item .effect-list,
+.orc.sheet.actor .main .content .central .sheet-body .magic .enchant-list .item .effect-list {
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  place-content: center;
+  width: 100%;
+}
+.orc.sheet.actor .main .content .central .sheet-body .magic .spell-list .item .edit-button,
+.orc.sheet.actor .main .content .central .sheet-body .magic .enchant-list .item .edit-button {
+  width: 50px;
+  align-self: center;
+  text-align: center;
 }
 .orc.sheet.actor .main .content .central .sheet-body .biography {
   height: 100%;
