@@ -38,6 +38,164 @@
     <div class="content">
       <table>
         <tr>
+          <th>{{localize "orc.consumable.hp"}}</th>
+          <th>{{localize "orc.consumable.mp"}}</th>
+          <th>{{localize "orc.consumable.isActivable"}}</th>
+        </tr>
+        <tr>
+          <td align="center">
+            {{#if unlocked}}
+              <input
+                name="system.hp"
+                type="text"
+                value="{{item.system.hp}}"
+                placeholder="0"
+              />
+            {{else}}
+              <span>{{item.system.hp}}</span>
+            {{/if}}
+          </td>
+          <td align="center">
+            {{#if unlocked}}
+              <input
+                name="system.mp"
+                type="text"
+                value="{{item.system.mp}}"
+                placeholder="0"
+              />
+            {{else}}
+              <span>{{item.system.mp}}</span>
+            {{/if}}
+          </td>
+          <td align="center">
+            {{#if unlocked}}
+              <input
+                name="system.isActivable"
+                type="checkbox"
+                {{checked item.system.isActivable}}
+              />
+            {{else}}
+              {{#if item.system.isActivable}}
+                <span class="fas fa-check"></span>
+              {{/if}}
+            {{/if}}
+          </td>
+        </tr>
+      </table>
+      <table>
+        <tr>
+          <th>{{localize "orc.consumable.healBleed"}}</th>
+          <th>{{localize "orc.consumable.healPoison"}}</th>
+          <th>{{localize "orc.consumable.healBurn"}}</th>
+        </tr>
+        <tr>
+          <td align="center">
+            {{#if unlocked}}
+              <input
+                name="system.healBleed"
+                type="checkbox"
+                {{checked item.system.healBleed}}
+              />
+            {{else}}
+              {{#if item.system.healBleed}}
+                <span class="fas fa-check"></span>
+              {{/if}}
+            {{/if}}
+          </td>
+          <td align="center">
+            {{#if unlocked}}
+              <input
+                name="system.healPoison"
+                type="checkbox"
+                {{checked item.system.healPoison}}
+              />
+            {{else}}
+              {{#if item.system.healPoison}}
+                <span class="fas fa-check"></span>
+              {{/if}}
+            {{/if}}
+          </td>
+          <td align="center">
+            {{#if unlocked}}
+              <input
+                name="system.healBurn"
+                type="checkbox"
+                {{checked item.system.healBurn}}
+              />
+            {{else}}
+              {{#if item.system.healBurn}}
+                <span class="fas fa-check"></span>
+              {{/if}}
+            {{/if}}
+          </td>
+        </tr>
+      </table>
+      <table>
+        <tr>
+          <th>{{localize "orc.consumable.damage"}}</th>
+          <th>{{localize "orc.consumable.damageMP"}}</th>
+          <th>{{localize "orc.consumable.poison"}}</th>
+        </tr>
+        <tr>
+          <td align="center">
+            {{#if unlocked}}
+              <input
+                name="system.damage"
+                type="text"
+                value="{{item.system.damage}}"
+                placeholder="0"
+              />
+            {{else}}
+              <span>{{item.system.damage}}</span>
+            {{/if}}
+          </td>
+          <td align="center">
+            {{#if unlocked}}
+              <input
+                name="system.damageMP"
+                type="text"
+                value="{{item.system.damageMP}}"
+                placeholder="0"
+              />
+            {{else}}
+              <span>{{item.system.damageMP}}</span>
+            {{/if}}
+          </td>
+          <td align="center">
+            {{#if unlocked}}
+              <input
+                name="system.poison"
+                type="number"
+                value="{{item.system.poison}}"
+                placeholder="0"
+              />
+            {{else}}
+              <span>{{item.system.poison}}</span>
+            {{/if}}
+          </td>
+        </tr>
+      </table>
+      <table>
+        <tr>
+          <th>{{localize "orc.consumable.addEffect"}}</th>
+        </tr>
+        <tr>
+          <td align="center">
+            {{#if unlocked}}  
+            <input
+              name="system.addEffect"
+              type="text"
+              value="{{item.system.addEffect}}"
+              placeholder=""
+            />
+            {{else}}
+              <span>{{item.system.addEffect}}</span>
+            {{/if}}
+          </td>
+        </tr>
+      </table>
+      <table>
+        <tr>
           <th>{{localize "orc.consumable.stock"}}</th>
           <th>{{localize "orc.consumable.weightIndiv"}}</th>
         </tr>
@@ -68,6 +226,27 @@
           </td>
         </tr>
       </table>
+      {{#if item.system.isActivable}}
+        <h2 class="consumable-activable-header">
+          {{#if (not item.system.ifActivable.optionDeploy)}}
+            <div 
+              class="consumable-activable-deploy button fas fa-arrow-down-short-wide"
+              align="center"
+              style="width: 25px"
+            ></div>
+          {{else}}
+            <div 
+              class="consumable-activable-deploy button fas fa-arrow-up-to-line" 
+              align="center"
+              style="width: 25px"
+            ></div>
+          {{/if}}
+          <div class="title" align="center">{{localize "orc.consumable.ifActivable.activableEffect"}}</div>
+        </h2>
+        {{#if item.system.ifActivable.optionDeploy}}
+          {{> systems/orc/templates/sheets/consumable-activable-sheet.hbs}}
+        {{/if}}
+      {{/if}}
     </div>
   </div>
   <div class="descripton">

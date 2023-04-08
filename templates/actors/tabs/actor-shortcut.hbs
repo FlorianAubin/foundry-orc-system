@@ -205,28 +205,174 @@
     {{/each}}
   </table>
 
+ <table class="item-list consumable-list">
+    <tr class="header flexrow">
+      <th class="content">{{localize "orc.consumablesActivated"}}</th>
+    </tr>
+    <tr class="header flexrow">
+      <th class="content"></th>
+      <th class="effect-list">{{localize "orc.consumable.passives"}}</th>
+      <th class="content">{{localize "orc.consumable.ifActivable.duration"}}</th>
+    </tr>
+    {{#each consumables as |consumable id|}}
+      {{#if
+        (and
+          consumable.system.isActivable
+          consumable.system.ifActivable.activated
+        )
+      }}
+        <tr class="item flexrow" data-item-id="{{consumable._id}}">
+          <td class="content">{{consumable.name}}</td>
+          <td class="effect-list">
+          {{#if (not consumable.system.ifActivable.optionDeploy)}}
+            <div
+              class="consumable-activable-deploy button fas fa-arrow-down-short-wide"
+              align="center"
+              style="width: 25px"
+              data-itemid="{{consumable._id}}"
+            ></div>
+          {{else}}
+            <div
+              class="consumable-activable-deploy button fas fa-arrow-up-to-line"
+              align="center"
+              style="width: 25px"
+              data-itemid="{{consumable._id}}"
+            ></div>
+            <table>
+              {{#if consumable.system.ifActivable.physicalModif}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.consumable.ifActivable.physicalModif"
+                    }}</td>
+                  <td align="center">{{consumable.system.ifActivable.physicalModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if consumable.system.ifActivable.socialModif}}
+                <tr>
+                  <td align="center">{{localize "orc.consumable.ifActivable.socialModif"}}</td>
+                  <td align="center">{{consumable.system.ifActivable.socialModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if consumable.system.ifActivable.intelModif}}
+                <tr>
+                  <td align="center">{{localize "orc.consumable.ifActivable.intelModif"}}</td>
+                  <td align="center">{{consumable.system.ifActivable.intelModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if consumable.system.ifActivable.hpMaxModif}}
+                <tr>
+                  <td align="center">{{localize "orc.consumable.ifActivable.hpMaxModif"}}</td>
+                  <td align="center">{{consumable.system.ifActivable.hpMaxModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if consumable.system.ifActivable.mpMaxModif}}
+                <tr>
+                  <td align="center">{{localize "orc.consumable.ifActivable.mpMaxModif"}}</td>
+                  <td align="center">{{consumable.system.ifActivable.mpMaxModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if consumable.system.ifActivable.apModif}}
+                <tr>
+                  <td align="center">{{localize "orc.consumable.ifActivable.apModif"}}</td>
+                  <td align="center">{{consumable.system.ifActivable.apModif}}</td>
+                </tr>
+              {{/if}}
+
+              {{#if consumable.system.ifActivable.attackModif}}
+                <tr>
+                  <td align="center">{{localize "orc.consumable.ifActivable.attackModif"}}</td>
+                  <td align="center">{{consumable.system.ifActivable.attackModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if consumable.system.ifActivable.defenceModif}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.consumable.ifActivable.defenceModif"
+                    }}</td>
+                  <td align="center">{{consumable.system.ifActivable.defenceModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if consumable.system.ifActivable.dodgeModif}}
+                <tr>
+                  <td align="center">{{localize "orc.consumable.ifActivable.dodgeModif"}}</td>
+                  <td align="center">{{consumable.system.ifActivable.dodgeModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if consumable.system.ifActivable.encumbranceLimitModif}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.consumable.ifActivable.encumbranceLimitModif"
+                    }}</td>
+                  <td
+                    align="center"
+                  >{{consumable.system.ifActivable.encumbranceLimitModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if consumable.system.ifActivable.limitCriticalModif}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.consumable.ifActivable.limitCriticalModif"
+                    }}</td>
+                  <td
+                    align="center"
+                  >{{consumable.system.ifActivable.limitCriticalModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if consumable.system.ifActivable.limitFumbleModif}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.consumable.ifActivable.limitFumbleModif"
+                    }}</td>
+                  <td
+                    align="center"
+                  >{{consumable.system.ifActivable.limitFumbleModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if (isNotEmptyString consumable.system.ifActivable.damageBonusModif)}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.consumable.ifActivable.damageBonusModif"
+                    }}</td>
+                  <td
+                    align="center"
+                  >{{consumable.system.ifActivable.damageBonusModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if (isNotEmptyString consumable.system.addEffect)}}
+                <tr>
+                  <td align="center">{{localize "orc.consumable.addEffect"}}</td>
+                  <td align="center">{{consumable.system.addEffect}}</td>
+                </tr>
+              {{/if}}
+            </table>
+          {{/if}}
+          </td>   
+          <td class="content">
+            <span>{{consumable.system.ifActivable.duration}}&nbsp;{{consumable.system.ifActivable.durationUnit}}&nbsp;&nbsp;&nbsp;</span>
+            <span
+                class="consumable-activable-reduce-duration button fas fa-clock"
+                data-itemid="{{consumable._id}}"
+            ></span>  
+          </td>
+        </tr>
+      {{/if}}
+    {{/each}}
+  </table>
+
   <table class="item-list enchant-list">
     <tr class="header flexrow">
-      <th class="content">{{localize "orc.enchantsActivated"}}</th>
+      <th class="content">{{localize "orc.enchantsActivables"}}</th>
     </tr>
     <tr class="header flexrow">
       <th class="content"></th>
       <th class="content">{{localize "orc.enchant.roll"}}</th>
-      <th class="content" style="min-width:300px">{{localize "orc.enchant.addEffect"}}</th>
+      <th class="effect-list">{{localize "orc.enchant.effect"}}</th>
       <th class="content">{{localize "orc.enchant.use"}} {{localize "orc.enchant.available"}}</th>
+      <th class="content">{{localize "orc.enchant.duration"}}</th>
+      <th class="content">{{localize "orc.enchant.activated"}}</th>
     </tr>
     {{#each items as |item id|}}
-      {{#if
-        (and
-          item.system.enchant.activated
-          (isNotEmptyString item.system.enchant.name)
-          (or
-            (isNotEmptyString item.system.enchant.roll)
-            (isNotEmptyString item.system.enchant.addEffect)
-            item.system.enchant.use.perDay
-          )
-        )
-      }}
+      {{#if (and item.system.equipped item.system.enchant.activeEffect (isNotEmptyString item.system.enchant.name))}}
         <tr class="item flexrow" data-item-id="{{item._id}}">
           <td class="content">{{item.system.enchant.name}}</td>
           <td align="center">
@@ -238,20 +384,179 @@
               ></span>
             {{/if}}
           </td>
-          <td align="center" style="min-width:300px">
-            {{#if (isNotEmptyString item.system.enchant.addEffect)}}
-              <span>{{item.system.enchant.addEffect}}</span>
-            {{/if}}
+          <td class="effect-list">
+          {{#if (not item.system.enchant.optionDeploy)}}
+            <div
+              class="enchant-deploy button fas fa-arrow-down-short-wide"
+              align="center"
+              style="width: 25px"
+              data-itemid="{{item._id}}"
+            ></div>
+          {{else}}
+            <div
+              class="enchant-deploy button fas fa-arrow-up-to-line"
+              align="center"
+              style="width: 25px"
+              data-itemid="{{item._id}}"
+            ></div>
+            <table>
+              {{#if item.system.enchant.physicalModif}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.enchant.physicalModif"
+                    }}</td>
+                  <td align="center">{{item.system.enchant.physicalModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if item.system.enchant.socialModif}}
+                <tr>
+                  <td align="center">{{localize "orc.enchant.socialModif"}}</td>
+                  <td align="center">{{item.system.enchant.socialModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if item.system.enchant.intelModif}}
+                <tr>
+                  <td align="center">{{localize "orc.enchant.intelModif"}}</td>
+                  <td align="center">{{item.system.enchant.intelModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if item.system.enchant.hpMaxModif}}
+                <tr>
+                  <td align="center">{{localize "orc.enchant.hpMaxModif"}}</td>
+                  <td align="center">{{item.system.enchant.hpMaxModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if item.system.enchant.mpMaxModif}}
+                <tr>
+                  <td align="center">{{localize "orc.enchant.mpMaxModif"}}</td>
+                  <td align="center">{{item.system.enchant.mpMaxModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if item.system.enchant.apModif}}
+                <tr>
+                  <td align="center">{{localize "orc.enchant.apModif"}}</td>
+                  <td align="center">{{item.system.enchant.apModif}}</td>
+                </tr>
+              {{/if}}
+
+              {{#if item.system.enchant.attackModif}}
+                <tr>
+                  <td align="center">{{localize "orc.enchant.attackModif"}}</td>
+                  <td align="center">{{item.system.enchant.attackModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if item.system.enchant.defenceModif}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.enchant.defenceModif"
+                    }}</td>
+                  <td align="center">{{item.system.enchant.defenceModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if item.system.enchant.dodgeModif}}
+                <tr>
+                  <td align="center">{{localize "orc.enchant.dodgeModif"}}</td>
+                  <td align="center">{{item.system.enchant.dodgeModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if item.system.enchant.encumbranceLimitModif}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.enchant.encumbranceLimitModif"
+                    }}</td>
+                  <td
+                    align="center"
+                  >{{item.system.enchant.encumbranceLimitModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if item.system.enchant.foodNeededDayModif}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.enchant.foodNeededDayModif"
+                    }}</td>
+                  <td
+                    align="center"
+                  >{{item.system.enchant.foodNeededDayModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if item.system.enchant.drinkNeededDayModif}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.enchant.drinkNeededDayModif"
+                    }}</td>
+                  <td
+                    align="center"
+                  >{{item.system.enchant.drinkNeededDayModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if item.system.enchant.limitCriticalModif}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.enchant.limitCriticalModif"
+                    }}</td>
+                  <td
+                    align="center"
+                  >{{item.system.enchant.limitCriticalModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if item.system.enchant.limitFumbleModif}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.enchant.limitFumbleModif"
+                    }}</td>
+                  <td
+                    align="center"
+                  >{{item.system.enchant.limitFumbleModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if (isNotEmptyString item.system.enchant.damageBonusModif)}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.enchant.damageBonusModif"
+                    }}</td>
+                  <td
+                    align="center"
+                  >{{item.system.enchant.damageBonusModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if (isNotEmptyString item.system.enchant.addEffect)}}
+                <tr>
+                  <td align="center">{{localize "orc.enchant.addEffect"}}</td>
+                  <td align="center">{{item.system.enchant.addEffect}}</td>
+                </tr>
+              {{/if}}
+            </table>
+          {{/if}}
           </td>
           <td class="content" align="center">
             {{#if item.system.enchant.use.perDay}}
-              <span>{{item.system.enchant.use.available}}&nbsp;&nbsp;</span>
-              <span
-                class="enchant-use button fas fa-calendar-minus"
-                data-itemid="{{item._id}}"
-              ></span>  
+              <span>{{item.system.enchant.use.available}}</span>
             {{/if}}
           </td>
+          <td class="content">
+            {{#if (and item.system.enchant.use.duration item.system.enchant.use.perDay)}}
+            {{#if item.system.enchant.activated}}
+              <span>{{item.system.enchant.use.durationEffective}}&nbsp;{{item.system.enchant.use.durationUnit}}</span>&nbsp;&nbsp;&nbsp;
+              <span
+                class="enchant-reduce-duration button fas fa-clock"
+                data-itemid="{{item._id}}"
+              ></span>  
+            {{else}}
+              <span>{{item.system.enchant.use.duration}}&nbsp;{{item.system.enchant.use.durationUnit}}</span>
+            {{/if}}
+            {{/if}}
+          </td>
+          {{#if (not item.system.enchant.use.perDay)}}
+            <td class="content fas fa-minus"></td>
+          {{else}}
+            {{#if item.system.enchant.activated}}
+              <td class="content enchant-activate button fas fa-check"
+                data-itemid="{{item._id}}"></td>
+            {{else}}
+              <td class="content enchant-activate button fas fa-xmark"
+                data-itemid="{{item._id}}"></td>
+            {{/if}}
+          {{/if}}
         </tr>
       {{/if}}
     {{/each}}

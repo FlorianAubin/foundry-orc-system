@@ -42,6 +42,9 @@ export default class ORCConsumableSheet extends ItemSheet {
     super.activateListeners(html);
 
     html.find(".sheet-change-lock").click(this._onSheetChangelock.bind(this));
+    html
+      .find(".consumable-activable-deploy")
+      .click(this._onConsumableDeploy.bind(this));
   }
 
   /* -------------------------------------------- */
@@ -76,5 +79,22 @@ export default class ORCConsumableSheet extends ItemSheet {
         weight: { total: Math.floor(100 * indivWeight * stock) / 100 },
       },
     });
+  }
+
+  async _onConsumableDeploy(event) {
+    event.preventDefault();
+
+    let item = this.item;
+    let itemData = item.system;
+    //Does nothing if the item is not tagged as activable
+    if (!itemData.isActivable) return;
+
+    await item.update({
+      system: {
+        ifActivable: { optionDeploy: !itemData.ifActivable.optionDeploy },
+      },
+    });
+
+    return;
   }
 }

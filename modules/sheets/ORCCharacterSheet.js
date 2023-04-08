@@ -103,8 +103,20 @@ export default class ORCCharacterSheet extends ActorSheet {
       .click(this._onAttackWithWeaponRoll.bind(this));
     html.find(".enchant-deploy").click(Enchant._onEnchantDeploy.bind(this));
     html.find(".enchant-roll").click(Enchant._onEnchantRoll.bind(this));
-    html.find(".enchant-use").click(Enchant._onEnchantUse.bind(this));
+    html.find(".enchant-activate").click(Enchant._onEnchantActivate.bind(this));
     html.find(".item-consume").click(this._onItemConsume.bind(this));
+    html
+      .find(".consumable-deactivate")
+      .click(this._onConsumableDeactivate.bind(this));
+    html
+      .find(".consumable-activable-deploy")
+      .click(this._onConsumableDeploy.bind(this));
+    html
+      .find(".consumable-activable-reduce-duration")
+      .click(this._onConsumableReduceDuration.bind(this));
+    html
+      .find(".enchant-reduce-duration")
+      .click(Enchant._onEnchantReduceDuration.bind(this));
 
     super.activateListeners(html);
   }
@@ -181,12 +193,21 @@ export default class ORCCharacterSheet extends ActorSheet {
       if (defaultAmmo) item.update({ system: { ammo: defaultAmmo._id } });
     }
 
-    return item.update({
+    //Add the tag equipped to the item, and activated to his enchant if the effect is not tagged as an active effect
+    let newValue = !item.system.equipped;
+    item.update({
       system: {
-        equipped: !item.system.equipped,
-        enchant: { activated: !item.system.enchant.activated },
+        equipped: newValue,
+        enchant: {
+          activated:
+            !item.system.enchant.activeEffect || !item.system.enchant.use.perDay
+              ? newValue
+              : false,
+        },
       },
     });
+
+    return;
   }
 
   _onArmorEquipped(event) {
@@ -214,9 +235,19 @@ export default class ORCCharacterSheet extends ActorSheet {
     //Check if the item can be equipped
     if (item.system.equipped == null) return;
 
-    return item.update({
-      system: { equipped: true, enchant: { activated: true } },
+    item.update({
+      system: {
+        equipped: true,
+        enchant: {
+          activated:
+            !item.system.enchant.activeEffect || !item.system.enchant.use.perDay
+              ? true
+              : false,
+        },
+      },
     });
+
+    return;
   }
 
   _onWeaponChooseAmmo(event) {
@@ -336,7 +367,7 @@ export default class ORCCharacterSheet extends ActorSheet {
       actor: this.actor,
       type: event.currentTarget.dataset.type,
     });
-    this.takeDamage({
+    await this.takeDamage({
       damageFormula: damage,
       limitValue: 1,
     });
@@ -347,7 +378,7 @@ export default class ORCCharacterSheet extends ActorSheet {
       actor: this.actor,
       type: event.currentTarget.dataset.type,
     });
-    this.takeDamage({
+    await this.takeDamage({
       damageFormula: damage,
     });
   }
@@ -366,37 +397,41 @@ export default class ORCCharacterSheet extends ActorSheet {
       let maj = { system: { status: { onfire: true } } };
       await this.actor.update(maj);
     }
+    return rollResult;
   }
 
   async _onBleedOff(event) {
-    let maj = { system: { status: { bleed: 0 } } };
-    await this.actor.update(maj);
+    await this.actor.update({ system: { status: { bleed: 0 } } });
+    return;
   }
 
   async _onPoisonOff(event) {
-    let maj = { system: { status: { poison: 0 } } };
-    await this.actor.update(maj);
+    await this.actor.update({ system: { status: { poison: 0 } } });
+    return;
   }
 
   async _onBurnOff(event) {
-    let maj = { system: { status: { burn: 0, onfire: false } } };
-    await this.actor.update(maj);
+    await this.actor.update({ system: { status: { burn: 0, onfire: false } } });
+    return;
   }
 
   async _onBurnDamage(event) {
     let damage = this.actor.system.status.burn;
-    this.takeDamage({
+    await this.takeDamage({
       damageFormula: damage,
       applyArmor: true,
     });
 
     //Add 5 burn stacks
-    let maj = { system: { status: { burn: damage + 5 } } };
-    await this.actor.update(maj);
+    await this.actor.update({ system: { status: { burn: damage + 5 } } });
+
+    return;
   }
 
   async _onNewDay(event) {
     this.newDay();
+
+    return;
   }
 
   async _onAttackWithWeaponRoll(event) {
@@ -408,66 +443,85 @@ export default class ORCCharacterSheet extends ActorSheet {
       actor: this.actor,
       attribute: event.currentTarget.dataset,
     });
+
+    return;
   }
 
   async _onItemConsume(event) {
     event.preventDefault();
+    //Retrive the actor and the item
     let element = event.currentTarget;
     let itemId = element.closest(".item").dataset.itemId;
     let actor = this.actor;
+    let actorData = actor.system;
     let item = this.actor.items.get(itemId);
-    let weightIndiv = item.system.weight.indiv;
-    let weightTotal = item.system.weight.total;
-    let stock = item.system.stock;
+    let itemData = item.system;
+    let weightIndiv = itemData.weight.indiv;
+    let weightTotal = itemData.weight.total;
+    let stock = itemData.stock;
     //Not enough items
     if (stock <= 0) {
-      this._onItemDelete(event);
+      await item.delete();
       return;
     }
 
     //New values
     let newValues = {
-      foodDay: actor.system.nutrition.foodDay,
-      drinkDay: actor.system.nutrition.drinkDay,
-      tipsiness: actor.system.nutrition.tipsiness,
+      foodDay: actorData.nutrition.foodDay,
+      drinkDay: actorData.nutrition.drinkDay,
+      tipsiness: actorData.nutrition.tipsiness,
+      poison: actorData.status.poison,
     };
-    if (item.system.type.food) newValues.foodDay += 1;
-    if (item.system.type.drink) newValues.drinkDay += 1;
-    //daily food or drink to the max
+    if (item.type == "food") {
+      if (itemData.type.food) newValues.foodDay += 1;
+      if (itemData.type.drink) newValues.drinkDay += 1;
+    }
+    //Daily food or drink at the max, return
     if (
-      newValues.foodDay > actor.system.nutrition.foodMax ||
-      newValues.drinkDay > actor.system.nutrition.drinkMax
+      newValues.foodDay > actorData.nutrition.foodMax ||
+      newValues.drinkDay > actorData.nutrition.drinkMax
     )
       return;
     //Do a physical roll and increase the actor tipsiness in case of failure
-    if (item.system.tipsiness) {
+    if (itemData.tipsiness || itemData.poison) {
       if (
         Dice.StatusResistRoll({
           actor: actor,
-          modif:
-            actor.system.modifAllAttributes + actor.system.status.modifResist,
+          modif: actorData.modifAllAttributes + actorData.status.modifResist,
         })
-      )
-        newValues.tipsiness += item.system.tipsiness;
+      ) {
+        newValues.tipsiness += itemData.tipsiness;
+        newValues.poison += itemData.poison;
+      }
     }
+    //Recover the HP and MP
     //HP or MP recovery through food only applies from excess meals
     if (
       item.type != "food" ||
-      (item.system.type.food &&
-        actor.system.nutrition.foodDay >=
-          actor.system.nutrition.foodNeededDay.value) ||
-      (item.system.type.drink &&
-        actor.system.nutrition.drinkDay >
-          actor.system.nutrition.drinkNeededDay.value)
+      (itemData.type.food &&
+        actorData.nutrition.foodDay >=
+          actorData.nutrition.foodNeededDay.value) ||
+      (itemData.type.drink &&
+        actorData.nutrition.drinkDay > actorData.nutrition.drinkNeededDay.value)
     ) {
-      if (item.system.hp)
-        this.takeHeal({
-          healFormula: item.system.hp,
-          multiplier: actor.system.recoverHP.multiplier.value,
+      if (itemData.hp != "")
+        await this.takeHeal({
+          healFormula: itemData.hp,
+          multiplier: actorData.recoverHP.multiplier.value,
         });
-      if (item.system.mp)
-        this.takeHeal({ healFormula: item.system.mp, onMP: true });
+      if (itemData.mp != "")
+        await this.takeHeal({ healFormula: itemData.mp, onMP: true });
     }
+    //Apply the status healing
+    if (itemData.healBleed) this._onBleedOff();
+    if (itemData.healPoison) this._onPoisonOff();
+    if (itemData.healBurn) this._onBurnOff();
+
+    //Take the damage
+    if (itemData.damage != null && itemData.damage != "")
+      await this.takeDamage({ damageFormula: itemData.damage });
+    if (itemData.damageMP != null && itemData.damageMP != "")
+      await this.takeDamage({ damageFormula: itemData.damageMP, onMP: true });
 
     //Update the actor
     let maj = {
@@ -477,19 +531,116 @@ export default class ORCCharacterSheet extends ActorSheet {
           foodDay: newValues.foodDay,
           drinkDay: newValues.drinkDay,
         },
+        status: {
+          poison: newValues.poison,
+        },
       },
     };
-    await this.actor.update(maj);
+    await actor.update(maj);
 
     //Update the item
+    //Update stock and weight
     await item.update({
       system: {
         stock: stock - 1,
-        weight: { total: Math.floor(100 * (weightTotal - weightIndiv)) / 100 },
+        weight: {
+          total: Math.floor(100 * (weightTotal - weightIndiv)) / 100,
+        },
       },
     });
+
+    //If the item is tagged as activable, create a copy tagged as activated
+    if (itemData.isActivable) {
+      //Roll the effective duration
+      let durationFormula = itemData.ifActivable.duration;
+      if (typeof durationFormula !== "string")
+        durationFormula = durationFormula.toString();
+      let roll = new Roll(durationFormula).roll({ async: false });
+      let duration = roll.total;
+      //If the formula is not trivial, display the roll in the chat
+      if (durationFormula.includes("d") || durationFormula.includes("+"))
+        Chat.RollToSimpleCustomMessage({ roll: roll });
+
+      //Create a copy of the item tagged as activated, with the proper duration and no weight
+      await item.clone(
+        {
+          "system.ifActivable.activated": true,
+          "system.ifActivable.duration": duration.toString(),
+          "system.stock": 1,
+          "system.weight.indiv": 0,
+          "system.weight.total": 0,
+        },
+        { save: true }
+      );
+    }
+
     //Delete the item if the stock goes to 0
-    if (item.system.stock <= 0) this._onItemDelete(event);
+    if (item.system.stock <= 0) await item.delete();
+
+    return;
+  }
+
+  async _onConsumableDeploy(event) {
+    event.preventDefault();
+    //Retrive the item
+    let item = this.actor.items.get(event.currentTarget.dataset.itemid);
+    //Does nothing if no item has been found
+    if (item == null) return;
+    //Does nothing if the item is not a consumable
+    if (item.type != "consumable") return;
+    let itemData = item.system;
+    //Does nothing if the item is not tagged as activable
+    if (!itemData.isActivable) return;
+
+    await item.update({
+      system: {
+        ifActivable: { optionDeploy: !itemData.ifActivable.optionDeploy },
+      },
+    });
+    return;
+  }
+
+  async _onConsumableReduceDuration(event) {
+    event.preventDefault();
+    //Retrive the item
+    let item = this.actor.items.get(event.currentTarget.dataset.itemid);
+    //Does nothing if no item has been found
+    if (item == null) return;
+    //Does nothing if the item is not a consumable
+    if (item.type != "consumable") return;
+    let itemData = item.system;
+    //Does nothing if the item is not tagged as activable
+    if (!itemData.isActivable) return;
+
+    let newDuration = itemData.ifActivable.duration - 1;
+    if (newDuration <= 0) {
+      this._onConsumableDeactivate(event);
+      return;
+    }
+
+    await item.update({
+      system: {
+        ifActivable: { duration: newDuration },
+      },
+    });
+
+    return;
+  }
+
+  async _onConsumableDeactivate(event) {
+    event.preventDefault();
+    //Retrive the item
+    let element = event.currentTarget;
+    let itemId = element.closest(".item").dataset.itemId;
+    let item = this.actor.items.get(itemId);
+    if (item.type != "consumable") return;
+    let itemData = item.system;
+    if (!itemData.isActivable || !itemData.ifActivable.activated) return;
+
+    //Delete the item
+    await item.delete();
+
+    return;
   }
 
   async takeDamage({
@@ -540,7 +691,7 @@ export default class ORCCharacterSheet extends ActorSheet {
         limitValue = actorData.mp.surplus;
         //MP cannot be negative, extra damages are reported on HP
         if (damage > value) {
-          this.takeDamage({
+          await this.takeDamage({
             damageFormula: damage - value,
             applyArmor: false,
             onMP: false,
@@ -634,14 +785,23 @@ export default class ORCCharacterSheet extends ActorSheet {
     for (let [key, it] of Object.entries(items)) {
       let item = actor.items.get(it._id);
       //Update the available usage of enchants
-      if (item.system.enchant != null)
-        if (item.system.enchant.use.perDay > 0)
+      if (item.system.enchant != null) {
+        if (item.system.enchant.use.perDay > 0) {
           maj = {
             system: {
               enchant: { use: { available: item.system.enchant.use.perDay } },
             },
           };
-      await item.update(maj);
+          await item.update(maj);
+        }
+      }
+      //Delete activated consumables
+      if (
+        item.type == "consumable" &&
+        item.system.ifActivable.activated == true
+      ) {
+        await item.delete();
+      }
     }
   }
 
@@ -848,33 +1008,57 @@ export default class ORCCharacterSheet extends ActorSheet {
     };
 
     for (let [key, item] of Object.entries(items)) {
+      let itemData = item.system;
+
       //Weapons
-      if (item.type == "weapon" && item.system.equipped) {
-        if (item.system.defenceModif) modif.defence += item.system.defenceModif;
+      if (item.type == "weapon" && itemData.equipped) {
+        if (itemData.defenceModif) modif.defence += itemData.defenceModif;
       }
       //Armors
-      if (item.type == "armor") {
-        if (item.system.equipped)
-          if (item.system.ap) modif.ap += item.system.ap;
+      if (item.type == "armor" && itemData.equipped) {
+        if (itemData.ap) modif.ap += itemData.ap;
       }
       //Bag
       if (item.type == "bag") {
         if (actorData.encumbrance.equippedBag == item._id) {
-          if (item.system.capacity)
-            modif.encumbranceLimit += item.system.capacity;
-          if (item.system.modifPhysical)
-            modif.physical += item.system.modifPhysical;
+          if (itemData.capacity) modif.encumbranceLimit += itemData.capacity;
+          if (itemData.modifPhysical) modif.physical += itemData.modifPhysical;
+        }
+      }
+      //Activated consumables
+      if (item.type == "consumable") {
+        if (itemData.isActivable && itemData.ifActivable.activated) {
+          let effect = itemData.ifActivable;
+          if (effect.physicalModif != 0) modif.physical += effect.physicalModif;
+          if (effect.socialModif != 0) modif.social += effect.socialModif;
+          if (effect.intelModif != 0) modif.intel += effect.intelModif;
+          if (effect.hpMaxModif != 0) modif.hpMax += effect.hpMaxModif;
+          if (effect.mpMaxModif != 0) modif.mpMax += effect.mpMaxModif;
+          if (effect.apModif != 0) modif.ap += effect.apModif;
+          if (effect.encumbranceLimitModif != 0)
+            modif.encumbranceLimit += effect.encumbranceLimitModif;
+          if (effect.attackModif != 0) modif.attack += effect.attackModif;
+          if (effect.defenceModif != 0) modif.defence += effect.defenceModif;
+          if (effect.dodgeModif != 0) modif.dodge += effect.dodgeModif;
+          if (effect.limitCriticalModif != 0)
+            modif.limitCritical += effect.limitCriticalModif;
+          if (effect.limitFumbleModif != 0)
+            modif.limitFumble += effect.limitFumbleModif;
+          if (effect.damageBonusModif != 0)
+            if (modif.damageBonus == "")
+              modif.damageBonus += effect.damageBonusModif;
+            else modif.damageBonus += "+" + effect.damageBonusModif;
         }
       }
       //All items with weight
-      if (item.system.weight) {
+      if (itemData.weight) {
         modif.encumbrance +=
-          item.system.weight.total != null
-            ? item.system.weight.total
-            : item.system.weight;
+          itemData.weight.total != null
+            ? itemData.weight.total
+            : itemData.weight;
       }
       //Add the enchant
-      let enchant = item.system.enchant;
+      let enchant = itemData.enchant;
       if (enchant && enchant.activated) {
         if (enchant.physicalModif != 0) modif.physical += enchant.physicalModif;
         if (enchant.socialModif != 0) modif.social += enchant.socialModif;
@@ -1110,9 +1294,13 @@ export default class ORCCharacterSheet extends ActorSheet {
     //Food
     if (actorData.nutrition.foodDay > actorData.nutrition.foodMax)
       actorData.nutrition.foodDay = actorData.nutrition.foodMax;
+    if (actorData.nutrition.foodNeededDay.value < 0)
+      actorData.nutrition.foodNeededDay.value = 0;
     //Drink
     if (actorData.nutrition.drinkDay > actorData.nutrition.drinkMax)
       actorData.nutrition.drinkDay = actorData.nutrition.drinkMax;
+    if (actorData.nutrition.drinkNeededDay.value < 0)
+      actorData.nutrition.drinkNeededDay.value = 0;
   }
 
   updateWeaponsEffectiveValues(data) {

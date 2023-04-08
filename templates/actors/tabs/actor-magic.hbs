@@ -12,10 +12,11 @@
     <th class="content"></th>
     <th class="content">{{localize "orc.enchant.item"}}</th>
     <th class="content">{{localize "orc.enchant.roll"}}</th>
-    <th class="effect-list">{{localize "orc.enchant.passives"}}</th>
+    <th class="effect-list">{{localize "orc.enchant.effect"}}</th>
     <th class="content">{{localize "orc.enchant.use"}}
       {{localize "orc.enchant.perDay"}}
     </th>
+    <th class="content">{{localize "orc.enchant.duration"}}
     <th class="edit-button"></th>
   </tr>
   {{#each items as |item id|}}
@@ -183,8 +184,11 @@
         </td>
         <td class="content">
           {{#if item.system.enchant.use.perDay}}
-            {{item.system.enchant.use.perDay}}
+            <span>{{item.system.enchant.use.perDay}}</span>
           {{/if}}
+        </td>
+       <td class="content">
+            <span>{{item.system.enchant.use.duration}}&nbsp;{{item.system.enchant.use.durationUnit}}</span>
         </td>
         <td class="edit-button">
           <a class="item-edit" align="center" title="Edit Item">

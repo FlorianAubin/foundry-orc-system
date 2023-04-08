@@ -38,6 +38,7 @@
               }
             }
             .weapon-list,
+            .consumable-list,
             .enchant-list {
               border-left: 1px solid #000;
               border-right: 1px solid #000;
@@ -45,12 +46,28 @@
                 .content {
                   align-self: center;
                   place-content: center;
+                  width: 100%;
+                  max-width: 200px;
+                }
+                .effect-list {
+                  align-self: center;
+                  place-content: center;
+                  width: 100%;
                 }
               }
               .item {
                 .content {
                   align-self: center;
                   place-content: center;
+                  width: 100%;
+                  max-width: 200px;
+                }
+                .effect-list {
+                  display: flex;
+                  flex-direction: row;
+                  align-self: center;
+                  place-content: center;
+                  width: 100%;
                 }
               }
             }

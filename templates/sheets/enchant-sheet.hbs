@@ -17,6 +17,105 @@
   <div class="content">
     <table>
       <tr>
+        {{#if (or unlocked item.system.enchant.activeEffect)}}
+          <th colspan="2">{{localize "orc.enchant.activeEffect"}}</th>
+        {{/if}}
+        {{#if unlocked}}
+          <td align="center">
+            <input
+              name="system.enchant.activeEffect"
+              type="checkbox"
+              {{checked item.system.enchant.activeEffect}}
+            />
+          </td>
+        {{else}}
+          {{#if item.system.enchant.activeEffect}}
+            <td align="center">
+              <span class="fas fa-check"></span>
+            </td>
+          {{/if}}
+        {{/if}}
+      </tr>
+      {{#if item.system.enchant.activeEffect}}
+        <tr>
+          {{#if (or unlocked (isNotEmptyString item.system.enchant.roll))}}
+            <th>{{localize "orc.enchant.roll"}}</th>
+          {{/if}}
+          {{#if (or unlocked item.system.enchant.use.perDay)}}
+            <th>{{localize "orc.enchant.use"}}
+              {{localize "orc.enchant.perDay"}}</th>
+          {{/if}}
+          {{#if
+            (or unlocked (isNotEmptyString item.system.enchant.use.duration))
+          }}
+            <th>{{localize "orc.enchant.duration"}}</th>
+          {{/if}}
+        </tr>
+        <tr>
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.enchant.roll"
+                type="text"
+                value="{{item.system.enchant.roll}}"
+                placeholder=""
+              />
+            </td>
+            <td align="center">
+              <input
+                name="system.enchant.use.perDay"
+                type="number"
+                value="{{item.system.enchant.use.perDay}}"
+                placeholder=""
+              />
+            </td>
+            <td align="center">
+              <table>
+                <tr align="center">
+                  <td align="center">
+                    <input
+                      name="system.enchant.use.duration"
+                      type="text"
+                      value="{{item.system.enchant.use.duration}}"
+                      placeholder=""
+                    />
+                  </td>
+                  <td align="center">
+                    <input
+                      name="system.enchant.use.durationUnit"
+                      type="text"
+                      value="{{item.system.enchant.use.durationUnit}}"
+                      placeholder=""
+                    />
+                  </td>
+                </tr>
+              </table>
+            </td>
+          {{else}}
+            {{#if (isNotEmptyString item.system.enchant.roll)}}
+              <td align="center">
+                <span>{{item.system.enchant.roll}}</span>
+                <span
+                  class="enchant-roll button fas fa-dice"
+                  data-itemid="{{item._id}}"
+                ></span>
+              </td>
+            {{/if}}
+            {{#if item.system.enchant.use.perDay}}
+              <td align="center">
+                <span>{{item.system.enchant.use.perDay}}</span>
+              </td>
+            {{/if}}
+            {{#if (isNotEmptyString item.system.enchant.use.duration)}}
+              <td align="center">
+                <span
+                >{{item.system.enchant.use.duration}}&nbsp;{{item.system.enchant.use.durationUnit}}</span>
+              </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+      {{/if}}
+      <tr>
         {{#if (or unlocked item.system.enchant.physicalModif)}}
           <th>{{localize "orc.enchant.physicalModif"}}</th>
         {{/if}}
@@ -299,28 +398,13 @@
       </tr>
 
       <tr>
-        {{#if (or unlocked (isNotEmptyString item.system.enchant.roll))}}
-          <th>{{localize "orc.enchant.roll"}}</th>
-        {{/if}}
         {{#if (or unlocked (isNotEmptyString item.system.enchant.addEffect))}}
-          <th>{{localize "orc.enchant.addEffect"}}</th>
-        {{/if}}
-        {{#if (or unlocked item.system.enchant.use.perDay)}}
-          <th>{{localize "orc.enchant.use"}}
-            {{localize "orc.enchant.perDay"}}</th>
+          <th colspan="3">{{localize "orc.enchant.addEffect"}}</th>
         {{/if}}
       </tr>
       <tr>
         {{#if unlocked}}
-          <td align="center">
-            <input
-              name="system.enchant.roll"
-              type="text"
-              value="{{item.system.enchant.roll}}"
-              placeholder=""
-            />
-          </td>
-          <td align="center">
+          <td align="center" colspan="3">
             <input
               name="system.enchant.addEffect"
               type="text"
@@ -328,32 +412,10 @@
               placeholder=""
             />
           </td>
-          <td align="center">
-            <input
-              name="system.enchant.use.perDay"
-              type="text"
-              value="{{item.system.enchant.use.perDay}}"
-              placeholder=""
-            />
-          </td>
         {{else}}
-          {{#if (isNotEmptyString item.system.enchant.roll)}}
-            <td align="center">
-              <span>{{item.system.enchant.roll}}</span>
-              <span
-                class="enchant-roll button fas fa-dice"
-                data-itemid="{{item._id}}"
-              ></span>
-            </td>
-          {{/if}}
           {{#if (isNotEmptyString item.system.enchant.addEffect)}}
-            <td align="center">
+            <td align="center" colspan="3">
               <span>{{item.system.enchant.addEffect}}</span>
-            </td>
-          {{/if}}
-          {{#if item.system.enchant.use.perDay}}
-            <td align="center">
-              <span>{{item.system.enchant.use.perDay}}</span>
             </td>
           {{/if}}
         {{/if}}

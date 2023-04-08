@@ -167,6 +167,7 @@
         "enchant": {
           "name": "",
           "optionDeploy": false,
+          "activeEffect": false,
           "activated": false,
           "physicalModif": 0,
           "socialModif": 0,
@@ -187,7 +188,10 @@
           "addEffect": "",
           "use": {
             "available": 0,
-            "perDay": 0
+            "perDay": 0,
+            "duration": "1",
+            "durationEffective": 0,
+            "durationUnit": "min"
           }
         }
       }
@@ -238,9 +242,10 @@
       "templates": ["enchant"]
     },
     "food": {
-      "hp": 0,
-      "mp": 0,
+      "hp": "",
+      "mp": "",
       "tipsiness": 0,
+      "poison": 0,
       "weight": {
         "indiv": 0,
         "total": 0
@@ -253,23 +258,35 @@
       "description": ""
     },
     "consumable": {
-      "activated": false,
-      "hp": 0,
-      "mp": 0,
-      "hpMaxModif": 0,
-      "mpMaxModif": 0,
-      "apModif": 0,
-      "physicalModif": 0,
-      "socialModif": 0,
-      "intelModif": 0,
-      "attackModif": 0,
-      "defenceModif": 0,
-      "dodgeModif": 0,
-      "encumbranceLimitModif": 0,
-      "limitCriticalModif": 0,
-      "limitFumbleModif": 0,
-      "damageBonusModif": "",
-      "duration": 0,
+      "isActivable": false,
+      "ifActivable": {
+        "activated": false,
+        "optionDeploy": false,
+        "hpMaxModif": 0,
+        "mpMaxModif": 0,
+        "apModif": 0,
+        "physicalModif": 0,
+        "socialModif": 0,
+        "intelModif": 0,
+        "attackModif": 0,
+        "defenceModif": 0,
+        "dodgeModif": 0,
+        "encumbranceLimitModif": 0,
+        "limitCriticalModif": 0,
+        "limitFumbleModif": 0,
+        "damageBonusModif": "",
+        "duration": "1",
+        "durationUnit": "min"
+      },
+      "hp": "",
+      "mp": "",
+      "healBleed": false,
+      "healPoison": false,
+      "healBurn": false,
+      "damage": "",
+      "damageMP": "",
+      "poison": 0,
+      "addEffect": "",
       "weight": {
         "indiv": 0,
         "total": 0

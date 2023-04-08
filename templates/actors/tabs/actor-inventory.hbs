@@ -281,9 +281,11 @@
         <th class="content"></th>
         <th class="content">{{localize "orc.consumable.stock"}}</th>
         <th class="content">{{localize "orc.consumable.weight"}}</th>
+        <th class="content">{{localize "orc.consumable.consume"}}</th>
         <th class="content"></th>
       </tr>
       {{#each consumables as |consumable id|}}
+      {{#if (not consumable.system.ifActivable.activated)}}
       <tr class="item flexrow" data-item-id="{{consumable._id}}">
         <td class="content">{{consumable.name}}</td> 
         <td class="content" align="center">
@@ -298,13 +300,15 @@
           />
         </td>         
         <td class="content">{{consumable.system.weight.total}}</td>
-        <td align="center">
+        <td class="content item-consume button fas fa-flask"></td>
+        <td align="center" class="content">
           <a class="item-edit" align="center" title="Edit Item">
             <i class="button fas fa-edit"></i></a>
           <a class="item-delete" align="center" title="Delete Item">
             <i class="button fas fa-trash"></i></a>
         </td>
       </tr>
+      {{/if}}
       {{/each}}
     </table>
   </div>

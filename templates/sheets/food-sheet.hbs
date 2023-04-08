@@ -40,14 +40,13 @@
         <tr>
           <th>{{localize "orc.food.hp"}}</th>
           <th>{{localize "orc.food.mp"}}</th>
-          <th>{{localize "orc.food.tipsiness"}}</th>
         </tr>
         <tr>
           <td align="center">
             {{#if unlocked}}
               <input
                 name="system.hp"
-                type="number"
+                type="text"
                 value="{{item.system.hp}}"
                 placeholder="0"
               />
@@ -59,7 +58,7 @@
             {{#if unlocked}}
               <input
                 name="system.mp"
-                type="number"
+                type="text"
                 value="{{item.system.mp}}"
                 placeholder="0"
               />
@@ -67,6 +66,14 @@
               <span>{{item.system.mp}}</span>
             {{/if}}
           </td>
+        </tr>
+      </table>
+      <table>
+        <tr>
+          <th>{{localize "orc.food.tipsiness"}}</th>
+          <th>{{localize "orc.food.poison"}}</th>
+        </tr>
+        <tr>
           <td align="center">
             {{#if unlocked}}
               <input
@@ -77,6 +84,18 @@
               />
             {{else}}
               <span>{{item.system.tipsiness}}</span>
+            {{/if}}
+          </td>
+          <td align="center">
+            {{#if unlocked}}
+              <input
+                name="system.poison"
+                type="number"
+                value="{{item.system.poison}}"
+                placeholder="0"
+              />
+            {{else}}
+              <span>{{item.system.poison}}</span>
             {{/if}}
           </td>
         </tr>
