@@ -1,4 +1,5 @@
 import * as Dice from "../commons/dice.js";
+import * as Chat from "../commons/chat.js";
 import * as Enchant from "../commons/enchant.js";
 export default class ORCCharacterSheet extends ActorSheet {
   static get defaultOptions() {
@@ -77,6 +78,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     html.find(".armor-update-ap").change(this._onArmorUpdateAP.bind(this));
 
     html.find(".take-damage").click(this._onTakeDamage.bind(this));
+    html.find(".take-damage-armor").click(this._onTakeDamageArmor.bind(this));
     html.find(".recover-hp").click(this._onRecoverHP.bind(this));
     html.find(".recover-mp").click(this._onRecoverMP.bind(this));
 
@@ -101,6 +103,7 @@ export default class ORCCharacterSheet extends ActorSheet {
       .click(this._onAttackWithWeaponRoll.bind(this));
     html.find(".enchant-deploy").click(Enchant._onEnchantDeploy.bind(this));
     html.find(".enchant-roll").click(Enchant._onEnchantRoll.bind(this));
+    html.find(".enchant-use").click(Enchant._onEnchantUse.bind(this));
     html.find(".item-consume").click(this._onItemConsume.bind(this));
 
     super.activateListeners(html);
@@ -130,7 +133,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     let maj = {
       system: { ap: { optionDeploy: !this.actor.system.ap.optionDeploy } },
     };
-    this.actor.update(maj);
+    await this.actor.update(maj);
   }
 
   async _onNutritionDeploy(event) {
@@ -141,7 +144,7 @@ export default class ORCCharacterSheet extends ActorSheet {
         nutrition: { optionDeploy: !this.actor.system.nutrition.optionDeploy },
       },
     };
-    this.actor.update(maj);
+    await this.actor.update(maj);
   }
 
   /**
@@ -266,27 +269,42 @@ export default class ORCCharacterSheet extends ActorSheet {
     const applyArmor = event.currentTarget.dataset.applyarmor === "true";
     const onMP = event.currentTarget.dataset.onmp === "true";
     if (!damage) return;
-    this.takeDamage(damage, { applyArmor: applyArmor, onMP: onMP });
+    this.takeDamage({
+      damageFormula: damage,
+      applyArmor: applyArmor,
+      onMP: onMP,
+    });
+  }
+
+  _onTakeDamageArmor(event) {
+    const damage = event.currentTarget.dataset.damage;
+    const armorId = event.currentTarget.dataset.armorid;
+    if (!damage) return;
+    this.takeDamage({
+      damageFormula: damage,
+      onArmor: { validate: true, armorId: armorId },
+      limitValue: 0,
+    });
   }
 
   _onRecoverHP(event) {
     const heal = event.currentTarget.dataset.heal;
     const multiplier = event.currentTarget.dataset.multiplier;
     if (!heal || !multiplier) return;
-    this.takeHeal(heal, multiplier, { onMP: false });
+    this.takeHeal({ healFormula: heal, multiplier: multiplier });
   }
 
   _onRecoverMP(event) {
     const heal = event.currentTarget.dataset.heal;
-    const multiplier = 1;
     if (!heal) return;
-    this.takeHeal(heal, multiplier, { onMP: true });
+    this.takeHeal({ healFormula: heal, onMP: true });
   }
 
   async _onAttributeRoll(event) {
     Dice.AttributeRoll({
       actor: this.actor,
       attribute: event.currentTarget.dataset,
+      modif: this.actor.system.modifAllAttributes,
     });
   }
 
@@ -294,6 +312,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     Dice.AttackRoll({
       actor: this.actor,
       attribute: event.currentTarget.dataset,
+      modif: this.actor.system.modifAllAttributes,
     });
   }
 
@@ -301,6 +320,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     Dice.DodgeRoll({
       actor: this.actor,
       attribute: event.currentTarget.dataset,
+      modif: this.actor.system.modifAllAttributes,
     });
   }
 
@@ -316,7 +336,10 @@ export default class ORCCharacterSheet extends ActorSheet {
       actor: this.actor,
       type: event.currentTarget.dataset.type,
     });
-    this.takeDamage(damage, { limitValue: 1 });
+    this.takeDamage({
+      damageFormula: damage,
+      limitValue: 1,
+    });
   }
 
   async _onBleedRoll(event) {
@@ -324,7 +347,9 @@ export default class ORCCharacterSheet extends ActorSheet {
       actor: this.actor,
       type: event.currentTarget.dataset.type,
     });
-    this.takeDamage(damage);
+    this.takeDamage({
+      damageFormula: damage,
+    });
   }
 
   async _onBurnRoll(event) {
@@ -339,34 +364,35 @@ export default class ORCCharacterSheet extends ActorSheet {
       //If it rolls a value lower than the number of stacks, the character catches fire.
     } else if (rollResult <= this.actor.system.status.burn) {
       let maj = { system: { status: { onfire: true } } };
-      this.actor.update(maj);
+      await this.actor.update(maj);
     }
   }
 
   async _onBleedOff(event) {
     let maj = { system: { status: { bleed: 0 } } };
-    this.actor.update(maj);
+    await this.actor.update(maj);
   }
 
   async _onPoisonOff(event) {
     let maj = { system: { status: { poison: 0 } } };
-    this.actor.update(maj);
+    await this.actor.update(maj);
   }
 
   async _onBurnOff(event) {
     let maj = { system: { status: { burn: 0, onfire: false } } };
-    this.actor.update(maj);
+    await this.actor.update(maj);
   }
 
   async _onBurnDamage(event) {
     let damage = this.actor.system.status.burn;
-    this.takeDamage(damage, {
+    this.takeDamage({
+      damageFormula: damage,
       applyArmor: true,
     });
 
     //Add 5 burn stacks
     let maj = { system: { status: { burn: damage + 5 } } };
-    this.actor.update(maj);
+    await this.actor.update(maj);
   }
 
   async _onNewDay(event) {
@@ -394,15 +420,16 @@ export default class ORCCharacterSheet extends ActorSheet {
     let weightTotal = item.system.weight.total;
     let stock = item.system.stock;
     //Not enough items
-    if (stock <= 0) return;
+    if (stock <= 0) {
+      this._onItemDelete(event);
+      return;
+    }
 
     //New values
     let newValues = {
       foodDay: actor.system.nutrition.foodDay,
       drinkDay: actor.system.nutrition.drinkDay,
       tipsiness: actor.system.nutrition.tipsiness,
-      hp: actor.system.hp.value,
-      mp: actor.system.mp.value,
     };
     if (item.system.type.food) newValues.foodDay += 1;
     if (item.system.type.drink) newValues.drinkDay += 1;
@@ -414,25 +441,37 @@ export default class ORCCharacterSheet extends ActorSheet {
       return;
     //Do a physical roll and increase the actor tipsiness in case of failure
     if (item.system.tipsiness) {
-      if (Dice.StatusResistRoll({ actor: actor }))
+      if (
+        Dice.StatusResistRoll({
+          actor: actor,
+          modif:
+            actor.system.modifAllAttributes + actor.system.status.modifResist,
+        })
+      )
         newValues.tipsiness += item.system.tipsiness;
     }
-    //HP or MP recovery through food only applies from the second meal
-    if (item.system.hp)
-      if (
-        item.type != "food" ||
-        (item.system.type.food && actor.system.nutrition.foodDay > 0) ||
-        (item.system.type.drink && actor.system.nutrition.drinkDay > 0)
-      ) {
-        newValues.hp += item.system.hp;
-        newValues.mp += item.system.mp;
-      }
+    //HP or MP recovery through food only applies from excess meals
+    if (
+      item.type != "food" ||
+      (item.system.type.food &&
+        actor.system.nutrition.foodDay >=
+          actor.system.nutrition.foodNeededDay.value) ||
+      (item.system.type.drink &&
+        actor.system.nutrition.drinkDay >
+          actor.system.nutrition.drinkNeededDay.value)
+    ) {
+      if (item.system.hp)
+        this.takeHeal({
+          healFormula: item.system.hp,
+          multiplier: actor.system.recoverHP.multiplier.value,
+        });
+      if (item.system.mp)
+        this.takeHeal({ healFormula: item.system.mp, onMP: true });
+    }
 
     //Update the actor
     let maj = {
       system: {
-        hp: { value: newValues.hp },
-        mp: { value: newValues.mp },
         nutrition: {
           tipsiness: newValues.tipsiness,
           foodDay: newValues.foodDay,
@@ -440,106 +479,145 @@ export default class ORCCharacterSheet extends ActorSheet {
         },
       },
     };
-    this.actor.update(maj);
+    await this.actor.update(maj);
 
     //Update the item
-    item.update({
+    await item.update({
       system: {
         stock: stock - 1,
         weight: { total: Math.floor(100 * (weightTotal - weightIndiv)) / 100 },
       },
     });
+    //Delete the item if the stock goes to 0
+    if (item.system.stock <= 0) this._onItemDelete(event);
   }
 
-  async takeDamage(
+  async takeDamage({
     damageFormula,
-    options = {
-      applyArmor: false,
-      onMP: false,
-    }
-  ) {
+    applyArmor = false,
+    onMP = false,
+    onArmor = { validate: false, armorId: "" },
+    limitValue = -1000,
+  }) {
+    //Recover the actor informations
+    let actor = this.actor;
+    let actorData = actor.system;
+
+    //Roll the damage
     if (typeof damageFormula !== "string")
       damageFormula = damageFormula.toString();
-    let damage = new Roll(damageFormula).roll({ async: false }).total;
-    if (options.applyArmor) damage -= this.actor.system.ap.value;
+    let roll = new Roll(damageFormula).roll({ async: false });
+    let damage = roll.total;
+    //If the formula is not trivial, display the roll in the chat
+    if (damageFormula.includes("d") || damageFormula.includes("+"))
+      Chat.RollToSimpleCustomMessage({ roll: roll });
 
-    let value, limitValue;
-    value = this.actor.system.hp.value;
-    limitValue = this.actor.system.hp.surplus;
-
-    if (options.onMP) {
-      value = this.actor.system.mp.value;
-      limitValue = this.actor.system.mp.surplus;
-      if (damage > value) {
-        //MP cannot be negative, extra damages are reported to HP
-        let extraDamage = damage - value;
-        let extraOptions = { ...options };
-        extraOptions.applyArmor = false;
-        extraOptions.onMP = false;
-        this.takeDamage(extraDamage, extraOptions);
-        damage = value;
-      }
-    }
-
+    //Apply the armor
+    if (applyArmor) damage -= actorData.ap.value;
     if (damage <= 0) return;
 
-    let newValue = value - damage;
-    if (options.limitValue) limitValue = options.limitValue;
-    if (newValue < limitValue) newValue = limitValue;
+    //Apply damage on an owned armor piece
+    if (onArmor.validate) {
+      //Recover the armor
+      let armor = actor.items.get(onArmor.armorId);
+      if (armor == null || armor.type != "armor") return;
+      let value = armor.system.ap;
+      //Calculate the new ap value
+      let newValue = value - damage;
+      if (newValue < limitValue) newValue = limitValue;
+      //Apply the damage
+      await armor.update({ system: { ap: newValue } });
+    }
 
-    let maj = {
-      system: options.onMP
-        ? { mp: { value: newValue } }
-        : { hp: { value: newValue } },
-    };
+    //Apply damage on HP or MP
+    else {
+      //Recover the actor values
+      let value = actorData.hp.value;
+      if (limitValue < actorData.hp.surplus) limitValue = actorData.hp.surplus;
+      //If damage are applied on MP
+      if (onMP) {
+        value = actorData.mp.value;
+        limitValue = actorData.mp.surplus;
+        //MP cannot be negative, extra damages are reported on HP
+        if (damage > value) {
+          this.takeDamage({
+            damageFormula: damage - value,
+            applyArmor: false,
+            onMP: false,
+          });
+          damage = value;
+        }
+      }
 
-    this.actor.update(maj);
+      //Calculate the new value
+      let newValue = value - damage;
+      if (newValue < limitValue) newValue = limitValue;
+      //Apply the damage
+      let maj = {
+        system: onMP
+          ? { mp: { value: newValue } }
+          : { hp: { value: newValue } },
+      };
+      await actor.update(maj);
+    }
+
+    return damage;
   }
 
-  async takeHeal(
-    healFormula,
-    multiplier,
-    options = {
-      onMP: false,
+  async takeHeal({ healFormula, multiplier = 1, onMP = false }) {
+    //Recover the actor informations
+    let actor = this.actor;
+    let actorData = actor.system;
+    let value, limitValue;
+    value = actorData.hp.value;
+    limitValue = actorData.hp.valueMax;
+    if (onMP) {
+      value = actorData.mp.value;
+      limitValue = actorData.mp.valueMax;
     }
-  ) {
+
+    //Roll the heal
     if (typeof healFormula !== "string") healFormula = healFormula.toString();
-    let heal = new Roll(healFormula).roll({ async: false }).total;
+    let roll = new Roll(healFormula).roll({ async: false });
+    let heal = roll.total;
+    //If the formula is not trivial, display the roll in the chat
+    if (healFormula.includes("d") || healFormula.includes("+"))
+      Chat.RollToSimpleCustomMessage({ roll: roll });
+    //Apply the multiplier
     heal *= multiplier;
 
-    let value, limitValue;
-    value = this.actor.system.hp.value;
-    limitValue = this.actor.system.hp.valueMax;
-    if (options.onMP) {
-      value = this.actor.system.mp.value;
-      limitValue = this.actor.system.mp.valueMax;
-    }
-
+    //Calculate the new value
     let newValue = value + heal;
     if (newValue > limitValue) newValue = limitValue;
 
+    //Apply the heal
     let maj = {
-      system: options.onMP
-        ? { mp: { value: newValue } }
-        : { hp: { value: newValue } },
+      system: onMP ? { mp: { value: newValue } } : { hp: { value: newValue } },
     };
+    await actor.update(maj);
 
-    this.actor.update(maj);
+    return heal;
   }
 
   async newDay() {
-    const valueMP = this.actor.system.mp.value;
-    const limitValueMP = this.actor.system.mp.valueMax;
+    let actor = this.actor;
+    let items = this.getData().items;
+    //Update the actors
+    //Add 10 MP
+    const valueMP = actor.system.mp.value;
+    const limitValueMP = actor.system.mp.valueMax;
     let newValueMP = valueMP + 10;
     if (newValueMP > limitValueMP) newValueMP = limitValueMP;
 
-    const food = this.actor.system.nutrition.foodDay;
-    const foodNeeded = this.actor.system.nutrition.foodNeededDay.value;
+    //Update the foods and drinks
+    const food = actor.system.nutrition.foodDay;
+    const foodNeeded = actor.system.nutrition.foodNeededDay.value;
     let newFood = food >= foodNeeded ? 0 : food - foodNeeded;
-    const drink = this.actor.system.nutrition.drinkDay;
-    const drinkNeeded = this.actor.system.nutrition.drinkNeededDay.value;
+    const drink = actor.system.nutrition.drinkDay;
+    const drinkNeeded = actor.system.nutrition.drinkNeededDay.value;
     let newDrink = drink >= drinkNeeded ? 0 : drink - drinkNeeded;
 
+    //Do the maj
     let maj = {
       system: {
         mp: { value: newValueMP },
@@ -550,8 +628,21 @@ export default class ORCCharacterSheet extends ActorSheet {
         },
       },
     };
+    await actor.update(maj);
 
-    this.actor.update(maj);
+    //Update the owned items
+    for (let [key, it] of Object.entries(items)) {
+      let item = actor.items.get(it._id);
+      //Update the available usage of enchants
+      if (item.system.enchant != null)
+        if (item.system.enchant.use.perDay > 0)
+          maj = {
+            system: {
+              enchant: { use: { available: item.system.enchant.use.perDay } },
+            },
+          };
+      await item.update(maj);
+    }
   }
 
   /**
@@ -959,7 +1050,7 @@ export default class ORCCharacterSheet extends ActorSheet {
         actorData.attributes.physical.valueModif.drink = -30;
         actorData.hp.valueMaxModif.drink = -20;
       } else if (drink <= -4) {
-        this.takeDamage(10000);
+        this.takeDamage({ damageFormula: 10000 });
       }
     }
 
@@ -1001,15 +1092,20 @@ export default class ORCCharacterSheet extends ActorSheet {
       actorData.mp.value = actorData.mp.valueMax;
 
     //Attributes
-    for (let [key, attribut] of Object.entries(actorData.attributes))
+    for (let [key, attribut] of Object.entries(actorData.attributes)) {
       if (attribut.value < 0) attribut.value = 0;
+      if (attribut.value > 100) attribut.value = 100;
+    }
 
     //Attack
     if (actorData.attack.value < 0) actorData.attack.value = 0;
+    if (actorData.attack.value > 100) actorData.attack.value = 100;
     //Defence
     if (actorData.defence.value < -100) actorData.defence.value = -100;
+    if (actorData.defence.value > 100) actorData.defence.value = 100;
     //Dodge
     if (actorData.dodge.value < 0) actorData.dodge.value = 0;
+    if (actorData.dodge.value > 100) actorData.dodge.value = 100;
 
     //Food
     if (actorData.nutrition.foodDay > actorData.nutrition.foodMax)

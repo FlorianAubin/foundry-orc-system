@@ -175,3 +175,14 @@ export async function EnchantRollToCustomMessage(rollResult, extraData) {
 
   await ChatMessage.create(chatData);
 }
+
+export async function RollToSimpleCustomMessage({ roll = null }) {
+  let chatData = {
+    user: game.user._id,
+    speaker: ChatMessage.getSpeaker(),
+    roll: roll,
+    sound: CONFIG.sounds.dice,
+    type: CONST.CHAT_MESSAGE_TYPES.ROLL,
+  };
+  await ChatMessage.create(chatData);
+}

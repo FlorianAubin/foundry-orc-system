@@ -63,12 +63,13 @@
       {{/if}}
     </td>
   </tr>
-  <th></th>
-  {{#if unlocked}}
-    <th colspan="2">{{localize "orc.native"}}</th>
-  {{else}}
-    <th colspan="2">{{localize "orc.effective"}}</th>
-  {{/if}}
+    <th></th>
+    {{#if unlocked}}
+      <th>{{localize "orc.native"}}</th>
+    {{else}}
+      <th>{{localize "orc.effective"}}</th>
+    {{/if}}
+    <th></th>
   <tr>
     <th>{{localize "orc.character.ap"}}</th>
     {{#if unlocked}}
@@ -103,7 +104,7 @@
         <td align="center" class="equipped-armor-bodypart">{{localize config.bodyPartList.head}}</td>
         {{#each armors as |armor|}}
           {{#if (eq armor._id ../actor.system.ap.bodyParts.head)}}
-            <td colspan="2" align="center" class="equipped-armor">{{armor.name}}</td>
+            <td align="center" class="equipped-armor">{{armor.name}}</td>
             <td align="center" class="item flexrow" data-item-id="{{armor._id}}">
               <input
                 class="armor-update-ap"
@@ -113,7 +114,7 @@
                 placeholder="0"
                 onClick="this.select();"
                 style="width: 25px"
-              />     
+              />    
             </td>
           {{/if}}
         {{/each}}
@@ -122,7 +123,7 @@
         <td align="center" class="equipped-armor-bodypart">{{localize config.bodyPartList.chest}}</td>
         {{#each armors as |armor|}}
           {{#if (eq armor._id ../actor.system.ap.bodyParts.chest)}}
-            <td colspan="2" align="center" class="equipped-armor">{{armor.name}}</td>
+            <td align="center" class="equipped-armor">{{armor.name}}</td>
             <td align="center" class="item flexrow" data-item-id="{{armor._id}}">
               <input
                 class="armor-update-ap"
@@ -141,7 +142,7 @@
         <td align="center" class="equipped-armor-bodypart">{{localize config.bodyPartList.arms}}</td>
         {{#each armors as |armor|}}
           {{#if (eq armor._id ../actor.system.ap.bodyParts.arms)}}
-            <td colspan="2" align="center" class="equipped-armor">{{armor.name}}</td>
+            <td align="center" class="equipped-armor">{{armor.name}}</td>
             <td align="center" class="item flexrow" data-item-id="{{armor._id}}">
               <input
                 class="armor-update-ap"
@@ -160,7 +161,7 @@
         <td align="center" class="equipped-armor-bodypart">{{localize config.bodyPartList.legs}}</td>
         {{#each armors as |armor|}}
           {{#if (eq armor._id ../actor.system.ap.bodyParts.legs)}}
-            <td colspan="2" align="center" class="equipped-armor">{{armor.name}}</td>
+            <td align="center" class="equipped-armor">{{armor.name}}</td>
             <td align="center" class="item flexrow" data-item-id="{{armor._id}}">
               <input
                 class="armor-update-ap"

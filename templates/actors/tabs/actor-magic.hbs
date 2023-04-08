@@ -9,10 +9,13 @@
     <th class="content">{{localize "orc.enchantsActivated"}}</th>
   </tr>
   <tr class="header">
-    <th class="content">{{localize "orc.enchant.name"}}</th>
+    <th class="content"></th>
     <th class="content">{{localize "orc.enchant.item"}}</th>
     <th class="content">{{localize "orc.enchant.roll"}}</th>
     <th class="effect-list">{{localize "orc.enchant.passives"}}</th>
+    <th class="content">{{localize "orc.enchant.use"}}
+      {{localize "orc.enchant.perDay"}}
+    </th>
     <th class="edit-button"></th>
   </tr>
   {{#each items as |item id|}}
@@ -176,6 +179,11 @@
                 </tr>
               {{/if}}
             </table>
+          {{/if}}
+        </td>
+        <td class="content">
+          {{#if item.system.enchant.use.perDay}}
+            {{item.system.enchant.use.perDay}}
           {{/if}}
         </td>
         <td class="edit-button">

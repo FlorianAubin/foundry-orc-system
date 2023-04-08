@@ -1,7 +1,8 @@
 <div class="global">
   <table class="global-table">
     <tr class="header flexrow">
-      <th>{{localize "orc.damageTaken"}}</th>
+      <th>{{localize "orc.takeDamage"}}</th>
+      <th>{{localize "orc.takeDamageOnArmor"}}</th>
       <th>{{localize "orc.recoverHP"}}</th>
       <th>{{localize "orc.recoverMP"}}</th>
     </tr>
@@ -10,8 +11,8 @@
         <table class="take-damage-table">
           <tr class="take-damage-row">
             <td class="choice">{{localize "orc.damage"}}</td>
-            <td class="choice">{{localize "orc.character.ap"}}</td>
-            <td class="choice">{{localize "orc.character.mp"}}</td>
+            <td class="choice">{{localize "orc.character.ap"}}?</td>
+            <td class="choice">{{localize "orc.character.mp"}}?</td>
             <td class="choice"></td>
           </tr>
           <tr class="take-damage-row">
@@ -44,6 +45,49 @@
               data-damage="{{actor.system.takeDamage.damage}}"
               data-applyArmor="{{actor.system.takeDamage.applyArmor}}"
               data-onmp="{{actor.system.takeDamage.onMP}}"
+              align="center"
+            ></td>
+          </tr>
+        </table>
+      </td>
+      <td class="table-container">
+        <table class="take-damage-table">
+          <tr class="take-damage-row">
+            <td class="choice">{{localize "orc.damage"}}</td>
+            <td class="choice">{{localize "orc.armorPiece"}}</td>
+            <td class="choice"></td>
+          </tr>
+          <tr class="take-damage-row">
+            <td class="choice">
+              <input
+                type="text"
+                name="system.takeDamageArmor.damage"
+                value="{{actor.system.takeDamageArmor.damage}}"
+                placeholder="0"
+                onClick="this.select();"
+                style="width: 40px"
+              />
+            </td>
+            <td class="choice">
+              <select
+                class=""
+                name="system.takeDamageArmor.armorId"
+                align="center"
+              >
+              {{#select actor.system.takeDamageArmor.armorId}}
+                  <option value=""></option>
+                  {{#each armors as |armor|}}
+                    {{#if armor.system.equipped}}
+                      <option value="{{armor._id}}">{{armor.name}}</option>
+                    {{/if}}
+                  {{/each}}
+                {{/select}}
+              </select>
+            </td>
+            <td
+              class="choice button take-damage-armor fas fa-shield-slash"
+              data-damage="{{actor.system.takeDamageArmor.damage}}"
+              data-armorid="{{actor.system.takeDamageArmor.armorId}}"
               align="center"
             ></td>
           </tr>
@@ -166,9 +210,10 @@
       <th class="content">{{localize "orc.enchantsActivated"}}</th>
     </tr>
     <tr class="header flexrow">
-      <th class="content">{{localize "orc.enchant.name"}}</th>
+      <th class="content"></th>
       <th class="content">{{localize "orc.enchant.roll"}}</th>
       <th class="content" style="min-width:300px">{{localize "orc.enchant.addEffect"}}</th>
+      <th class="content">{{localize "orc.enchant.use"}} {{localize "orc.enchant.available"}}</th>
     </tr>
     {{#each items as |item id|}}
       {{#if
@@ -178,6 +223,7 @@
           (or
             (isNotEmptyString item.system.enchant.roll)
             (isNotEmptyString item.system.enchant.addEffect)
+            item.system.enchant.use.perDay
           )
         )
       }}
@@ -195,6 +241,15 @@
           <td align="center" style="min-width:300px">
             {{#if (isNotEmptyString item.system.enchant.addEffect)}}
               <span>{{item.system.enchant.addEffect}}</span>
+            {{/if}}
+          </td>
+          <td class="content" align="center">
+            {{#if item.system.enchant.use.perDay}}
+              <span>{{item.system.enchant.use.available}}&nbsp;&nbsp;</span>
+              <span
+                class="enchant-use button fas fa-calendar-minus"
+                data-itemid="{{item._id}}"
+              ></span>  
             {{/if}}
           </td>
         </tr>

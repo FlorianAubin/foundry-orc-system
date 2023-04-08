@@ -22,6 +22,7 @@
           "value": 0
         }
       },
+      "modifAllAttributes": 0,
       "roll": {
         "limitCritical": {
           "native": 1,
@@ -100,7 +101,8 @@
         "burn": 0,
         "bleed": 0,
         "poison": 0,
-        "onfire": false
+        "onfire": false,
+        "modifResist": 0
       },
       "nutrition": {
         "foodDay": 0,
@@ -121,12 +123,16 @@
         "optionDeploy": false
       },
       "takeDamage": {
-        "damage": 0,
+        "damage": "",
         "applyArmor": true,
         "onMP": false
       },
+      "takeDamageArmor": {
+        "damage": "",
+        "armorId": ""
+      },
       "recoverHP": {
-        "heal": 0,
+        "heal": "",
         "multiplier": {
           "native": 1,
           "valueModif": {},
@@ -134,7 +140,7 @@
         }
       },
       "recoverMP": {
-        "heal": 0
+        "heal": ""
       },
       "biography": ""
     }
@@ -151,8 +157,7 @@
       "generalitem",
       "bag",
       "spell",
-      "active",
-      "passive",
+      "capacity",
       "wound",
       "disease",
       "mutation"
@@ -179,7 +184,11 @@
           "limitFumbleModif": 0,
           "damageBonusModif": "",
           "roll": "",
-          "addEffect": ""
+          "addEffect": "",
+          "use": {
+            "available": 0,
+            "perDay": 0
+          }
         }
       }
     },
@@ -240,18 +249,32 @@
         "food": false,
         "drink": false
       },
-      "stock": 0,
+      "stock": 1,
       "description": ""
     },
     "consumable": {
+      "activated": false,
       "hp": 0,
       "mp": 0,
+      "hpMaxModif": 0,
+      "mpMaxModif": 0,
+      "apModif": 0,
+      "physicalModif": 0,
+      "socialModif": 0,
+      "intelModif": 0,
+      "attackModif": 0,
+      "defenceModif": 0,
+      "dodgeModif": 0,
+      "encumbranceLimitModif": 0,
+      "limitCriticalModif": 0,
+      "limitFumbleModif": 0,
+      "damageBonusModif": "",
       "duration": 0,
       "weight": {
         "indiv": 0,
         "total": 0
       },
-      "stock": 0,
+      "stock": 1,
       "description": ""
     },
     "generalitem": {
@@ -275,13 +298,14 @@
       "duration": 0,
       "description": ""
     },
-    "active": {
+    "capacity": {
+      "active": {
+        "isActive": false,
+        "activated": false
+      },
       "duration": 0,
-      "damage": 0,
+      "damageBonusModif": "",
       "effect": "",
-      "description": ""
-    },
-    "passive": {
       "description": ""
     },
     "wound": {

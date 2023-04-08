@@ -305,6 +305,10 @@
         {{#if (or unlocked (isNotEmptyString item.system.enchant.addEffect))}}
           <th>{{localize "orc.enchant.addEffect"}}</th>
         {{/if}}
+        {{#if (or unlocked item.system.enchant.use.perDay)}}
+          <th>{{localize "orc.enchant.use"}}
+            {{localize "orc.enchant.perDay"}}</th>
+        {{/if}}
       </tr>
       <tr>
         {{#if unlocked}}
@@ -324,6 +328,14 @@
               placeholder=""
             />
           </td>
+          <td align="center">
+            <input
+              name="system.enchant.use.perDay"
+              type="text"
+              value="{{item.system.enchant.use.perDay}}"
+              placeholder=""
+            />
+          </td>
         {{else}}
           {{#if (isNotEmptyString item.system.enchant.roll)}}
             <td align="center">
@@ -337,6 +349,11 @@
           {{#if (isNotEmptyString item.system.enchant.addEffect)}}
             <td align="center">
               <span>{{item.system.enchant.addEffect}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.enchant.use.perDay}}
+            <td align="center">
+              <span>{{item.system.enchant.use.perDay}}</span>
             </td>
           {{/if}}
         {{/if}}

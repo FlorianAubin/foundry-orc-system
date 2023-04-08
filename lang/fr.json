@@ -1,10 +1,12 @@
 {
   "orc": {
     "name": "Nom",
-    "damageTaken": "Subir des dégâts",
+    "takeDamage": "Subir des dégâts",
+    "takeDamageOnArmor": "Subir des dégâts sur une pièce d'armure",
     "recoverHP": "Récupérer des HP",
     "recoverMP": "Récupérer des MP",
     "damage": "Dégâts",
+    "armorPiece": "Pièce d'armure",
     "multiplier": "Multiplicateur",
     "effective": "Effective",
     "max": "Max.",
@@ -142,7 +144,10 @@
       "limitFumbleModif": "Limite échec critique",
       "damageBonusModif": "Dégâts bonus",
       "roll": "Jet",
-      "addEffect": "Effets additionnels"
+      "addEffect": "Effets additionnels",
+      "use": "Nombre d'utilisations",
+      "available": "disponibles",
+      "perDay": "journalières"
     },
     "spells": "Sorts",
     "damageTypeList": {

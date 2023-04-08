@@ -3,13 +3,14 @@ import * as Chat from "./chat.js";
 export function AttributeRoll({
   actor = null,
   attribute = null,
+  modif = 0,
   extraMessageData = {},
 } = {}) {
   let rollFormula = "1d100";
   let rollData = {}; //for some reasons, rollData are not conserved on ChatMessage, use rollOptions instead
   let rollOptions = {
     attributeName: attribute.attributename,
-    attributeValue: attribute.attributevalue,
+    attributeValue: (parseFloat(attribute.attributevalue) + modif).toString(),
     actorName: actor.name,
     actorLimitCritical: actor.system.roll.limitCritical.value,
     actorLimitFumble: actor.system.roll.limitFumble.value,
@@ -27,11 +28,14 @@ export function AttributeRoll({
     base: attribute.attributevaluebase,
     modif: (
       parseFloat(attribute.attributevalue) -
-      parseFloat(attribute.attributevaluebase)
+      parseFloat(attribute.attributevaluebase) +
+      modif
     ).toString(),
-    value: attribute.attributevalue,
+    value: (parseFloat(attribute.attributevalue) + modif).toString(),
     diff: (
-      parseFloat(attribute.attributevalue) - parseFloat(rollResult.total)
+      parseFloat(attribute.attributevalue) +
+      modif -
+      parseFloat(rollResult.total)
     ).toString(),
   };
 
@@ -65,11 +69,13 @@ export function AttributeRoll({
 export function AttackRoll({
   actor = null,
   attribute = null,
+  modif = 0,
   extraMessageData = {},
 }) {
   return this.AttributeRoll({
     actor,
     attribute,
+    modif,
     extraMessageData,
   });
 }
@@ -77,27 +83,31 @@ export function AttackRoll({
 export function DodgeRoll({
   actor = null,
   attribute = null,
+  modif = 0,
   extraMessageData = {},
 }) {
   return this.AttributeRoll({
     actor,
     attribute,
+    modif,
     extraMessageData,
   });
 }
 
 export function StatusResistRoll({ actor = null, modif = 0 }) {
-  let difficulty = actor.system.attributes.physical.value + modif;
+  let physical = actor.system.attributes.physical;
   let attribute = {
-    attributename: "Physical",
-    attributevalue: difficulty,
-    attributevaluebase: actor.system.attributes.physical.native,
+    attributename: "Physique", //physical.name,    ////c'est pas beau !
+    attributevalue: physical.value,
+    attributevaluebase: physical.native,
   };
   return (
     this.AttributeRoll({
       actor: actor,
       attribute: attribute,
-    }) > difficulty
+      modif: modif,
+    }) >
+    physical.value + modif
   );
 }
 
@@ -158,6 +168,7 @@ export function DamageRoll({
           .filter(function (item) {
             return item._id == weapon.system.ammo;
           })[0];
+        if (ammo == null) return;
 
         const ammoStock = ammo.system.stock;
         if (ammoStock > 0) {
