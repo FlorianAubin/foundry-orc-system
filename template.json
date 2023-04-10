@@ -66,7 +66,6 @@
         "value": 0,
         "limitMultiplier": 0.5,
         "limitModif": {},
-        "equippedBag": "",
         "limit": 0
       },
       "attack": {
@@ -107,8 +106,6 @@
       "nutrition": {
         "foodDay": 0,
         "drinkDay": 0,
-        "foodMax": 5,
-        "drinkMax": 8,
         "foodNeededDay": {
           "native": 1,
           "valueModif": {},
@@ -189,9 +186,9 @@
           "use": {
             "available": 0,
             "perDay": 0,
-            "duration": "1",
+            "duration": "",
             "durationEffective": 0,
-            "durationUnit": "min"
+            "durationUnit": ""
           }
         }
       }
@@ -207,13 +204,14 @@
       "precise": false,
       "weight": 0,
       "effect": "",
-      "description": "",
       "equipped": false,
       "effective": {
         "damage": "",
         "effect": "",
         "attack": 0
       },
+      "optionDescriptionDeploy": false,
+      "description": "",
       "templates": ["enchant"]
     },
     "ammo": {
@@ -225,12 +223,14 @@
       },
       "effect": "",
       "stock": 1,
+      "optionDescriptionDeploy": false,
       "description": ""
     },
     "armor": {
       "ap": 0,
       "bodyPart": "",
       "weight": 0,
+      "optionDescriptionDeploy": false,
       "description": "",
       "equipped": false,
       "templates": ["enchant"]
@@ -238,6 +238,7 @@
     "equipableitem": {
       "equipped": false,
       "weight": 0,
+      "optionDescriptionDeploy": false,
       "description": "",
       "templates": ["enchant"]
     },
@@ -255,6 +256,7 @@
         "drink": false
       },
       "stock": 1,
+      "optionDescriptionDeploy": false,
       "description": ""
     },
     "consumable": {
@@ -292,6 +294,7 @@
         "total": 0
       },
       "stock": 1,
+      "optionDescriptionDeploy": false,
       "description": ""
     },
     "generalitem": {
@@ -300,11 +303,14 @@
         "total": 0
       },
       "stock": 1,
+      "optionDescriptionDeploy": false,
       "description": ""
     },
     "bag": {
+      "equipped": false,
       "capacity": 0,
       "modifPhysical": 0,
+      "optionDescriptionDeploy": false,
       "description": ""
     },
     "spell": {
@@ -313,6 +319,7 @@
       "damage": 0,
       "damageType": "",
       "duration": 0,
+      "optionDescriptionDeploy": false,
       "description": ""
     },
     "capacity": {
@@ -323,6 +330,7 @@
       "duration": 0,
       "damageBonusModif": "",
       "effect": "",
+      "optionDescriptionDeploy": false,
       "description": ""
     },
     "wound": {
@@ -331,6 +339,7 @@
         "social": 0,
         "intel": 0
       },
+      "optionDescriptionDeploy": false,
       "description": ""
     },
     "disease": {
@@ -339,9 +348,11 @@
         "social": 0,
         "intel": 0
       },
+      "optionDescriptionDeploy": false,
       "description": ""
     },
     "mutation": {
+      "optionDescriptionDeploy": false,
       "description": ""
     }
   }

@@ -1,6 +1,7 @@
+<div class="inventory">
 <div class="weapon">
 <table class="item-list weapon-list">
-  <tr class="header-main flexrow">
+  <tr class="main-header flexrow">
     <th class="content">{{localize "orc.weapons"}}</th>
   </tr>
   <tr class="header flexrow">
@@ -40,17 +41,17 @@
 </div>
 <div class="armor">
 <table class="item-list armor-list">
-  <tr class="header-main flexrow">
+  <tr class="main-header flexrow">
     <th class="content">{{localize "orc.armors"}}</th>
   </tr>
-  <tr class="header flexrow">
+  <tr class="bodypart flexrow">
     {{#each config.bodyPartList as |bodyPart part|}}
       {{#if (isNotEmptyString bodyPart)}}
         <th class="content">{{localize bodyPart}}</th>
       {{/if}}
     {{/each}}
   </tr>
-  <tr class="header flexrow">
+  <tr class="bodypart flexrow">
     <td class="content">
       <select
         class="bodyPart-choose-armor armor-equipped"
@@ -156,8 +157,8 @@
 </div>
 <div class="ammo-equipableitem">
   <div class="ammo">
-    <table class="item-list ammo-list">
-      <tr class="header-main flexrow">
+    <table class="main-item-list ammo-list">
+      <tr class="header flexrow">
         <th class="content">{{localize "orc.ammos"}}</th>
       </tr>
       <tr class="header flexrow">
@@ -197,7 +198,7 @@
   </div>
   <div class="equipableitem">
     <table class="item-list equipableitem-list">
-      <tr class="header-main flexrow">
+      <tr class="main-header flexrow">
         <th class="content">{{localize "orc.equipableitems"}}</th>
       </tr>
       <tr class="header flexrow">
@@ -230,7 +231,7 @@
 <div class="food-consumable">
   <div class="food">
     <table class="item-list food-list">
-      <tr class="header-main flexrow">
+      <tr class="main-header flexrow">
         <th class="content">{{localize "orc.foods"}}</th>
       </tr>
       <tr class="header flexrow">
@@ -274,7 +275,7 @@
   </div>
   <div class="consumable">
     <table class="item-list consumable-list">
-      <tr class="header-main flexrow">
+      <tr class="main-header flexrow">
         <th class="content">{{localize "orc.consumables"}}</th>
       </tr>
       <tr class="header flexrow">
@@ -312,4 +313,67 @@
       {{/each}}
     </table>
   </div>
+</div>
+
+
+<div class="bag-general">
+  <div class="bag">
+    <table class="item-list bag-list">
+      <tr class="main-header flexrow">
+        <th class="content">{{localize "orc.bags"}}</th>
+      </tr>
+      <tr class="header flexrow">
+        <th class="content"></th>
+        <th class="content">{{localize "orc.bag.capacity"}}</th>
+        <th class="content">{{localize "orc.bag.modifPhysical"}}</th>
+        <th class="content">{{localize "orc.weapon.equipped"}}</th>
+        <th class="content"></th>
+      </tr>
+      {{#each bags as |bag id|}}
+        <tr class="item flexrow" data-item-id="{{bag._id}}">
+          <td class="content">{{bag.name}}</td>
+          <td class="content">{{bag.system.capacity}}</td>
+          <td class="content">{{bag.system.modifPhysical}}</td>
+          {{#if bag.system.equipped}}
+            <td class="content item-equipped button fas fa-check"></td>
+          {{else}}
+            <td class="content item-equipped button fas fa-xmark"></td>
+          {{/if}}
+          <td align="center">
+            <a class="item-edit" align="center" title="Edit Item">
+              <i class="button fas fa-edit"></i></a>
+            <a class="item-delete" align="center" title="Delete Item">
+              <i class="button fas fa-trash"></i></a>
+          </td>
+        </tr>
+      {{/each}}
+    </table>
+  </div>
+  <div class="general">
+    <table class="item-list general-list">
+      <tr class="main-header flexrow">
+        <th class="content">{{localize "orc.generals"}}</th>
+      </tr>
+      <tr class="header flexrow">
+        <th class="content"></th>
+        <th class="content">{{localize "orc.generalitem.stock"}}</th>
+        <th class="content">{{localize "orc.generalitem.weight"}}</th>
+        <th class="content"></th>
+      </tr>
+      {{#each generalitems as |general id|}}
+        <tr class="item flexrow" data-item-id="{{general._id}}">
+          <td class="content">{{general.name}}</td>
+          <td class="content">{{general.system.stock}}</td>
+          <td class="content">{{general.system.weight.total}}</td>
+          <td align="center">
+            <a class="item-edit" align="center" title="Edit Item">
+              <i class="button fas fa-edit"></i></a>
+            <a class="item-delete" align="center" title="Delete Item">
+              <i class="button fas fa-trash"></i></a>
+          </td>
+        </tr>
+      {{/each}}
+    </table>
+  </div>
+</div>
 </div>

@@ -1,3 +1,4 @@
+import * as Item from "../commons/item.js";
 export default class ORCAmmoSheet extends ItemSheet {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
@@ -32,7 +33,7 @@ export default class ORCAmmoSheet extends ItemSheet {
       relativeTo: this.item,
     });
 
-    this.updateTotalWeight(data);
+    Item.updateTotalWeight(data);
 
     //console.log(data);
     return data;
@@ -41,42 +42,14 @@ export default class ORCAmmoSheet extends ItemSheet {
   activateListeners(html) {
     super.activateListeners(html);
 
-    html.find(".sheet-change-lock").click(this._onSheetChangelock.bind(this));
+    html.find(".sheet-change-lock").click(Item._onSheetChangelock.bind(this));
+
+    html
+      .find(".description-deploy")
+      .click(Item._onDescriptionDeploy.bind(this));
   }
 
   /* -------------------------------------------- */
 
   /* -------------------------------------------- */
-  /*  Manage the lock/unlock button on the sheet  */
-  /* -------------------------------------------- */
-
-  async _onSheetChangelock(event) {
-    event.preventDefault();
-
-    let flagData = await this.item.getFlag(game.system.id, "SheetUnlocked");
-    flagData
-      ? await this.item.unsetFlag(game.system.id, "SheetUnlocked")
-      : await this.item.setFlag(
-          game.system.id,
-          "SheetUnlocked",
-          "SheetUnlocked"
-        );
-
-    this.item.sheet.render(true);
-  }
-
-  /* -------------------------------------------- */
-
-  updateTotalWeight(data) {
-    const item = data.item;
-    const itemData = item.system;
-
-    const stock = itemData.stock;
-    const indivWeight = itemData.weight.indiv;
-    item.update({
-      system: {
-        weight: { total: Math.floor(100 * indivWeight * stock) / 100 },
-      },
-    });
-  }
 }

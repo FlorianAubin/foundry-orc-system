@@ -43,6 +43,12 @@ export default class ORCCharacterSheet extends ActorSheet {
     data.consumables = data.items.filter(function (item) {
       return item.type == "consumable";
     });
+    data.bags = data.items.filter(function (item) {
+      return item.type == "bag";
+    });
+    data.generalitems = data.items.filter(function (item) {
+      return item.type == "generalitem";
+    });
 
     //Enrich the html to be able to link objects
     data.biographyHTML = TextEditor.enrichHTML(data.actor.system.biography, {
@@ -193,19 +199,24 @@ export default class ORCCharacterSheet extends ActorSheet {
       if (defaultAmmo) item.update({ system: { ammo: defaultAmmo._id } });
     }
 
-    //Add the tag equipped to the item, and activated to his enchant if the effect is not tagged as an active effect
+    //Add the tag equipped to the item
     let newValue = !item.system.equipped;
-    item.update({
-      system: {
-        equipped: newValue,
-        enchant: {
-          activated:
-            !item.system.enchant.activeEffect || !item.system.enchant.use.perDay
-              ? newValue
-              : false,
+    item.update({ system: { equipped: newValue } });
+
+    //Activated the item enchant if the effect is not tagged as an active effect
+    if (item.system.enchant != null) {
+      item.update({
+        system: {
+          enchant: {
+            activated:
+              !item.system.enchant.activeEffect ||
+              !item.system.enchant.use.perDay
+                ? newValue
+                : false,
+          },
         },
-      },
-    });
+      });
+    }
 
     return;
   }
@@ -476,12 +487,6 @@ export default class ORCCharacterSheet extends ActorSheet {
       if (itemData.type.food) newValues.foodDay += 1;
       if (itemData.type.drink) newValues.drinkDay += 1;
     }
-    //Daily food or drink at the max, return
-    if (
-      newValues.foodDay > actorData.nutrition.foodMax ||
-      newValues.drinkDay > actorData.nutrition.drinkMax
-    )
-      return;
     //Do a physical roll and increase the actor tipsiness in case of failure
     if (itemData.tipsiness || itemData.poison) {
       if (
@@ -502,7 +507,8 @@ export default class ORCCharacterSheet extends ActorSheet {
         actorData.nutrition.foodDay >=
           actorData.nutrition.foodNeededDay.value) ||
       (itemData.type.drink &&
-        actorData.nutrition.drinkDay > actorData.nutrition.drinkNeededDay.value)
+        actorData.nutrition.drinkDay >=
+          actorData.nutrition.drinkNeededDay.value)
     ) {
       if (itemData.hp != "")
         await this.takeHeal({
@@ -858,14 +864,19 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     //Encumbrance limit
     //Recover the physical value
-    actorData.encumbrance.limit = actorData.attributes.physical.value;
-    //Remove the encumbrance modifier
-    if (actorData.attributes.physical.valueModif.encumbrance)
-      actorData.encumbrance.limit -=
-        actorData.attributes.physical.valueModif.encumbrance;
-    //Apply the multiplier
-    actorData.encumbrance.limit *= actorData.encumbrance.limitMultiplier;
-    actorData.encumbrance.limit = Math.floor(actorData.encumbrance.limit);
+    //Remove the encumbrance modifier and apply the multiplier
+    actorData.encumbrance.limit =
+      actorData.attributes.physical.valueModif.encumbrance != null
+        ? Math.floor(
+            (actorData.attributes.physical.value -
+              actorData.attributes.physical.valueModif.encumbrance) *
+              actorData.encumbrance.limitMultiplier
+          )
+        : Math.floor(
+            actorData.attributes.physical.value *
+              actorData.encumbrance.limitMultiplier
+          );
+    //Apply the flat modifier
     for (let [key, modificator] of Object.entries(
       actorData.encumbrance.limitModif
     ))
@@ -1020,7 +1031,7 @@ export default class ORCCharacterSheet extends ActorSheet {
       }
       //Bag
       if (item.type == "bag") {
-        if (actorData.encumbrance.equippedBag == item._id) {
+        if (item.system.equipped) {
           if (itemData.capacity) modif.encumbranceLimit += itemData.capacity;
           if (itemData.modifPhysical) modif.physical += itemData.modifPhysical;
         }
@@ -1207,7 +1218,19 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     //Food
     const food = actorData.nutrition.foodDay;
-    if (food < 0) {
+    const foodNedeed = actorData.nutrition.foodNeededDay.value;
+    if (food >= foodNedeed + 3) {
+      updated = true;
+      actorData.attributes.social.valueModif.food = -5;
+      actorData.attributes.intel.valueModif.food = -5;
+      if (food >= foodNedeed + 4) {
+        actorData.attributes.physical.valueModif.food =
+          -10 * (food - (foodNedeed + 3));
+        actorData.attributes.social.valueModif.food = -10;
+        actorData.attributes.intel.valueModif.food =
+          -10 * (food - (foodNedeed + 3));
+      }
+    } else if (food < 0) {
       updated = true;
       if (food == -1) {
         actorData.attributes.physical.valueModif.food = -5;
@@ -1223,16 +1246,29 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     //Drink
     const drink = actorData.nutrition.drinkDay;
-    if (drink < 0) {
+    const drinkNedeed = actorData.nutrition.drinkNeededDay.value;
+    if (drink >= drinkNedeed + 3) {
+      updated = true;
+      actorData.attributes.physical.valueModif.drink =
+        -5 * (drink - (drinkNedeed + 2));
+      if (drink >= drinkNedeed + 4) {
+        actorData.attributes.intel.valueModif.drink =
+          -10 * (drink - (drinkNedeed + 3));
+        actorData.hp.valueMaxModif.drink = -10 * (drink - (drinkNedeed + 3));
+      }
+    } else if (drink < 0) {
       updated = true;
       if (drink == -1) {
         actorData.attributes.physical.valueModif.drink = -10;
+        actorData.mp.valueMaxModif.drink = -1;
       } else if (drink == -2) {
         actorData.attributes.physical.valueModif.drink = -20;
         actorData.hp.valueMaxModif.drink = -10;
+        actorData.mp.valueMaxModif.drink = -3;
       } else if (drink == -3) {
         actorData.attributes.physical.valueModif.drink = -30;
         actorData.hp.valueMaxModif.drink = -20;
+        actorData.mp.valueMaxModif.drink = -5;
       } else if (drink <= -4) {
         this.takeDamage({ damageFormula: 10000 });
       }
@@ -1249,6 +1285,7 @@ export default class ORCCharacterSheet extends ActorSheet {
         actorData.attributes.social.valueModif.tipsiness = +10;
         actorData.attributes.intel.valueModif.tipsiness = -10;
       } else if (tipsiness >= 3) {
+        actorData.attributes.social.valueModif.tipsiness = -5 * (tipsiness - 1);
         actorData.attributes.intel.valueModif.tipsiness = -10 * (tipsiness - 1);
       }
     }
@@ -1269,11 +1306,14 @@ export default class ORCCharacterSheet extends ActorSheet {
     const actorData = actor.system;
 
     //HP
+    if (actorData.hp.valueMax < 0) actorData.hp.valueMax = 0;
     if (actorData.hp.value > actorData.hp.valueMax)
       actorData.hp.value = actorData.hp.valueMax;
     //MP
+    if (actorData.mp.valueMax < 0) actorData.mp.valueMax = 0;
     if (actorData.mp.value > actorData.mp.valueMax)
       actorData.mp.value = actorData.mp.valueMax;
+    if (actorData.mp.value < 0) actorData.mp.value = 0;
 
     //Attributes
     for (let [key, attribut] of Object.entries(actorData.attributes)) {
@@ -1292,13 +1332,9 @@ export default class ORCCharacterSheet extends ActorSheet {
     if (actorData.dodge.value > 100) actorData.dodge.value = 100;
 
     //Food
-    if (actorData.nutrition.foodDay > actorData.nutrition.foodMax)
-      actorData.nutrition.foodDay = actorData.nutrition.foodMax;
     if (actorData.nutrition.foodNeededDay.value < 0)
       actorData.nutrition.foodNeededDay.value = 0;
     //Drink
-    if (actorData.nutrition.drinkDay > actorData.nutrition.drinkMax)
-      actorData.nutrition.drinkDay = actorData.nutrition.drinkMax;
     if (actorData.nutrition.drinkNeededDay.value < 0)
       actorData.nutrition.drinkNeededDay.value = 0;
   }

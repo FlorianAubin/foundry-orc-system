@@ -1,5 +1,5 @@
 import { ORC } from "./commons/config.js";
-import * as Macros from "./commons/macros.js";
+import * as Macro from "./commons/macro.js";
 import * as Chat from "./commons/chat.js";
 import ORCCharacterSheet from "./sheets/ORCCharacterSheet.js";
 import ORCWeaponSheet from "./sheets/ORCWeaponSheet.js";
@@ -22,7 +22,7 @@ Hooks.once("init", async function () {
   CONFIG.ORC = ORC;
 
   game.orc = {
-    macros: Macros,
+    macro: Macro,
   };
 
   Actors.unregisterSheet("core", ActorSheet);

@@ -42,10 +42,12 @@
       "food": "Nourriture",
       "drink": "Boisson",
       "tipsiness": "Ivresse",
+      "nutrition": "Nutrition",
       "shortcut": "Raccourcis",
       "gear": "Équipement",
       "magic": "Magie",
       "capacity": "Capacités",
+      "active": "Effets actifs",
       "inventory": "Inventaire",
       "biography": "Biographie"
     },
@@ -55,6 +57,8 @@
     "foods": "Nourritures et boissons",
     "equipableitems": "Objets équipables",
     "consumables": "Consommables",
+    "bags": "Sacs",
+    "generals": "Autres items",
     "consumablesActivated": "Consommables actifs",
     "weaponsEquipped": "Armes équipées",
     "weapon": {
@@ -136,7 +140,7 @@
       "weight": "Poids",
       "weightIndiv": "Poids par consommable",
       "descripton": "Description",
-      "passives": "Effets passifs",
+      "effect": "Effets",
       "consume": "Consommer"
     },
     "equipableitem": {
@@ -144,7 +148,7 @@
       "equipped": "Équipé",
       "descripton": "Description"
     },
-    "generalItem": {
+    "generalitem": {
       "stock": "Quantité",
       "weight": "Poids",
       "weightIndiv": "Poids par objet",

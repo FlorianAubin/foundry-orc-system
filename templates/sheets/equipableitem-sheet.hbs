@@ -78,14 +78,25 @@
       {{/if}}
     </div>
   </div>
-  <div class="descripton">
-    <h2 align="center">{{localize "orc.weapon.descripton"}}</h2>
-    {{editor
-      descriptionHTML
-      target="system.description"
-      button=true
-      owner=owner
-      editable=editable
-    }}
+  <div class="description">
+    <h2 class="description-header">     
+      {{#if (not item.system.optionDescriptionDeploy)}}
+          <div 
+            class="description-deploy button fas fa-arrow-down-short-wide"
+            align="center"
+            style="width: 25px"
+          ></div>
+        {{else}}
+          <div 
+            class="description-deploy button fas fa-arrow-up-to-line" 
+            align="center"
+            style="width: 25px"
+          ></div>
+        {{/if}}
+      <div class="title" align="center">{{localize "orc.weapon.descripton"}}</div>
+    </h2>
+      {{#if item.system.optionDescriptionDeploy}}
+        {{> systems/orc/templates/description.hbs}}
+      {{/if}}
   </div>
 </form>

@@ -1,209 +1,84 @@
-<div class="global">
-  <table class="global-table">
-    <tr class="header flexrow">
-      <th>{{localize "orc.takeDamage"}}</th>
-      <th>{{localize "orc.takeDamageOnArmor"}}</th>
-      <th>{{localize "orc.recoverHP"}}</th>
-      <th>{{localize "orc.recoverMP"}}</th>
-    </tr>
-    <tr class="column-container flexrow">
-      <td class="table-container">
-        <table class="take-damage-table">
-          <tr class="take-damage-row">
-            <td class="choice">{{localize "orc.damage"}}</td>
-            <td class="choice">{{localize "orc.character.ap"}}?</td>
-            <td class="choice">{{localize "orc.character.mp"}}?</td>
-            <td class="choice"></td>
-          </tr>
-          <tr class="take-damage-row">
-            <td class="choice">
-              <input
-                type="text"
-                name="system.takeDamage.damage"
-                value="{{actor.system.takeDamage.damage}}"
-                placeholder="0"
-                onClick="this.select();"
-                style="width: 40px"
-              />
-            </td>
-            <td class="choice">
-              <input
-                name="system.takeDamage.applyArmor"
-                type="checkbox"
-                {{checked actor.system.takeDamage.applyArmor}}
-              />
-            </td>
-            <td class="choice">
-              <input
-                name="system.takeDamage.onMP"
-                type="checkbox"
-                {{checked actor.system.takeDamage.onMP}}
-              />
-            </td>
-            <td
-              class="choice button take-damage fas fa-heart-crack"
-              data-damage="{{actor.system.takeDamage.damage}}"
-              data-applyArmor="{{actor.system.takeDamage.applyArmor}}"
-              data-onmp="{{actor.system.takeDamage.onMP}}"
-              align="center"
-            ></td>
-          </tr>
-        </table>
-      </td>
-      <td class="table-container">
-        <table class="take-damage-table">
-          <tr class="take-damage-row">
-            <td class="choice">{{localize "orc.damage"}}</td>
-            <td class="choice">{{localize "orc.armorPiece"}}</td>
-            <td class="choice"></td>
-          </tr>
-          <tr class="take-damage-row">
-            <td class="choice">
-              <input
-                type="text"
-                name="system.takeDamageArmor.damage"
-                value="{{actor.system.takeDamageArmor.damage}}"
-                placeholder="0"
-                onClick="this.select();"
-                style="width: 40px"
-              />
-            </td>
-            <td class="choice">
-              <select
-                class=""
-                name="system.takeDamageArmor.armorId"
-                align="center"
-              >
-              {{#select actor.system.takeDamageArmor.armorId}}
-                  <option value=""></option>
-                  {{#each armors as |armor|}}
-                    {{#if armor.system.equipped}}
-                      <option value="{{armor._id}}">{{armor.name}}</option>
-                    {{/if}}
-                  {{/each}}
-                {{/select}}
-              </select>
-            </td>
-            <td
-              class="choice button take-damage-armor fas fa-shield-slash"
-              data-damage="{{actor.system.takeDamageArmor.damage}}"
-              data-armorid="{{actor.system.takeDamageArmor.armorId}}"
-              align="center"
-            ></td>
-          </tr>
-        </table>
-      </td>
-      <td class="table-container">
-        <table class="heal-table">
-          <tr class="heal-hp-row">
-            <td class="choice">{{localize "orc.character.hp"}}</td>
-            <td class="choice">{{localize "orc.multiplier"}}</td>
-            <td class="choice"></td>
-          </tr>
-          <tr class="heal-hp-row">
-            <td class="choice">
-              <input
-                type="text"
-                name="system.recoverHP.heal"
-                value="{{actor.system.recoverHP.heal}}"
-                placeholder="0"
-                onClick="this.select();"
-                style="width: 40px"
-              />
-            </td>
-            {{#if unlocked}}
-              <td class="choice">
-                <input
-                  type="number"
-                  name="system.recoverHP.multiplier.native"
-                  value="{{actor.system.recoverHP.multiplier.native}}"
-                  placeholder="0"
-                  onClick="this.select();"
-                  style="width: 40px"
-                />
-              </td>
-            {{else}}
-              <td
-                class="choice"
-              >{{actor.system.recoverHP.multiplier.value}}</td>
-            {{/if}}
-            <td
-              class="choice button recover-hp fas fa-medkit"
-              data-heal="{{actor.system.recoverHP.heal}}"
-              data-multiplier="{{actor.system.recoverHP.multiplier.value}}"
-              align="center"
-            ></td>
-          </tr>
-        </table>
-      </td>
-      <td class="table-container">
-        <table class="heal-table">
-          <tr class="heal-mp-row">
-            <td class="choice">{{localize "orc.character.mp"}}</td>
-            <td class="choice"></td>
-          </tr>
-          <tr class="heal-mp-row">
-            <td class="choice">
-              <input
-                type="text"
-                name="system.recoverMP.heal"
-                value="{{actor.system.recoverMP.heal}}"
-                placeholder="0"
-                onClick="this.select();"
-                style="width: 40px"
-              />
-            </td>
-            <td
-              class="choice button recover-mp fas fa-sparkles"
-              data-heal="{{actor.system.recoverMP.heal}}"
-              align="center"
-            ></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-  <table class="item-list weapon-list">
-    <tr class="main-header flexrow">
-      <th class="content">{{localize "orc.weaponsEquipped"}}</th>
+<div class="active">
+<table class="item-list nutrition">
+  <tr class="main-header flexrow">
+      <th class="content">{{localize "orc.character.nutrition"}}</th>
     </tr>
     <tr class="header flexrow">
-      <th></th>
-      <th>{{localize "orc.weapon.ammo"}}</th>
-      <th>{{localize "orc.weapon.damage"}}</th>
-      <th>{{localize "orc.weapon.effect"}}</th>
+      <th class="content"></th>
+      <th class="content">{{localize "orc.character.attributes.physical"}}</th>
+      <th class="content">{{localize "orc.character.attributes.social"}}</th>
+      <th class="content">{{localize "orc.character.attributes.intel"}}</th>
+      <th class="content">{{localize "orc.character.hp"}}</th>
+      <th class="content">{{localize "orc.character.mp"}}</th>
+    </tr>
+    <tr class="item flexrow">
+      <td class="content">{{localize "orc.character.food"}}</td>
+      <td class="content">{{actor.system.attributes.physical.valueModif.food}}</td>
+      <td class="content">{{actor.system.attributes.social.valueModif.food}}</td>
+      <td class="content">{{actor.system.attributes.intel.valueModif.food}}</td>
+      <td class="content">{{actor.system.hp.valueMaxModif.food}}</td>
+      <td class="content">{{actor.system.mp.valueMaxModif.food}}</td>
+    </tr>
+    <tr class="item flexrow">
+      <td class="content">{{localize "orc.character.drink"}}</td>
+      <td class="content">{{actor.system.attributes.physical.valueModif.drink}}</td>
+      <td class="content">{{actor.system.attributes.social.valueModif.drink}}</td>
+      <td class="content">{{actor.system.attributes.intel.valueModif.drink}}</td>
+      <td class="content">{{actor.system.hp.valueMaxModif.drink}}</td>
+      <td class="content">{{actor.system.mp.valueMaxModif.drink}}</td>
+    </tr>
+    <tr class="item flexrow">
+      <td class="content">{{localize "orc.character.tipsiness"}}</td>
+      <td class="content">{{actor.system.attributes.physical.valueModif.tipsiness}}</td>
+      <td class="content">{{actor.system.attributes.social.valueModif.tipsiness}}</td>
+      <td class="content">{{actor.system.attributes.intel.valueModif.tipsiness}}</td>
+      <td class="content">{{actor.system.hp.valueMaxModif.tipsiness}}</td>
+      <td class="content">{{actor.system.mp.valueMaxModif.tipsiness}}</td>
+    </tr>
+</table>
+
+<table class="item-list encumbrance">
+  <tr class="main-header flexrow">
+      <th class="content">{{localize "orc.character.encumbrance"}}</th>
+    </tr>
+    <tr class="header flexrow">
+      <th class="content"></th>
+      <th class="content">{{localize "orc.character.attributes.physical"}}</th>
       <th class="content">{{localize "orc.character.attack"}}</th>
-      <th></th>
+      <th class="content">{{localize "orc.character.defence"}}</th>
+      <th class="content">{{localize "orc.character.dodge"}}</th>
+      <th class="content">{{localize "orc.needed"}} {{localize "orc.character.food"}}</th>
+      <th class="content">{{localize "orc.needed"}} {{localize "orc.character.drink"}}</th>
+    </tr>
+    <tr class="item flexrow">
+      <td class="content"></td>
+      <td class="content">{{actor.system.attributes.physical.valueModif.encumbrance}}</td>
+      <td class="content">{{actor.system.attack.valueModif.encumbrance}}</td>
+      <td class="content">{{actor.system.defence.valueModif.encumbrance}}</td>
+      <td class="content">{{actor.system.dodge.valueModif.encumbrance}}</td>
+      <td class="content">{{actor.system.nutrition.foodNeededDay.valueModif.encumbrance}}</td>
+      <td class="content">{{actor.system.nutrition.drinkNeededDay.valueModif.encumbrance}}</td>
+    </tr>
+</table>
+
+<table class="item-list weapon-defence">
+  <tr class="main-header flexrow">
+      <th class="content">{{localize "orc.weapons"}}</th>
+    </tr>
+    <tr class="header flexrow">
+      <th class="content"></th>
+      <th class="content">{{localize "orc.weapon.defenceModif"}}</th>
     </tr>
     {{#each weapons as |weapon id|}}
-      {{#if weapon.system.equipped}}
-        <tr class="item flexrow" data-item-id="{{weapon._id}}">
-          <td class="content">{{weapon.name}}</td>
-          <td class="content">
-            {{#if weapon.system.useAmmo}}
-              <select class="weapon-choose-ammo" name="system.ammo" align="center">
-              {{#select weapon.system.ammo}} 
-              {{#each ../ammos as |ammo|}}
-              <option value="{{ammo._id}}">{{ammo.name}}</option>
-              {{/each}} 
-              {{/select}}
-            </select>
-            {{/if}}
-          </td>
-          <td class="content">{{weapon.system.effective.damage}}</td>
-          <td class="content">{{weapon.system.effective.effect}}</td>
-          <td class="content">{{weapon.system.effective.attack}}</td>
-          <td
-            class="content attack-with-weapon-roll button fas fa-dice"
-            data-attributename="{{localize 'orc.character.attack'}}"
-            data-attributevalue="{{weapon.system.effective.attack}}"
-            data-attributevaluebase="{{../actor.system.attack.native}}"
-            data-weaponid="{{weapon._id}}"
-          ></td>
-        </tr>
-      {{/if}}
+    {{#if weapon.system.equipped}}
+    <tr class="item flexrow">
+      <td class="content">{{weapon.name}}</td>
+      <td class="content">{{weapon.system.defenceModif}}</td>
+    </tr>
+    {{/if}}
     {{/each}}
-  </table>
+</table>
+
  <table class="item-list consumable-list">
     <tr class="main-header flexrow">
       <th class="content">{{localize "orc.consumablesActivated"}}</th>
@@ -211,7 +86,6 @@
     <tr class="header flexrow">
       <th class="content"></th>
       <th class="effect-list">{{localize "orc.consumable.effect"}}</th>
-      <th class="content">{{localize "orc.consumable.ifActivable.duration"}}</th>
     </tr>
     {{#each consumables as |consumable id|}}
       {{#if
@@ -346,43 +220,30 @@
             </table>
           {{/if}}
           </td>   
-          <td class="content">
-            <span>{{consumable.system.ifActivable.duration}}&nbsp;{{consumable.system.ifActivable.durationUnit}}&nbsp;&nbsp;&nbsp;</span>
-            <span
-                class="consumable-activable-reduce-duration button fas fa-clock"
-                data-itemid="{{consumable._id}}"
-            ></span>  
-          </td>
         </tr>
       {{/if}}
     {{/each}}
   </table>
-  <table class="item-list enchant-list">
-    <tr class="main-header flexrow">
-      <th class="content">{{localize "orc.enchantsActivables"}}</th>
-    </tr>
-    <tr class="header flexrow">
-      <th class="content"></th>
-      <th class="content">{{localize "orc.enchant.roll"}}</th>
-      <th class="effect-list">{{localize "orc.enchant.effect"}}</th>
-      <th class="content">{{localize "orc.enchant.use"}} {{localize "orc.enchant.available"}}</th>
-      <th class="content">{{localize "orc.enchant.duration"}}</th>
-      <th class="content">{{localize "orc.enchant.activated"}}</th>
-    </tr>
-    {{#each items as |item id|}}
-      {{#if (and item.system.equipped item.system.enchant.activeEffect (isNotEmptyString item.system.enchant.name))}}
-        <tr class="item flexrow" data-item-id="{{item._id}}">
-          <td class="content">{{item.system.enchant.name}}</td>
-          <td class="content">
-            {{#if (isNotEmptyString item.system.enchant.roll)}}
-              <span>{{item.system.enchant.roll}}</span>
-              <span
-                class="enchant-roll button fas fa-dice"
-                data-itemid="{{item._id}}"
-              ></span>
-            {{/if}}
-          </td>
-          <td class="effect-list">
+<table class="item-list enchant-list">
+  <tr class="main-header flexrow">
+    <th class="content">{{localize "orc.enchantsActivated"}}</th>
+  </tr>
+  <tr class="header">
+    <th class="content"></th>
+    <th class="content">{{localize "orc.enchant.item"}}</th>
+    <th class="effect-list">{{localize "orc.enchant.effect"}}</th>
+  </tr>
+  {{#each items as |item id|}}
+    {{#if
+      (and
+        item.system.enchant.activated
+        (isNotEmptyString item.system.enchant.name)
+      )
+    }}
+      <tr class="item" data-item-id="{{item._id}}">
+        <td class="content">{{item.system.enchant.name}}</td>
+        <td class="content">{{item.name}}</td>
+        <td class="effect-list">
           {{#if (not item.system.enchant.optionDeploy)}}
             <div
               class="enchant-deploy button fas fa-arrow-down-short-wide"
@@ -517,46 +378,22 @@
                   >{{item.system.enchant.damageBonusModif}}</td>
                 </tr>
               {{/if}}
-              {{#if (isNotEmptyString item.system.enchant.addEffect)}}
+              {{#if (isNotEmptyString item.system.enchant.roll)}}
                 <tr>
+                  <td align="center">{{localize "orc.enchant.roll"}}</td>
+                  <td align="center">{{item.system.enchant.roll}}</td>
+                </tr>
+              {{/if}}
+              {{#if (isNotEmptyString item.system.enchant.addEffect)}}
                   <td align="center">{{localize "orc.enchant.addEffect"}}</td>
                   <td align="center">{{item.system.enchant.addEffect}}</td>
                 </tr>
               {{/if}}
             </table>
           {{/if}}
-          </td>
-          <td class="content" align="center">
-            {{#if item.system.enchant.use.perDay}}
-              <span>{{item.system.enchant.use.available}}</span>
-            {{/if}}
-          </td>
-          <td class="content">
-            {{#if (and item.system.enchant.use.duration item.system.enchant.use.perDay)}}
-            {{#if item.system.enchant.activated}}
-              <span>{{item.system.enchant.use.durationEffective}}&nbsp;{{item.system.enchant.use.durationUnit}}</span>&nbsp;&nbsp;&nbsp;
-              <span
-                class="enchant-reduce-duration button fas fa-clock"
-                data-itemid="{{item._id}}"
-              ></span>  
-            {{else}}
-              <span>{{item.system.enchant.use.duration}}&nbsp;{{item.system.enchant.use.durationUnit}}</span>
-            {{/if}}
-            {{/if}}
-          </td>
-          {{#if (not item.system.enchant.use.perDay)}}
-            <td class="content fas fa-minus"></td>
-          {{else}}
-            {{#if item.system.enchant.activated}}
-              <td class="content enchant-activate button fas fa-check"
-                data-itemid="{{item._id}}"></td>
-            {{else}}
-              <td class="content enchant-activate button fas fa-xmark"
-                data-itemid="{{item._id}}"></td>
-            {{/if}}
-          {{/if}}
-        </tr>
-      {{/if}}
-    {{/each}}
-  </table>
+        </td>
+      </tr>
+    {{/if}}
+  {{/each}}
+</table>
 </div>

@@ -1,5 +1,6 @@
 import * as Dice from "../commons/dice.js";
 import * as Enchant from "../commons/enchant.js";
+import * as Item from "../commons/item.js";
 
 export default class ORCWeaponSheet extends ItemSheet {
   static get defaultOptions() {
@@ -50,34 +51,19 @@ export default class ORCWeaponSheet extends ItemSheet {
   activateListeners(html) {
     super.activateListeners(html);
 
-    html.find(".sheet-change-lock").click(this._onSheetChangelock.bind(this));
+    html.find(".sheet-change-lock").click(Item._onSheetChangelock.bind(this));
 
     html.find(".damage-roll").click(this._onDamageRoll.bind(this));
 
     html.find(".enchant-deploy").click(Enchant._onEnchantDeploy.bind(this));
     html.find(".enchant-roll").click(Enchant._onEnchantRoll.bind(this));
+
+    html
+      .find(".description-deploy")
+      .click(Item._onDescriptionDeploy.bind(this));
   }
 
   /* -------------------------------------------- */
-
-  /* -------------------------------------------- */
-  /*  Manage the lock/unlock button on the sheet  */
-  /* -------------------------------------------- */
-
-  async _onSheetChangelock(event) {
-    event.preventDefault();
-
-    let flagData = await this.item.getFlag(game.system.id, "SheetUnlocked");
-    flagData
-      ? await this.item.unsetFlag(game.system.id, "SheetUnlocked")
-      : await this.item.setFlag(
-          game.system.id,
-          "SheetUnlocked",
-          "SheetUnlocked"
-        );
-
-    this.item.sheet.render(true);
-  }
 
   /* -------------------------------------------- */
 

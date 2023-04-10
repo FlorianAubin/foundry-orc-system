@@ -373,13 +373,12 @@
     {{/if}}
   </tr>
   <tr>
-    <th></th>
+    <th colspan="2"></th>
     <th>{{localize "orc.day"}}</th>
     <th>{{localize "orc.needed"}}</th>
-    <th>{{localize "orc.max"}}</th>
   </tr>
   <tr>
-    <th>{{localize "orc.character.food"}}</th>
+    <th colspan="2">{{localize "orc.character.food"}}</th>
     <td align="center">
       {{#if unlocked}}
         <input
@@ -408,23 +407,9 @@
         <span>{{actor.system.nutrition.foodNeededDay.value}}</span>
       {{/if}}
     </td>
-    <td align="center">
-      {{#if unlocked}}
-        <input
-          type="number"
-          name="system.nutrition.foodMax"
-          value="{{actor.system.nutrition.foodMax}}"
-          placeholder="0"
-          onClick="this.select();"
-          style="width: 30px"
-        />
-      {{else}}
-        <span>{{actor.system.nutrition.foodMax}}</span>
-      {{/if}}
-    </td>
   </tr>
   <tr>
-    <th>{{localize "orc.character.drink"}}</th>
+    <th colspan="2">{{localize "orc.character.drink"}}</th>
     <td align="center">
       {{#if unlocked}}
         <input
@@ -453,23 +438,9 @@
         <span>{{actor.system.nutrition.drinkNeededDay.value}}</span>
       {{/if}}
     </td>
-    <td align="center">
-      {{#if unlocked}}
-        <input
-          type="number"
-          name="system.nutrition.drinkMax"
-          value="{{actor.system.nutrition.drinkMax}}"
-          placeholder="0"
-          onClick="this.select();"
-          style="width: 30px"
-        />
-      {{else}}
-        <span>{{actor.system.nutrition.drinkMax}}</span>
-      {{/if}}
-    </td>
   </tr>
   <tr>
-    <th>{{localize "orc.character.tipsiness"}}</th>
+    <th colspan="2">{{localize "orc.character.tipsiness"}}</th>
     <td align="center">
       <input
         type="number"
@@ -480,7 +451,6 @@
         style="width: 30px"
       />
     </td>
-    <td></td>
     {{#if (not actor.system.nutrition.optionDeploy)}}
       <td
         class="nutrition-deploy button fas fa-arrow-down-short-wide"
@@ -497,6 +467,7 @@
         {{#if food.system.stock}}
           <tr class="item" data-item-id="{{food._id}}">
             <td colspan="2" align="center">{{food.name}}</td>
+            <td></td>
             <td class="content item-consume button fas fa-meat"></td>
           </tr>
         {{/if}}
