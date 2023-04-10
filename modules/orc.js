@@ -10,6 +10,7 @@ import ORCConsumableSheet from "./sheets/ORCConsumableSheet.js";
 import ORCEquipableItemSheet from "./sheets/ORCEquipableItemSheet.js";
 import ORCGeneralItemSheet from "./sheets/ORCGeneralItemSheet.js";
 import ORCBagSheet from "./sheets/ORCBagSheet.js";
+import ORCWoundSheet from "./sheets/ORCWoundSheet.js";
 import { preloadHandlebarsTemplates } from "./commons/templates.js";
 import { RegisterHandlebars } from "./commons/handlebars.mjs";
 
@@ -62,6 +63,10 @@ Hooks.once("init", async function () {
   });
   Items.registerSheet("bag", ORCBagSheet, {
     types: ["bag"],
+    makeDefault: true,
+  });
+  Items.registerSheet("wound", ORCWoundSheet, {
+    types: ["wound"],
     makeDefault: true,
   });
 

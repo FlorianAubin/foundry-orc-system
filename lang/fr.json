@@ -59,6 +59,8 @@
     "consumables": "Consommables",
     "bags": "Sacs",
     "generals": "Autres items",
+    "spells": "Sorts",
+    "wounds": "Maladies et blessures",
     "consumablesActivated": "Consommables actifs",
     "weaponsEquipped": "Armes équipées",
     "weapon": {
@@ -156,7 +158,6 @@
     },
     "bag": {
       "capacity": "Capacité",
-      "modifPhysical": "Malus de Physique",
       "descripton": "Description"
     },
     "enchants": "Enchantements",
@@ -191,7 +192,20 @@
       "perDay": "journalières",
       "duration": "Durée"
     },
-    "spells": "Sorts",
+    "wound": {
+      "physicalModif": "Physique",
+      "socialModif": "Social",
+      "intelModif": "Intel",
+      "hpMaxModif": "HP max.",
+      "mpMaxModif": "MP max.",
+      "attackModif": "Attaque",
+      "dodgeModif": "Esquive",
+      "damageBonusModif": "Modificateur de dégâts",
+      "encumbranceLimitModif": "Encombrement max.",
+      "foodNeededDayModif": "Nourriture nécessaire par jour",
+      "drinkNeededDayModif": "Boisson nécessaire par jour",
+      "effect": "Effets"
+    },
     "damageTypeList": {
       "piercing": "Perçant",
       "slashing": "Tranchant",

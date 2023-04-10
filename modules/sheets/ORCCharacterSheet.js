@@ -49,6 +49,12 @@ export default class ORCCharacterSheet extends ActorSheet {
     data.generalitems = data.items.filter(function (item) {
       return item.type == "generalitem";
     });
+    data.wounds = data.items.filter(function (item) {
+      return item.type == "wound";
+    });
+    data.mutations = data.items.filter(function (item) {
+      return item.type == "mutation";
+    });
 
     //Enrich the html to be able to link objects
     data.biographyHTML = TextEditor.enrichHTML(data.actor.system.biography, {
@@ -123,6 +129,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     html
       .find(".enchant-reduce-duration")
       .click(Enchant._onEnchantReduceDuration.bind(this));
+    html.find(".wound-deploy").click(this._onWoundDeploy.bind(this));
 
     super.activateListeners(html);
   }
@@ -606,6 +613,25 @@ export default class ORCCharacterSheet extends ActorSheet {
     return;
   }
 
+  async _onWoundDeploy(event) {
+    event.preventDefault();
+    //Retrive the item
+    let item = this.actor.items.get(event.currentTarget.dataset.itemid);
+
+    //Does nothing if no item has been found
+    if (item == null) return;
+    //Does nothing if the item is not a consumable
+    if (item.type != "wound") return;
+    let itemData = item.system;
+
+    await item.update({
+      system: {
+        optionDeploy: !itemData.optionDeploy,
+      },
+    });
+    return;
+  }
+
   async _onConsumableReduceDuration(event) {
     event.preventDefault();
     //Retrive the item
@@ -1033,7 +1059,6 @@ export default class ORCCharacterSheet extends ActorSheet {
       if (item.type == "bag") {
         if (item.system.equipped) {
           if (itemData.capacity) modif.encumbranceLimit += itemData.capacity;
-          if (itemData.modifPhysical) modif.physical += itemData.modifPhysical;
         }
       }
       //Activated consumables
@@ -1092,6 +1117,30 @@ export default class ORCCharacterSheet extends ActorSheet {
           modif.drinkNeededDay += enchant.drinkNeededDayModif;
         if (enchant.damageBonusModif != 0)
           modif.damageBonus += "+" + enchant.damageBonusModif;
+      }
+
+      //Add wounds
+      if (item.type == "wound") {
+        if (itemData.physicalModif != 0)
+          modif.physical += itemData.physicalModif;
+        if (itemData.socialModif != 0) modif.social += itemData.socialModif;
+        if (itemData.intelModif != 0) modif.intel += itemData.intelModif;
+        if (itemData.hpMaxModif != 0) modif.hpMax += itemData.hpMaxModif;
+        if (itemData.mpMaxModif != 0) modif.mpMax += itemData.mpMaxModif;
+        if (itemData.apModif != 0) modif.ap += itemData.apModif;
+        if (itemData.encumbranceLimitModif != 0)
+          modif.encumbranceLimit += itemData.encumbranceLimitModif;
+        if (itemData.attackModif != 0) modif.attack += itemData.attackModif;
+        if (itemData.defenceModif != 0) modif.defence += itemData.defenceModif;
+        if (itemData.dodgeModif != 0) modif.dodge += itemData.dodgeModif;
+        if (itemData.limitCriticalModif != 0)
+          modif.limitCritical += itemData.limitCriticalModif;
+        if (itemData.limitFumbleModif != 0)
+          modif.limitFumble += itemData.limitFumbleModif;
+        if (itemData.damageBonusModif != 0)
+          if (modif.damageBonus == "")
+            modif.damageBonus += itemData.damageBonusModif;
+          else modif.damageBonus += "+" + itemData.damageBonusModif;
       }
     }
 

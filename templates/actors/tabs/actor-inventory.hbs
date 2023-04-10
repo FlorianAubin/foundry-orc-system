@@ -315,7 +315,6 @@
   </div>
 </div>
 
-
 <div class="bag-general">
   <div class="bag">
     <table class="item-list bag-list">
@@ -325,7 +324,6 @@
       <tr class="header flexrow">
         <th class="content"></th>
         <th class="content">{{localize "orc.bag.capacity"}}</th>
-        <th class="content">{{localize "orc.bag.modifPhysical"}}</th>
         <th class="content">{{localize "orc.weapon.equipped"}}</th>
         <th class="content"></th>
       </tr>
@@ -333,7 +331,6 @@
         <tr class="item flexrow" data-item-id="{{bag._id}}">
           <td class="content">{{bag.name}}</td>
           <td class="content">{{bag.system.capacity}}</td>
-          <td class="content">{{bag.system.modifPhysical}}</td>
           {{#if bag.system.equipped}}
             <td class="content item-equipped button fas fa-check"></td>
           {{else}}

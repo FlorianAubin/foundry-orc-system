@@ -156,7 +156,6 @@
       "spell",
       "capacity",
       "wound",
-      "disease",
       "mutation"
     ],
     "templates": {
@@ -309,7 +308,6 @@
     "bag": {
       "equipped": false,
       "capacity": 0,
-      "modifPhysical": 0,
       "optionDescriptionDeploy": false,
       "description": ""
     },
@@ -334,20 +332,18 @@
       "description": ""
     },
     "wound": {
-      "attributesModif": {
-        "physical": 0,
-        "social": 0,
-        "intel": 0
-      },
-      "optionDescriptionDeploy": false,
-      "description": ""
-    },
-    "disease": {
-      "attributesModif": {
-        "physical": 0,
-        "social": 0,
-        "intel": 0
-      },
+      "hpMaxModif": 0,
+      "mpMaxModif": 0,
+      "physicalModif": 0,
+      "socialModif": 0,
+      "intelModif": 0,
+      "attackModif": 0,
+      "dodgeModif": 0,
+      "damageBonusModif": 0,
+      "encumbranceLimitModif": 0,
+      "foodNeededDayModif": 0,
+      "drinkNeededDayModif": 0,
+      "optionDeploy": false,
       "optionDescriptionDeploy": false,
       "description": ""
     },

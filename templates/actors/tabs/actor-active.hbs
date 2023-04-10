@@ -224,6 +224,7 @@
       {{/if}}
     {{/each}}
   </table>
+
 <table class="item-list enchant-list">
   <tr class="main-header flexrow">
     <th class="content">{{localize "orc.enchantsActivated"}}</th>
@@ -394,6 +395,130 @@
         </td>
       </tr>
     {{/if}}
+  {{/each}}
+</table>
+<table class="item-list wound-list">
+  <tr class="main-header flexrow">
+    <th class="content">{{localize "orc.wounds"}}</th>
+  </tr>
+  <tr class="header">
+    <th class="content"></th>
+    <th class="effect-list">{{localize "orc.wound.effect"}}</th>
+  </tr>
+  {{#each wounds as |wound id|}}
+      <tr class="item" data-item-id="{{wound._id}}">
+        <td class="content">{{wound.system.name}}</td>
+        <td class="effect-list">
+          {{#if (not wound.system.optionDeploy)}}
+            <div
+              class="wound-deploy button fas fa-arrow-down-short-wide"
+              align="center"
+              style="width: 25px"
+              data-itemid="{{wound._id}}"
+            ></div>
+          {{else}}
+            <div
+              class="wound-deploy button fas fa-arrow-up-to-line"
+              align="center"
+              style="width: 25px"
+              data-itemid="{{wound._id}}"
+            ></div>
+            <table>
+              {{#if wound.system.physicalModif}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.wound.physicalModif"
+                    }}</td>
+                  <td align="center">{{wound.system.physicalModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if wound.system.socialModif}}
+                <tr>
+                  <td align="center">{{localize "orc.wound.socialModif"}}</td>
+                  <td align="center">{{wound.system.socialModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if wound.system.intelModif}}
+                <tr>
+                  <td align="center">{{localize "orc.wound.intelModif"}}</td>
+                  <td align="center">{{wound.system.intelModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if wound.system.hpMaxModif}}
+                <tr>
+                  <td align="center">{{localize "orc.wound.hpMaxModif"}}</td>
+                  <td align="center">{{wound.system.hpMaxModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if wound.system.mpMaxModif}}
+                <tr>
+                  <td align="center">{{localize "orc.wound.mpMaxModif"}}</td>
+                  <td align="center">{{wound.system.mpMaxModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if wound.system.attackModif}}
+                <tr>
+                  <td align="center">{{localize "orc.wound.attackModif"}}</td>
+                  <td align="center">{{wound.system.attackModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if wound.system.dodgeModif}}
+                <tr>
+                  <td align="center">{{localize "orc.wound.dodgeModif"}}</td>
+                  <td align="center">{{wound.system.dodgeModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if wound.system.encumbranceLimitModif}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.wound.encumbranceLimitModif"
+                    }}</td>
+                  <td
+                    align="center"
+                  >{{wound.system.encumbranceLimitModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if wound.system.foodNeededDayModif}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.wound.foodNeededDayModif"
+                    }}</td>
+                  <td
+                    align="center"
+                  >{{wound.system.foodNeededDayModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if wound.system.drinkNeededDayModif}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.wound.drinkNeededDayModif"
+                    }}</td>
+                  <td
+                    align="center"
+                  >{{wound.system.drinkNeededDayModif}}</td>
+                </tr>
+              {{/if}}
+     
+              {{#if (isNotEmptyString wound.system.damageBonusModif)}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.wound.damageBonusModif"
+                    }}</td>
+                  <td
+                    align="center"
+                  >{{wound.system.damageBonusModif}}</td>
+                </tr>
+              {{/if}}
+            </table>
+          {{/if}}
+        </td>
+        <td align="center">
+          <a class="item-edit" align="center" title="Edit Item">
+            <i class="button fas fa-edit"></i></a>
+          <a class="item-delete" align="center" title="Delete Item">
+            <i class="button fas fa-trash"></i></a>
+        </td>
+      </tr>
   {{/each}}
 </table>
 </div>

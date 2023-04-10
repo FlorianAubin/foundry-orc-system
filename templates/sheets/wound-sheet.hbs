@@ -1,0 +1,277 @@
+<form class="{{cssClass}} wound" autocomplete="off">
+  <div class="main">
+    <div class="header">
+      <div class="lock-icon">
+        <a class="sheet-change-lock" title="lock/unlock sheet">
+          {{#if unlocked}}
+            <i class="button fas fa-lock-open"></i>
+          {{else}}
+            <i class="button fas fa-lock"></i>
+          {{/if}}
+        </a>
+      </div>
+      <div>
+        <img
+          src="{{item.img}}"
+          data-edit="img"
+          title="{{item.name}}"
+          height="64"
+          width="64"
+        />
+      </div>
+      <div class="name">
+        <h1 class="name" align="center">
+          {{#if unlocked}}
+            <input
+              name="name"
+              type="text"
+              value="{{item.name}}"
+              placeholder="{{localize 'orc.name'}}"
+              onClick="this.select();"
+            />
+          {{else}}
+            <span>{{item.name}}</span>
+          {{/if}}
+        </h1>
+      </div>
+    </div>
+    <div class="content">
+      <table>
+        <tr>
+          {{#if (or unlocked item.system.physicalModif)}}
+            <th>{{localize "orc.wound.physicalModif"}}</th>
+          {{/if}}
+          {{#if (or unlocked item.system.socialModif)}}
+            <th>{{localize "orc.wound.socialModif"}}</th>
+          {{/if}}
+          {{#if (or unlocked item.system.intelModif)}}
+            <th>{{localize "orc.wound.intelModif"}}</th>
+          {{/if}}
+        </tr>
+        <tr>
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.physicalModif"
+                type="number"
+                value="{{item.system.physicalModif}}"
+                placeholder="0"
+              />
+            </td>
+            <td align="center">
+              <input
+                name="system.socialModif"
+                type="number"
+                value="{{item.system.socialModif}}"
+                placeholder="0"
+              />
+            </td>
+            <td align="center">
+              <input
+                name="system.intelModif"
+                type="number"
+                value="{{item.system.intelModif}}"
+                placeholder="0"
+              />
+            </td>
+          {{else}}
+            {{#if item.system.physicalModif}}
+              <td align="center">
+                <span>{{item.system.physicalModif}}</span>
+              </td>
+            {{/if}}
+            {{#if item.system.socialModif}}
+              <td align="center">
+                <span>{{item.system.socialModif}}</span>
+              </td>
+            {{/if}}
+            {{#if item.system.intelModif}}
+              <td align="center">
+                <span>{{item.system.intelModif}}</span>
+              </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+
+      <tr>
+        {{#if (or unlocked item.system.hpMaxModif)}}
+          <th>{{localize "orc.wound.hpMaxModif"}}</th>
+        {{/if}}
+        {{#if (or unlocked item.system.mpMaxModif)}}
+          <th>{{localize "orc.wound.mpMaxModif"}}</th>
+        {{/if}}
+      </tr>
+      <tr>
+        {{#if unlocked}}
+          <td align="center">
+            <input
+              name="system.hpMaxModif"
+              type="number"
+              value="{{item.system.hpMaxModif}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.mpMaxModif"
+              type="number"
+              value="{{item.system.mpMaxModif}}"
+              placeholder="0"
+            />
+          </td>
+        {{else}}
+          {{#if item.system.hpMaxModif}}
+            <td align="center">
+              <span>{{item.system.hpMaxModif}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.mpMaxModif}}
+            <td align="center">
+              <span>{{item.system.mpMaxModif}}</span>
+            </td>
+          {{/if}}
+        {{/if}}
+      </tr>
+
+      <tr>
+        {{#if (or unlocked item.system.attackModif)}}
+          <th>{{localize "orc.wound.attackModif"}}</th>
+        {{/if}}
+        {{#if (or unlocked item.system.dodgeModif)}}
+          <th>{{localize "orc.wound.dodgeModif"}}</th>
+        {{/if}}
+        {{#if
+          (or unlocked (isNotEmptyString item.system.damageBonusModif))
+        }}
+          <th>{{localize "orc.wound.damageBonusModif"}}</th>
+        {{/if}}
+      </tr>
+      <tr>
+        {{#if unlocked}}
+          <td align="center">
+            <input
+              name="system.attackModif"
+              type="number"
+              value="{{item.system.attackModif}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.dodgeModif"
+              type="number"
+              value="{{item.system.dodgeModif}}"
+              placeholder="0"
+            />
+          </td>
+        <td align="center">
+            <input
+              name="system.damageBonusModif"
+              type="text"
+              value="{{item.system.damageBonusModif}}"
+              placeholder=""
+            />
+          </td>
+        {{else}}
+          {{#if item.system.attackModif}}
+            <td align="center">
+              <span>{{item.system.attackModif}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.dodgeModif}}
+            <td align="center">
+              <span>{{item.system.dodgeModif}}</span>
+            </td>
+          {{/if}}
+          {{#if (isNotEmptyString item.system.damageBonusModif)}}
+            <td align="center">
+              <span>{{item.system.damageBonusModif}}</span>
+            </td>
+          {{/if}}
+        {{/if}}
+      </tr>
+
+      <tr>
+        {{#if (or unlocked item.system.encumbranceLimitModif)}}
+          <th>{{localize "orc.wound.encumbranceLimitModif"}}</th>
+        {{/if}}
+        {{#if (or unlocked item.system.foodNeededDayModif)}}
+          <th>{{localize "orc.wound.foodNeededDayModif"}}</th>
+        {{/if}}
+        {{#if (or unlocked item.system.drinkNeededDayModif)}}
+          <th>{{localize "orc.wound.drinkNeededDayModif"}}</th>
+        {{/if}}
+      </tr>
+      <tr>
+        {{#if unlocked}}
+          <td align="center">
+            <input
+              name="system.encumbranceLimitModif"
+              type="number"
+              value="{{item.system.encumbranceLimitModif}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.foodNeededDayModif"
+              type="number"
+              value="{{item.system.foodNeededDayModif}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.drinkNeededDayModif"
+              type="number"
+              value="{{item.system.drinkNeededDayModif}}"
+              placeholder="0"
+            />
+          </td>
+        {{else}}
+          {{#if item.system.encumbranceLimitModif}}
+            <td align="center">
+              <span>{{item.system.encumbranceLimitModif}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.foodNeededDayModif}}
+            <td align="center">
+              <span>{{item.system.foodNeededDayModif}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.drinkNeededDayModif}}
+            <td align="center">
+              <span>{{item.system.drinkNeededDayModif}}</span>
+            </td>
+          {{/if}}
+        {{/if}}
+      </tr>
+
+
+      </table>
+    </div>
+  </div>
+  <div class="description">
+    <h2 class="description-header">
+      {{#if (not item.system.optionDescriptionDeploy)}}
+        <div
+          class="description-deploy button fas fa-arrow-down-short-wide"
+          align="center"
+          style="width: 25px"
+        ></div>
+      {{else}}
+        <div
+          class="description-deploy button fas fa-arrow-up-to-line"
+          align="center"
+          style="width: 25px"
+        ></div>
+      {{/if}}
+      <div class="title" align="center">{{localize
+          "orc.weapon.descripton"
+        }}</div>
+    </h2>
+    {{#if item.system.optionDescriptionDeploy}}
+        {{> systems/orc/templates/description.hbs}}
+    {{/if}}
+  </div>
+</form>

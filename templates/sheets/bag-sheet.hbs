@@ -39,7 +39,6 @@
       <table>
         <tr>
           <th>{{localize "orc.bag.capacity"}}</th>
-          <th>{{localize "orc.bag.modifPhysical"}}</th>
         </tr>
         <tr>
           <td align="center">
@@ -52,18 +51,6 @@
               />
             {{else}}
               <span>{{item.system.capacity}}</span>
-            {{/if}}
-          </td>
-          <td align="center">
-            {{#if unlocked}}
-              <input
-                name="system.modifPhysical"
-                type="number"
-                value="{{item.system.modifPhysical}}"
-                placeholder="0"
-              />
-            {{else}}
-              <span>{{item.system.modifPhysical}}</span>
             {{/if}}
           </td>
         </tr>
