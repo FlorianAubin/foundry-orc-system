@@ -1,67 +1,28 @@
 <div class="active">
-<table class="item-list nutrition">
-  <tr class="main-header flexrow">
-      <th class="content">{{localize "orc.character.nutrition"}}</th>
-    </tr>
-    <tr class="header flexrow">
-      <th class="content"></th>
-      <th class="content">{{localize "orc.character.attributes.physical"}}</th>
-      <th class="content">{{localize "orc.character.attributes.social"}}</th>
-      <th class="content">{{localize "orc.character.attributes.intel"}}</th>
-      <th class="content">{{localize "orc.character.hp"}}</th>
-      <th class="content">{{localize "orc.character.mp"}}</th>
-    </tr>
-    <tr class="item flexrow">
-      <td class="content">{{localize "orc.character.food"}}</td>
-      <td class="content">{{actor.system.attributes.physical.valueModif.food}}</td>
-      <td class="content">{{actor.system.attributes.social.valueModif.food}}</td>
-      <td class="content">{{actor.system.attributes.intel.valueModif.food}}</td>
-      <td class="content">{{actor.system.hp.valueMaxModif.food}}</td>
-      <td class="content">{{actor.system.mp.valueMaxModif.food}}</td>
-    </tr>
-    <tr class="item flexrow">
-      <td class="content">{{localize "orc.character.drink"}}</td>
-      <td class="content">{{actor.system.attributes.physical.valueModif.drink}}</td>
-      <td class="content">{{actor.system.attributes.social.valueModif.drink}}</td>
-      <td class="content">{{actor.system.attributes.intel.valueModif.drink}}</td>
-      <td class="content">{{actor.system.hp.valueMaxModif.drink}}</td>
-      <td class="content">{{actor.system.mp.valueMaxModif.drink}}</td>
-    </tr>
-    <tr class="item flexrow">
-      <td class="content">{{localize "orc.character.tipsiness"}}</td>
-      <td class="content">{{actor.system.attributes.physical.valueModif.tipsiness}}</td>
-      <td class="content">{{actor.system.attributes.social.valueModif.tipsiness}}</td>
-      <td class="content">{{actor.system.attributes.intel.valueModif.tipsiness}}</td>
-      <td class="content">{{actor.system.hp.valueMaxModif.tipsiness}}</td>
-      <td class="content">{{actor.system.mp.valueMaxModif.tipsiness}}</td>
-    </tr>
-</table>
 
-<table class="item-list encumbrance">
-  <tr class="main-header flexrow">
-      <th class="content">{{localize "orc.character.encumbrance"}}</th>
+<table class="item-list status">
+    <tr class="main-header flexrow">
+      <th class="content">{{localize "orc.character.combatStyle"}}</th>
     </tr>
     <tr class="header flexrow">
       <th class="content"></th>
-      <th class="content">{{localize "orc.character.attributes.physical"}}</th>
       <th class="content">{{localize "orc.character.attack"}}</th>
       <th class="content">{{localize "orc.character.defence"}}</th>
       <th class="content">{{localize "orc.character.dodge"}}</th>
-      <th class="content">{{localize "orc.needed"}} {{localize "orc.character.food"}}</th>
-      <th class="content">{{localize "orc.needed"}} {{localize "orc.character.drink"}}</th>
+      <th class="content">{{localize "orc.character.damageBonus"}}</th>
     </tr>
     <tr class="item flexrow">
       <td class="content"></td>
-      <td class="content">{{actor.system.attributes.physical.valueModif.encumbrance}}</td>
-      <td class="content">{{actor.system.attack.valueModif.encumbrance}}</td>
-      <td class="content">{{actor.system.defence.valueModif.encumbrance}}</td>
-      <td class="content">{{actor.system.dodge.valueModif.encumbrance}}</td>
-      <td class="content">{{actor.system.nutrition.foodNeededDay.valueModif.encumbrance}}</td>
-      <td class="content">{{actor.system.nutrition.drinkNeededDay.valueModif.encumbrance}}</td>
+      <td class="content">{{actor.system.attack.valueModif.style}}</td>
+      <td class="content">{{actor.system.defence.valueModif.style}}</td>
+      {{#if actor.system.dodge.enable}}
+        <td class="content">{{actor.system.dodge.valueModif.style}}</td>
+      {{else}}
+        <td class="content fas fa-minus"></td>
+      {{/if}}
+      <td class="content">{{actor.system.damageBonus.valueModif.style}}</td>
     </tr>
-</table>
 
-<table class="item-list weapon-defence">
   <tr class="main-header flexrow">
       <th class="content">{{localize "orc.weapons"}}</th>
     </tr>
@@ -77,7 +38,28 @@
     </tr>
     {{/if}}
     {{/each}}
-</table>
+    <tr class="main-header flexrow">
+      <th class="content">{{localize "orc.equipableitems"}}</th>
+    </tr>
+    <tr class="header flexrow">
+      <th class="content"></th>
+      <th class="content">{{localize "orc.equipableitem.nSpell"}}</th>
+      <th class="content">{{localize "orc.equipableitem.nInvoc"}}</th>
+      <th class="content">{{localize "orc.equipableitem.magicDamageBonus"}}</th>
+      <th class="content">{{localize "orc.equipableitem.mpReduc"}}</th>
+    </tr>
+    {{#each equipableitems as |equipableitem id|}}
+    {{#if equipableitem.system.equipped}}
+    <tr class="item flexrow">
+      <td class="content">{{equipableitem.name}}</td>
+      <td class="content">{{equipableitem.system.nSpell}}</td>
+      <td class="content">{{equipableitem.system.nInvoc}}</td>
+      <td class="content">{{equipableitem.system.magicDamageBonus}}</td>
+      <td class="content">{{equipableitem.system.mpReduc}}</td>
+    </tr>
+    {{/if}}
+    {{/each}}
+  </table>
 
  <table class="item-list consumable-list">
     <tr class="main-header flexrow">
@@ -209,6 +191,26 @@
                   <td
                     align="center"
                   >{{consumable.system.ifActivable.damageBonusModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if (isNotEmptyString consumable.system.ifActivable.magicDamageBonus)}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.consumable.ifActivable.magicDamageBonus"
+                    }}</td>
+                  <td
+                    align="center"
+                  >{{consumable.system.ifActivable.magicDamageBonus}}</td>
+                </tr>
+              {{/if}}
+              {{#if consumable.system.ifActivable.mpReduc}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.consumable.ifActivable.mpReduc"
+                    }}</td>
+                  <td
+                    align="center"
+                  >{{consumable.system.ifActivable.mpReduc}}</td>
                 </tr>
               {{/if}}
               {{#if (isNotEmptyString consumable.system.addEffect)}}
@@ -379,6 +381,46 @@
                   >{{item.system.enchant.damageBonusModif}}</td>
                 </tr>
               {{/if}}
+              {{#if item.system.enchant.nSpell}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.enchant.nSpell"
+                    }}</td>
+                  <td
+                    align="center"
+                  >{{item.system.enchant.nSpell}}</td>
+                </tr>
+              {{/if}}
+              {{#if item.system.enchant.nInvoc}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.enchant.nInvoc"
+                    }}</td>
+                  <td
+                    align="center"
+                  >{{item.system.enchant.nInvoc}}</td>
+                </tr>
+              {{/if}}
+              {{#if (isNotEmptyString item.system.enchant.magicDamageBonus)}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.enchant.magicDamageBonus"
+                    }}</td>
+                  <td
+                    align="center"
+                  >{{item.system.enchant.magicDamageBonus}}</td>
+                </tr>
+              {{/if}}
+              {{#if item.system.enchant.mpReduc}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.enchant.mpReduc"
+                    }}</td>
+                  <td
+                    align="center"
+                  >{{item.system.enchant.mpReduc}}</td>
+                </tr>
+              {{/if}}
               {{#if (isNotEmptyString item.system.enchant.roll)}}
                 <tr>
                   <td align="center">{{localize "orc.enchant.roll"}}</td>
@@ -397,6 +439,71 @@
     {{/if}}
   {{/each}}
 </table>
+
+<table class="item-list status">
+  <tr class="main-header flexrow">
+      <th class="content">{{localize "orc.character.encumbrance"}}</th>
+    </tr>
+    <tr class="header flexrow">
+      <th class="content"></th>
+      <th class="content">{{localize "orc.character.attributes.physical"}}</th>
+      <th class="content">{{localize "orc.character.attack"}}</th>
+      <th class="content">{{localize "orc.character.defence"}}</th>
+      <th class="content">{{localize "orc.character.dodge"}}</th>
+      <th class="content">{{localize "orc.needed"}} {{localize "orc.character.food"}}</th>
+      <th class="content">{{localize "orc.needed"}} {{localize "orc.character.drink"}}</th>
+    </tr>
+    <tr class="item flexrow">
+      <td class="content"></td>
+      <td class="content">{{actor.system.attributes.physical.valueModif.encumbrance}}</td>
+      <td class="content">{{actor.system.attack.valueModif.encumbrance}}</td>
+      <td class="content">{{actor.system.defence.valueModif.encumbrance}}</td>
+      <td class="content">{{actor.system.dodge.valueModif.encumbrance}}</td>
+      <td class="content">{{actor.system.nutrition.foodNeededDay.valueModif.encumbrance}}</td>
+      <td class="content">{{actor.system.nutrition.drinkNeededDay.valueModif.encumbrance}}</td>
+    </tr>
+
+  <tr class="main-header flexrow">
+      <th class="content">{{localize "orc.character.nutrition"}}</th>
+    </tr>
+    <tr class="header flexrow">
+      <th class="content"></th>
+      <th class="content">{{localize "orc.character.attributes.physical"}}</th>
+      <th class="content">{{localize "orc.character.attributes.social"}}</th>
+      <th class="content">{{localize "orc.character.attributes.intel"}}</th>
+      <th class="content">{{localize "orc.character.hp"}}</th>
+      <th class="content">{{localize "orc.character.mp"}}</th>
+    </tr>
+    <tr class="item flexrow">
+      <td class="content">{{localize "orc.character.food"}}</td>
+      <td class="content">{{actor.system.attributes.physical.valueModif.food}}</td>
+      <td class="content">{{actor.system.attributes.social.valueModif.food}}</td>
+      <td class="content">{{actor.system.attributes.intel.valueModif.food}}</td>
+      <td class="content">{{actor.system.hp.valueMaxModif.food}}</td>
+      <td class="content">{{actor.system.mp.valueMaxModif.food}}</td>
+    </tr>
+    <tr class="item flexrow">
+      <td class="content">{{localize "orc.character.drink"}}</td>
+      <td class="content">{{actor.system.attributes.physical.valueModif.drink}}</td>
+      <td class="content">{{actor.system.attributes.social.valueModif.drink}}</td>
+      <td class="content">{{actor.system.attributes.intel.valueModif.drink}}</td>
+      <td class="content">{{actor.system.hp.valueMaxModif.drink}}</td>
+      <td class="content">{{actor.system.mp.valueMaxModif.drink}}</td>
+    </tr>
+    <tr class="item flexrow">
+      <td class="content">{{localize "orc.character.tipsiness"}}</td>
+      <td class="content">{{actor.system.attributes.physical.valueModif.tipsiness}}</td>
+      <td class="content">{{actor.system.attributes.social.valueModif.tipsiness}}</td>
+      <td class="content">{{actor.system.attributes.intel.valueModif.tipsiness}}</td>
+      <td class="content">{{actor.system.hp.valueMaxModif.tipsiness}}</td>
+      <td class="content">{{actor.system.mp.valueMaxModif.tipsiness}}</td>
+    </tr>
+</table>
+
+
+
+
+
 <table class="item-list wound-list">
   <tr class="main-header flexrow">
     <th class="content">{{localize "orc.wounds"}}</th>
@@ -407,7 +514,7 @@
   </tr>
   {{#each wounds as |wound id|}}
       <tr class="item" data-item-id="{{wound._id}}">
-        <td class="content">{{wound.system.name}}</td>
+        <td class="content">{{wound.name}}</td>
         <td class="effect-list">
           {{#if (not wound.system.optionDeploy)}}
             <div

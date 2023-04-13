@@ -144,25 +144,9 @@
       {{/if}}
       <table>
         <tr>
-          <th>{{localize "orc.weapon.damageType"}}</th>
           <th>{{localize "orc.weapon.weight"}}</th>
         </tr>
         <tr>
-          <td align="center">
-            {{#if unlocked}}
-              <select name="system.damageType" align="center">
-                {{#select item.system.damageType}}
-                  {{#each config.damageTypeList as |damagetype type|}}
-                    <option value="{{damagetype}}">{{localize
-                        damagetype
-                      }}</option>
-                  {{/each}}
-                {{/select}}
-              </select>
-            {{else}}
-              <span>{{localize item.system.damageType}}</span>
-            {{/if}}
-          </td>
           <td align="center">
             {{#if unlocked}}
               <input
@@ -192,6 +176,46 @@
             </td>
           {{else}}
             {{#if item.system.precise}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+        <tr>
+          {{#if (or unlocked item.system.twin)}}
+            <th>{{localize "orc.weapon.twin"}}</th>
+          {{/if}}
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.twin"
+                type="checkbox"
+                {{checked item.system.twin}}
+              />
+            </td>
+          {{else}}
+            {{#if item.system.twin}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+        <tr>
+          {{#if (or unlocked item.system.allowMagic)}}
+            <th>{{localize "orc.weapon.allowMagic"}}</th>
+          {{/if}}
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.allowMagic"
+                type="checkbox"
+                {{checked item.system.allowMagic}}
+              />
+            </td>
+          {{else}}
+            {{#if item.system.allowMagic}}
               <td align="center">
                 <span class="fas fa-check"></span>
               </td>

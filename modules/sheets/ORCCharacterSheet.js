@@ -49,6 +49,9 @@ export default class ORCCharacterSheet extends ActorSheet {
     data.generalitems = data.items.filter(function (item) {
       return item.type == "generalitem";
     });
+    data.capacities = data.items.filter(function (item) {
+      return item.type == "capacity";
+    });
     data.wounds = data.items.filter(function (item) {
       return item.type == "wound";
     });
@@ -129,6 +132,22 @@ export default class ORCCharacterSheet extends ActorSheet {
     html
       .find(".enchant-reduce-duration")
       .click(Enchant._onEnchantReduceDuration.bind(this));
+    html
+      .find(".capacity-activable-reduce-duration")
+      .click(this._onCapacityReduceDuration.bind(this));
+    html
+      .find(".capacity-activable-activate")
+      .click(this._onCapacityActivate.bind(this));
+    html
+      .find(".capacity-activable-deactivate")
+      .click(this._onCapacityDeactivate.bind(this));
+    html
+      .find(".capacity-choose-weapon")
+      .change(this._onCapacityChooseWeapon.bind(this));
+    html
+      .find(".capacity-status-resist-roll")
+      .click(this._onCapacityStatusResistRoll.bind(this));
+
     html.find(".wound-deploy").click(this._onWoundDeploy.bind(this));
 
     super.activateListeners(html);
@@ -453,9 +472,29 @@ export default class ORCCharacterSheet extends ActorSheet {
   }
 
   async _onAttackWithWeaponRoll(event) {
+    const weapon = this.actor.items
+      .filter(function (item) {
+        return item.type == "weapon";
+      })
+      .filter(function (item) {
+        return item._id == event.currentTarget.dataset.weaponid;
+      })[0];
+    if (
+      weapon.system.useAmmo &&
+      this.actor.items
+        .filter(function (item) {
+          return item.type == "ammo";
+        })
+        .filter(function (item) {
+          return item._id == weapon.system.ammo;
+        })[0] == null
+    )
+      return;
+
     await Dice.AttackRoll({
       actor: this.actor,
       attribute: event.currentTarget.dataset,
+      modif: this.actor.system.modifAllAttributes,
     });
     await Dice.DamageRoll({
       actor: this.actor,
@@ -659,6 +698,51 @@ export default class ORCCharacterSheet extends ActorSheet {
     return;
   }
 
+  async _onCapacityReduceDuration(event) {
+    event.preventDefault();
+    //Retrive the item
+    let item = this.actor.items.get(event.currentTarget.dataset.itemid);
+    //Does nothing if no item has been found
+    if (item == null) return;
+    //Does nothing if the item is not a capacity
+    if (item.type != "capacity") return;
+    let itemData = item.system;
+    //Does nothing if the item is not tagged as activable
+    if (!itemData.activeEffect || !itemData.ifActivable.activated) return;
+
+    let newDuration = itemData.ifActivable.durationEffective - 1;
+    if (newDuration <= 0) {
+      this._onCapacityDeactivate(event);
+      return;
+    }
+    await item.update({
+      system: {
+        ifActivable: { durationEffective: newDuration },
+      },
+    });
+    return;
+  }
+
+  _onCapacityChooseWeapon(event) {
+    event.preventDefault();
+    let element = event.currentTarget;
+    let itemId = element.closest(".item").dataset.itemId;
+    let item = this.actor.items.get(itemId);
+    if (item.type != "capacity") return;
+
+    let maj = { system: { weaponLocal: event.currentTarget.value } };
+    return item.update(maj);
+  }
+
+  _onCapacityStatusResistRoll(event) {
+    let actor = this.actor;
+    let actorData = actor.system;
+    return Dice.StatusResistRoll({
+      actor: actor,
+      modif: actorData.modifAllAttributes + actorData.status.modifResist,
+    });
+  }
+
   async _onConsumableDeactivate(event) {
     event.preventDefault();
     //Retrive the item
@@ -672,6 +756,58 @@ export default class ORCCharacterSheet extends ActorSheet {
     //Delete the item
     await item.delete();
 
+    return;
+  }
+
+  async _onCapacityActivate(event) {
+    event.preventDefault();
+
+    let item = this.actor.items.get(event.currentTarget.dataset.itemid);
+    //Does nothing if no item or no enchant has been found
+    if (item == null) return;
+    let itemData = item.system;
+    if (!itemData.activeEffect == null) return;
+    if (itemData.ifActivable.activated) return;
+
+    //Roll the effective duration
+    let durationEffective = 0;
+    if (itemData.ifActivable.duration != "") {
+      let durationFormula = itemData.ifActivable.duration;
+      if (typeof durationFormula !== "string")
+        durationFormula = durationFormula.toString();
+      let roll = new Roll(durationFormula).roll({ async: false });
+      durationEffective = roll.total;
+      //If the formula is not trivial, display the roll in the chat
+      if (durationFormula.includes("d") || durationFormula.includes("+"))
+        Chat.RollToSimpleCustomMessage({ roll: roll });
+    }
+
+    item.update({
+      system: {
+        ifActivable: { activated: true, durationEffective: durationEffective },
+      },
+    });
+
+    return;
+  }
+
+  async _onCapacityDeactivate(event) {
+    event.preventDefault();
+    //Retrive the item
+    let element = event.currentTarget;
+    let itemId = element.closest(".item").dataset.itemId;
+    let item = this.actor.items.get(itemId);
+
+    if (item.type != "capacity") return;
+    let itemData = item.system;
+    if (!itemData.activeEffect || !itemData.ifActivable.activated) return;
+
+    //Deactivate the item
+    item.update({
+      system: {
+        ifActivable: { activated: false },
+      },
+    });
     return;
   }
 
@@ -816,22 +952,37 @@ export default class ORCCharacterSheet extends ActorSheet {
     //Update the owned items
     for (let [key, it] of Object.entries(items)) {
       let item = actor.items.get(it._id);
-      //Update the available usage of enchants
+      //Deactivate and reset enchants
       if (item.system.enchant != null) {
-        if (item.system.enchant.use.perDay > 0) {
+        if (
+          item.system.enchant.activeEffect &&
+          item.system.enchant.use.perDay > 0
+        ) {
           maj = {
             system: {
-              enchant: { use: { available: item.system.enchant.use.perDay } },
+              enchant: {
+                use: { available: item.system.enchant.use.perDay },
+                activated: false,
+              },
             },
           };
           await item.update(maj);
         }
       }
-      //Delete activated consumables
+      //Deactivate capacities
       if (
-        item.type == "consumable" &&
-        item.system.ifActivable.activated == true
+        item.type == "capacity" &&
+        item.system.activeEffect &&
+        item.system.ifActivable.activated
       ) {
+        item.update({
+          system: {
+            ifActivable: { activated: false },
+          },
+        });
+      }
+      //Delete activated consumables
+      if (item.type == "consumable" && item.system.ifActivable.activated) {
         await item.delete();
       }
     }
@@ -853,6 +1004,9 @@ export default class ORCCharacterSheet extends ActorSheet {
     if (this.checkEncumbrance(data)) this.calculateValues(data);
     //Bad nutrition
     if (this.checkBadNutrition(data)) this.calculateValues(data);
+
+    //Modifier from capacity
+    if (this.applyModifFromCapacity(data)) this.calculateValues(data);
 
     //Calculate the HP and MP surplus
     this.calculateSurplus(data);
@@ -914,6 +1068,8 @@ export default class ORCCharacterSheet extends ActorSheet {
       actorData.encumbrance.valueModif
     ))
       if (modificator) actorData.encumbrance.value += modificator;
+    actorData.encumbrance.value =
+      Math.floor(100 * actorData.encumbrance.value) / 100;
 
     //Attack
     actorData.attack.native = actorData.attributes.physical.value;
@@ -925,7 +1081,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     for (let [key, modificator] of Object.entries(actorData.defence.valueModif))
       if (modificator) actorData.defence.value += modificator;
     //Dodge
-    actorData.dodge.native = actorData.attributes.physical.value - 20;
+    actorData.dodge.native = actorData.attributes.physical.value;
     actorData.dodge.value = actorData.dodge.native;
     for (let [key, modificator] of Object.entries(actorData.dodge.valueModif))
       if (modificator) actorData.dodge.value += modificator;
@@ -939,6 +1095,34 @@ export default class ORCCharacterSheet extends ActorSheet {
           actorData.damageBonus.value += modificator;
         else actorData.damageBonus.value += " + " + modificator;
       }
+    }
+
+    //Magic
+    const magic = actorData.magic;
+    //nSpell
+    magic.nSpell.value = magic.nSpell.native;
+    for (let [key, modificator] of Object.entries(magic.nSpell.valueModif)) {
+      if (modificator) magic.nSpell.value += modificator;
+    }
+    //nInvoc
+    magic.nInvoc.value = magic.nInvoc.native;
+    for (let [key, modificator] of Object.entries(magic.nInvoc.valueModif)) {
+      if (modificator) magic.nInvoc.value += modificator;
+    }
+    //Damage bonus
+    magic.damageBonus.value = magic.damageBonus.native;
+    for (let [key, modificator] of Object.entries(
+      magic.damageBonus.valueModif
+    )) {
+      if (modificator) {
+        if (!magic.damageBonus.value) magic.damageBonus.value += modificator;
+        else magic.damageBonus.value += " + " + modificator;
+      }
+    }
+    //mpReduc
+    magic.mpReduc.value = magic.mpReduc.native;
+    for (let [key, modificator] of Object.entries(magic.mpReduc.valueModif)) {
+      if (modificator) magic.mpReduc.value += modificator;
     }
 
     //Roll limits
@@ -987,33 +1171,39 @@ export default class ORCCharacterSheet extends ActorSheet {
     if (style === "standard") {
       actorData.attack.valueModif.style = 0;
       actorData.defence.valueModif.style = 0;
-      actorData.dodge.valueModif.style = 0;
+      actorData.dodge.valueModif.style = -20;
       actorData.dodge.enable = false;
       actorData.damageBonus.valueModif.style = "";
     } else if (style === "offensive") {
       actorData.attack.valueModif.style = +10;
-      actorData.defence.valueModif.style = -10;
-      actorData.dodge.valueModif.style = 0;
+      actorData.defence.valueModif.style = -15;
+      actorData.dodge.valueModif.style = -20;
       actorData.dodge.enable = false;
       actorData.damageBonus.valueModif.style = "";
     } else if (style === "defensive") {
       actorData.attack.valueModif.style = -15;
       actorData.defence.valueModif.style = +10;
-      actorData.dodge.valueModif.style = 0;
+      actorData.dodge.valueModif.style = -20;
       actorData.dodge.enable = false;
       actorData.damageBonus.valueModif.style = "";
     } else if (style === "dodge") {
-      actorData.attack.valueModif.style = -10;
-      actorData.defence.valueModif.style = -10;
-      actorData.dodge.valueModif.style = 0;
+      actorData.attack.valueModif.style = -15;
+      actorData.defence.valueModif.style = -5;
+      actorData.dodge.valueModif.style = -10;
       actorData.dodge.enable = true;
       actorData.damageBonus.valueModif.style = "";
     } else if (style === "aggressive") {
       actorData.attack.valueModif.style = -10;
-      actorData.defence.valueModif.style = -10;
-      actorData.dodge.valueModif.style = 0;
+      actorData.defence.valueModif.style = -15;
+      actorData.dodge.valueModif.style = -20;
       actorData.dodge.enable = false;
       actorData.damageBonus.valueModif.style = "2d10";
+    } else if (style === "ambidex") {
+      actorData.attack.valueModif.style = -20;
+      actorData.defence.valueModif.style = 0;
+      actorData.dodge.valueModif.style = -20;
+      actorData.dodge.enable = false;
+      actorData.damageBonus.valueModif.style = "";
     }
 
     return true;
@@ -1042,6 +1232,12 @@ export default class ORCCharacterSheet extends ActorSheet {
       limitFumble: 0,
       damageBonus: "",
       encumbrance: 0,
+      magic: {
+        nSpell: 0,
+        nInvoc: 0,
+        damageBonus: "",
+        mpReduc: 0,
+      },
     };
 
     for (let [key, item] of Object.entries(items)) {
@@ -1054,6 +1250,16 @@ export default class ORCCharacterSheet extends ActorSheet {
       //Armors
       if (item.type == "armor" && itemData.equipped) {
         if (itemData.ap) modif.ap += itemData.ap;
+      }
+      //Equipable items
+      if (item.type == "equipableitem" && itemData.equipped) {
+        if (itemData.nSpell != 0) modif.magic.nSpell += itemData.nSpell;
+        if (itemData.nInvoc != 0) modif.magic.nInvoc += itemData.nInvoc;
+        if (itemData.magicDamageBonusModif != "")
+          if (modif.magic.damageBonus == "")
+            modif.magic.damageBonus += itemData.magicDamageBonusModif;
+          else modif.magic.damageBonus += "+" + itemData.magicDamageBonusModif;
+        if (itemData.mpReduc != 0) modif.magic.mpReduc += itemData.mpReduc;
       }
       //Bag
       if (item.type == "bag") {
@@ -1080,10 +1286,16 @@ export default class ORCCharacterSheet extends ActorSheet {
             modif.limitCritical += effect.limitCriticalModif;
           if (effect.limitFumbleModif != 0)
             modif.limitFumble += effect.limitFumbleModif;
-          if (effect.damageBonusModif != 0)
+          if (effect.damageBonusModif != "")
             if (modif.damageBonus == "")
               modif.damageBonus += effect.damageBonusModif;
             else modif.damageBonus += "+" + effect.damageBonusModif;
+
+          if (effect.magicDamageBonusModif != "")
+            if (modif.magic.damageBonus == "")
+              modif.magic.damageBonus += effect.magicDamageBonusModif;
+            else modif.magic.damageBonus += "+" + effect.magicDamageBonusModif;
+          if (effect.mpReduc != 0) modif.magic.mpReduc += effect.mpReduc;
         }
       }
       //All items with weight
@@ -1115,11 +1327,19 @@ export default class ORCCharacterSheet extends ActorSheet {
           modif.foodNeededDay += enchant.foodNeededDayModif;
         if (enchant.drinkNeededDayModif != 0)
           modif.drinkNeededDay += enchant.drinkNeededDayModif;
-        if (enchant.damageBonusModif != 0)
+        if (enchant.damageBonusModif != "")
           modif.damageBonus += "+" + enchant.damageBonusModif;
+
+        if (enchant.nSpell != 0) modif.magic.nSpell += enchant.nSpell;
+        if (enchant.nInvoc != 0) modif.magic.nInvoc += enchant.nInvoc;
+        if (enchant.magicDamageBonusModif != "")
+          if (modif.magic.damageBonus == "")
+            modif.magic.damageBonus += enchant.magicDamageBonusModif;
+          else modif.magic.damageBonus += "+" + enchant.magicDamageBonusModif;
+        if (enchant.mpReduc != 0) modif.magic.mpReduc += enchant.mpReduc;
       }
 
-      //Add wounds
+      //Wounds
       if (item.type == "wound") {
         if (itemData.physicalModif != 0)
           modif.physical += itemData.physicalModif;
@@ -1133,11 +1353,11 @@ export default class ORCCharacterSheet extends ActorSheet {
         if (itemData.attackModif != 0) modif.attack += itemData.attackModif;
         if (itemData.defenceModif != 0) modif.defence += itemData.defenceModif;
         if (itemData.dodgeModif != 0) modif.dodge += itemData.dodgeModif;
-        if (itemData.limitCriticalModif != 0)
-          modif.limitCritical += itemData.limitCriticalModif;
-        if (itemData.limitFumbleModif != 0)
-          modif.limitFumble += itemData.limitFumbleModif;
-        if (itemData.damageBonusModif != 0)
+        if (itemData.foodNeededDayModif != 0)
+          modif.foodNeededDay += itemData.foodNeededDayModif;
+        if (itemData.drinkNeededDayModif != 0)
+          modif.drinkNeededDay += itemData.drinkNeededDayModif;
+        if (itemData.damageBonusModif != "")
           if (modif.damageBonus == "")
             modif.damageBonus += itemData.damageBonusModif;
           else modif.damageBonus += "+" + itemData.damageBonusModif;
@@ -1208,6 +1428,23 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     if (modif.encumbrance != 0) {
       actorData.encumbrance.valueModif.items = modif.encumbrance;
+      updated = true;
+    }
+
+    if (modif.magic.spell != 0) {
+      actorData.magic.nSpell.valueModif.items = modif.magic.spell;
+      updated = true;
+    }
+    if (modif.magic.nInvoc != 0) {
+      actorData.magic.nInvoc.valueModif.items = modif.magic.nInvoc;
+      updated = true;
+    }
+    if (modif.magic.damageBonus != "") {
+      actorData.magic.damageBonus.valueModif.items = modif.magic.damageBonus;
+      updated = true;
+    }
+    if (modif.magic.mpReduc != 0) {
+      actorData.magic.mpReduc.valueModif.items = modif.magic.mpReduc;
       updated = true;
     }
 
@@ -1342,6 +1579,71 @@ export default class ORCCharacterSheet extends ActorSheet {
     return updated;
   }
 
+  applyModifFromCapacity(data) {
+    const actor = data.actor;
+    const actorData = actor.system;
+    const items = data.items;
+    let updated = false;
+
+    let modif = {
+      physical: 0,
+      social: 0,
+      intel: 0,
+      modifAllAttributes: 0,
+      modifResist: 0,
+      dodgeEnable: false,
+      damageBonus: "",
+    };
+
+    for (let [key, item] of Object.entries(items)) {
+      let itemData = item.system;
+      if (item.type != "capacity") continue;
+      if (itemData.activeEffect && !itemData.ifActivable.activated) continue;
+      if (itemData.isRageBerserk) {
+        modif.physical += Math.floor(
+          (actorData.hp.valueMax - actorData.hp.value) / 10
+        );
+      }
+      modif.modifAllAttributes += itemData.modifAllAttributes;
+      modif.modifResist += itemData.modifStatusResist;
+      if (itemData.dodgeEnable) modif.dodgeEnable = true;
+      if (itemData.damageBonusModif != "")
+        if (modif.damageBonus == "")
+          modif.damageBonus += itemData.damageBonusModif;
+        else modif.damageBonus += "+" + itemData.damageBonusModif;
+    }
+
+    if (modif.physical != 0) {
+      actorData.attributes.physical.valueModif.capacity = modif.physical;
+      updated = true;
+    }
+    if (modif.social != 0) {
+      actorData.attributes.social.valueModif.capacity = modif.social;
+      updated = true;
+    }
+    if (modif.intel != 0) {
+      actorData.attributes.intel.valueModif.capacity = modif.intel;
+      updated = true;
+    }
+    if (modif.modifAllAttributes != 0) {
+      actorData.modifAllAttributes = modif.modifAllAttributes;
+      updated = true;
+    }
+    if (modif.modifResist != 0) {
+      actorData.status.modifResist = modif.modifResist;
+      updated = true;
+    }
+    if (modif.dodgeEnable) {
+      actorData.dodge.enable = true;
+    }
+    if (modif.damageBonus != "") {
+      actorData.damageBonus.valueModif.capacity = modif.damageBonus;
+      updated = true;
+    }
+
+    return updated;
+  }
+
   calculateSurplus(data) {
     const actor = data.actor;
     const actorData = actor.system;
@@ -1399,6 +1701,9 @@ export default class ORCCharacterSheet extends ActorSheet {
       let effectiveDamage = item.system.damage;
       let effectiveEffect = item.system.effect;
       let effectiveAttack = actor.system.attack.value + item.system.attackModif;
+      //if the weapon is tagged as twin, cancel the ambidex malus
+      if (actor.system.combatStyle == "ambidex" && item.system.twin)
+        effectiveAttack += 20;
 
       if (item.system.useAmmo) {
         let ammo = ammos.filter(function (i) {

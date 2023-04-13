@@ -118,9 +118,13 @@
   border-left: 1px solid #000;
   border-right: 1px solid #000;
 }
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .column-container .table-container {
+  width: 100%;
+}
 .orc.sheet.actor .main .content .central .sheet-body .shortcut .global .column-container .table-container .take-damage-table,
 .orc.sheet.actor .main .content .central .sheet-body .shortcut .global .column-container .table-container .heal-table {
   margin: 0 0 0 0;
+  border-top: 0;
   border-bottom: 0;
 }
 .orc.sheet.actor .main .content .central .sheet-body .shortcut .global .column-container .table-container .take-damage-table th,
@@ -139,50 +143,60 @@
 }
 .orc.sheet.actor .main .content .central .sheet-body .shortcut .weapon-list,
 .orc.sheet.actor .main .content .central .sheet-body .shortcut .consumable-list,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .enchant-list {
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .enchant-list,
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .capacity-list {
   border-left: 1px solid #000;
   border-right: 1px solid #000;
 }
 .orc.sheet.actor .main .content .central .sheet-body .shortcut .weapon-list .main-header,
 .orc.sheet.actor .main .content .central .sheet-body .shortcut .consumable-list .main-header,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .enchant-list .main-header {
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .enchant-list .main-header,
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .capacity-list .main-header {
   display: flex;
   flex-direction: row;
 }
 .orc.sheet.actor .main .content .central .sheet-body .shortcut .weapon-list .main-header .content,
 .orc.sheet.actor .main .content .central .sheet-body .shortcut .consumable-list .main-header .content,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .enchant-list .main-header .content {
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .enchant-list .main-header .content,
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .capacity-list .main-header .content {
   align-self: center;
   place-content: center;
+  align-items: center;
   width: 100%;
-  max-width: 200px;
+  max-width: 300px;
 }
 .orc.sheet.actor .main .content .central .sheet-body .shortcut .weapon-list .header .content,
 .orc.sheet.actor .main .content .central .sheet-body .shortcut .consumable-list .header .content,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .enchant-list .header .content {
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .enchant-list .header .content,
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .capacity-list .header .content {
   align-self: center;
   place-content: center;
+  align-items: center;
   width: 100%;
-  max-width: 200px;
+  max-width: 300px;
 }
 .orc.sheet.actor .main .content .central .sheet-body .shortcut .weapon-list .header .effect-list,
 .orc.sheet.actor .main .content .central .sheet-body .shortcut .consumable-list .header .effect-list,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .enchant-list .header .effect-list {
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .enchant-list .header .effect-list,
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .capacity-list .header .effect-list {
   align-self: center;
   place-content: center;
   width: 100%;
 }
 .orc.sheet.actor .main .content .central .sheet-body .shortcut .weapon-list .item .content,
 .orc.sheet.actor .main .content .central .sheet-body .shortcut .consumable-list .item .content,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .enchant-list .item .content {
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .enchant-list .item .content,
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .capacity-list .item .content {
   align-self: center;
   place-content: center;
+  align-items: center;
   width: 100%;
-  max-width: 200px;
+  max-width: 300px;
 }
 .orc.sheet.actor .main .content .central .sheet-body .shortcut .weapon-list .item .effect-list,
 .orc.sheet.actor .main .content .central .sheet-body .shortcut .consumable-list .item .effect-list,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .enchant-list .item .effect-list {
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .enchant-list .item .effect-list,
+.orc.sheet.actor .main .content .central .sheet-body .shortcut .capacity-list .item .effect-list {
   display: flex;
   flex-direction: row;
   align-self: center;
@@ -426,9 +440,7 @@
 .orc.sheet.actor .main .content .central .sheet-body .active td {
   width: 100px;
 }
-.orc.sheet.actor .main .content .central .sheet-body .active .nutrition,
-.orc.sheet.actor .main .content .central .sheet-body .active .encumbrance,
-.orc.sheet.actor .main .content .central .sheet-body .active .weapon-defence {
+.orc.sheet.actor .main .content .central .sheet-body .active .status {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -436,42 +448,31 @@
   border-left: 1px solid #000;
   border-right: 1px solid #000;
 }
-.orc.sheet.actor .main .content .central .sheet-body .active .nutrition .main-header,
-.orc.sheet.actor .main .content .central .sheet-body .active .encumbrance .main-header,
-.orc.sheet.actor .main .content .central .sheet-body .active .weapon-defence .main-header {
+.orc.sheet.actor .main .content .central .sheet-body .active .status .main-header {
   display: flex;
   flex-direction: row;
+  border-top: 1px solid #000;
 }
-.orc.sheet.actor .main .content .central .sheet-body .active .nutrition .main-header .content,
-.orc.sheet.actor .main .content .central .sheet-body .active .encumbrance .main-header .content,
-.orc.sheet.actor .main .content .central .sheet-body .active .weapon-defence .main-header .content {
+.orc.sheet.actor .main .content .central .sheet-body .active .status .main-header .content {
   align-self: center;
   place-content: center;
   width: 100%;
   max-width: 200px;
 }
-.orc.sheet.actor .main .content .central .sheet-body .active .nutrition .header,
-.orc.sheet.actor .main .content .central .sheet-body .active .encumbrance .header,
-.orc.sheet.actor .main .content .central .sheet-body .active .weapon-defence .header {
+.orc.sheet.actor .main .content .central .sheet-body .active .status .header {
   display: flex;
   flex-direction: row;
 }
-.orc.sheet.actor .main .content .central .sheet-body .active .nutrition .header .content,
-.orc.sheet.actor .main .content .central .sheet-body .active .encumbrance .header .content,
-.orc.sheet.actor .main .content .central .sheet-body .active .weapon-defence .header .content {
+.orc.sheet.actor .main .content .central .sheet-body .active .status .header .content {
   align-self: center;
   place-content: center;
   width: 100%;
 }
-.orc.sheet.actor .main .content .central .sheet-body .active .nutrition .item,
-.orc.sheet.actor .main .content .central .sheet-body .active .encumbrance .item,
-.orc.sheet.actor .main .content .central .sheet-body .active .weapon-defence .item {
+.orc.sheet.actor .main .content .central .sheet-body .active .status .item {
   display: flex;
   flex-direction: row;
 }
-.orc.sheet.actor .main .content .central .sheet-body .active .nutrition .item .content,
-.orc.sheet.actor .main .content .central .sheet-body .active .encumbrance .item .content,
-.orc.sheet.actor .main .content .central .sheet-body .active .weapon-defence .item .content {
+.orc.sheet.actor .main .content .central .sheet-body .active .status .item .content {
   align-self: center;
   place-content: center;
   width: 100%;
@@ -876,6 +877,47 @@
 }
 .orc.sheet.item .wound .button:hover,
 .orc.sheet.item .wound .button:focus {
+  color: #000;
+  box-shadow: inset 0 0 6px #b41212;
+  cursor: pointer;
+}
+.orc.sheet.item .capacity .main .header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.orc.sheet.item .capacity .main .header .name {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.orc.sheet.item .capacity .main .content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-top: 2px solid #000;
+  border-bottom: 2px solid #000;
+  border-left: 2px solid #000;
+  border-right: 2px solid #000;
+}
+.orc.sheet.item .capacity .main .content th,
+.orc.sheet.item .capacity .main .content td {
+  width: 100px;
+}
+.orc.sheet.item .capacity .main .content .sep {
+  border-top: 1px solid #000;
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
+}
+.orc.sheet.item .capacity .button {
+  display: table-cell;
+  align-self: center;
+  place-content: center;
+  font-size: var(--font-size-15);
+  height: 100%;
+}
+.orc.sheet.item .capacity .button:hover,
+.orc.sheet.item .capacity .button:focus {
   color: #000;
   box-shadow: inset 0 0 6px #b41212;
   cursor: pointer;

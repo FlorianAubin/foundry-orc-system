@@ -38,10 +38,88 @@
     <div class="content">
       <table>
         <tr>
-          <th>{{localize "orc.equipableitem.weight"}}</th>
+          {{#if (or unlocked item.system.nSpell)}}
+          <th>{{localize "orc.equipableitem.nSpell"}}</th>
+          {{/if}}
+          {{#if (or unlocked item.system.nInvoc)}}
+          <th>{{localize "orc.equipableitem.nInvoc"}}</th>
+          {{/if}}
         </tr>
         <tr>
-          <td align="center">
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.nSpell"
+                type="number"
+                value="{{item.system.nSpell}}"
+                placeholder="0"
+              />
+            </td>
+            <td align="center">
+              <input
+                name="system.nInvoc"
+                type="number"
+                value="{{item.system.nInvoc}}"
+                placeholder="0"
+              />
+            </td>
+          {{else}}
+            {{#if item.system.nSpell}}
+            <td align="center">
+              <span>{{item.system.nSpell}}</span>
+            </td>
+            {{/if}}
+            {{#if item.system.nInvoc}}
+            <td align="center">
+              <span>{{item.system.nInvoc}}</span>
+            </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+        <tr>
+          {{#if (or unlocked (isNotEmptyString item.system.magicDamageBonus))}}
+          <th>{{localize "orc.equipableitem.magicDamageBonus"}}</th>
+          {{/if}}
+          {{#if (or unlocked item.system.mpReduc)}}
+          <th>{{localize "orc.equipableitem.mpReduc"}}</th>
+          {{/if}}
+        </tr>
+        <tr>
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.magicDamageBonus"
+                type="text"
+                value="{{item.system.magicDamageBonus}}"
+                placeholder=""
+              />
+            </td>
+            <td align="center">
+              <input
+                name="system.mpReduc"
+                type="number"
+                value="{{item.system.mpReduc}}"
+                placeholder="0"
+              />
+            </td>
+          {{else}}
+            {{#if (isNotEmptyString item.system.magicDamageBonus)}}
+            <td align="center">
+              <span>{{item.system.magicDamageBonus}}</span>
+            </td>
+            {{/if}}
+            {{#if item.system.mpReduc}}
+            <td align="center">
+              <span>{{item.system.mpReduc}}</span>
+            </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+        <tr>
+          <th colspan="2">{{localize "orc.equipableitem.weight"}}</th>
+        </tr>
+        <tr>
+          <td align="center" colspan="2">
             {{#if unlocked}}
               <input
                 name="system.weight"

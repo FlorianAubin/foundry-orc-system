@@ -90,6 +90,30 @@
         "value": ""
       },
       "combatStyle": "standard",
+      "magic": {
+        "nSpell": {
+          "native": 0,
+          "valueModif": {},
+          "value": 0,
+          "effective": 0
+        },
+        "nInvoc": {
+          "native": 0,
+          "valueModif": {},
+          "value": 0,
+          "effective": 0
+        },
+        "damageBonus": {
+          "native": "",
+          "valueModif": {},
+          "value": ""
+        },
+        "mpReduc": {
+          "native": 0,
+          "valueModif": {},
+          "value": 0
+        }
+      },
       "details": {
         "race": "",
         "job": "",
@@ -174,6 +198,10 @@
           "attackModif": 0,
           "defenceModif": 0,
           "dodgeModif": 0,
+          "nSpell": 0,
+          "nInvoc": 0,
+          "magicDamageBonus": "",
+          "mpReduc": 0,
           "encumbranceLimitModif": 0,
           "foodNeededDayModif": 0,
           "drinkNeededDayModif": 0,
@@ -194,13 +222,14 @@
     },
     "weapon": {
       "damage": "0",
-      "damageType": "",
       "range": 0,
       "useAmmo": false,
       "ammo": "",
       "defenceModif": 0,
       "attackModif": 0,
       "precise": false,
+      "twin": false,
+      "allowMagic": false,
       "weight": 0,
       "effect": "",
       "equipped": false,
@@ -237,6 +266,10 @@
     "equipableitem": {
       "equipped": false,
       "weight": 0,
+      "nSpell": 0,
+      "nInvoc": 0,
+      "magicDamageBonus": "",
+      "mpReduc": 0,
       "optionDescriptionDeploy": false,
       "description": "",
       "templates": ["enchant"]
@@ -272,6 +305,8 @@
         "attackModif": 0,
         "defenceModif": 0,
         "dodgeModif": 0,
+        "magicDamageBonus": "",
+        "mpReduc": 0,
         "encumbranceLimitModif": 0,
         "limitCriticalModif": 0,
         "limitFumbleModif": 0,
@@ -312,22 +347,34 @@
       "description": ""
     },
     "spell": {
-      "MPcost": 0,
-      "actionCost": 0,
+      "cost": 0,
+      "useHP": false,
       "damage": 0,
-      "damageType": "",
       "duration": 0,
       "optionDescriptionDeploy": false,
       "description": ""
     },
     "capacity": {
-      "active": {
-        "isActive": false,
-        "activated": false
+      "activeEffect": false,
+      "ifActivable": {
+        "activated": false,
+        "duration": "1",
+        "durationUnit": "tr",
+        "durationEffective": 0
       },
-      "duration": 0,
+      "isRageBerserk": false,
+      "isAttributRoll": false,
+      "attributLocal": "",
+      "isAttackRoll": false,
+      "weaponLocal": "",
+      "rangeWeapon": false,
+      "isStatusResistRoll": false,
+      "modifStatusResist": 0,
+      "modifLocal": 0,
       "damageBonusModif": "",
-      "effect": "",
+      "modifAllAttributes": 0,
+      "dodgeEnable": false,
+      "addEffect": "",
       "optionDescriptionDeploy": false,
       "description": ""
     },

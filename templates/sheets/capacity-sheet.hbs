@@ -1,0 +1,407 @@
+<form class="{{cssClass}} capacity" autocomplete="off">
+  <div class="main">
+    <div class="header">
+      <div class="lock-icon">
+        <a class="sheet-change-lock" title="lock/unlock sheet">
+          {{#if unlocked}}
+            <i class="button fas fa-lock-open"></i>
+          {{else}}
+            <i class="button fas fa-lock"></i>
+          {{/if}}
+        </a>
+      </div>
+      <div>
+        <img
+          src="{{item.img}}"
+          data-edit="img"
+          title="{{item.name}}"
+          height="64"
+          width="64"
+        />
+      </div>
+      <div class="name">
+        <h1 class="name" align="center">
+          {{#if unlocked}}
+            <input
+              name="name"
+              type="text"
+              value="{{item.name}}"
+              placeholder="{{localize 'orc.name'}}"
+              onClick="this.select();"
+            />
+          {{else}}
+            <span>{{item.name}}</span>
+          {{/if}}
+        </h1>
+      </div>
+    </div>
+    <div class="content">
+      <table>
+        <tr>
+          {{#if (or unlocked item.system.activeEffect)}}
+            <th>{{localize "orc.capacity.activeEffect"}}</th>
+          {{/if}}
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.activeEffect"
+                type="checkbox"
+                {{checked item.system.activeEffect}}
+              />
+            </td>
+          {{else}}
+            {{#if item.system.activeEffect}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+        {{#if item.system.activeEffect}}
+          <tr>
+            {{#if (or unlocked (isNotEmptyString item.system.ifActivable.duration))}}
+              <th colspan="2">{{localize "orc.capacity.duration"}}</th>
+            {{/if}}
+          </tr>
+          <tr>
+            {{#if unlocked}}
+              <td align="center">
+                <input
+                  name="system.ifActivable.duration"
+                  type="text"
+                  value="{{item.system.ifActivable.duration}}"
+                  placeholder=""
+                />
+              </td>
+              <td align="center">
+                <input
+                  name="system.ifActivable.durationUnit"
+                  type="text"
+                  value="{{item.system.ifActivable.durationUnit}}"
+                  placeholder=""
+                />
+              </td>
+            {{else}}
+              {{#if (isNotEmptyString item.system.ifActivable.duration)}}
+                <td align="center">
+                  <span
+                  >{{item.system.ifActivable.duration}}&nbsp;{{item.system.ifActivable.durationUnit}}</span>
+                </td>
+              {{/if}}
+            {{/if}}
+          </tr>
+        {{/if}}
+        <tr>
+          {{#if (or unlocked item.system.isRageBerserk)}}
+            <th>{{localize "orc.capacity.isRageBerserk"}}</th>
+          {{/if}}
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.isRageBerserk"
+                type="checkbox"
+                {{checked item.system.isRageBerserk}}
+              />
+            </td>
+          {{else}}
+            {{#if item.system.isRageBerserk}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+          {{/if}}
+        <tr class="sep"></tr>
+        <tr>
+          {{#if (or unlocked item.system.isAttributRoll)}}
+            <th>{{localize "orc.capacity.isAttributRoll"}}</th>
+          {{/if}}
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.isAttributRoll"
+                type="checkbox"
+                {{checked item.system.isAttributRoll}}
+              />
+            </td>
+          {{else}}
+            {{#if item.system.isAttributRoll}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+        {{#if (and item.system.isAttributRoll
+            (not item.system.isAttackRoll)
+            (not item.system.isStatusResistRoll)
+        )}}
+          <tr>
+            <th>{{localize "orc.capacity.attributLocal"}}</th>
+            <th>{{localize "orc.capacity.modifLocal"}}</th>
+          </tr>
+          <tr>
+            {{#if unlocked}}
+              <td align="center">
+                <select name="system.attributLocal" align="center">
+                  {{#select item.system.attributLocal}}
+                    <option value=""></option>
+                    {{#each attributes as |attribut|}}
+                      <option
+                        value="{{attribut.name}}"
+                      >{{localize attribut.name}}</option>
+                    {{/each}}
+                  {{/select}}
+                </select>
+              </td>
+              <td align="center">
+                <input
+                  name="system.modifLocal"
+                  type="Number"
+                  value="{{item.system.modifLocal}}"
+                  placeholder="0"
+                />
+              </td>
+            {{else}}
+              <td align="center">
+                <span>{{localize item.system.attributLocal}}</span>
+              </td>
+              <td align="center">
+                <span>{{item.system.modifLocal}}</span>
+              </td>
+            {{/if}}
+          </tr>
+        {{/if}}
+        <tr class="sep"></tr>
+        <tr>
+          {{#if (or unlocked item.system.isAttackRoll)}}
+            <th>{{localize "orc.capacity.isAttackRoll"}}</th>
+          {{/if}}
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.isAttackRoll"
+                type="checkbox"
+                {{checked item.system.isAttackRoll}}
+              />
+            </td>
+          {{else}}
+            {{#if item.system.isAttackRoll}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+        {{#if (and item.system.isAttackRoll
+                (not item.system.isAttributRoll)
+                (not item.system.isStatusResistRoll)
+        )}}
+          <tr>
+            {{#if (or unlocked item.system.rangeWeapon)}}
+              <th>{{localize "orc.capacity.rangeWeapon"}}</th>
+            {{/if}}
+            {{#if unlocked}}
+              <td align="center">
+                <input
+                  name="system.rangeWeapon"
+                  type="checkbox"
+                  {{checked item.system.rangeWeapon}}
+                />
+              </td>
+            {{else}}
+              {{#if item.system.rangeWeapon}}
+                <td align="center">
+                  <span class="fas fa-check"></span>
+                </td>
+              {{/if}}
+            {{/if}}
+          </tr>
+          <tr>
+            <th>{{localize "orc.capacity.weaponLocal"}}</th>
+            <th>{{localize "orc.capacity.modifLocal"}}</th>
+          </tr>
+          <tr>
+            <td align="center">
+              <select name="system.weaponLocal" align="center">
+                {{#select item.system.weaponLocal}}
+                    <option value=""></option>
+                    {{#each weapons as |weapon|}}
+                        {{#if (and weapon.system.equipped
+                        (or 
+                          (and ../item.system.rangeWeapon weapon.system.useAmmo) 
+                          (and (not ../item.system.rangeWeapon) (not weapon.system.useAmmo)) 
+                        ))}}
+                            <option value="{{weapon._id}}">{{weapon.name}}</option>
+                        {{/if}}
+                    {{/each}}
+                {{/select}}
+              </select>
+            </td>
+            {{#if unlocked}}
+              <td align="center">
+                <input
+                  name="system.modifLocal"
+                  type="Number"
+                  value="{{item.system.modifLocal}}"
+                  placeholder="0"
+                />
+              </td>
+            {{else}}
+              <td align="center">
+                <span>{{item.system.modifLocal}}</span>
+              </td>
+            {{/if}}
+          </tr>
+        {{/if}}
+        <tr class="sep"></tr>
+        <tr>
+          {{#if (or unlocked item.system.isStatusResistRoll)}}
+            <th>{{localize "orc.capacity.isStatusResistRoll"}}</th>
+          {{/if}}
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.isStatusResistRoll"
+                type="checkbox"
+                {{checked item.system.isStatusResistRoll}}
+              />
+            </td>
+          {{else}}
+            {{#if item.system.isStatusResistRoll}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+        {{#if (and item.system.isStatusResistRoll
+            (not item.system.isAttributRoll)
+            (not item.system.isAttackRoll)
+        )}}
+          <tr>
+            <th>{{localize "orc.capacity.modifStatusResist"}}</th>
+          </tr>
+          <tr>
+            {{#if unlocked}}
+              <td align="center">
+                <input
+                  name="system.modifStatusResist"
+                  type="Number"
+                  value="{{item.system.modifStatusResist}}"
+                  placeholder="0"
+                />
+              </td>
+            {{else}}
+              <td align="center">
+                <span>{{item.system.modifStatusResist}}</span>
+              </td>
+            {{/if}}
+          </tr>
+        {{/if}}
+        <tr class="sep"></tr>
+        <tr>
+          {{#if (or unlocked (isNotEmptyString item.system.damageBonusModif))}}
+          <th>{{localize "orc.capacity.damageBonusModif"}}</th>
+          {{/if}}
+          {{#if (or unlocked item.system.modifAllAttributes)}}
+          <th>{{localize "orc.capacity.modifAllAttributes"}}</th>
+          {{/if}}
+        </tr>
+        <tr>
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.damageBonusModif"
+                type="text"
+                value="{{item.system.damageBonusModif}}"
+                placeholder=""
+              />
+            </td>
+            <td align="center">
+              <input
+                name="system.modifAllAttributes"
+                type="number"
+                value="{{item.system.modifAllAttributes}}"
+                placeholder="0"
+              />
+            </td>
+          {{else}}
+            {{#if (isNotEmptyString item.system.damageBonusModif)}}
+            <td align="center">
+              <span>{{item.system.damageBonusModif}}</span>
+            </td>
+            {{/if}}
+            {{#if item.system.modifAllAttributes}}
+            <td align="center">
+              <span>{{item.system.modifAllAttributes}}</span>
+            </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+
+        <tr>
+          {{#if (or unlocked item.system.dodgeEnable)}}
+          <th>{{localize "orc.capacity.dodgeEnable"}}</th>
+          {{/if}}
+          {{#if (or unlocked (isNotEmptyString item.system.addEffect))}}
+          <th>{{localize "orc.capacity.addEffect"}}</th>
+          {{/if}}
+        </tr>
+        <tr>
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.dodgeEnable"
+                type="checkbox"
+                {{checked item.system.dodgeEnable}}
+              />
+            </td>
+            <td align="center">
+              <input
+                name="system.addEffect"
+                type="text"
+                value="{{item.system.addEffect}}"
+                placeholder=""
+              />
+            </td>
+          {{else}}
+            {{#if item.system.dodgeEnable}}
+            <td align="center">
+                <span class="fas fa-check"></span>
+            </td>
+            {{/if}}
+            {{#if (isNotEmptyString item.system.addEffect)}}
+            <td align="center">
+              <span>{{item.system.addEffect}}</span>
+            </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="description">
+    <h2 class="description-header">
+      {{#if (not item.system.optionDescriptionDeploy)}}
+        <div
+          class="description-deploy button fas fa-arrow-down-short-wide"
+          align="center"
+          style="width: 25px"
+        ></div>
+      {{else}}
+        <div
+          class="description-deploy button fas fa-arrow-up-to-line"
+          align="center"
+          style="width: 25px"
+        ></div>
+      {{/if}}
+      <div class="title" align="center">{{localize
+          "orc.capacity.descripton"
+        }}</div>
+    </h2>
+    {{#if item.system.optionDescriptionDeploy}}
+        {{> systems/orc/templates/description.hbs}}
+    {{/if}}
+  </div>
+</form>

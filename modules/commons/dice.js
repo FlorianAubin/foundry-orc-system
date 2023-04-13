@@ -6,6 +6,9 @@ export function AttributeRoll({
   modif = 0,
   extraMessageData = {},
 } = {}) {
+  if (attribute.attributelocalmodif != null)
+    modif += parseFloat(attribute.attributelocalmodif);
+
   let rollFormula = "1d100";
   let rollData = {}; //for some reasons, rollData are not conserved on ChatMessage, use rollOptions instead
   let rollOptions = {

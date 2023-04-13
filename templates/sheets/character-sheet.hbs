@@ -23,9 +23,6 @@
           <a class="item" data-tab="magic"
             >{{localize 'orc.character.magic'}}</a
           >
-          <a class="item" data-tab="capacity"
-            >{{localize 'orc.character.capacity'}}</a
-          >
           <a class="item" data-tab="active"
             >{{localize 'orc.character.active'}}</a
           >
@@ -45,15 +42,10 @@
             {{> systems/orc/templates/actors/tabs/actor-inventory.hbs
             sections=inventory}}
           </div>
-          {{!-- magic Tab --}}
+          {{!-- Magic Tab --}}
           <div class="tab magic" data-group="primary" data-tab="magic">
             {{> systems/orc/templates/actors/tabs/actor-magic.hbs
             sections=magic}}
-          </div>
-          {{!-- Capacity effect Tab --}}
-          <div class="tab capacity" data-group="primary" data-tab="capacity">
-            {{> systems/orc/templates/actors/tabs/actor-capacity.hbs
-            sections=capacity}}
           </div>
           {{!-- Passive effect Tab --}}
           <div class="tab active" data-group="primary" data-tab="active">
