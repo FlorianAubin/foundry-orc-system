@@ -1,0 +1,465 @@
+<form class="{{cssClass}} consumable activable" autocomplete="off">
+  <div class="content">
+    <table>
+      <tr>
+        {{#if (or unlocked item.system.ifActivable.activated)}}
+          <th>{{localize "orc.consumable.ifActivable.activated"}}</th>
+        {{/if}}
+        <td align="center">
+          {{#if unlocked}}
+            <input
+              name="system.ifActivable.activated"
+              type="checkbox"
+              {{checked item.system.ifActivable.activated}}
+            />
+          {{else}}
+            {{#if item.system.ifActivable.activated}}
+              <span class="fas fa-check"></span>
+            {{/if}}
+          {{/if}}
+        </td>
+      </tr>
+      <table>
+        <tr>
+          {{#if (or unlocked item.system.ifActivable.consumeOnRoll)}}
+            <th>{{localize "orc.consumable.ifActivable.consumeOnRoll"}}</th>
+          {{/if}}
+          {{#if (or unlocked item.system.ifActivable.consumeOnAttack)}}
+            <th>{{localize "orc.consumable.ifActivable.consumeOnAttack"}}</th>
+          {{/if}}
+          {{#if (or unlocked item.system.ifActivable.consumeOnSpell)}}
+            <th>{{localize "orc.consumable.ifActivable.consumeOnSpell"}}</th>
+          {{/if}}
+        </tr>
+        <tr>
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.ifActivable.consumeOnRoll"
+                type="checkbox"
+                {{checked item.system.ifActivable.consumeOnRoll}}
+              />
+            </td>
+            <td align="center">
+              <input
+                name="system.ifActivable.consumeOnAttack"
+                type="checkbox"
+                {{checked item.system.ifActivable.consumeOnAttack}}
+              />
+            </td>
+            <td align="center">
+              <input
+                name="system.ifActivable.consumeOnSpell"
+                type="checkbox"
+                {{checked item.system.ifActivable.consumeOnSpell}}
+              />
+            </td>
+          {{else}}
+            {{#if item.system.ifActivable.consumeOnRoll}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+            {{#if item.system.ifActivable.consumeOnAttack}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+            {{#if item.system.ifActivable.consumeOnSpell}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+        <tr>
+          {{#if (or unlocked item.system.ifActivable.disableOnNewDay)}}
+            <th colspan="2">{{localize
+                "orc.consumable.ifActivable.disableOnNewDay"
+              }}</th>
+          {{/if}}
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.ifActivable.disableOnNewDay"
+                type="checkbox"
+                {{checked item.system.ifActivable.disableOnNewDay}}
+              />
+            </td>
+          {{else}}
+            {{#if item.system.ifActivable.disableOnNewDay}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+      </table>
+      <table>
+      <tr>
+        {{#if
+          (or unlocked (isNotEmptyString item.system.ifActivable.duration))
+        }}
+          <th>{{localize "orc.consumable.ifActivable.duration"}}</th>
+        {{/if}}
+        {{#if
+          (or unlocked (isNotEmptyString item.system.ifActivable.durationUnit))
+        }}
+          <th>{{localize "orc.consumable.ifActivable.durationUnit"}}</th>
+        {{/if}}
+      </tr>
+      <tr>
+        <td align="center">
+          {{#if unlocked}}
+            <input
+              name="system.ifActivable.duration"
+              type="text"
+              value="{{item.system.ifActivable.duration}}"
+              placeholder="0"
+            />
+          {{else}}
+            {{#if (isNotEmptyString item.system.ifActivable.duration)}}
+              <span>{{item.system.ifActivable.duration}}</span>
+            {{/if}}
+          {{/if}}
+        </td>
+        <td align="center">
+          {{#if unlocked}}
+            <input
+              name="system.ifActivable.durationUnit"
+              type="text"
+              value="{{item.system.ifActivable.durationUnit}}"
+              placeholder=""
+            />
+          {{else}}
+            {{#if (isNotEmptyString item.system.ifActivable.duration)}}
+              <span>{{item.system.ifActivable.durationUnit}}</span>
+            {{/if}}
+          {{/if}}
+        </td>
+      </tr>
+    </table>
+    <table>
+      <tr>
+        {{#if (or unlocked item.system.ifActivable.hpMaxModif)}}
+          <th>{{localize "orc.consumable.ifActivable.hpMaxModif"}}</th>
+        {{/if}}
+        {{#if (or unlocked item.system.ifActivable.mpMaxModif)}}
+          <th>{{localize "orc.consumable.ifActivable.mpMaxModif"}}</th>
+        {{/if}}
+        {{#if (or unlocked item.system.ifActivable.apModif)}}
+          <th>{{localize "orc.consumable.ifActivable.apModif"}}</th>
+        {{/if}}
+      </tr>
+      <tr>
+        {{#if unlocked}}
+          <td align="center">
+            <input
+              name="system.ifActivable.hpMaxModif"
+              type="number"
+              value="{{item.system.ifActivable.hpMaxModif}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.ifActivable.mpMaxModif"
+              type="number"
+              value="{{item.system.ifActivable.mpMaxModif}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.ifActivable.apModif"
+              type="number"
+              value="{{item.system.ifActivable.apModif}}"
+              placeholder="0"
+            />
+          </td>
+        {{else}}
+          {{#if item.system.ifActivable.hpMaxModif}}
+            <td align="center">
+              <span>{{item.system.ifActivable.hpMaxModif}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.ifActivable.mpMaxModif}}
+            <td align="center">
+              <span>{{item.system.ifActivable.mpMaxModif}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.ifActivable.apModif}}
+            <td align="center">
+              <span>{{item.system.ifActivable.apModif}}</span>
+            </td>
+          {{/if}}
+        {{/if}}
+
+      </tr>
+    </table>
+    <table>
+      <tr>
+        {{#if (or unlocked item.system.ifActivable.physicalModif)}}
+          <th>{{localize "orc.consumable.ifActivable.physicalModif"}}</th>
+        {{/if}}
+        {{#if (or unlocked item.system.ifActivable.socialModif)}}
+          <th>{{localize "orc.consumable.ifActivable.socialModif"}}</th>
+        {{/if}}
+        {{#if (or unlocked item.system.ifActivable.intelModif)}}
+          <th>{{localize "orc.consumable.ifActivable.intelModif"}}</th>
+        {{/if}}
+      </tr>
+      <tr>
+        {{#if unlocked}}
+          <td align="center">
+            <input
+              name="system.ifActivable.physicalModif"
+              type="number"
+              value="{{item.system.ifActivable.physicalModif}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.ifActivable.socialModif"
+              type="number"
+              value="{{item.system.ifActivable.socialModif}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.ifActivable.intelModif"
+              type="number"
+              value="{{item.system.ifActivable.intelModif}}"
+              placeholder="0"
+            />
+          </td>
+        {{else}}
+          {{#if item.system.ifActivable.physicalModif}}
+            <td align="center">
+              <span>{{item.system.ifActivable.physicalModif}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.ifActivable.socialModif}}
+            <td align="center">
+              <span>{{item.system.ifActivable.socialModif}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.ifActivable.intelModif}}
+            <td align="center">
+              <span>{{item.system.ifActivable.intelModif}}</span>
+            </td>
+          {{/if}}
+        {{/if}}
+      </tr>
+    </table>
+    <table>
+      <tr>
+        {{#if (or unlocked item.system.ifActivable.attackModif)}}
+          <th>{{localize "orc.consumable.ifActivable.attackModif"}}</th>
+        {{/if}}
+        {{#if (or unlocked item.system.ifActivable.defenceModif)}}
+          <th>{{localize "orc.consumable.ifActivable.defenceModif"}}</th>
+        {{/if}}
+        {{#if (or unlocked item.system.ifActivable.dodgeModif)}}
+          <th>{{localize "orc.consumable.ifActivable.dodgeModif"}}</th>
+        {{/if}}
+      </tr>
+      <tr>
+        {{#if unlocked}}
+          <td align="center">
+            <input
+              name="system.ifActivable.attackModif"
+              type="number"
+              value="{{item.system.ifActivable.attackModif}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.ifActivable.defenceModif"
+              type="number"
+              value="{{item.system.ifActivable.defenceModif}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.ifActivable.dodgeModif"
+              type="number"
+              value="{{item.system.ifActivable.dodgeModif}}"
+              placeholder="0"
+            />
+          </td>
+        {{else}}
+          {{#if item.system.ifActivable.attackModif}}
+            <td align="center">
+              <span>{{item.system.ifActivable.attackModif}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.ifActivable.defenceModif}}
+            <td align="center">
+              <span>{{item.system.ifActivable.defenceModif}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.ifActivable.dodgeModif}}
+            <td align="center">
+              <span>{{item.system.ifActivable.dodgeModif}}</span>
+            </td>
+          {{/if}}
+        {{/if}}
+      </tr>
+    </table>
+    <table>
+      <tr>
+        {{#if
+          (or
+            unlocked (isNotEmptyString item.system.ifActivable.magicPower)
+          )
+        }}
+          <th>{{localize "orc.consumable.ifActivable.magicPower"}}</th>
+        {{/if}}
+        {{#if (or unlocked item.system.ifActivable.mpReduc)}}
+          <th>{{localize "orc.consumable.ifActivable.mpReduc"}}</th>
+        {{/if}}
+       {{#if (or unlocked item.system.ifActivable.rollSpellBonus)}}
+          <th>{{localize "orc.consumable.ifActivable.rollSpellBonus"}}</th>
+        {{/if}}
+      </tr>
+      <tr>
+        {{#if unlocked}}
+          <td align="center">
+            <input
+              name="system.ifActivable.magicPower"
+              type="text"
+              value="{{item.system.ifActivable.magicPower}}"
+              placeholder=""
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.ifActivable.mpReduc"
+              type="number"
+              value="{{item.system.ifActivable.mpReduc}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.ifActivable.rollSpellBonus"
+              type="number"
+              value="{{item.system.ifActivable.rollSpellBonus}}"
+              placeholder="0"
+            />
+          </td>
+        {{else}}
+          {{#if (isNotEmptyString item.system.ifActivable.magicPower)}}
+            <td align="center">
+              <span>{{item.system.ifActivable.magicPower}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.ifActivable.mpReduc}}
+            <td align="center">
+              <span>{{item.system.ifActivable.mpReduc}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.ifActivable.rollSpellBonus}}
+            <td align="center">
+              <span>{{item.system.ifActivable.rollSpellBonus}}</span>
+            </td>
+          {{/if}}
+        {{/if}}
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        {{#if (or unlocked item.system.ifActivable.encumbranceLimitModif)}}
+          <th>{{localize
+              "orc.consumable.ifActivable.encumbranceLimitModif"
+            }}</th>
+        {{/if}}
+        {{#if (or unlocked item.system.ifActivable.limitCriticalModif)}}
+          <th>{{localize "orc.consumable.ifActivable.limitCriticalModif"}}</th>
+        {{/if}}
+        {{#if (or unlocked item.system.ifActivable.limitFumbleModif)}}
+          <th>{{localize "orc.consumable.ifActivable.limitFumbleModif"}}</th>
+        {{/if}}
+      </tr>
+      <tr>
+        {{#if unlocked}}
+          <td align="center">
+            <input
+              name="system.ifActivable.encumbranceLimitModif"
+              type="number"
+              value="{{item.system.ifActivable.encumbranceLimitModif}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.ifActivable.limitCriticalModif"
+              type="number"
+              value="{{item.system.ifActivable.limitCriticalModif}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.ifActivable.limitFumbleModif"
+              type="number"
+              value="{{item.system.ifActivable.limitFumbleModif}}"
+              placeholder="0"
+            />
+          </td>
+        {{else}}
+          {{#if item.system.ifActivable.encumbranceLimitModif}}
+            <td align="center">
+              <span>{{item.system.ifActivable.encumbranceLimitModif}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.ifActivable.limitCriticalModif}}
+            <td align="center">
+              <span>{{item.system.ifActivable.limitCriticalModif}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.ifActivable.limitFumbleModif}}
+            <td align="center">
+              <span>{{item.system.ifActivable.limitFumbleModif}}</span>
+            </td>
+          {{/if}}
+        {{/if}}
+      </tr>
+    </table>
+    <table>
+      <tr>
+        {{#if
+          (or
+            unlocked (isNotEmptyString item.system.ifActivable.damageBonusModif)
+          )
+        }}
+          <th>{{localize "orc.consumable.ifActivable.damageBonusModif"}}</th>
+        {{/if}}
+      </tr>
+      <tr>
+        {{#if unlocked}}
+          <td align="center">
+            <input
+              name="system.ifActivable.damageBonusModif"
+              type="text"
+              value="{{item.system.ifActivable.damageBonusModif}}"
+              placeholder="0"
+            />
+          </td>
+        {{else}}
+          {{#if (isNotEmptyString item.system.ifActivable.damageBonusModif)}}
+            <td align="center">
+              <span>{{item.system.ifActivable.damageBonusModif}}</span>
+            </td>
+          {{/if}}
+        {{/if}}
+      </tr>
+    </table>
+  </div>
+</form>

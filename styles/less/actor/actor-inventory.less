@@ -1,0 +1,85 @@
+.orc.sheet.actor {
+  .main {
+    .content {
+      .central {
+        .sheet-body {
+          .inventory {
+            width: 100%;
+            height: 100%;
+            td {
+              width: 100px;
+            }
+            .ammo-equipableitem,
+            .food-consumable,
+            .bag-general {
+              display: flex;
+              flex-direction: row;
+              width: 100%;
+              .ammo,
+              .equipableitem,
+              .food,
+              .consumable,
+              .bag,
+              .general {
+                display: flex;
+                flex-direction: row;
+                float: left;
+                width: 100%;
+              }
+            }
+            .weapon-list,
+            .armor-list,
+            .ammo-list,
+            .equipableitem-list,
+            .food-list,
+            .consumable-list,
+            .bag-list,
+            .general-list {
+              display: flex;
+              flex-direction: column;
+              width: 100%;
+              margin: 0 0 1em 0;
+              border-left: 1px solid #000;
+              border-right: 1px solid #000;
+              .main-header {
+                display: flex;
+                flex-direction: row;
+                .content {
+                  align-self: center;
+                  place-content: center;
+                  width: 100%;
+                  max-width: 150px;
+                }
+              }
+              .header {
+                display: flex;
+                flex-direction: row;
+                .content {
+                  align-self: center;
+                  place-content: center;
+                  width: 100%;
+                }
+              }
+              .bodypart {
+                display: flex;
+                flex-direction: row;
+                .content {
+                  align-self: center;
+                  place-content: center;
+                  width: 100%;
+                }
+              }
+              .item {
+                .content {
+                  align-self: center;
+                  place-content: center;
+                  width: 100%;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

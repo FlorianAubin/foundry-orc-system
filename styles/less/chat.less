@@ -1,0 +1,81 @@
+.orc.attack-roll,
+.orc.attribute-roll,
+.orc.status-roll,
+.orc.enchant-roll {
+  display: flex;
+  flex-direction: column;
+  .title {
+    display: flex;
+    flex-direction: column;
+    font-size: var(--font-size-15);
+    font-weight: bold;
+  }
+  .add-info {
+    display: flex;
+    flex-direction: column;
+    .header {
+      text-align: left;
+    }
+    .value {
+      text-align: right;
+    }
+  }
+  .results {
+    .dice-formula {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      place-content: center;
+      height: 20px;
+    }
+    .dice-total {
+      display: flex;
+      flex-direction: column;
+      place-content: center;
+    }
+    .dice-total.critical {
+      color: rgb(0, 190, 0);
+    }
+    .dice-total.fumble {
+      color: red;
+    }
+  }
+  .dice-excess {
+    display: flex;
+    flex-direction: column;
+    font-size: var(--font-size-20);
+    font-weight: bold;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--color-border-light-2);
+  }
+  .dice-excess.positive {
+    display: flex;
+    color: rgb(10, 100, 10);
+  }
+  .dice-excess.negative {
+    display: flex;
+    color: rgb(100, 10, 10);
+  }
+}
+
+.spell-roll {
+  .title {
+    font-size: var(--font-size-15);
+    font-weight: bold;
+  }
+  .add-info {
+    text-align: center;
+    font-weight: bold;
+  }
+  .results {
+    .dice-formula {
+      text-align: center;
+      place-content: center;
+      height: 20px;
+    }
+    .dice-total {
+      place-content: center;
+    }
+  }
+}

@@ -1,0 +1,81 @@
+<form class="{{cssClass}} bag" autocomplete="off">
+  <div class="main">
+    <div class="header">
+      <div class="lock-icon">
+        <a class="sheet-change-lock" title="lock/unlock sheet">
+          {{#if unlocked}}
+            <i class="button fas fa-lock-open"></i>
+          {{else}}
+            <i class="button fas fa-lock"></i>
+          {{/if}}
+        </a>
+      </div>
+      <div>
+        <img
+          src="{{item.img}}"
+          data-edit="img"
+          title="{{item.name}}"
+          height="64"
+          width="64"
+        />
+      </div>
+      <div class="name">
+        <h1 class="name" align="center">
+          {{#if unlocked}}
+            <input
+              name="name"
+              type="text"
+              value="{{item.name}}"
+              placeholder="{{localize 'orc.name'}}"
+              onClick="this.select();"
+            />
+          {{else}}
+            <span>{{item.name}}</span>
+          {{/if}}
+        </h1>
+      </div>
+    </div>
+    <div class="content">
+      <table>
+        <tr>
+          <th>{{localize "orc.bag.capacity"}}</th>
+        </tr>
+        <tr>
+          <td align="center">
+            {{#if unlocked}}
+              <input
+                name="system.capacity"
+                type="number"
+                value="{{item.system.capacity}}"
+                placeholder="0"
+              />
+            {{else}}
+              <span>{{item.system.capacity}}</span>
+            {{/if}}
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="description">
+    <h2 class="description-header">     
+      {{#if (not item.system.optionDescriptionDeploy)}}
+          <div 
+            class="description-deploy button fas fa-arrow-down-short-wide"
+            align="center"
+            style="width: 25px"
+          ></div>
+        {{else}}
+          <div 
+            class="description-deploy button fas fa-arrow-up-to-line" 
+            align="center"
+            style="width: 25px"
+          ></div>
+        {{/if}}
+      <div class="title" align="center">{{localize "orc.weapon.descripton"}}</div>
+    </h2>
+      {{#if item.system.optionDescriptionDeploy}}
+        {{> systems/orc/templates/description.hbs}}
+      {{/if}}
+  </div>
+</form>

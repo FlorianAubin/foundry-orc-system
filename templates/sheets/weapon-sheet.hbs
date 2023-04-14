@@ -1,0 +1,287 @@
+<form class="{{cssClass}} weapon" autocomplete="off">
+  <div class="main">
+    <div class="header">
+      <div class="lock-icon">
+        <a class="sheet-change-lock" title="lock/unlock sheet">
+          {{#if unlocked}}
+            <i class="button fas fa-lock-open"></i>
+          {{else}}
+            <i class="button fas fa-lock"></i>
+          {{/if}}
+        </a>
+      </div>
+      <div>
+        <img
+          src="{{item.img}}"
+          data-edit="img"
+          title="{{item.name}}"
+          height="64"
+          width="64"
+        />
+      </div>
+      <div class="name">
+        <h1 class="name" align="center">
+          {{#if unlocked}}
+            <input
+              name="name"
+              type="text"
+              value="{{item.name}}"
+              placeholder="{{localize 'orc.name'}}"
+              onClick="this.select();"
+            />
+          {{else}}
+            <span>{{item.name}}</span>
+          {{/if}}
+        </h1>
+      </div>
+    </div>
+    <div class="content">
+      <table>
+        <tr>
+          <th>{{localize "orc.weapon.damage"}}</th>
+          <th>{{localize "orc.weapon.range"}}</th>
+          {{#if unlocked}}
+            <th>{{localize "orc.weapon.useAmmo"}}</th>
+          {{/if}}
+          {{#if (and item.system.useAmmo (not unlocked))}}
+            <th>{{localize "orc.weapon.ammo"}}</th>
+          {{/if}}
+        </tr>
+        <tr>
+          <td align="center">
+            {{#if unlocked}}
+              <input
+                name="system.damage"
+                type="text"
+                value="{{item.system.damage}}"
+                placeholder="0"
+              />
+            {{else}}
+              <span>{{item.system.damage}}</span>
+              <span class="damage-roll button fas fa-dice">
+              </span>
+            {{/if}}
+          </td>
+          <td align="center">
+            {{#if unlocked}}
+              <input
+                name="system.range"
+                type="Number"
+                value="{{item.system.range}}"
+                placeholder="0"
+              />
+            {{else}}
+              <span>{{item.system.range}}</span>
+            {{/if}}
+          </td>
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.useAmmo"
+                type="checkbox"
+                {{checked item.system.useAmmo}}
+              />
+            </td>
+          {{/if}}
+          {{#if (and item.system.useAmmo (not unlocked))}}
+            <td align="center">
+              <select name="system.ammo" align="center">
+                {{#select item.system.ammo}}
+                  {{#each ammos as |ammo|}}
+                    <option value="{{ammo._id}}">{{ammo.name}}</option>
+                  {{/each}}
+                {{/select}}
+              </select>
+            </td>
+          {{/if}}
+        </tr>
+      </table>
+      {{#if (or unlocked item.system.defenceModif item.system.attackModif)}}
+        <table>
+          <tr>
+            {{#if (or unlocked item.system.defenceModif)}}
+              <th>{{localize "orc.weapon.defenceModif"}}</th>
+            {{/if}}
+            {{#if (or unlocked item.system.attackModif)}}
+              <th>{{localize "orc.weapon.attackModif"}}</th>
+            {{/if}}
+          </tr>
+          <tr>
+            {{#if (or unlocked item.system.defenceModif)}}
+              <td align="center">
+                {{#if unlocked}}
+                  <input
+                    name="system.defenceModif"
+                    type="Number"
+                    value="{{item.system.defenceModif}}"
+                    placeholder="0"
+                  />
+                {{else}}
+                  {{#if item.system.defenceModif}}
+                    <span>{{item.system.defenceModif}}</span>
+                  {{/if}}
+                {{/if}}
+              </td>
+            {{/if}}
+            {{#if (or unlocked item.system.attackModif)}}
+              <td align="center">
+                {{#if unlocked}}
+                  <input
+                    name="system.attackModif"
+                    type="Number"
+                    value="{{item.system.attackModif}}"
+                    placeholder="0"
+                  />
+                {{else}}
+                  {{#if item.system.attackModif}}
+                    <span>{{item.system.attackModif}}</span>
+                  {{/if}}
+                {{/if}}
+              </td>
+            {{/if}}
+          </tr>
+        </table>
+      {{/if}}
+      <table>
+        <tr>
+          <th>{{localize "orc.weapon.weight"}}</th>
+        </tr>
+        <tr>
+          <td align="center">
+            {{#if unlocked}}
+              <input
+                name="system.weight"
+                type="Number"
+                value="{{item.system.weight}}"
+                placeholder="0"
+              />
+            {{else}}
+              <span>{{item.system.weight}}</span>
+            {{/if}}
+          </td>
+        </tr>
+      </table>
+      <table>
+        <tr>
+          {{#if (or unlocked item.system.precise)}}
+            <th>{{localize "orc.weapon.precise"}}</th>
+          {{/if}}
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.precise"
+                type="checkbox"
+                {{checked item.system.precise}}
+              />
+            </td>
+          {{else}}
+            {{#if item.system.precise}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+        <tr>
+          {{#if (or unlocked item.system.twin)}}
+            <th>{{localize "orc.weapon.twin"}}</th>
+          {{/if}}
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.twin"
+                type="checkbox"
+                {{checked item.system.twin}}
+              />
+            </td>
+          {{else}}
+            {{#if item.system.twin}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+        <tr>
+          {{#if (or unlocked item.system.allowMagic)}}
+            <th>{{localize "orc.weapon.allowMagic"}}</th>
+          {{/if}}
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.allowMagic"
+                type="checkbox"
+                {{checked item.system.allowMagic}}
+              />
+            </td>
+          {{else}}
+            {{#if item.system.allowMagic}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+        <tr>
+          <th colspan="2">{{localize "orc.weapon.effect"}}</th>
+        </tr>
+        <tr>
+          <td colspan="2" align="center">
+            {{#if unlocked}}
+              <input
+                name="system.effect"
+                type="text"
+                value="{{item.system.effect}}"
+                placeholder=""
+              />
+            {{else}}
+              <span>{{item.system.effect}}</span>
+            {{/if}}
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="enchant">
+      <h2 class="enchant-header">
+        {{#if (not item.system.enchant.optionDeploy)}}
+          <div 
+            class="enchant-deploy button fas fa-arrow-down-short-wide"
+            align="center"
+            style="width: 25px"
+          ></div>
+        {{else}}
+          <div 
+            class="enchant-deploy button fas fa-arrow-up-to-line" 
+            align="center"
+            style="width: 25px"
+          ></div>
+        {{/if}}
+        <div class="title" align="center">{{localize "orc.enchant.title"}}</div>
+      </h2>
+      {{#if item.system.enchant.optionDeploy}}
+        {{> systems/orc/templates/sheets/enchant-sheet.hbs}}
+      {{/if}}
+    </div>
+  </div>
+  <div class="description">
+    <h2 class="description-header">     
+      {{#if (not item.system.optionDescriptionDeploy)}}
+          <div 
+            class="description-deploy button fas fa-arrow-down-short-wide"
+            align="center"
+            style="width: 25px"
+          ></div>
+        {{else}}
+          <div 
+            class="description-deploy button fas fa-arrow-up-to-line" 
+            align="center"
+            style="width: 25px"
+          ></div>
+        {{/if}}
+      <div class="title" align="center">{{localize "orc.weapon.descripton"}}</div>
+    </h2>
+      {{#if item.system.optionDescriptionDeploy}}
+        {{> systems/orc/templates/description.hbs}}
+      {{/if}}
+  </div>
+</form>

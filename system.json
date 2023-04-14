@@ -1,0 +1,31 @@
+{
+  "id": "orc",
+  "title": "Orc",
+  "description": "Le système du jdr Orc",
+  "authors": [
+    {
+      "name": "Florian Aubin",
+      "flags": {}
+    }
+  ],
+  "version": 1.0,
+  "compatibility": {
+    "minimum": "10",
+    "verified": "10"
+  },
+  "esmodules": ["./modules/orc.js"],
+  "styles": ["./styles/orc.css"],
+  "packs": [],
+  "languages": [
+    {
+      "lang": "fr",
+      "name": "Français",
+      "path": "./lang/fr.json"
+    }
+  ],
+  "gridDistance": 2,
+  "grdiUnits": "m",
+  "primaryTokenAttribute": "HP",
+  "secondTokenAttribute": "MP",
+  "initiative": "1d100"
+}

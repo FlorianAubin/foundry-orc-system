@@ -1,0 +1,309 @@
+<form class="{{cssClass}} spell" autocomplete="off">
+  <div class="main">
+    <div class="header">
+      <div class="lock-icon">
+        <a class="sheet-change-lock" title="lock/unlock sheet">
+          {{#if unlocked}}
+            <i class="button fas fa-lock-open"></i>
+          {{else}}
+            <i class="button fas fa-lock"></i>
+          {{/if}}
+        </a>
+      </div>
+      <div>
+        <img
+          src="{{item.img}}"
+          data-edit="img"
+          title="{{item.name}}"
+          height="64"
+          width="64"
+        />
+      </div>
+      <div class="name">
+        <h1 class="name" align="center">
+          {{#if unlocked}}
+            <input
+              name="name"
+              type="text"
+              value="{{item.name}}"
+              placeholder="{{localize 'orc.name'}}"
+              onClick="this.select();"
+            />
+          {{else}}
+            <span>{{item.name}}</span>
+          {{/if}}
+        </h1>
+      </div>
+    </div>
+    <div class="content">
+      <table>
+        <tr>
+          <th>{{localize "orc.spell.school"}}</th>
+          <th>{{localize "orc.spell.level"}}</th>
+          <th>{{localize "orc.spell.difficulty"}}</th>
+        </tr>
+        <tr>
+          {{#if unlocked}}
+            <td align="center">
+              <select name="system.school" align="center">
+                {{#select item.system.school}}
+                  {{#each config.magicSchoolList as |school|}}
+                    <option value="{{school}}">{{localize school}}</option>
+                  {{/each}}
+                {{/select}}
+              </select>
+            </td>
+            <td align="center">
+              <input
+                name="system.level"
+                type="number"
+                value="{{item.system.level}}"
+                placeholder="0"
+              />
+            </td>
+            <td align="center">
+              <input
+                name="system.difficulty"
+                type="number"
+                value="{{item.system.difficulty}}"
+                placeholder="0"
+              />
+            </td>
+          {{else}}
+            <td align="center">
+              <span>{{localize item.system.school}}</span>
+            </td>
+            <td align="center">
+              <span>{{item.system.level}}</span>
+            </td>
+            <td align="center">
+              <span>{{item.system.difficulty}}</span>
+            </td>
+          {{/if}}
+        </tr>
+        <tr>
+          <th {{#if (or unlocked item.system.useHP)}} colspan="2" {{else}} colspan="3" {{/if}}>{{localize "orc.spell.cost"}}</th>
+          {{#if (or unlocked item.system.useHP)}}
+          <th>{{localize "orc.spell.useHP"}}</th>
+          {{/if}}
+        </tr>
+        <tr>
+          {{#if unlocked}}
+            <td align="center" colspan="2">
+              <input
+                name="system.cost"
+                type="text"
+                value="{{item.system.cost}}"
+                placeholder=""
+              />
+            </td>
+            <td align="center">
+              <input
+                name="system.useHP"
+                type="checkbox"
+                {{checked item.system.useHP}}
+              />
+            </td>
+          {{else}}
+            <td align="center" {{#if (or unlocked item.system.useHP)}} colspan="2" {{else}} colspan="3" {{/if}}>
+              <span>{{item.system.cost}}</span>
+            </td>
+            {{#if item.system.useHP}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+      </table>
+      <table>
+        <tr>
+          {{#if (or unlocked item.system.isInvoc)}}
+            <th>{{localize "orc.spell.isInvoc"}}</th>
+          {{/if}}
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.isInvoc"
+                type="checkbox"
+                {{checked item.system.isInvoc}}
+              />
+            </td>
+          {{else}}
+            {{#if item.system.isInvoc}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+        {{#if item.system.isInvoc}}
+        <tr>
+          {{#if (or unlocked item.system.ifInvoc.fixed)}}
+            <th>{{localize "orc.spell.fixed"}}</th>
+          {{/if}}
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.ifInvoc.fixed"
+                type="checkbox"
+                {{checked item.system.ifInvoc.fixed}}
+              />
+            </td>
+          {{else}}
+            {{#if item.system.ifInvoc.fixed}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+        {{/if}}
+        <tr>
+          {{#if (or unlocked item.system.isRitual)}}
+            <th>{{localize "orc.spell.isRitual"}}</th>
+          {{/if}}
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.isRitual"
+                type="checkbox"
+                {{checked item.system.isRitual}}
+              />
+            </td>
+          {{else}}
+            {{#if item.system.isRitual}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+      </table>
+      <table>
+        <tr>
+          {{#if (or unlocked (isNotEmptyString item.system.power))}}
+            <th>{{localize "orc.spell.power"}}</th>
+          {{/if}} 
+          {{#if (or unlocked item.system.range)}}
+            <th>{{localize "orc.spell.range"}}</th>
+          {{/if}}       
+        </tr>
+        <tr>
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.power"
+                type="text"
+                value="{{item.system.power}}"
+                placeholder=""
+              />
+            </td>
+            <td align="center">
+              <input
+                name="system.range"
+                type="number"
+                value="{{item.system.range}}"
+                placeholder="0"
+              />
+            </td>
+          {{else}}
+            {{#if (isNotEmptyString item.system.power)}}
+              <td align="center">
+                <span>{{item.system.power}}</span>
+              </td>
+            {{/if}}
+            {{#if item.system.range}}
+              <td align="center">
+                <span>{{item.system.range}}</span>
+              </td>
+            {{/if}}
+          {{/if}}          
+        </tr>
+        <tr>
+          {{#if (or unlocked (isNotEmptyString item.system.duration))}}
+            <th>{{localize "orc.spell.duration"}}</th>
+          {{/if}}
+          {{#if (or unlocked (isNotEmptyString item.system.durationUnit))}}
+            <th>{{localize "orc.spell.durationUnit"}}</th>
+          {{/if}}
+        </tr>
+        <tr>
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.duration"
+                type="text"
+                value="{{item.system.duration}}"
+                placeholder=""
+              />
+            </td>
+            <td align="center">
+              <input
+                name="system.durationUnit"
+                type="text"
+                value="{{item.system.durationUnit}}"
+                placeholder=""
+              />
+            </td>
+          {{else}}
+            {{#if (isNotEmptyString item.system.duration)}}
+              <td align="center">
+                <span>{{item.system.duration}}</span>
+              </td>
+            {{/if}}
+            {{#if (isNotEmptyString item.system.durationUnit)}}
+              <td align="center">
+                <span>{{item.system.durationUnit}}</span>
+              </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+        <tr>
+          {{#if (or unlocked (isNotEmptyString item.system.effect))}}
+            <th colspan="2">{{localize "orc.spell.effect"}}</th>
+          {{/if}}
+        </tr>
+        <tr>
+          <td colspan="2" align="center">
+            {{#if unlocked}}
+              <input
+                name="system.effect"
+                type="text"
+                value="{{item.system.effect}}"
+                placeholder=""
+              />
+            {{else}}
+              {{#if (isNotEmptyString item.system.effect)}}
+                <span>{{item.system.effect}}</span>
+              {{/if}}
+            {{/if}}
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="description">
+    <h2 class="description-header">
+      {{#if (not item.system.optionDescriptionDeploy)}}
+        <div
+          class="description-deploy button fas fa-arrow-down-short-wide"
+          align="center"
+          style="width: 25px"
+        ></div>
+      {{else}}
+        <div
+          class="description-deploy button fas fa-arrow-up-to-line"
+          align="center"
+          style="width: 25px"
+        ></div>
+      {{/if}}
+      <div class="title" align="center">{{localize
+          "orc.weapon.descripton"
+        }}</div>
+    </h2>
+    {{#if item.system.optionDescriptionDeploy}}
+      {{> systems/orc/templates/description.hbs}}    
+    {{/if}}
+  </div>
+</form>

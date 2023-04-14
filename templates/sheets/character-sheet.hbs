@@ -1,0 +1,64 @@
+<form class="{{ccsClass}}" autocomplete="off">
+  <div class="main">
+    {{!-- Sheet Header --}}
+    <div class="header">
+      {{> systems/orc/templates/actors/actor-header.hbs}}
+    </div>
+    {{!-- Sheet Content --}}
+    <div class="content">
+      {{!-- Sheet Left Column --}}
+      <div class="leftcolumn" align="center" style="width: 220px">
+        {{> systems/orc/templates/actors/actor-left-column.hbs}}
+      </div>
+      {{!-- Sheet Central --}}
+      <div class="central">
+        {{!-- Sheet Tab Navigation --}}
+        <nav class="sheet-tabs tabs flexshrink" data-group="primary">
+          <a class="item" data-tab="shortcut"
+            >{{localize 'orc.character.shortcut'}}</a
+          >
+          <a class="item" data-tab="inventory"
+            >{{localize 'orc.character.inventory'}}</a
+          >
+          <a class="item" data-tab="magic"
+            >{{localize 'orc.character.magic'}}</a
+          >
+          <a class="item" data-tab="active"
+            >{{localize 'orc.character.active'}}</a
+          >
+          <a class="item" data-tab="biography"
+            >{{localize 'orc.character.biography'}}</a
+          >
+        </nav>
+        {{!-- Sheet Body --}}
+        <section class="sheet-body">
+          {{!-- Summary Tab --}}
+          <div class="tab shortcut" data-group="primary" data-tab="shortcut">
+            {{> systems/orc/templates/actors/tabs/actor-shortcut.hbs
+            sections=summary}}
+          </div>
+          {{!-- Inventory Tab --}}
+          <div class="tab inventory" data-group="primary" data-tab="inventory">
+            {{> systems/orc/templates/actors/tabs/actor-inventory.hbs
+            sections=inventory}}
+          </div>
+          {{!-- Magic Tab --}}
+          <div class="tab magic" data-group="primary" data-tab="magic">
+            {{> systems/orc/templates/actors/tabs/actor-magic.hbs
+            sections=magic}}
+          </div>
+          {{!-- Passive effect Tab --}}
+          <div class="tab active" data-group="primary" data-tab="active">
+            {{> systems/orc/templates/actors/tabs/actor-active.hbs
+            sections=active}}
+          </div>
+          {{!-- Biography Tab --}}
+          <div class="tab biography" data-group="primary" data-tab="biography">
+            {{> systems/orc/templates/actors/tabs/actor-biography.hbs
+            sections=biography}}
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</form>

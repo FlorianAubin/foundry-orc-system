@@ -1,0 +1,43 @@
+.orc.sheet.item {
+  .weapon {
+    .main {
+      .header {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        .name {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+        }
+      }
+      .content {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        border-top: 2px solid #000;
+        border-bottom: 2px solid #000;
+        border-left: 2px solid #000;
+        border-right: 2px solid #000;
+        th,
+        td {
+          width: 100px;
+        }
+      }
+    }
+
+    .button {
+      display: table-cell;
+      align-self: center;
+      place-content: center;
+      font-size: var(--font-size-15);
+      height: 100%;
+    }
+    .button:hover,
+    .button:focus {
+      color: #000;
+      box-shadow: inset 0 0 6px rgb(180, 18, 18);
+      cursor: pointer;
+    }
+  }
+}

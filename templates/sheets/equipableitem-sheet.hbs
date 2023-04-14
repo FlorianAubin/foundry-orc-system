@@ -1,0 +1,198 @@
+<form class="{{cssClass}} equipableitem" autocomplete="off">
+  <div class="main">
+    <div class="header">
+      <div class="lock-icon">
+        <a class="sheet-change-lock" title="lock/unlock sheet">
+          {{#if unlocked}}
+            <i class="button fas fa-lock-open"></i>
+          {{else}}
+            <i class="button fas fa-lock"></i>
+          {{/if}}
+        </a>
+      </div>
+      <div>
+        <img
+          src="{{item.img}}"
+          data-edit="img"
+          title="{{item.name}}"
+          height="64"
+          width="64"
+        />
+      </div>
+      <div class="name">
+        <h1 class="name" align="center">
+          {{#if unlocked}}
+            <input
+              name="name"
+              type="text"
+              value="{{item.name}}"
+              placeholder="{{localize 'orc.name'}}"
+              onClick="this.select();"
+            />
+          {{else}}
+            <span>{{item.name}}</span>
+          {{/if}}
+        </h1>
+      </div>
+    </div>
+    <div class="content">
+      <table>
+        <tr>
+          {{#if (or unlocked item.system.nSpell)}}
+          <th>{{localize "orc.equipableitem.nSpell"}}</th>
+          {{/if}}
+          {{#if (or unlocked item.system.nInvoc)}}
+          <th>{{localize "orc.equipableitem.nInvoc"}}</th>
+          {{/if}}
+        </tr>
+        <tr>
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.nSpell"
+                type="number"
+                value="{{item.system.nSpell}}"
+                placeholder="0"
+              />
+            </td>
+            <td align="center">
+              <input
+                name="system.nInvoc"
+                type="number"
+                value="{{item.system.nInvoc}}"
+                placeholder="0"
+              />
+            </td>
+          {{else}}
+            {{#if item.system.nSpell}}
+            <td align="center">
+              <span>{{item.system.nSpell}}</span>
+            </td>
+            {{/if}}
+            {{#if item.system.nInvoc}}
+            <td align="center">
+              <span>{{item.system.nInvoc}}</span>
+            </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+        <tr>
+          {{#if (or unlocked (isNotEmptyString item.system.magicPower))}}
+          <th>{{localize "orc.equipableitem.magicPower"}}</th>
+          {{/if}}
+          {{#if (or unlocked item.system.mpReduc)}}
+          <th>{{localize "orc.equipableitem.mpReduc"}}</th>
+          {{/if}}
+        </tr>
+        <tr>
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.magicPower"
+                type="text"
+                value="{{item.system.magicPower}}"
+                placeholder=""
+              />
+            </td>
+            <td align="center">
+              <input
+                name="system.mpReduc"
+                type="number"
+                value="{{item.system.mpReduc}}"
+                placeholder="0"
+              />
+            </td>
+          {{else}}
+            {{#if (isNotEmptyString item.system.magicPower)}}
+            <td align="center">
+              <span>{{item.system.magicPower}}</span>
+            </td>
+            {{/if}}
+            {{#if item.system.mpReduc}}
+            <td align="center">
+              <span>{{item.system.mpReduc}}</span>
+            </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+        <tr>
+        {{#if (or unlocked item.system.rollSpellBonus)}}
+          <th>{{localize "orc.equipableitem.rollSpellBonus"}}</th>
+        {{/if}}
+          <th>{{localize "orc.equipableitem.weight"}}</th>
+        </tr>
+        <tr>
+          {{#if unlocked}}
+          <td align="center">
+            <input
+              name="system.rollSpellBonus"
+              type="number"
+              value="{{item.system.rollSpellBonus}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
+              <input
+                name="system.weight"
+                type="number"
+                value="{{item.system.weight}}"
+                placeholder="0"
+              />
+          </td>
+          {{else}}
+          {{#if item.system.rollSpellBonus}}
+            <td align="center">
+              <span>{{item.system.rollSpellBonus}}</span>
+            </td>
+          {{/if}}
+          <td align="center">
+            <span>{{item.system.weight}}</span>
+          </td>
+          {{/if}}
+        </tr>
+      </table>
+    </div>
+    <div class="enchant">
+      <h2 class="enchant-header">
+        {{#if (not item.system.enchant.optionDeploy)}}
+          <div 
+            class="enchant-deploy button fas fa-arrow-down-short-wide"
+            align="center"
+            style="width: 25px"
+          ></div>
+        {{else}}
+          <div 
+            class="enchant-deploy button fas fa-arrow-up-to-line" 
+            align="center"
+            style="width: 25px"
+          ></div>
+        {{/if}}
+        <div class="title" align="center">{{localize "orc.enchant.title"}}</div>
+      </h2>
+      {{#if item.system.enchant.optionDeploy}}
+        {{> systems/orc/templates/sheets/enchant-sheet.hbs}}
+      {{/if}}
+    </div>
+  </div>
+  <div class="description">
+    <h2 class="description-header">     
+      {{#if (not item.system.optionDescriptionDeploy)}}
+          <div 
+            class="description-deploy button fas fa-arrow-down-short-wide"
+            align="center"
+            style="width: 25px"
+          ></div>
+        {{else}}
+          <div 
+            class="description-deploy button fas fa-arrow-up-to-line" 
+            align="center"
+            style="width: 25px"
+          ></div>
+        {{/if}}
+      <div class="title" align="center">{{localize "orc.weapon.descripton"}}</div>
+    </h2>
+      {{#if item.system.optionDescriptionDeploy}}
+        {{> systems/orc/templates/description.hbs}}
+      {{/if}}
+  </div>
+</form>
