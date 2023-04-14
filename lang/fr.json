@@ -1,4 +1,22 @@
 {
+  "ACTOR": {
+    "TypeCharacter": "Personnage"
+  },
+
+  "ITEM": {
+    "TypeWeapon": "Arme",
+    "TypeAmmo": "Munition",
+    "TypeArmor": "Armure",
+    "TypeEquipableitem": "Objet équipable",
+    "TypeFood": "Nourriture",
+    "TypeConsumable": "Consommable",
+    "TypeGeneralitem": "Objet général",
+    "TypeBag": "Sac",
+    "TypeSpell": "Sort",
+    "TypeCapacity": "Capacité",
+    "TypeWound": "Blessure"
+  },
+
   "orc": {
     "name": "Nom",
     "takeDamage": "Subir des dégâts",
@@ -33,6 +51,7 @@
       },
       "combatStyle": "Style de combat",
       "attack": "Attaque",
+      "magicRoll": "Magie",
       "defence": "Défense",
       "dodge": "Esquive",
       "damageBonus": "Bonus de dégâts",
@@ -46,6 +65,9 @@
       "shortcut": "Raccourcis",
       "gear": "Équipement",
       "magic": "Grimoire",
+      "nSpell": " sorts mémorisés",
+      "nInvoc": " invocations mémorisées",
+      "invocControlDiff": "Difficulté de contrôle : ",
       "capacity": "Capacités",
       "active": "Effets actifs",
       "inventory": "Inventaire",
@@ -58,12 +80,15 @@
     "equipableitems": "Objets équipables",
     "consumables": "Consommables",
     "bags": "Sacs",
-    "generals": "Autres items",
+    "generals": "Autres objets",
     "spells": "Sorts",
+    "invocs": "Invocations",
     "capacities": "Capacités",
     "wounds": "Maladies et blessures",
-    "consumablesActivated": "Consommables actifs",
+    "consumablesActivated": "Effets temporaires actifs",
     "weaponsEquipped": "Armes équipées",
+    "spellsMemorized": "Sorts mémorisés",
+    "invocsMemorized": "Invocations mémorisés",
     "weapon": {
       "damage": "Dégâts",
       "range": "Portée (m)",
@@ -136,12 +161,17 @@
         "attackModif": "Attaque",
         "defenceModif": "Défense",
         "dodgeModif": "Esquive",
-        "magicDamageBonus": "Dégâts magiques bonus",
+        "magicPower": "Puissance magique bonus",
         "mpReduc": "Réduction du coût en mana des sorts et des invoc.",
+        "rollSpellBonus": "Bonus au lancer des sorts",
         "encumbranceLimitModif": "Encombrement max.",
         "limitCriticalModif": "Limite réussite critique",
         "limitFumbleModif": "Limite échec critique",
-        "damageBonusModif": "Dégâts bonus"
+        "damageBonusModif": "Dégâts bonus",
+        "consumeOnRoll": "Consommé après un jet de carac.",
+        "consumeOnAttack": "Consommé après une attaque",
+        "consumeOnSpell": "Consommé après un sort",
+        "disableOnNewDay": "Désactivation au passage du jour"
       },
       "stock": "Quantité",
       "weight": "Poids",
@@ -153,8 +183,9 @@
     "equipableitem": {
       "nSpell": "Nombre de sorts mémorisables supp.",
       "nInvoc": "Nombre d'invocations mémorisables supp.",
-      "magicDamageBonus": "Dégâts magiques bonus",
+      "magicPower": "Puissance magique bonus",
       "mpReduc": "Réduction du coût en mana des sorts et des invoc.",
+      "rollSpellBonus": "Bonus au lancer des sorts",
       "weight": "Poids",
       "equipped": "Équipé",
       "descripton": "Description"
@@ -196,14 +227,19 @@
       "damageBonusModif": "Dégâts bonus",
       "nSpell": "Nombre de sorts mémorisables supp.",
       "nInvoc": "Nombre d'invocations mémorisables supp.",
-      "magicDamageBonus": "Dégâts magiques bonus",
+      "magicPower": "Puissance magique bonus",
+      "rollSpellBonus": "Bonus au lancer des sorts",
       "mpReduc": "Réduction du coût en mana des sorts et des invoc.",
       "roll": "Jet",
       "addEffect": "Effets additionnels",
       "use": "Nombre d'utilisations",
       "available": "disponibles",
       "perDay": "journalières",
-      "duration": "Durée"
+      "duration": "Durée",
+      "consumeOnRoll": "Consommé après un jet de carac.",
+      "consumeOnAttack": "Consommé après une attaque",
+      "consumeOnSpell": "Consommé après un sort",
+      "disableOnNewDay": "Désactivation au passage du jour"
     },
     "wound": {
       "physicalModif": "Physique",
@@ -223,6 +259,10 @@
       "activeEffect": "Activable",
       "duration": "Durée",
       "durationUnit": "Durée unité",
+      "consumeOnRoll": "Consommé après un jet de carac.",
+      "consumeOnAttack": "Consommé après une attaque",
+      "consumeOnSpell": "Consommé après un sort",
+      "disableOnNewDay": "Désactivation au passage du jour",
       "isRageBerserk": "Bonus de Physique de la rage Berserk",
       "isAttributRoll": "Jet d'attribut",
       "attributLocal": "Attribut",
@@ -240,6 +280,25 @@
       "roll": "Jet",
       "activated": "Activé"
     },
+    "spell": {
+      "school": "Domaine de magie",
+      "level": "Niveau du sort",
+      "difficulty": "Difficulté",
+      "fixed": "Fixée",
+      "cost": " Coût en ressource",
+      "useHP": "Consomme des HP",
+      "isInvoc": "Est une invocation",
+      "isRitual": "Est un rituel",
+      "power": "Puissance",
+      "duration": "Durée",
+      "durationUnit": "Durée unité",
+      "range": "Portée (m)",
+      "effect": "Effets",
+      "memorized": "Mémorisé",
+      "launch": "Lancer le sort",
+      "control": "Contrôler l'invocation",
+      "invoked": "Invoqué"
+    },
     "combatStyleList": {
       "standard": "Standard",
       "offensive": "Offensif",
@@ -247,6 +306,16 @@
       "dodge": "Esquive",
       "aggressive": "Agressif",
       "ambidex": "Ambidextrie"
+    },
+    "magicSchoolList": {
+      "elem": "Élémentaire",
+      "demon": "Démonologie",
+      "arcane": "Arcanique",
+      "rune": "Runique",
+      "life": "Vie et nature",
+      "death": "Mort et sang",
+      "time": "Temps",
+      "reality": "Réalité et chaos"
     },
     "bodyPartList": {
       "head": "Tête",
@@ -273,6 +342,9 @@
       },
       "damageBonus": {
         "title": "Jet de dégâts bonus :"
+      },
+      "rollSpell": {
+        "title": "Jets du sort {spellName} :"
       },
       "bleed": {
         "title": "{charName} saigne !"

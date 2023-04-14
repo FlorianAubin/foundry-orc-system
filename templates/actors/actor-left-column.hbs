@@ -205,13 +205,24 @@
       data-attributename="{{localize 'orc.character.attack'}}"
       data-attributevalue="{{actor.system.attack.value}}"
       data-attributevaluebase="{{actor.system.attack.native}}"
-      data-attributevaluemodiflocal="0"
     ></td>
   </tr>
+  {{#if actor.system.magic.canLaunchSpell}}
+  <tr align="center">
+    <th>{{localize "orc.character.magicRoll"}}</th>
+    <td>{{actor.system.magic.roll.value}}</td>
+    <td
+      class="launch-spell-roll button fas fa-dice"
+      data-attributename="{{localize 'orc.character.magicRoll'}}"
+      data-attributevalue="{{actor.system.magic.roll.value}}"
+      data-attributevaluebase="{{actor.system.magic.roll.native}}"
+    ></td>
+  </tr>
+  {{/if}}
   {{#if actor.system.defence.value}}
     <tr align="center">
       <th>{{localize "orc.character.defence"}}</th>
-      <td class="defence">{{actor.system.defence.value}}</td>
+      <td class="defence" colspan="2">{{actor.system.defence.value}}</td>
     </tr>
   {{/if}}
   {{#if actor.system.dodge.enable}}

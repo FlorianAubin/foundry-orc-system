@@ -57,7 +57,83 @@
             {{/if}}
           {{/if}}
         </tr>
+      </table>
+      <table>
         {{#if item.system.activeEffect}}
+         <tr>
+          {{#if (or unlocked item.system.ifActivable.consumeOnRoll)}}
+            <th>{{localize "orc.capacity.consumeOnRoll"}}</th>
+          {{/if}}
+          {{#if (or unlocked item.system.ifActivable.consumeOnAttack)}}
+            <th>{{localize "orc.capacity.consumeOnAttack"}}</th>
+          {{/if}}
+          {{#if (or unlocked item.system.ifActivable.consumeOnSpell)}}
+            <th>{{localize "orc.capacity.consumeOnSpell"}}</th>
+          {{/if}}
+        </tr>
+        <tr>
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.ifActivable.consumeOnRoll"
+                type="checkbox"
+                {{checked item.system.ifActivable.consumeOnRoll}}
+              />
+            </td>
+            <td align="center">
+              <input
+                name="system.ifActivable.consumeOnAttack"
+                type="checkbox"
+                {{checked item.system.ifActivable.consumeOnAttack}}
+              />
+            </td>
+            <td align="center">
+              <input
+                name="system.ifActivable.consumeOnSpell"
+                type="checkbox"
+                {{checked item.system.ifActivable.consumeOnSpell}}
+              />
+            </td>
+          {{else}}
+            {{#if item.system.ifActivable.consumeOnRoll}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+            {{#if item.system.ifActivable.consumeOnAttack}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+            {{#if item.system.ifActivable.consumeOnSpell}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+          {{/if}}
+          </tr>
+        <tr>
+          {{#if (or unlocked item.system.ifActivable.disableOnNewDay)}}
+            <th colspan="2">{{localize "orc.capacity.disableOnNewDay"}}</th>
+          {{/if}}
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.ifActivable.disableOnNewDay"
+                type="checkbox"
+                {{checked item.system.ifActivable.disableOnNewDay}}
+              />
+            </td>
+          {{else}}
+            {{#if item.system.ifActivable.disableOnNewDay}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+        </table>
+        <table>
           <tr>
             {{#if (or unlocked (isNotEmptyString item.system.ifActivable.duration))}}
               <th colspan="2">{{localize "orc.capacity.duration"}}</th>

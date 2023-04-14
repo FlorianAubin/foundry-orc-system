@@ -45,8 +45,9 @@
       <th class="content"></th>
       <th class="content">{{localize "orc.equipableitem.nSpell"}}</th>
       <th class="content">{{localize "orc.equipableitem.nInvoc"}}</th>
-      <th class="content">{{localize "orc.equipableitem.magicDamageBonus"}}</th>
+      <th class="content">{{localize "orc.equipableitem.magicPower"}}</th>
       <th class="content">{{localize "orc.equipableitem.mpReduc"}}</th>
+      <th class="content">{{localize "orc.equipableitem.rollSpellBonus"}}</th>
     </tr>
     {{#each equipableitems as |equipableitem id|}}
     {{#if equipableitem.system.equipped}}
@@ -54,8 +55,9 @@
       <td class="content">{{equipableitem.name}}</td>
       <td class="content">{{equipableitem.system.nSpell}}</td>
       <td class="content">{{equipableitem.system.nInvoc}}</td>
-      <td class="content">{{equipableitem.system.magicDamageBonus}}</td>
+      <td class="content">{{equipableitem.system.magicPower}}</td>
       <td class="content">{{equipableitem.system.mpReduc}}</td>
+      <td class="content">{{equipableitem.system.rollSpellBonus}}</td>
     </tr>
     {{/if}}
     {{/each}}
@@ -193,14 +195,14 @@
                   >{{consumable.system.ifActivable.damageBonusModif}}</td>
                 </tr>
               {{/if}}
-              {{#if (isNotEmptyString consumable.system.ifActivable.magicDamageBonus)}}
+              {{#if (isNotEmptyString consumable.system.ifActivable.magicPower)}}
                 <tr>
                   <td align="center">{{localize
-                      "orc.consumable.ifActivable.magicDamageBonus"
+                      "orc.consumable.ifActivable.magicPower"
                     }}</td>
                   <td
                     align="center"
-                  >{{consumable.system.ifActivable.magicDamageBonus}}</td>
+                  >{{consumable.system.ifActivable.magicPower}}</td>
                 </tr>
               {{/if}}
               {{#if consumable.system.ifActivable.mpReduc}}
@@ -211,6 +213,16 @@
                   <td
                     align="center"
                   >{{consumable.system.ifActivable.mpReduc}}</td>
+                </tr>
+              {{/if}}
+              {{#if consumable.system.ifActivable.rollSpellBonus}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.consumable.ifActivable.rollSpellBonus"
+                    }}</td>
+                  <td
+                    align="center"
+                  >{{consumable.system.ifActivable.rollSpellBonus}}</td>
                 </tr>
               {{/if}}
               {{#if (isNotEmptyString consumable.system.addEffect)}}
@@ -401,14 +413,14 @@
                   >{{item.system.enchant.nInvoc}}</td>
                 </tr>
               {{/if}}
-              {{#if (isNotEmptyString item.system.enchant.magicDamageBonus)}}
+              {{#if (isNotEmptyString item.system.enchant.magicPower)}}
                 <tr>
                   <td align="center">{{localize
-                      "orc.enchant.magicDamageBonus"
+                      "orc.enchant.magicPower"
                     }}</td>
                   <td
                     align="center"
-                  >{{item.system.enchant.magicDamageBonus}}</td>
+                  >{{item.system.enchant.magicPower}}</td>
                 </tr>
               {{/if}}
               {{#if item.system.enchant.mpReduc}}
@@ -419,6 +431,16 @@
                   <td
                     align="center"
                   >{{item.system.enchant.mpReduc}}</td>
+                </tr>
+              {{/if}}
+              {{#if item.system.enchant.rollSpellBonus}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.enchant.rollSpellBonus"
+                    }}</td>
+                  <td
+                    align="center"
+                  >{{item.system.enchant.rollSpellBonus}}</td>
                 </tr>
               {{/if}}
               {{#if (isNotEmptyString item.system.enchant.roll)}}

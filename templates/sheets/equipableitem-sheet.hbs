@@ -77,8 +77,8 @@
           {{/if}}
         </tr>
         <tr>
-          {{#if (or unlocked (isNotEmptyString item.system.magicDamageBonus))}}
-          <th>{{localize "orc.equipableitem.magicDamageBonus"}}</th>
+          {{#if (or unlocked (isNotEmptyString item.system.magicPower))}}
+          <th>{{localize "orc.equipableitem.magicPower"}}</th>
           {{/if}}
           {{#if (or unlocked item.system.mpReduc)}}
           <th>{{localize "orc.equipableitem.mpReduc"}}</th>
@@ -88,9 +88,9 @@
           {{#if unlocked}}
             <td align="center">
               <input
-                name="system.magicDamageBonus"
+                name="system.magicPower"
                 type="text"
-                value="{{item.system.magicDamageBonus}}"
+                value="{{item.system.magicPower}}"
                 placeholder=""
               />
             </td>
@@ -103,9 +103,9 @@
               />
             </td>
           {{else}}
-            {{#if (isNotEmptyString item.system.magicDamageBonus)}}
+            {{#if (isNotEmptyString item.system.magicPower)}}
             <td align="center">
-              <span>{{item.system.magicDamageBonus}}</span>
+              <span>{{item.system.magicPower}}</span>
             </td>
             {{/if}}
             {{#if item.system.mpReduc}}
@@ -116,21 +116,39 @@
           {{/if}}
         </tr>
         <tr>
-          <th colspan="2">{{localize "orc.equipableitem.weight"}}</th>
+        {{#if (or unlocked item.system.rollSpellBonus)}}
+          <th>{{localize "orc.equipableitem.rollSpellBonus"}}</th>
+        {{/if}}
+          <th>{{localize "orc.equipableitem.weight"}}</th>
         </tr>
         <tr>
-          <td align="center" colspan="2">
-            {{#if unlocked}}
+          {{#if unlocked}}
+          <td align="center">
+            <input
+              name="system.rollSpellBonus"
+              type="number"
+              value="{{item.system.rollSpellBonus}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
               <input
                 name="system.weight"
                 type="number"
                 value="{{item.system.weight}}"
                 placeholder="0"
               />
-            {{else}}
-              <span>{{item.system.weight}}</span>
-            {{/if}}
           </td>
+          {{else}}
+          {{#if item.system.rollSpellBonus}}
+            <td align="center">
+              <span>{{item.system.rollSpellBonus}}</span>
+            </td>
+          {{/if}}
+          <td align="center">
+            <span>{{item.system.weight}}</span>
+          </td>
+          {{/if}}
         </tr>
       </table>
     </div>

@@ -36,7 +36,9 @@
           {{/if}}
         {{/if}}
       </tr>
+      </table>
       {{#if item.system.enchant.activeEffect}}
+      <table>
         <tr>
           {{#if (or unlocked (isNotEmptyString item.system.enchant.roll))}}
             <th>{{localize "orc.enchant.roll"}}</th>
@@ -114,7 +116,81 @@
             {{/if}}
           {{/if}}
         </tr>
+        <tr>
+          {{#if (or unlocked item.system.enchant.use.consumeOnRoll)}}
+            <th>{{localize "orc.enchant.consumeOnRoll"}}</th>
+          {{/if}}
+          {{#if (or unlocked item.system.enchant.use.consumeOnAttack)}}
+            <th>{{localize "orc.enchant.consumeOnAttack"}}</th>
+          {{/if}}
+          {{#if (or unlocked item.system.enchant.use.consumeOnSpell)}}
+            <th>{{localize "orc.enchant.consumeOnSpell"}}</th>
+          {{/if}}
+        </tr>
+        <tr>
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.enchant.use.consumeOnRoll"
+                type="checkbox"
+                {{checked item.system.enchant.use.consumeOnRoll}}
+              />
+            </td>
+            <td align="center">
+              <input
+                name="system.enchant.use.consumeOnAttack"
+                type="checkbox"
+                {{checked item.system.enchant.use.consumeOnAttack}}
+              />
+            </td>
+            <td align="center">
+              <input
+                name="system.enchant.use.consumeOnSpell"
+                type="checkbox"
+                {{checked item.system.enchant.use.consumeOnSpell}}
+              />
+            </td>
+          {{else}}
+            {{#if item.system.enchant.use.consumeOnRoll}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+            {{#if item.system.enchant.use.consumeOnAttack}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+            {{#if item.system.enchant.use.consumeOnSpell}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+        <tr>
+          {{#if (or unlocked item.system.enchant.use.disableOnNewDay)}}
+            <th colspan="2">{{localize "orc.enchant.disableOnNewDay"}}</th>
+          {{/if}}
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.enchant.use.disableOnNewDay"
+                type="checkbox"
+                {{checked item.system.enchant.use.disableOnNewDay}}
+              />
+            </td>
+          {{else}}
+            {{#if item.system.enchant.use.disableOnNewDay}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+          {{/if}}
+        </tr>
       {{/if}}
+    </table>
+    <table>
       <tr>
         {{#if (or unlocked item.system.enchant.physicalModif)}}
           <th>{{localize "orc.enchant.physicalModif"}}</th>
@@ -396,7 +472,8 @@
           {{/if}}
         {{/if}}
       </tr>
-
+    </table>
+    <table>
       <tr>
         {{#if (or unlocked item.system.enchant.nSpell)}}
           <th>{{localize "orc.enchant.nSpell"}}</th>
@@ -436,23 +513,28 @@
           {{/if}}
         {{/if}}
       </tr>
+    </table>
+    <table>
       <tr>
         {{#if
-          (or unlocked (isNotEmptyString item.system.enchant.magicDamageBonus))
+          (or unlocked (isNotEmptyString item.system.enchant.magicPower))
         }}
-          <th>{{localize "orc.enchant.magicDamageBonus"}}</th>
+          <th>{{localize "orc.enchant.magicPower"}}</th>
         {{/if}}
         {{#if (or unlocked item.system.enchant.mpReduc)}}
           <th>{{localize "orc.enchant.mpReduc"}}</th>
+        {{/if}}
+        {{#if (or unlocked item.system.enchant.rollSpellBonus)}}
+          <th>{{localize "orc.enchant.rollSpellBonus"}}</th>
         {{/if}}
       </tr>
       <tr>
         {{#if unlocked}}
           <td align="center">
             <input
-              name="system.enchant.magicDamageBonus"
+              name="system.enchant.magicPower"
               type="text"
-              value="{{item.system.enchant.magicDamageBonus}}"
+              value="{{item.system.enchant.magicPower}}"
               placeholder=""
             />
           </td>
@@ -464,15 +546,28 @@
               placeholder="0"
             />
           </td>
+          <td align="center">
+            <input
+              name="system.enchant.rollSpellBonus"
+              type="number"
+              value="{{item.system.enchant.rollSpellBonus}}"
+              placeholder="0"
+            />
+          </td>
         {{else}}
-          {{#if (isNotEmptyString item.system.enchant.magicDamageBonus)}}
+          {{#if (isNotEmptyString item.system.enchant.magicPower)}}
             <td align="center">
-              <span>{{item.system.enchant.magicDamageBonus}}</span>
+              <span>{{item.system.enchant.magicPower}}</span>
             </td>
           {{/if}}
           {{#if item.system.enchant.mpReduc}}
             <td align="center">
               <span>{{item.system.enchant.mpReduc}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.enchant.rollSpellBonus}}
+            <td align="center">
+              <span>{{item.system.enchant.rollSpellBonus}}</span>
             </td>
           {{/if}}
         {{/if}}

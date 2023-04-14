@@ -52,11 +52,11 @@ export default class ORCCharacterSheet extends ActorSheet {
     data.capacities = data.items.filter(function (item) {
       return item.type == "capacity";
     });
+    data.spells = data.items.filter(function (item) {
+      return item.type == "spell";
+    });
     data.wounds = data.items.filter(function (item) {
       return item.type == "wound";
-    });
-    data.mutations = data.items.filter(function (item) {
-      return item.type == "mutation";
     });
 
     //Enrich the html to be able to link objects
@@ -148,6 +148,12 @@ export default class ORCCharacterSheet extends ActorSheet {
       .find(".capacity-status-resist-roll")
       .click(this._onCapacityStatusResistRoll.bind(this));
 
+    html.find(".spell-memorized").click(this._onSpellMemorized.bind(this));
+    html.find(".launch-spell-roll").click(this._onLaunchSpellRoll.bind(this));
+    html.find(".control-invoc-roll").click(this._onControlInvocRoll.bind(this));
+
+    html.find(".spell-invoc").click(this._onSpellInvoc.bind(this));
+
     html.find(".wound-deploy").click(this._onWoundDeploy.bind(this));
 
     super.activateListeners(html);
@@ -206,6 +212,10 @@ export default class ORCCharacterSheet extends ActorSheet {
   _onItemDelete(event) {
     const li = $(event.currentTarget).parents(".item");
     const item = this.actor.items.get(li.data("itemId"));
+
+    if (item.type == "spell" && item.system.memorized) {
+      this._onSpellMemorized(event);
+    }
     item.delete();
   }
 
@@ -242,6 +252,71 @@ export default class ORCCharacterSheet extends ActorSheet {
           },
         },
       });
+    }
+
+    return;
+  }
+
+  _onSpellMemorized(event) {
+    event.preventDefault();
+    let element = event.currentTarget;
+    let itemId = element.closest(".item").dataset.itemId;
+    let actor = this.actor;
+    let item = actor.items.get(itemId);
+    if (item == null || item.type != "spell") return;
+
+    //Add the tag equipped to the item
+    let n;
+    if (item.system.isRitual) {
+    } else if (item.system.isInvoc) n = actor.system.magic.nInvoc;
+    else n = actor.system.magic.nSpell;
+
+    if (item.system.memorized) {
+      item.update({ system: { memorized: false } });
+      n.effective--;
+    } else if (n.effective < n.value) {
+      item.update({ system: { memorized: true } });
+      n.effective++;
+    }
+
+    if (item.system.isRitual) {
+    } else if (item.system.isInvoc)
+      actor.update({
+        system: { magic: { nInvoc: { effective: n.effective } } },
+      });
+    else
+      actor.update({
+        system: { magic: { nSpell: { effective: n.effective } } },
+      });
+    return;
+  }
+
+  _onSpellInvoc(event) {
+    event.preventDefault();
+    let element = event.currentTarget;
+    let itemId = element.closest(".item").dataset.itemId;
+    let actor = this.actor;
+    let nInvoked = actor.system.magic.nInvoc.invoked;
+    let item = actor.items.get(itemId);
+
+    if (item == null || item.type != "spell" || !item.system.isInvoc) return;
+
+    if (!item.system.ifInvoc.invoked) {
+      nInvoked++;
+      actor.update({
+        system: {
+          magic: { nInvoc: { invoked: nInvoked } },
+        },
+      });
+      item.update({ system: { ifInvoc: { invoked: true } } });
+    } else {
+      nInvoked--;
+      actor.update({
+        system: {
+          magic: { nInvoc: { invoked: nInvoked } },
+        },
+      });
+      item.update({ system: { ifInvoc: { invoked: false } } });
     }
 
     return;
@@ -374,6 +449,9 @@ export default class ORCCharacterSheet extends ActorSheet {
       attribute: event.currentTarget.dataset,
       modif: this.actor.system.modifAllAttributes,
     });
+
+    //Consume enchant and capacity on roll
+    this.consumeOnRoll({ onRoll: true });
   }
 
   async _onAttackRoll(event) {
@@ -382,6 +460,11 @@ export default class ORCCharacterSheet extends ActorSheet {
       attribute: event.currentTarget.dataset,
       modif: this.actor.system.modifAllAttributes,
     });
+
+    //Consume enchant and capacity on roll
+    this.consumeOnRoll({ onAttack: true });
+
+    return;
   }
 
   async _onDodgeRoll(event) {
@@ -390,6 +473,9 @@ export default class ORCCharacterSheet extends ActorSheet {
       attribute: event.currentTarget.dataset,
       modif: this.actor.system.modifAllAttributes,
     });
+
+    //Consume enchant and capacity on roll
+    this.consumeOnRoll({ onRoll: true });
   }
 
   async _onDamageRoll(event) {
@@ -501,6 +587,50 @@ export default class ORCCharacterSheet extends ActorSheet {
       attribute: event.currentTarget.dataset,
     });
 
+    //Consume enchant and capacity on attack
+    this.consumeOnRoll({ onAttack: true });
+
+    return;
+  }
+
+  async _onLaunchSpellRoll(event) {
+    let actor = this.actor;
+    //Recover the spell
+    const spell = actor.items
+      .filter(function (item) {
+        return item.type == "spell";
+      })
+      .filter(function (item) {
+        return item._id == event.currentTarget.dataset.spellid;
+      })[0];
+
+    //Do the roll
+    await Dice.SpellRoll({
+      actor: actor,
+      attribute: event.currentTarget.dataset,
+      modif: actor.system.modifAllAttributes,
+      spell: spell,
+    });
+
+    //Consume enchant and capacity on spell
+    this.consumeOnRoll({ onSpell: true });
+
+    return;
+  }
+
+  async _onControlInvocRoll(event) {
+    let actor = this.actor;
+    //Do the roll
+    await Dice.SpellRoll({
+      actor: actor,
+      attribute: event.currentTarget.dataset,
+      modif: actor.system.modifAllAttributes,
+      spell: null,
+    });
+
+    //Consume enchant and capacity on spell
+    this.consumeOnRoll({ onSpell: true });
+
     return;
   }
 
@@ -535,12 +665,15 @@ export default class ORCCharacterSheet extends ActorSheet {
     }
     //Do a physical roll and increase the actor tipsiness in case of failure
     if (itemData.tipsiness || itemData.poison) {
-      if (
-        Dice.StatusResistRoll({
-          actor: actor,
-          modif: actorData.modifAllAttributes + actorData.status.modifResist,
-        })
-      ) {
+      let statusResistOut = Dice.StatusResistRoll({
+        actor: actor,
+        modif: actorData.modifAllAttributes + actorData.status.modifResist,
+      });
+
+      //Consume enchant and capacity on roll
+      this.consumeOnRoll({ onRoll: true });
+
+      if (statusResistOut) {
         newValues.tipsiness += itemData.tipsiness;
         newValues.poison += itemData.poison;
       }
@@ -737,10 +870,15 @@ export default class ORCCharacterSheet extends ActorSheet {
   _onCapacityStatusResistRoll(event) {
     let actor = this.actor;
     let actorData = actor.system;
-    return Dice.StatusResistRoll({
+    Dice.StatusResistRoll({
       actor: actor,
       modif: actorData.modifAllAttributes + actorData.status.modifResist,
     });
+
+    //Use enchant and capacity on roll
+    this.consumeOnRoll({ onRoll: true });
+
+    return;
   }
 
   async _onConsumableDeactivate(event) {
@@ -809,6 +947,65 @@ export default class ORCCharacterSheet extends ActorSheet {
       },
     });
     return;
+  }
+
+  consumeOnRoll({ onRoll = false, onAttack = false, onSpell = false }) {
+    let actor = this.actor;
+    let items = this.getData().items;
+    for (let [key, it] of Object.entries(items)) {
+      let item = actor.items.get(it._id);
+      let itemData = item.system;
+
+      let enchant = itemData.enchant;
+      if (
+        enchant != null &&
+        enchant.activeEffect &&
+        enchant.activated &&
+        ((onRoll && enchant.use.consumeOnRoll) ||
+          (onAttack && enchant.use.consumeOnAttack) ||
+          (onSpell && enchant.use.consumeOnSpell))
+      ) {
+        let newDuration = enchant.use.durationEffective - 1;
+        if (newDuration <= 0)
+          item.update({ system: { enchant: { activated: false } } });
+        else
+          item.update({
+            system: { enchant: { use: { durationEffective: newDuration } } },
+          });
+      }
+      if (
+        item.type == "capacity" &&
+        itemData.activeEffect &&
+        itemData.ifActivable.activated &&
+        ((onRoll && itemData.ifActivable.consumeOnRoll) ||
+          (onAttack && itemData.ifActivable.consumeOnAttack) ||
+          (onSpell && itemData.ifActivable.consumeOnSpell))
+      ) {
+        let newDuration = itemData.ifActivable.durationEffective - 1;
+        if (newDuration <= 0)
+          item.update({ system: { ifActivable: { activated: false } } });
+        else
+          item.update({
+            system: { ifActivable: { durationEffective: newDuration } },
+          });
+      }
+      if (
+        item.type == "consumable" &&
+        itemData.isActivable &&
+        itemData.ifActivable.activated &&
+        ((onRoll && itemData.ifActivable.consumeOnRoll) ||
+          (onAttack && itemData.ifActivable.consumeOnAttack) ||
+          (onSpell && itemData.ifActivable.consumeOnSpell))
+      ) {
+        let newDuration = itemData.ifActivable.duration - 1;
+        if (newDuration <= 0)
+          item.update({ system: { ifActivable: { activated: false } } });
+        else
+          item.update({
+            system: { ifActivable: { duration: newDuration } },
+          });
+      }
+    }
   }
 
   async takeDamage({
@@ -962,7 +1159,9 @@ export default class ORCCharacterSheet extends ActorSheet {
             system: {
               enchant: {
                 use: { available: item.system.enchant.use.perDay },
-                activated: false,
+                activated: item.system.enchant.use.disableOnNewDay
+                  ? false
+                  : true,
               },
             },
           };
@@ -977,12 +1176,18 @@ export default class ORCCharacterSheet extends ActorSheet {
       ) {
         item.update({
           system: {
-            ifActivable: { activated: false },
+            ifActivable: {
+              activated: item.system.ifActivable.disableOnNewDay ? false : true,
+            },
           },
         });
       }
       //Delete activated consumables
-      if (item.type == "consumable" && item.system.ifActivable.activated) {
+      if (
+        item.type == "consumable" &&
+        item.system.ifActivable.activated &&
+        item.system.ifActivable.disableOnNewDay
+      ) {
         await item.delete();
       }
     }
@@ -1016,6 +1221,8 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     //Update the owned weapon effective values (damage, effect and attack)
     this.updateWeaponsEffectiveValues(data);
+    //Update the spell effective values (rolls, effect...)
+    this.updateSpellEffectiveValues(data);
   }
 
   calculateValues(data) {
@@ -1099,30 +1306,34 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     //Magic
     const magic = actorData.magic;
-    //nSpell
+    //Number of memorized spells
     magic.nSpell.value = magic.nSpell.native;
     for (let [key, modificator] of Object.entries(magic.nSpell.valueModif)) {
       if (modificator) magic.nSpell.value += modificator;
     }
-    //nInvoc
+    //Number of memorized invocations
     magic.nInvoc.value = magic.nInvoc.native;
     for (let [key, modificator] of Object.entries(magic.nInvoc.valueModif)) {
       if (modificator) magic.nInvoc.value += modificator;
     }
     //Damage bonus
-    magic.damageBonus.value = magic.damageBonus.native;
-    for (let [key, modificator] of Object.entries(
-      magic.damageBonus.valueModif
-    )) {
+    magic.power.value = magic.power.native;
+    for (let [key, modificator] of Object.entries(magic.power.valueModif)) {
       if (modificator) {
-        if (!magic.damageBonus.value) magic.damageBonus.value += modificator;
-        else magic.damageBonus.value += " + " + modificator;
+        if (!magic.power.value) magic.power.value += modificator;
+        else magic.power.value += " + " + modificator;
       }
     }
-    //mpReduc
+    //MP reduction
     magic.mpReduc.value = magic.mpReduc.native;
     for (let [key, modificator] of Object.entries(magic.mpReduc.valueModif)) {
       if (modificator) magic.mpReduc.value += modificator;
+    }
+    //Roll spell value
+    magic.roll.native = actorData.attributes.intel.value;
+    magic.roll.value = magic.roll.native;
+    for (let [key, modificator] of Object.entries(magic.roll.valueModif)) {
+      if (modificator) magic.roll.value += modificator;
     }
 
     //Roll limits
@@ -1235,8 +1446,10 @@ export default class ORCCharacterSheet extends ActorSheet {
       magic: {
         nSpell: 0,
         nInvoc: 0,
-        damageBonus: "",
+        power: "",
         mpReduc: 0,
+        rollSpellBonus: 0,
+        canLaunchSpell: false,
       },
     };
 
@@ -1246,6 +1459,7 @@ export default class ORCCharacterSheet extends ActorSheet {
       //Weapons
       if (item.type == "weapon" && itemData.equipped) {
         if (itemData.defenceModif) modif.defence += itemData.defenceModif;
+        if (itemData.allowMagic) modif.magic.canLaunchSpell = true;
       }
       //Armors
       if (item.type == "armor" && itemData.equipped) {
@@ -1255,11 +1469,12 @@ export default class ORCCharacterSheet extends ActorSheet {
       if (item.type == "equipableitem" && itemData.equipped) {
         if (itemData.nSpell != 0) modif.magic.nSpell += itemData.nSpell;
         if (itemData.nInvoc != 0) modif.magic.nInvoc += itemData.nInvoc;
-        if (itemData.magicDamageBonusModif != "")
-          if (modif.magic.damageBonus == "")
-            modif.magic.damageBonus += itemData.magicDamageBonusModif;
-          else modif.magic.damageBonus += "+" + itemData.magicDamageBonusModif;
+        if (itemData.magicPower != "")
+          if (modif.magic.power == "") modif.magic.power += itemData.magicPower;
+          else modif.magic.power += "+" + itemData.magicPower;
         if (itemData.mpReduc != 0) modif.magic.mpReduc += itemData.mpReduc;
+        if (itemData.rollSpellBonus != 0)
+          modif.magic.rollSpellBonus += itemData.rollSpellBonus;
       }
       //Bag
       if (item.type == "bag") {
@@ -1291,11 +1506,12 @@ export default class ORCCharacterSheet extends ActorSheet {
               modif.damageBonus += effect.damageBonusModif;
             else modif.damageBonus += "+" + effect.damageBonusModif;
 
-          if (effect.magicDamageBonusModif != "")
-            if (modif.magic.damageBonus == "")
-              modif.magic.damageBonus += effect.magicDamageBonusModif;
-            else modif.magic.damageBonus += "+" + effect.magicDamageBonusModif;
+          if (effect.magicPower != "")
+            if (modif.magic.power == "") modif.magic.power += effect.magicPower;
+            else modif.magic.power += "+" + effect.magicPower;
           if (effect.mpReduc != 0) modif.magic.mpReduc += effect.mpReduc;
+          if (effect.rollSpellBonus != 0)
+            modif.magic.rollSpellBonus += effect.rollSpellBonus;
         }
       }
       //All items with weight
@@ -1332,11 +1548,12 @@ export default class ORCCharacterSheet extends ActorSheet {
 
         if (enchant.nSpell != 0) modif.magic.nSpell += enchant.nSpell;
         if (enchant.nInvoc != 0) modif.magic.nInvoc += enchant.nInvoc;
-        if (enchant.magicDamageBonusModif != "")
-          if (modif.magic.damageBonus == "")
-            modif.magic.damageBonus += enchant.magicDamageBonusModif;
-          else modif.magic.damageBonus += "+" + enchant.magicDamageBonusModif;
+        if (enchant.magicPower != "")
+          if (modif.magic.power == "") modif.magic.power += enchant.magicPower;
+          else modif.magic.power += "+" + enchant.magicPower;
         if (enchant.mpReduc != 0) modif.magic.mpReduc += enchant.mpReduc;
+        if (enchant.rollSpellBonus != 0)
+          modif.magic.rollSpellBonus += enchant.rollSpellBonus;
       }
 
       //Wounds
@@ -1431,21 +1648,30 @@ export default class ORCCharacterSheet extends ActorSheet {
       updated = true;
     }
 
-    if (modif.magic.spell != 0) {
-      actorData.magic.nSpell.valueModif.items = modif.magic.spell;
+    if (modif.magic.nSpell != 0) {
+      actorData.magic.nSpell.valueModif.items = modif.magic.nSpell;
       updated = true;
     }
     if (modif.magic.nInvoc != 0) {
       actorData.magic.nInvoc.valueModif.items = modif.magic.nInvoc;
       updated = true;
     }
-    if (modif.magic.damageBonus != "") {
-      actorData.magic.damageBonus.valueModif.items = modif.magic.damageBonus;
+    if (modif.magic.power != "") {
+      actorData.magic.power.valueModif.items = modif.magic.power;
       updated = true;
     }
     if (modif.magic.mpReduc != 0) {
       actorData.magic.mpReduc.valueModif.items = modif.magic.mpReduc;
       updated = true;
+    }
+    if (modif.magic.rollSpellBonus != 0) {
+      actorData.magic.roll.valueModif.items = modif.magic.rollSpellBonus;
+      updated = true;
+    }
+    if (modif.magic.canLaunchSpell) {
+      actorData.magic.canLaunchSpell = true;
+    } else {
+      actorData.magic.canLaunchSpell = false;
     }
 
     return updated;
@@ -1728,5 +1954,47 @@ export default class ORCCharacterSheet extends ActorSheet {
       };
       item.update(maj);
     }
+
+    return;
+  }
+
+  updateSpellEffectiveValues(data) {
+    const actor = data.actor;
+    const spells = data.spells;
+
+    for (let [key, spell] of Object.entries(spells)) {
+      let item = actor.items.get(spell._id);
+
+      let effectivePower = item.system.power;
+      if (actor.system.magic.power.value != "") {
+        effectivePower += "+" + actor.system.magic.power.value;
+      }
+      let effectiveEffect = item.system.effect;
+      let effectiveCost = item.system.cost;
+      if (!item.system.useHP && actor.system.magic.mpReduc.value != 0)
+        effectiveCost += "+" + actor.system.magic.mpReduc.value.toString();
+      let effectiveLaunchRoll =
+        actor.system.magic.roll.value + item.system.difficulty;
+      let effectiveControlRoll = effectiveLaunchRoll;
+      if (actor.system.magic.nInvoc.invoked > 1)
+        effectiveControlRoll -=
+          (actor.system.magic.nInvoc.invoked - 1) *
+          actor.system.magic.nInvoc.controlDiffIncrease;
+
+      let maj = {
+        system: {
+          effective: {
+            power: effectivePower,
+            effect: effectiveEffect,
+            cost: effectiveCost,
+            rollLaunch: effectiveLaunchRoll,
+            rollControl: effectiveControlRoll,
+          },
+        },
+      };
+      item.update(maj);
+    }
+
+    return;
   }
 }

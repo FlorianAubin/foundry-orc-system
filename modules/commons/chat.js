@@ -147,6 +147,39 @@ export async function DamageRollToCustomMessage(rollResult, extraData) {
   await ChatMessage.create(chatData);
 }
 
+export async function SpellRollToCustomMessage(
+  rollResults = { costRoll: null, powerRoll: null, durationRoll: null },
+  extraData
+) {
+  const template = "systems/orc/templates/chat/roll-spell-result.hbs";
+
+  let templateContext = {
+    ...extraData,
+    costRoll: rollResults.costRoll,
+    powerRoll: rollResults.powerRoll,
+    durationRoll: rollResults.durationRoll,
+    costTooltip: rollResults.costRoll
+      ? await rollResults.costRoll.getTooltip()
+      : null,
+    powerTooltip: rollResults.powerRoll
+      ? await rollResults.powerRoll.getTooltip()
+      : null,
+    durationTooltip: rollResults.durationRoll
+      ? await rollResults.durationRoll.getTooltip()
+      : null,
+  };
+
+  let chatData = {
+    user: game.user._id,
+    speaker: ChatMessage.getSpeaker(),
+    sound: CONFIG.sounds.dice,
+    content: await renderTemplate(template, templateContext),
+    type: CONST.CHAT_MESSAGE_TYPES.ROLL,
+  };
+
+  await ChatMessage.create(chatData);
+}
+
 export async function EnchantRollToCustomMessage(rollResult, extraData) {
   const template = "systems/orc/templates/chat/roll-enchant-result.hbs";
 

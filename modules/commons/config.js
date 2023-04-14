@@ -16,3 +16,14 @@ ORC.bodyPartList = {
   arms: "orc.bodyPartList.arms",
   legs: "orc.bodyPartList.legs",
 };
+
+ORC.magicSchoolList = {
+  elem: "orc.magicSchoolList.elem",
+  demon: "orc.magicSchoolList.demon",
+  arcane: "orc.magicSchoolList.arcane",
+  rune: "orc.magicSchoolList.rune",
+  life: "orc.magicSchoolList.life",
+  death: "orc.magicSchoolList.death",
+  time: "orc.magicSchoolList.time",
+  reality: "orc.magicSchoolList.reality",
+};

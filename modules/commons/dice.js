@@ -83,6 +83,77 @@ export function AttackRoll({
   });
 }
 
+export function SpellRoll({
+  actor = null,
+  attribute = null,
+  modif = 0,
+  spell = null,
+  extraMessageData = {},
+}) {
+  let costFormula, powerFormula, durationFormula;
+  let costRoll = null,
+    powerRoll = null,
+    durationRoll = null;
+
+  if (spell != null) {
+    //Consume ressource
+    costFormula = spell.system.effective.cost;
+    if (typeof costFormula !== "string") costFormula = costFormula.toString();
+    if (costFormula != "") {
+      costRoll = new Roll(costFormula).roll({ async: false });
+      if (spell.system.useHP) {
+        if (actor.system.hp.value <= 0) return;
+        let newValue = actor.system.hp.value - costRoll.total;
+        if (newValue < actor.system.hp.surplus)
+          newValue = actor.system.hp.surplus;
+        actor.update({ system: { hp: { value: newValue } } });
+      } else {
+        let newValue = actor.system.mp.value - costRoll.total;
+        if (newValue < 0) return;
+        actor.update({ system: { mp: { value: newValue } } });
+      }
+    }
+
+    //Roll power
+    powerFormula = spell.system.effective.power;
+    if (typeof powerFormula !== "string")
+      powerFormula = powerFormula.toString();
+    if (powerFormula != "")
+      powerRoll = new Roll(powerFormula).roll({ async: false });
+
+    //Roll duration
+    durationFormula = spell.system.duration;
+    if (typeof durationFormula !== "string")
+      durationFormula = durationFormula.toString();
+    if (durationFormula != "")
+      durationRoll = new Roll(durationFormula).roll({ async: false });
+  }
+
+  this.AttributeRoll({
+    actor,
+    attribute,
+    modif,
+    extraMessageData,
+  });
+
+  //Roll to custom message
+  if (spell != null) {
+    extraMessageData.title = game.i18n.format("orc.dialog.rollSpell.title", {
+      spellName: spell.name,
+    });
+    extraMessageData.effect = spell.system.effect;
+    extraMessageData.useHP = spell.system.useHP;
+    extraMessageData.durationUnit = spell.system.durationUnit;
+
+    Chat.SpellRollToCustomMessage(
+      { costRoll, powerRoll, durationRoll },
+      { ...extraMessageData }
+    );
+  }
+
+  return;
+}
+
 export function DodgeRoll({
   actor = null,
   attribute = null,

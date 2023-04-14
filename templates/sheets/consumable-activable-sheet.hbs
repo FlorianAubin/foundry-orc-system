@@ -19,6 +19,83 @@
           {{/if}}
         </td>
       </tr>
+      <table>
+        <tr>
+          {{#if (or unlocked item.system.ifActivable.consumeOnRoll)}}
+            <th>{{localize "orc.consumable.ifActivable.consumeOnRoll"}}</th>
+          {{/if}}
+          {{#if (or unlocked item.system.ifActivable.consumeOnAttack)}}
+            <th>{{localize "orc.consumable.ifActivable.consumeOnAttack"}}</th>
+          {{/if}}
+          {{#if (or unlocked item.system.ifActivable.consumeOnSpell)}}
+            <th>{{localize "orc.consumable.ifActivable.consumeOnSpell"}}</th>
+          {{/if}}
+        </tr>
+        <tr>
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.ifActivable.consumeOnRoll"
+                type="checkbox"
+                {{checked item.system.ifActivable.consumeOnRoll}}
+              />
+            </td>
+            <td align="center">
+              <input
+                name="system.ifActivable.consumeOnAttack"
+                type="checkbox"
+                {{checked item.system.ifActivable.consumeOnAttack}}
+              />
+            </td>
+            <td align="center">
+              <input
+                name="system.ifActivable.consumeOnSpell"
+                type="checkbox"
+                {{checked item.system.ifActivable.consumeOnSpell}}
+              />
+            </td>
+          {{else}}
+            {{#if item.system.ifActivable.consumeOnRoll}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+            {{#if item.system.ifActivable.consumeOnAttack}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+            {{#if item.system.ifActivable.consumeOnSpell}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+        <tr>
+          {{#if (or unlocked item.system.ifActivable.disableOnNewDay)}}
+            <th colspan="2">{{localize
+                "orc.consumable.ifActivable.disableOnNewDay"
+              }}</th>
+          {{/if}}
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.ifActivable.disableOnNewDay"
+                type="checkbox"
+                {{checked item.system.ifActivable.disableOnNewDay}}
+              />
+            </td>
+          {{else}}
+            {{#if item.system.ifActivable.disableOnNewDay}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+      </table>
+      <table>
       <tr>
         {{#if
           (or unlocked (isNotEmptyString item.system.ifActivable.duration))
@@ -238,22 +315,25 @@
       <tr>
         {{#if
           (or
-            unlocked (isNotEmptyString item.system.ifActivable.magicDamageBonus)
+            unlocked (isNotEmptyString item.system.ifActivable.magicPower)
           )
         }}
-          <th>{{localize "orc.consumable.ifActivable.magicDamageBonus"}}</th>
+          <th>{{localize "orc.consumable.ifActivable.magicPower"}}</th>
         {{/if}}
         {{#if (or unlocked item.system.ifActivable.mpReduc)}}
           <th>{{localize "orc.consumable.ifActivable.mpReduc"}}</th>
+        {{/if}}
+       {{#if (or unlocked item.system.ifActivable.rollSpellBonus)}}
+          <th>{{localize "orc.consumable.ifActivable.rollSpellBonus"}}</th>
         {{/if}}
       </tr>
       <tr>
         {{#if unlocked}}
           <td align="center">
             <input
-              name="system.ifActivable.magicDamageBonus"
+              name="system.ifActivable.magicPower"
               type="text"
-              value="{{item.system.ifActivable.magicDamageBonus}}"
+              value="{{item.system.ifActivable.magicPower}}"
               placeholder=""
             />
           </td>
@@ -265,15 +345,28 @@
               placeholder="0"
             />
           </td>
+          <td align="center">
+            <input
+              name="system.ifActivable.rollSpellBonus"
+              type="number"
+              value="{{item.system.ifActivable.rollSpellBonus}}"
+              placeholder="0"
+            />
+          </td>
         {{else}}
-          {{#if (isNotEmptyString item.system.ifActivable.magicDamageBonus)}}
+          {{#if (isNotEmptyString item.system.ifActivable.magicPower)}}
             <td align="center">
-              <span>{{item.system.ifActivable.magicDamageBonus}}</span>
+              <span>{{item.system.ifActivable.magicPower}}</span>
             </td>
           {{/if}}
           {{#if item.system.ifActivable.mpReduc}}
             <td align="center">
               <span>{{item.system.ifActivable.mpReduc}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.ifActivable.rollSpellBonus}}
+            <td align="center">
+              <span>{{item.system.ifActivable.rollSpellBonus}}</span>
             </td>
           {{/if}}
         {{/if}}

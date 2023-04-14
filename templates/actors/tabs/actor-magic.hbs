@@ -2,6 +2,138 @@
   <table class="item-list spell-list">
     <tr class="main-header flexrow">
       <th class="content">{{localize "orc.spells"}}</th>
+      <th class="content"></th>
+      <th class="content"></th>
+      <td class="info" align="center">
+        {{#if unlocked}}
+          <input
+            type="number"
+            name="system.magic.nSpell.native"
+            value="{{actor.system.magic.nSpell.native}}"
+            placeholder="0"
+            onClick="this.select();"
+            style="width: 30px"
+          />
+        {{else}}
+          <span class="info">{{actor.system.magic.nSpell.effective}}&nbsp;/{{actor.system.magic.nSpell.value}}</span>
+        {{/if}}
+        <span class="info">{{localize "orc.character.nSpell"}}</span>
+      </td>
     </tr>
+    <tr class="header flexrow">
+      <th class="content"></th>
+      <th class="content">{{localize "orc.spell.difficulty"}}</th>
+      <th class="content">{{localize "orc.spell.cost"}}</th>
+      <th class="content">{{localize "orc.spell.power"}}</th>
+      <th class="content">{{localize "orc.spell.range"}}</th>
+      <th class="content">{{localize "orc.spell.duration"}}</th>
+      <th class="content">{{localize "orc.spell.effect"}}</th>
+      <th class="content">{{localize "orc.spell.memorized"}}</th>
+      <th class="content"></th>
+    </tr>
+    {{#each config.magicSchoolList as |magicSchool|}}
+      <tr class="main-header flexrow">
+        <th class="content">{{localize magicSchool}}</th>
+      </tr>
+      {{#each ../spells as |spell|}}
+      {{#if (and (not spell.system.isRitual) (not spell.system.isInvoc))}}
+        {{#if (eq spell.system.school magicSchool)}}
+          <tr class="item flexrow" data-item-id="{{spell._id}}">
+            <td class="content">{{spell.name}}</td>
+            <td class="content">{{spell.system.difficulty}}</td>
+            <td class="content">{{spell.system.cost}}&nbsp;{{#if spell.system.useHP}}{{localize "orc.character.hp"}}{{else}}{{localize "orc.character.mp"}}{{/if}}</td>
+            <td class="content">{{spell.system.power}}</td>
+            <td class="content">{{spell.system.range}}</td>
+            <td class="content">{{spell.system.duration}}&nbsp;{{spell.system.durationUnit}}</td>
+            <td class="content">{{spell.system.effect}}</td>
+            {{#if spell.system.memorized}}
+              <td class="content spell-memorized button fas fa-check"></td>
+            {{else}}
+              <td class="content spell-memorized button fas fa-xmark"></td>
+            {{/if}}
+            <td align="center" class="content">
+              <a class="item-edit" align="center" title="Edit Item">
+                <i class="button fas fa-edit"></i></a>
+              <a class="item-delete" align="center" title="Delete Item">
+                <i class="button fas fa-trash"></i></a>
+            </td>
+          </tr>
+        {{/if}}
+      {{/if}}
+      {{/each}}
+    {{/each}}
+  </table>
+
+
+  <table class="item-list invoc-list">
+    <tr class="main-header flexrow">
+      <th class="content">{{localize "orc.invocs"}}</th>
+      <td class="info" align="center">
+        {{#if unlocked}}
+          <input
+            type="number"
+            name="system.magic.nInvoc.native"
+            value="{{actor.system.magic.nInvoc.native}}"
+            placeholder="0"
+            onClick="this.select();"
+            style="width: 30px"
+          />
+        {{else}}
+          <span class="info">{{actor.system.magic.nInvoc.effective}}&nbsp;/{{actor.system.magic.nInvoc.value}}</span>
+        {{/if}}
+        <span class="info">{{localize "orc.character.nInvoc"}}</span>
+      </td>
+      <td class="info" align="center">
+        <span class="info">{{localize "orc.character.invocControlDiff"}}</span>
+        {{#if unlocked}}
+          <input
+            type="number"
+            name="system.magic.nInvoc.controlDiffIncrease"
+            value="{{actor.system.magic.nInvoc.controlDiffIncrease}}"
+            placeholder="0"
+            onClick="this.select();"
+            style="width: 30px"
+          />
+        {{else}}
+          <span class="info">{{actor.system.magic.nInvoc.controlDiffIncrease}}</span>
+        {{/if}}
+      </td>
+    </tr>
+    <tr class="header flexrow">
+      <th class="content"></th>
+      <th class="content">{{localize "orc.spell.difficulty"}}</th>
+      <th class="content">{{localize "orc.spell.cost"}}</th>
+      <th class="content">{{localize "orc.spell.duration"}}</th>
+      <th class="content">{{localize "orc.spell.memorized"}}</th>
+      <th class="content"></th>
+    </tr>
+    {{#each config.magicSchoolList as |magicSchool|}}
+      <tr class="main-header flexrow">
+        <th class="content">{{localize magicSchool}}</th>
+      </tr>
+      {{#each ../spells as |spell|}}
+      {{#if spell.system.isInvoc}}
+        {{#if (eq spell.system.school magicSchool)}}
+          <tr class="item flexrow" data-item-id="{{spell._id}}">
+            <td class="content">{{spell.name}}</td>
+            <td class="content">{{spell.system.difficulty}}</td> 
+            <td class="content">{{spell.system.cost}}</td>
+            <td class="content">{{spell.system.duration}}&nbsp;{{spell.system.durationUnit}}</td>
+            {{#if spell.system.memorized}}
+              <td class="content spell-memorized button fas fa-check"></td>
+            {{else}}
+              <td class="content spell-memorized button fas fa-xmark"></td>
+            {{/if}}
+            <td align="center" class="content">
+              <a class="item-edit" align="center" title="Edit Item">
+                <i class="button fas fa-edit"></i></a>
+              <a class="item-delete" align="center" title="Delete Item">
+                <i class="button fas fa-trash"></i></a>
+            </td>
+          </tr>
+        {{/if}}
+      {{/if}}
+      {{/each}}
+    {{/each}}
   </table>
 </div>

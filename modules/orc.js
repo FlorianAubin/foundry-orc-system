@@ -12,6 +12,7 @@ import ORCGeneralItemSheet from "./sheets/ORCGeneralItemSheet.js";
 import ORCBagSheet from "./sheets/ORCBagSheet.js";
 import ORCWoundSheet from "./sheets/ORCWoundSheet.js";
 import ORCCapacitySheet from "./sheets/ORCCapacitySheet.js";
+import ORCSpellSheet from "./sheets/ORCSpellSheet.js";
 import { preloadHandlebarsTemplates } from "./commons/templates.js";
 import { RegisterHandlebars } from "./commons/handlebars.mjs";
 
@@ -72,6 +73,10 @@ Hooks.once("init", async function () {
   });
   Items.registerSheet("capacity", ORCCapacitySheet, {
     types: ["capacity"],
+    makeDefault: true,
+  });
+  Items.registerSheet("spell", ORCSpellSheet, {
+    types: ["spell"],
     makeDefault: true,
   });
 

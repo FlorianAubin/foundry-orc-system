@@ -91,6 +91,7 @@
       },
       "combatStyle": "standard",
       "magic": {
+        "canLaunchSpell": false,
         "nSpell": {
           "native": 0,
           "valueModif": {},
@@ -101,14 +102,21 @@
           "native": 0,
           "valueModif": {},
           "value": 0,
-          "effective": 0
+          "effective": 0,
+          "invoked": 0,
+          "controlDiffIncrease": 20
         },
-        "damageBonus": {
+        "power": {
           "native": "",
           "valueModif": {},
           "value": ""
         },
         "mpReduc": {
+          "native": 0,
+          "valueModif": {},
+          "value": 0
+        },
+        "roll": {
           "native": 0,
           "valueModif": {},
           "value": 0
@@ -172,15 +180,14 @@
       "weapon",
       "ammo",
       "armor",
+      "equipableitem",
       "food",
       "consumable",
-      "equipableitem",
       "generalitem",
       "bag",
       "spell",
       "capacity",
-      "wound",
-      "mutation"
+      "wound"
     ],
     "templates": {
       "enchant": {
@@ -200,8 +207,9 @@
           "dodgeModif": 0,
           "nSpell": 0,
           "nInvoc": 0,
-          "magicDamageBonus": "",
+          "magicPower": "",
           "mpReduc": 0,
+          "rollSpellBonus": 0,
           "encumbranceLimitModif": 0,
           "foodNeededDayModif": 0,
           "drinkNeededDayModif": 0,
@@ -215,7 +223,11 @@
             "perDay": 0,
             "duration": "",
             "durationEffective": 0,
-            "durationUnit": ""
+            "durationUnit": "",
+            "consumeOnRoll": false,
+            "consumeOnAttack": false,
+            "consumeOnSpell": false,
+            "disableOnNewDay": true
           }
         }
       }
@@ -268,8 +280,9 @@
       "weight": 0,
       "nSpell": 0,
       "nInvoc": 0,
-      "magicDamageBonus": "",
+      "magicPower": "",
       "mpReduc": 0,
+      "rollSpellBonus": 0,
       "optionDescriptionDeploy": false,
       "description": "",
       "templates": ["enchant"]
@@ -305,14 +318,19 @@
         "attackModif": 0,
         "defenceModif": 0,
         "dodgeModif": 0,
-        "magicDamageBonus": "",
+        "magicPower": "",
         "mpReduc": 0,
+        "rollSpellBonus": 0,
         "encumbranceLimitModif": 0,
         "limitCriticalModif": 0,
         "limitFumbleModif": 0,
         "damageBonusModif": "",
         "duration": "1",
-        "durationUnit": "min"
+        "durationUnit": "min",
+        "consumeOnRoll": false,
+        "consumeOnAttack": false,
+        "consumeOnSpell": false,
+        "disableOnNewDay": true
       },
       "hp": "",
       "mp": "",
@@ -347,12 +365,29 @@
       "description": ""
     },
     "spell": {
-      "cost": 0,
+      "school": "",
+      "level": 0,
+      "difficulty": 0,
+      "cost": "",
       "useHP": false,
-      "damage": 0,
-      "duration": 0,
+      "isInvoc": false,
+      "isRitual": false,
+      "ifInvoc": { "invoked": false, "fixed": false },
+      "power": "",
+      "duration": "",
+      "durationUnit": "",
+      "range": 0,
+      "effect": "",
+      "memorized": false,
       "optionDescriptionDeploy": false,
-      "description": ""
+      "description": "",
+      "effective": {
+        "power": "",
+        "effect": "",
+        "cost": "",
+        "rollLaunch": 0,
+        "rollControl": 0
+      }
     },
     "capacity": {
       "activeEffect": false,
@@ -360,7 +395,11 @@
         "activated": false,
         "duration": "1",
         "durationUnit": "tr",
-        "durationEffective": 0
+        "durationEffective": 0,
+        "consumeOnRoll": false,
+        "consumeOnAttack": false,
+        "consumeOnSpell": false,
+        "disableOnNewDay": true
       },
       "isRageBerserk": false,
       "isAttributRoll": false,
@@ -391,10 +430,6 @@
       "foodNeededDayModif": 0,
       "drinkNeededDayModif": 0,
       "optionDeploy": false,
-      "optionDescriptionDeploy": false,
-      "description": ""
-    },
-    "mutation": {
       "optionDescriptionDeploy": false,
       "description": ""
     }
