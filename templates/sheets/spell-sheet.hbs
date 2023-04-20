@@ -39,7 +39,6 @@
       <table>
         <tr>
           <th>{{localize "orc.spell.school"}}</th>
-          <th>{{localize "orc.spell.level"}}</th>
           <th>{{localize "orc.spell.difficulty"}}</th>
         </tr>
         <tr>
@@ -47,19 +46,12 @@
             <td align="center">
               <select name="system.school" align="center">
                 {{#select item.system.school}}
+                  <option value=""></option>
                   {{#each config.magicSchoolList as |school|}}
                     <option value="{{school}}">{{localize school}}</option>
                   {{/each}}
                 {{/select}}
               </select>
-            </td>
-            <td align="center">
-              <input
-                name="system.level"
-                type="number"
-                value="{{item.system.level}}"
-                placeholder="0"
-              />
             </td>
             <td align="center">
               <input
@@ -74,22 +66,19 @@
               <span>{{localize item.system.school}}</span>
             </td>
             <td align="center">
-              <span>{{item.system.level}}</span>
-            </td>
-            <td align="center">
               <span>{{item.system.difficulty}}</span>
             </td>
           {{/if}}
         </tr>
         <tr>
-          <th {{#if (or unlocked item.system.useHP)}} colspan="2" {{else}} colspan="3" {{/if}}>{{localize "orc.spell.cost"}}</th>
+          <th {{#if (or unlocked item.system.useHP)}} {{else}} colspan="2" {{/if}}>{{localize "orc.spell.cost"}}</th>
           {{#if (or unlocked item.system.useHP)}}
           <th>{{localize "orc.spell.useHP"}}</th>
           {{/if}}
         </tr>
         <tr>
           {{#if unlocked}}
-            <td align="center" colspan="2">
+            <td align="center">
               <input
                 name="system.cost"
                 type="text"
@@ -105,7 +94,7 @@
               />
             </td>
           {{else}}
-            <td align="center" {{#if (or unlocked item.system.useHP)}} colspan="2" {{else}} colspan="3" {{/if}}>
+            <td align="center" {{#if (or unlocked item.system.useHP)}}  {{else}} colspan="2" {{/if}}>
               <span>{{item.system.cost}}</span>
             </td>
             {{#if item.system.useHP}}
@@ -183,10 +172,10 @@
       <table>
         <tr>
           {{#if (or unlocked (isNotEmptyString item.system.power))}}
-            <th>{{localize "orc.spell.power"}}</th>
+            <th {{#if (and (not unlocked) (not item.system.range))}} colspan="2" {{/if}}>{{localize "orc.spell.power"}}</th>
           {{/if}} 
           {{#if (or unlocked item.system.range)}}
-            <th>{{localize "orc.spell.range"}}</th>
+            <th {{#if (and (not unlocked) (not (isNotEmptyString item.system.power)))}} colspan="2" {{/if}}>{{localize "orc.spell.range"}}</th>
           {{/if}}       
         </tr>
         <tr>
@@ -209,12 +198,12 @@
             </td>
           {{else}}
             {{#if (isNotEmptyString item.system.power)}}
-              <td align="center">
+              <td align="center" {{#if (not item.system.range)}} colspan="2" {{/if}}>
                 <span>{{item.system.power}}</span>
               </td>
             {{/if}}
             {{#if item.system.range}}
-              <td align="center">
+              <td align="center" {{#if (not (isNotEmptyString item.system.power))}} colspan="2" {{/if}}>
                 <span>{{item.system.range}}</span>
               </td>
             {{/if}}

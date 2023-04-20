@@ -39,9 +39,22 @@
       {{#if (and (not spell.system.isRitual) (not spell.system.isInvoc))}}
         {{#if (eq spell.system.school magicSchool)}}
           <tr class="item flexrow" data-item-id="{{spell._id}}">
-            <td class="content">{{spell.name}}</td>
+            <td class="content">
+              <img
+                src="{{spell.img}}"
+                data-edit="img"
+                title="{{spell.name}}"
+                height="24"
+                width="24"
+              />
+              <div>{{spell.name}}</div>
+            </td>
             <td class="content">{{spell.system.difficulty}}</td>
-            <td class="content">{{spell.system.cost}}&nbsp;{{#if spell.system.useHP}}{{localize "orc.character.hp"}}{{else}}{{localize "orc.character.mp"}}{{/if}}</td>
+            <td class="content">
+              {{#if spell.system.effective.cost}}
+              {{spell.system.cost}}&nbsp;{{#if spell.system.useHP}}{{localize "orc.character.hp"}}{{else}}{{localize "orc.character.mp"}}{{/if}}
+              {{/if}}
+            </td>
             <td class="content">{{spell.system.power}}</td>
             <td class="content">{{spell.system.range}}</td>
             <td class="content">{{spell.system.duration}}&nbsp;{{spell.system.durationUnit}}</td>
@@ -115,10 +128,22 @@
       {{#if spell.system.isInvoc}}
         {{#if (eq spell.system.school magicSchool)}}
           <tr class="item flexrow" data-item-id="{{spell._id}}">
-            <td class="content">{{spell.name}}</td>
+            <td class="content">
+              <img
+                src="{{spell.img}}"
+                data-edit="img"
+                title="{{spell.name}}"
+                height="24"
+                width="24"
+              />
+              <div>{{spell.name}}</div>
+            </td>
             <td class="content">{{spell.system.difficulty}}</td> 
-            <td class="content">{{spell.system.cost}}</td>
-            <td class="content">{{spell.system.duration}}&nbsp;{{spell.system.durationUnit}}</td>
+            <td class="content">
+              {{#if spell.system.effective.cost}}
+              {{spell.system.cost}}&nbsp;{{#if spell.system.useHP}}{{localize "orc.character.hp"}}{{else}}{{localize "orc.character.mp"}}{{/if}}
+              {{/if}}
+            </td>            <td class="content">{{spell.system.duration}}&nbsp;{{spell.system.durationUnit}}</td>
             {{#if spell.system.memorized}}
               <td class="content spell-memorized button fas fa-check"></td>
             {{else}}

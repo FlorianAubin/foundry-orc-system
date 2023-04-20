@@ -1,6 +1,7 @@
 {
   "ACTOR": {
-    "TypeCharacter": "Personnage"
+    "TypeCharacter": "Personnage",
+    "TypeContainer": "Conteneur"
   },
 
   "ITEM": {
@@ -62,7 +63,7 @@
       "drink": "Boisson",
       "tipsiness": "Ivresse",
       "nutrition": "Nutrition",
-      "shortcut": "Raccourcis",
+      "shortcut": "Général",
       "gear": "Équipement",
       "magic": "Grimoire",
       "nSpell": " sorts mémorisés",
@@ -72,6 +73,10 @@
       "active": "Effets actifs",
       "inventory": "Inventaire",
       "biography": "Biographie"
+    },
+    "container": {
+      "capacity": "Capacité du conteneur : ",
+      "itemStock": "Quantité"
     },
     "weapons": "Armes",
     "ammos": "Munitions",
@@ -344,7 +349,7 @@
         "title": "Jet de dégâts bonus :"
       },
       "rollSpell": {
-        "title": "Jets du sort {spellName} :"
+        "title": "Jet du sort {spellName} :"
       },
       "bleed": {
         "title": "{charName} saigne !"
@@ -359,6 +364,11 @@
       "enchant": {
         "title": "{charName} fait un jet d'enchantement de {enchantName}",
         "titleNoActor": "Jet d'enchantement de {enchantName}"
+      },
+      "splitItem": {
+        "title": "Séparation d'objets",
+        "chooseSplit": "Combien d'objets voulez-vous séparer ?",
+        "validate": "Valider"
       }
     }
   }

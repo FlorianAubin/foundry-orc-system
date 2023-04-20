@@ -45,6 +45,7 @@
           </tr>
         </table>
       </td>
+      {{#if (not (eq actor.system.ap.native actor.system.ap.value))}}
       <td class="table-container">
         <table class="take-damage-table">
           <tr><th colspan="3">{{localize "orc.takeDamageOnArmor"}}</th></tr>
@@ -89,6 +90,7 @@
           </tr>
         </table>
       </td>
+      {{/if}}
       <td class="table-container">
         <table class="heal-table">
           <tr><th colspan="3">{{localize "orc.recoverHP"}}</th></tr>
@@ -133,6 +135,7 @@
           </tr>
         </table>
       </td>
+      {{#if actor.system.mp.valueMaxNative}}
       <td class="table-container">
         <table class="heal-table">
           <tr><th colspan="2">{{localize "orc.recoverMP"}}</th></tr>
@@ -159,6 +162,7 @@
           </tr>
         </table>
       </td>
+      {{/if}}
     </tr>
   </table>
 
@@ -171,13 +175,23 @@
       <th></th>
       <th class="content">{{localize "orc.weapon.ammo"}}</th>
       <th class="content">{{localize "orc.weapon.damage"}}</th>
+      <th class="content">{{localize "orc.weapon.range"}}</th>
       <th class="effect-list">{{localize "orc.weapon.effect"}}</th>
       <th class="content">{{localize "orc.character.attack"}}</th>
     </tr>
     {{#each weapons as |weapon id|}}
       {{#if weapon.system.equipped}}
         <tr class="item flexrow" data-item-id="{{weapon._id}}">
-          <td class="content">{{weapon.name}}</td>
+          <td class="content">
+            <img
+              src="{{weapon.img}}"
+              data-edit="img"
+              title="{{weapon.name}}"
+              height="24"
+              width="24"
+            />
+            <div>{{weapon.name}}</div>
+          </td>
           <td class="content">
             {{#if weapon.system.useAmmo}}
               <select class="weapon-choose-ammo" name="system.ammo" align="center">
@@ -191,8 +205,9 @@
             {{/if}}
           </td>
           <td class="content">{{weapon.system.effective.damage}}</td>
-          <td class="content">{{weapon.system.effective.effect}}</td>
-          <td class="content">
+          <td class="content">{{weapon.system.range}}</td>
+          <td class="effect-list">{{weapon.system.effective.effect}}</td>
+          <td class="content" style="display: flex">
             {{weapon.system.effective.attack}}
             <span
               class="attack-with-weapon-roll button fas fa-dice"
@@ -207,7 +222,9 @@
     {{/each}}
   </table>
 
-    <table class="item-list spell-list">
+  {{#if (or actor.system.magic.nSpell.effective actor.system.magic.nInvoc.effective)}}
+  <table class="item-list spell-list">
+    {{#if actor.system.magic.nSpell.effective}}
     <tr class="main-header flexrow">
       <th class="content">{{localize "orc.spellsMemorized"}}</th>
     </tr>
@@ -227,13 +244,26 @@
               (not spell.system.isInvoc)
             )}}
         <tr class="item flexrow" data-item-id="{{spell._id}}">
-          <td class="content">{{spell.name}}</td>
+          <td class="content">
+            <img
+              src="{{spell.img}}"
+              data-edit="img"
+              title="{{spell.name}}"
+              height="24"
+              width="24"
+            />
+            <div>{{spell.name}}</div>
+          </td>
           <td class="content">{{spell.system.effective.power}}</td>
           <td class="content">{{spell.system.range}}</td>
           <td class="content">{{spell.system.duration}}&nbsp;{{spell.system.durationUnit}}</td>
-          <td class="content">{{spell.system.effective.cost}}&nbsp;{{#if spell.system.useHP}}{{localize "orc.character.hp"}}{{else}}{{localize "orc.character.mp"}}{{/if}}</td>
-          <td class="effect-list">{{spell.system.effect}}</td>
           <td class="content">
+            {{#if spell.system.effective.cost}}
+            {{spell.system.effective.cost}}&nbsp;{{#if spell.system.useHP}}{{localize "orc.character.hp"}}{{else}}{{localize "orc.character.mp"}}{{/if}}
+            {{/if}}
+          </td>
+          <td class="effect-list">{{spell.system.effect}}</td>
+          <td class="content" style="display: flex">
             {{spell.system.effective.rollLaunch}}
             {{#if ../actor.system.magic.canLaunchSpell}}
               <span
@@ -248,6 +278,8 @@
         </tr>
       {{/if}}
     {{/each}}
+    {{/if}}
+    {{#if actor.system.magic.nInvoc.effective}}
     <tr class="main-header flexrow">
       <th class="content">{{localize "orc.invocsMemorized"}}</th>
     </tr>
@@ -265,10 +297,23 @@
               spell.system.memorized
             )}}
         <tr class="item flexrow" data-item-id="{{spell._id}}">
-          <td class="content">{{spell.name}}</td>
-          <td class="content">{{spell.system.duration}}&nbsp;{{spell.system.durationUnit}}</td>
-          <td class="content">{{spell.system.effective.cost}}&nbsp;{{#if spell.system.useHP}}{{localize "orc.character.hp"}}{{else}}{{localize "orc.character.mp"}}{{/if}}</td>
           <td class="content">
+            <img
+              src="{{spell.img}}"
+              data-edit="img"
+              title="{{spell.name}}"
+              height="24"
+              width="24"
+            />
+            <div>{{spell.name}}</div>
+          </td>
+          <td class="content">{{spell.system.duration}}&nbsp;{{spell.system.durationUnit}}</td>
+          <td class="content">
+            {{#if spell.system.effective.cost}}
+            {{spell.system.effective.cost}}&nbsp;{{#if spell.system.useHP}}{{localize "orc.character.hp"}}{{else}}{{localize "orc.character.mp"}}{{/if}}
+            {{/if}}
+          </td>
+          <td class="content" style="display: flex">
             {{#if (not spell.system.ifInvoc.invoked)}}
               {{spell.system.effective.rollLaunch}}
               {{#if ../actor.system.magic.canLaunchSpell}}
@@ -314,7 +359,9 @@
         </tr>
       {{/if}}
     {{/each}}
+    {{/if}}
   </table>
+  {{/if}}
 
   <table class="item-list capacity-list">
     <tr class="main-header flexrow">
@@ -330,7 +377,16 @@
     </tr>
     {{#each capacities as |capacity id|}}
       <tr class="item flexrow" data-item-id="{{capacity._id}}">
-        <td class="content">{{capacity.name}}</td>
+        <td class="content">
+          <img
+            src="{{capacity.img}}"
+            data-edit="img"
+            title="{{capacity.name}}"
+            height="24"
+            width="24"
+          />
+          <div>{{capacity.name}}</div>
+        </td>
         <td class="content">
           {{#if (and 
             capacity.system.activeEffect 
@@ -396,6 +452,7 @@
           <td
             class="capacity-status-resist-roll button fas fa-dice"
             align="center">
+            {{localize "orc.character.attributes.physical"}}
           </td>
         {{/if}}
         {{#if (and 
@@ -418,7 +475,7 @@
           {{/if}}
         {{/if}}
         </td>
-        <td class="content">
+        <td class="content" align="center">
           <a class="item-edit" align="center" title="Edit Item">
             <i class="button fas fa-edit"></i></a>
           <a class="item-delete" align="center" title="Delete Item">
@@ -444,7 +501,7 @@
         {{#if (and item.system.equipped item.system.enchant.activeEffect (isNotEmptyString item.system.enchant.name))}}
           <tr class="item flexrow" data-item-id="{{item._id}}">
             <td class="content">{{item.system.enchant.name}}</td>
-            <td class="content">
+            <td class="content" style="display: flex">
               {{#if (isNotEmptyString item.system.enchant.roll)}}
                 <span>{{item.system.enchant.roll}}</span>
                 <span
@@ -588,14 +645,64 @@
                     >{{item.system.enchant.damageBonusModif}}</td>
                   </tr>
                 {{/if}}
-                {{#if (isNotEmptyString item.system.enchant.addEffect)}}
-                  <tr>
-                    <td align="center">{{localize "orc.enchant.addEffect"}}</td>
-                    <td align="center">{{item.system.enchant.addEffect}}</td>
-                  </tr>
-                {{/if}}
-              </table>
-            {{/if}}
+                {{#if item.system.enchant.nSpell}}
+                    <tr>
+                      <td align="center">{{localize
+                          "orc.enchant.nSpell"
+                        }}</td>
+                      <td
+                        align="center"
+                      >{{item.system.enchant.nSpell}}</td>
+                    </tr>
+                  {{/if}}
+                  {{#if item.system.enchant.nInvoc}}
+                    <tr>
+                      <td align="center">{{localize
+                          "orc.enchant.nInvoc"
+                        }}</td>
+                      <td
+                        align="center"
+                      >{{item.system.enchant.nInvoc}}</td>
+                    </tr>
+                  {{/if}}
+                  {{#if (isNotEmptyString item.system.enchant.magicPower)}}
+                    <tr>
+                      <td align="center">{{localize
+                          "orc.enchant.magicPower"
+                        }}</td>
+                      <td
+                        align="center"
+                      >{{item.system.enchant.magicPower}}</td>
+                    </tr>
+                  {{/if}}
+                  {{#if item.system.enchant.mpReduc}}
+                    <tr>
+                      <td align="center">{{localize
+                          "orc.enchant.mpReduc"
+                        }}</td>
+                      <td
+                        align="center"
+                      >{{item.system.enchant.mpReduc}}</td>
+                    </tr>
+                  {{/if}}
+                  {{#if item.system.enchant.rollSpellBonus}}
+                    <tr>
+                      <td align="center">{{localize
+                          "orc.enchant.rollSpellBonus"
+                        }}</td>
+                      <td
+                        align="center"
+                      >{{item.system.enchant.rollSpellBonus}}</td>
+                    </tr>
+                  {{/if}}
+                  {{#if (isNotEmptyString item.system.enchant.addEffect)}}
+                    <tr>
+                      <td align="center">{{localize "orc.enchant.addEffect"}}</td>
+                      <td align="center">{{item.system.enchant.addEffect}}</td>
+                    </tr>
+                  {{/if}}
+                </table>
+              {{/if}}
             </td>
             <td class="content" align="center">
               {{#if item.system.enchant.use.perDay}}
@@ -649,7 +756,16 @@
           )
         }}
           <tr class="item flexrow" data-item-id="{{consumable._id}}">
-            <td class="content">{{consumable.name}}</td>
+            <td class="content">
+              <img
+                src="{{consumable.img}}"
+                data-edit="img"
+                title="{{consumable.name}}"
+                height="24"
+                width="24"
+              />
+              <div>{{consumable.name}}</div>
+            </td>
             <td class="effect-list">
             {{#if (not consumable.system.ifActivable.optionDeploy)}}
               <div
@@ -764,23 +880,73 @@
                     >{{consumable.system.ifActivable.damageBonusModif}}</td>
                   </tr>
                 {{/if}}
-                {{#if (isNotEmptyString consumable.system.addEffect)}}
-                  <tr>
-                    <td align="center">{{localize "orc.consumable.addEffect"}}</td>
-                    <td align="center">{{consumable.system.addEffect}}</td>
-                  </tr>
-                {{/if}}
-              </table>
-            {{/if}}
+                {{#if consumable.system.ifActivable.nSpell}}
+                    <tr>
+                      <td align="center">{{localize
+                          "orc.consumable.ifActivable.nSpell"
+                        }}</td>
+                      <td
+                        align="center"
+                      >{{consumable.system.ifActivable.nSpell}}</td>
+                    </tr>
+                  {{/if}}
+                  {{#if consumable.system.ifActivable.nInvoc}}
+                    <tr>
+                      <td align="center">{{localize
+                          "orc.consumable.ifActivable.nInvoc"
+                        }}</td>
+                      <td
+                        align="center"
+                      >{{consumable.system.ifActivable.nInvoc}}</td>
+                    </tr>
+                  {{/if}}
+                  {{#if (isNotEmptyString consumable.system.ifActivable.magicPower)}}
+                    <tr>
+                      <td align="center">{{localize
+                          "orc.consumable.ifActivable.magicPower"
+                        }}</td>
+                      <td
+                        align="center"
+                      >{{consumable.system.ifActivable.magicPower}}</td>
+                    </tr>
+                  {{/if}}
+                  {{#if consumable.system.ifActivable.mpReduc}}
+                    <tr>
+                      <td align="center">{{localize
+                          "orc.consumable.ifActivable.mpReduc"
+                        }}</td>
+                      <td
+                        align="center"
+                      >{{consumable.system.ifActivable.mpReduc}}</td>
+                    </tr>
+                  {{/if}}
+                  {{#if consumable.system.ifActivable.rollSpellBonus}}
+                    <tr>
+                      <td align="center">{{localize
+                          "orc.consumable.ifActivable.rollSpellBonus"
+                        }}</td>
+                      <td
+                        align="center"
+                      >{{consumable.system.ifActivable.rollSpellBonus}}</td>
+                    </tr>
+                  {{/if}}
+                  {{#if (isNotEmptyString consumable.system.addEffect)}}
+                    <tr>
+                      <td align="center">{{localize "orc.consumable.addEffect"}}</td>
+                      <td align="center">{{consumable.system.addEffect}}</td>
+                    </tr>
+                  {{/if}}
+                </table>
+              {{/if}}
             </td>   
-            <td class="content">
+            <td class="content" style="display: flex">
               <span>{{consumable.system.ifActivable.duration}}&nbsp;{{consumable.system.ifActivable.durationUnit}}&nbsp;&nbsp;&nbsp;</span>
               <span
                   class="consumable-activable-reduce-duration button fas fa-clock"
                   data-itemid="{{consumable._id}}"
               ></span>  
             </td>
-            <td class="content">
+            <td class="content" style="display: flex">
               <span
                   class="consumable-deactivate button fas fa-xmark"
                   data-itemid="{{consumable._id}}"

@@ -17,7 +17,16 @@
   </tr>
   {{#each weapons as |weapon id|}}
     <tr class="item flexrow" data-item-id="{{weapon._id}}">
-      <td class="content">{{weapon.name}}</td>
+      <td class="content">
+        <img
+          src="{{weapon.img}}"
+          data-edit="img"
+          title="{{weapon.name}}"
+          height="24"
+          width="24"
+        />
+        <div>{{weapon.name}}</div>
+      </td>
       <td class="content">{{weapon.system.damage}}</td>
       <td class="content">{{weapon.system.range}}</td>
       <td class="content">{{weapon.system.defenceModif}}</td>
@@ -29,7 +38,7 @@
       {{else}}
         <td class="content item-equipped button fas fa-xmark"></td>
       {{/if}}
-      <td align="center">
+      <td class="content" align="center">
         <a class="item-edit" align="center" title="Edit Item">
           <i class="button fas fa-edit"></i></a>
         <a class="item-delete" align="center" title="Delete Item">
@@ -142,11 +151,20 @@
   </tr>
   {{#each armors as |armor id|}}
     <tr class="item flexrow" data-item-id="{{armor._id}}">
-      <td class="content">{{armor.name}}</td>
+      <td class="content">
+        <img
+          src="{{armor.img}}"
+          data-edit="img"
+          title="{{armor.name}}"
+          height="24"
+          width="24"
+        />
+        <div>{{armor.name}}</div>
+      </td>
       <td class="content">{{localize armor.system.bodyPart}}</td>
       <td class="content">{{armor.system.ap}}</td>
       <td class="content">{{armor.system.weight}}</td>
-      <td align="center">
+      <td class="content" align="center">
         <a class="item-edit" align="center" title="Edit Item">
           <i class="button fas fa-edit"></i></a>
         <a class="item-delete" align="center" title="Delete Item">
@@ -171,7 +189,16 @@
       </tr>
       {{#each ammos as |ammo id|}}
         <tr class="item flexrow" data-item-id="{{ammo._id}}">
-          <td class="content">{{ammo.name}}</td>
+          <td class="content">
+            <img
+              src="{{ammo.img}}"
+              data-edit="img"
+              title="{{ammo.name}}"
+              height="24"
+              width="24"
+            />
+            <div>{{ammo.name}}</div>
+          </td>
           <td class="content">{{ammo.system.damage}}</td>
           <td class="content">{{ammo.system.effect}}</td>
           <td class="content" align="center">
@@ -186,7 +213,9 @@
             />
           </td>
           <td class="content">{{ammo.system.weight.total}}</td>
-          <td align="center">
+          <td class="content" align="center">
+            <a class="item-split" align="center" title="Split Item">
+              <i class="button fas fa-split"></i></a>
             <a class="item-edit" align="center" title="Edit Item">
               <i class="button fas fa-edit"></i></a>
             <a class="item-delete" align="center" title="Delete Item">
@@ -209,14 +238,23 @@
       </tr>
       {{#each equipableitems as |equipableitem id|}}
         <tr class="item flexrow" data-item-id="{{equipableitem._id}}">
-          <td class="content">{{equipableitem.name}}</td>
+         <td class="content">
+            <img
+              src="{{equipableitem.img}}"
+              data-edit="img"
+              title="{{equipableitem.name}}"
+              height="24"
+              width="24"
+            />
+            <div>{{equipableitem.name}}</div>
+          </td>
           <td class="content">{{equipableitem.system.weight}}</td>
           {{#if equipableitem.system.equipped}}
             <td class="content item-equipped button fas fa-check"></td>
           {{else}}
             <td class="content item-equipped button fas fa-xmark"></td>
           {{/if}}
-          <td align="center">
+          <td class="content" align="center">
             <a class="item-edit" align="center" title="Edit Item">
               <i class="button fas fa-edit"></i></a>
             <a class="item-delete" align="center" title="Delete Item">
@@ -246,10 +284,23 @@
       </tr>
       {{#each foods as |food id|}}
         <tr class="item flexrow" data-item-id="{{food._id}}">
-          <td class="content">{{food.name}}</td>
+         <td class="content">
+            <img
+              src="{{food.img}}"
+              data-edit="img"
+              title="{{food.name}}"
+              height="24"
+              width="24"
+            />
+            <div>{{food.name}}</div>
+          </td>
           <td class="content">{{food.system.hp}}</td>
           <td class="content">{{food.system.mp}}</td>
-          <td class="content">{{food.system.tipsiness}}</td>
+          <td class="content">
+            {{#if food.system.tipsiness}}
+              {{food.system.tipsiness}}
+            {{/if}}
+          </td>
           <td class="content" align="center">
             <input
               class="update-stock"
@@ -263,7 +314,9 @@
           </td>
           <td class="content">{{food.system.weight.total}}</td> 
           <td class="content item-consume button fas fa-meat"></td>
-          <td align="center">
+          <td class="content" align="center">
+            <a class="item-split" align="center" title="Split Item">
+              <i class="button fas fa-split"></i></a>
             <a class="item-edit" align="center" title="Edit Item">
               <i class="button fas fa-edit"></i></a>
             <a class="item-delete" align="center" title="Delete Item">
@@ -288,7 +341,16 @@
       {{#each consumables as |consumable id|}}
       {{#if (not consumable.system.ifActivable.activated)}}
       <tr class="item flexrow" data-item-id="{{consumable._id}}">
-        <td class="content">{{consumable.name}}</td> 
+       <td class="content">
+          <img
+            src="{{consumable.img}}"
+            data-edit="img"
+            title="{{consumable.name}}"
+            height="24"
+            width="24"
+          />
+          <div>{{consumable.name}}</div>
+        </td>
         <td class="content" align="center">
           <input
             class="update-stock"
@@ -302,7 +364,9 @@
         </td>         
         <td class="content">{{consumable.system.weight.total}}</td>
         <td class="content item-consume button fas fa-flask"></td>
-        <td align="center" class="content">
+        <td class="content" align="center" class="content">
+          <a class="item-split" align="center" title="Split Item">
+              <i class="button fas fa-split"></i></a>
           <a class="item-edit" align="center" title="Edit Item">
             <i class="button fas fa-edit"></i></a>
           <a class="item-delete" align="center" title="Delete Item">
@@ -315,7 +379,6 @@
   </div>
 </div>
 
-<div class="bag-general">
   <div class="bag">
     <table class="item-list bag-list">
       <tr class="main-header flexrow">
@@ -329,14 +392,23 @@
       </tr>
       {{#each bags as |bag id|}}
         <tr class="item flexrow" data-item-id="{{bag._id}}">
-          <td class="content">{{bag.name}}</td>
+        <td class="content">
+            <img
+              src="{{bag.img}}"
+              data-edit="img"
+              title="{{bag.name}}"
+              height="24"
+              width="24"
+            />
+            <div>{{bag.name}}</div>
+          </td>
           <td class="content">{{bag.system.capacity}}</td>
           {{#if bag.system.equipped}}
             <td class="content item-equipped button fas fa-check"></td>
           {{else}}
             <td class="content item-equipped button fas fa-xmark"></td>
           {{/if}}
-          <td align="center">
+          <td class="content" align="center">
             <a class="item-edit" align="center" title="Edit Item">
               <i class="button fas fa-edit"></i></a>
             <a class="item-delete" align="center" title="Delete Item">
@@ -359,10 +431,31 @@
       </tr>
       {{#each generalitems as |general id|}}
         <tr class="item flexrow" data-item-id="{{general._id}}">
-          <td class="content">{{general.name}}</td>
-          <td class="content">{{general.system.stock}}</td>
+          <td class="content">
+            <img
+              src="{{general.img}}"
+              data-edit="img"
+              title="{{general.name}}"
+              height="24"
+              width="24"
+            />
+            <div>{{general.name}}</div>
+          </td>
+          <td class="content" align="center">
+            <input
+              class="update-stock"
+              type="number"
+              name="general.system.stock"
+              value="{{general.system.stock}}"
+              placeholder="0"
+              onClick="this.select();"
+              style="width: 30px"
+            />
+          </td>
           <td class="content">{{general.system.weight.total}}</td>
-          <td align="center">
+          <td class="content" align="center">
+            <a class="item-split" align="center" title="Split Item">
+              <i class="button fas fa-split"></i></a>
             <a class="item-edit" align="center" title="Edit Item">
               <i class="button fas fa-edit"></i></a>
             <a class="item-delete" align="center" title="Delete Item">
@@ -372,5 +465,4 @@
       {{/each}}
     </table>
   </div>
-</div>
 </div>

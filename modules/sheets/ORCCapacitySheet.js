@@ -49,11 +49,9 @@ export default class ORCCapacitySheet extends ItemSheet {
   activateListeners(html) {
     super.activateListeners(html);
 
-    html.find(".sheet-change-lock").click(Item._onSheetChangelock.bind(this));
+    html.find(".sheet-change-lock").click(Item.onSheetChangelock.bind(this));
 
-    html
-      .find(".description-deploy")
-      .click(Item._onDescriptionDeploy.bind(this));
+    html.find(".description-deploy").click(Item.onDescriptionDeploy.bind(this));
   }
 
   /* -------------------------------------------- */

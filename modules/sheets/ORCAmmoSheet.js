@@ -1,4 +1,4 @@
-import * as Item from "../commons/item.js";
+import * as ItemOrc from "../commons/item.js";
 export default class ORCAmmoSheet extends ItemSheet {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
@@ -33,7 +33,7 @@ export default class ORCAmmoSheet extends ItemSheet {
       relativeTo: this.item,
     });
 
-    Item.updateTotalWeight(data);
+    ItemOrc.updateTotalWeight(data);
 
     //console.log(data);
     return data;
@@ -42,11 +42,11 @@ export default class ORCAmmoSheet extends ItemSheet {
   activateListeners(html) {
     super.activateListeners(html);
 
-    html.find(".sheet-change-lock").click(Item._onSheetChangelock.bind(this));
+    html.find(".sheet-change-lock").click(ItemOrc.onSheetChangelock.bind(this));
 
     html
       .find(".description-deploy")
-      .click(Item._onDescriptionDeploy.bind(this));
+      .click(ItemOrc.onDescriptionDeploy.bind(this));
   }
 
   /* -------------------------------------------- */

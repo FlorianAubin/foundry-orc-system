@@ -8,7 +8,7 @@
       "flags": {}
     }
   ],
-  "version": 1.0,
+  "version": 1.1,
   "compatibility": {
     "minimum": "10",
     "verified": "10"
@@ -25,7 +25,6 @@
   ],
   "gridDistance": 2,
   "grdiUnits": "m",
-  "primaryTokenAttribute": "HP",
-  "secondTokenAttribute": "MP",
-  "initiative": "1d100"
+  "primaryTokenAttribute": "hp.value",
+  "secondaryTokenAttribute": "mp.value"
 }

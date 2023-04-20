@@ -1,9 +1,11 @@
 <div class="orc spell-roll dice-roll">
   <table class="results">
-    <tr class="title"><th>{{title}}</th></tr>
+    <tr class="title">
+      <th colspan="4">{{title}}</th>
+    </tr>
     {{#if costRoll.formula}}
       <tr>
-        <th class="add-info">{{localize "orc.spell.cost"}}</th>
+        <th class="header">{{localize "orc.spell.cost"}}</th>
         <td class="dice-formula">
           {{costRoll.formula}}
         </td>
@@ -23,7 +25,7 @@
 
     {{#if powerRoll.formula}}
       <tr>
-        <th class="add-info">{{localize "orc.spell.power"}}</th>
+        <th class="header">{{localize "orc.spell.power"}}</th>
         <td class="dice-formula">
           {{powerRoll.formula}}
         </td>
@@ -36,7 +38,7 @@
 
     {{#if durationRoll.formula}}
       <tr>
-        <th class="add-info">{{localize "orc.spell.duration"}}</th>
+        <th class="header">{{localize "orc.spell.duration"}}</th>
         <td class="dice-formula">
           {{durationRoll.formula}}
         </td>
@@ -52,7 +54,7 @@
 
     {{#if effect}}
       <tr class="effects">
-        <td>{{effect}}</td>
+        <td colspan="4">{{effect}}</td>
       </tr>
     {{/if}}
   </table>

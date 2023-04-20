@@ -1,7 +1,8 @@
 {
   "Actor": {
-    "types": ["character"],
+    "types": ["character", "container"],
     "character": {
+      "initiative": 0,
       "attributes": {
         "physical": {
           "name": "orc.character.attributes.physical",
@@ -172,6 +173,10 @@
         "heal": ""
       },
       "biography": ""
+    },
+    "container": {
+      "capacity": 0,
+      "capacityUsed": 0
     }
   },
 
@@ -234,7 +239,7 @@
     },
     "weapon": {
       "damage": "0",
-      "range": 0,
+      "range": 2,
       "useAmmo": false,
       "ammo": "",
       "defenceModif": 0,
@@ -366,7 +371,6 @@
     },
     "spell": {
       "school": "",
-      "level": 0,
       "difficulty": 0,
       "cost": "",
       "useHP": false,
@@ -376,7 +380,7 @@
       "power": "",
       "duration": "",
       "durationUnit": "",
-      "range": 0,
+      "range": 30,
       "effect": "",
       "memorized": false,
       "optionDescriptionDeploy": false,
@@ -425,7 +429,7 @@
       "intelModif": 0,
       "attackModif": 0,
       "dodgeModif": 0,
-      "damageBonusModif": 0,
+      "damageBonusModif": "",
       "encumbranceLimitModif": 0,
       "foodNeededDayModif": 0,
       "drinkNeededDayModif": 0,

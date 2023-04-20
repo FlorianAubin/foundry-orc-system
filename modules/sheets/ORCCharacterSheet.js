@@ -1,6 +1,8 @@
-import * as Dice from "../commons/dice.js";
-import * as Chat from "../commons/chat.js";
-import * as Enchant from "../commons/enchant.js";
+import * as DiceOrc from "../commons/dice.js";
+import * as ChatOrc from "../commons/chat.js";
+import * as EnchantOrc from "../commons/enchant.js";
+import * as ItemOrc from "../commons/item.js";
+import * as ActorOrc from "../commons/actor.js";
 export default class ORCCharacterSheet extends ActorSheet {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
@@ -69,26 +71,30 @@ export default class ORCCharacterSheet extends ActorSheet {
     data.unlocked = this.actor.getFlag(game.system.id, "SheetUnlocked");
 
     this._prepareCharacterData(data);
+    this._calculateInitiative(data);
 
     //console.log(data);
     return data;
   }
 
   activateListeners(html) {
-    html.find(".sheet-change-lock").click(this._onSheetChangelock.bind(this));
+    html
+      .find(".sheet-change-lock")
+      .click(ActorOrc.onSheetChangelock.bind(this));
 
     html.find(".ap-deploy").click(this._onAPDeploy.bind(this));
     html.find(".nutrition-deploy").click(this._onNutritionDeploy.bind(this));
 
     //html.find(".item-create").click(this._onItemCreate.bind(this));
-    html.find(".item-edit").click(this._onItemEdit.bind(this));
-    html.find(".item-delete").click(this._onItemDelete.bind(this));
+    html.find(".item-edit").click(ItemOrc.onItemEdit.bind(this));
+    html.find(".item-delete").click(ItemOrc.onItemDelete.bind(this));
+    html.find(".item-split").click(ItemOrc.onItemSplit.bind(this));
 
     html.find(".item-equipped").click(this._onItemEquipped.bind(this));
     html
       .find(".weapon-choose-ammo")
       .change(this._onWeaponChooseAmmo.bind(this));
-    html.find(".update-stock").change(this._onUpdateStock.bind(this));
+    html.find(".update-stock").change(ItemOrc.onUpdateStock.bind(this));
     html.find(".armor-equipped").change(this._onArmorEquipped.bind(this));
     html.find(".armor-update-ap").change(this._onArmorUpdateAP.bind(this));
 
@@ -116,22 +122,24 @@ export default class ORCCharacterSheet extends ActorSheet {
     html
       .find(".attack-with-weapon-roll")
       .click(this._onAttackWithWeaponRoll.bind(this));
-    html.find(".enchant-deploy").click(Enchant._onEnchantDeploy.bind(this));
-    html.find(".enchant-roll").click(Enchant._onEnchantRoll.bind(this));
-    html.find(".enchant-activate").click(Enchant._onEnchantActivate.bind(this));
+    html.find(".enchant-deploy").click(EnchantOrc.onEnchantDeploy.bind(this));
+    html.find(".enchant-roll").click(EnchantOrc.onEnchantRoll.bind(this));
+    html
+      .find(".enchant-activate")
+      .click(EnchantOrc.onEnchantActivate.bind(this));
     html.find(".item-consume").click(this._onItemConsume.bind(this));
     html
       .find(".consumable-deactivate")
       .click(this._onConsumableDeactivate.bind(this));
     html
       .find(".consumable-activable-deploy")
-      .click(this._onConsumableDeploy.bind(this));
+      .click(ItemOrc.onConsumableDeploy.bind(this));
     html
       .find(".consumable-activable-reduce-duration")
       .click(this._onConsumableReduceDuration.bind(this));
     html
       .find(".enchant-reduce-duration")
-      .click(Enchant._onEnchantReduceDuration.bind(this));
+      .click(EnchantOrc._onEnchantReduceDuration.bind(this));
     html
       .find(".capacity-activable-reduce-duration")
       .click(this._onCapacityReduceDuration.bind(this));
@@ -154,27 +162,9 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     html.find(".spell-invoc").click(this._onSpellInvoc.bind(this));
 
-    html.find(".wound-deploy").click(this._onWoundDeploy.bind(this));
+    html.find(".wound-deploy").click(ItemOrc.onWoundDeploy.bind(this));
 
     super.activateListeners(html);
-  }
-
-  /**
-   * Manage the lock/unlock button on the sheet
-   */
-  async _onSheetChangelock(event) {
-    event.preventDefault();
-
-    let flagData = await this.actor.getFlag(game.system.id, "SheetUnlocked");
-    flagData
-      ? await this.actor.unsetFlag(game.system.id, "SheetUnlocked")
-      : await this.actor.setFlag(
-          game.system.id,
-          "SheetUnlocked",
-          "SheetUnlocked"
-        );
-
-    this.actor.sheet.render(true);
   }
 
   async _onAPDeploy(event) {
@@ -195,28 +185,6 @@ export default class ORCCharacterSheet extends ActorSheet {
       },
     };
     await this.actor.update(maj);
-  }
-
-  /**
-   * Edit owned item
-   */
-  _onItemEdit(event) {
-    const li = $(event.currentTarget).parents(".item");
-    const item = this.actor.items.get(li.data("itemId"));
-    item.sheet.render(true);
-  }
-
-  /**
-   * Delete owned item
-   */
-  _onItemDelete(event) {
-    const li = $(event.currentTarget).parents(".item");
-    const item = this.actor.items.get(li.data("itemId"));
-
-    if (item.type == "spell" && item.system.memorized) {
-      this._onSpellMemorized(event);
-    }
-    item.delete();
   }
 
   _onItemEquipped(event) {
@@ -373,29 +341,6 @@ export default class ORCCharacterSheet extends ActorSheet {
     return item.update(maj);
   }
 
-  _onUpdateStock(event) {
-    event.preventDefault();
-    let element = event.currentTarget;
-    let itemId = element.closest(".item").dataset.itemId;
-    let item = this.actor.items.get(itemId);
-    if (item.system.stock == null) return;
-
-    let maj = {
-      system: {
-        stock: parseFloat(event.currentTarget.value),
-        weight: {
-          total:
-            Math.floor(
-              100 *
-                item.system.weight.indiv *
-                parseFloat(event.currentTarget.value)
-            ) / 100,
-        },
-      },
-    };
-    return item.update(maj);
-  }
-
   _onArmorUpdateAP(event) {
     event.preventDefault();
     let element = event.currentTarget;
@@ -444,7 +389,7 @@ export default class ORCCharacterSheet extends ActorSheet {
   }
 
   async _onAttributeRoll(event) {
-    Dice.AttributeRoll({
+    DiceOrc.AttributeRoll({
       actor: this.actor,
       attribute: event.currentTarget.dataset,
       modif: this.actor.system.modifAllAttributes,
@@ -455,7 +400,7 @@ export default class ORCCharacterSheet extends ActorSheet {
   }
 
   async _onAttackRoll(event) {
-    Dice.AttackRoll({
+    DiceOrc.AttackRoll({
       actor: this.actor,
       attribute: event.currentTarget.dataset,
       modif: this.actor.system.modifAllAttributes,
@@ -468,7 +413,7 @@ export default class ORCCharacterSheet extends ActorSheet {
   }
 
   async _onDodgeRoll(event) {
-    Dice.DodgeRoll({
+    DiceOrc.DodgeRoll({
       actor: this.actor,
       attribute: event.currentTarget.dataset,
       modif: this.actor.system.modifAllAttributes,
@@ -479,14 +424,14 @@ export default class ORCCharacterSheet extends ActorSheet {
   }
 
   async _onDamageRoll(event) {
-    Dice.DamageRoll({
+    DiceOrc.DamageRoll({
       actor: this.actor,
       attribute: event.currentTarget.dataset,
     });
   }
 
   async _onPoisonRoll(event) {
-    let damage = Dice.BleedPoisonRoll({
+    let damage = DiceOrc.BleedPoisonRoll({
       actor: this.actor,
       type: event.currentTarget.dataset.type,
     });
@@ -497,7 +442,7 @@ export default class ORCCharacterSheet extends ActorSheet {
   }
 
   async _onBleedRoll(event) {
-    let damage = Dice.BleedPoisonRoll({
+    let damage = DiceOrc.BleedPoisonRoll({
       actor: this.actor,
       type: event.currentTarget.dataset.type,
     });
@@ -507,7 +452,7 @@ export default class ORCCharacterSheet extends ActorSheet {
   }
 
   async _onBurnRoll(event) {
-    const rollResult = Dice.BurnRoll({
+    const rollResult = DiceOrc.BurnRoll({
       actor: this.actor,
     });
 
@@ -577,12 +522,12 @@ export default class ORCCharacterSheet extends ActorSheet {
     )
       return;
 
-    await Dice.AttackRoll({
+    await DiceOrc.AttackRoll({
       actor: this.actor,
       attribute: event.currentTarget.dataset,
       modif: this.actor.system.modifAllAttributes,
     });
-    await Dice.DamageRoll({
+    await DiceOrc.DamageRoll({
       actor: this.actor,
       attribute: event.currentTarget.dataset,
     });
@@ -605,7 +550,7 @@ export default class ORCCharacterSheet extends ActorSheet {
       })[0];
 
     //Do the roll
-    await Dice.SpellRoll({
+    await DiceOrc.SpellRoll({
       actor: actor,
       attribute: event.currentTarget.dataset,
       modif: actor.system.modifAllAttributes,
@@ -621,7 +566,7 @@ export default class ORCCharacterSheet extends ActorSheet {
   async _onControlInvocRoll(event) {
     let actor = this.actor;
     //Do the roll
-    await Dice.SpellRoll({
+    await DiceOrc.SpellRoll({
       actor: actor,
       attribute: event.currentTarget.dataset,
       modif: actor.system.modifAllAttributes,
@@ -665,7 +610,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     }
     //Do a physical roll and increase the actor tipsiness in case of failure
     if (itemData.tipsiness || itemData.poison) {
-      let statusResistOut = Dice.StatusResistRoll({
+      let statusResistOut = DiceOrc.StatusResistRoll({
         actor: actor,
         modif: actorData.modifAllAttributes + actorData.status.modifResist,
       });
@@ -744,7 +689,7 @@ export default class ORCCharacterSheet extends ActorSheet {
       let duration = roll.total;
       //If the formula is not trivial, display the roll in the chat
       if (durationFormula.includes("d") || durationFormula.includes("+"))
-        Chat.RollToSimpleCustomMessage({ roll: roll });
+        ChatOrc.RollToSimpleCustomMessage({ roll: roll });
 
       //Create a copy of the item tagged as activated, with the proper duration and no weight
       await item.clone(
@@ -762,45 +707,6 @@ export default class ORCCharacterSheet extends ActorSheet {
     //Delete the item if the stock goes to 0
     if (item.system.stock <= 0) await item.delete();
 
-    return;
-  }
-
-  async _onConsumableDeploy(event) {
-    event.preventDefault();
-    //Retrive the item
-    let item = this.actor.items.get(event.currentTarget.dataset.itemid);
-    //Does nothing if no item has been found
-    if (item == null) return;
-    //Does nothing if the item is not a consumable
-    if (item.type != "consumable") return;
-    let itemData = item.system;
-    //Does nothing if the item is not tagged as activable
-    if (!itemData.isActivable) return;
-
-    await item.update({
-      system: {
-        ifActivable: { optionDeploy: !itemData.ifActivable.optionDeploy },
-      },
-    });
-    return;
-  }
-
-  async _onWoundDeploy(event) {
-    event.preventDefault();
-    //Retrive the item
-    let item = this.actor.items.get(event.currentTarget.dataset.itemid);
-
-    //Does nothing if no item has been found
-    if (item == null) return;
-    //Does nothing if the item is not a consumable
-    if (item.type != "wound") return;
-    let itemData = item.system;
-
-    await item.update({
-      system: {
-        optionDeploy: !itemData.optionDeploy,
-      },
-    });
     return;
   }
 
@@ -870,7 +776,7 @@ export default class ORCCharacterSheet extends ActorSheet {
   _onCapacityStatusResistRoll(event) {
     let actor = this.actor;
     let actorData = actor.system;
-    Dice.StatusResistRoll({
+    DiceOrc.StatusResistRoll({
       actor: actor,
       modif: actorData.modifAllAttributes + actorData.status.modifResist,
     });
@@ -917,7 +823,7 @@ export default class ORCCharacterSheet extends ActorSheet {
       durationEffective = roll.total;
       //If the formula is not trivial, display the roll in the chat
       if (durationFormula.includes("d") || durationFormula.includes("+"))
-        Chat.RollToSimpleCustomMessage({ roll: roll });
+        ChatOrc.RollToSimpleCustomMessage({ roll: roll });
     }
 
     item.update({
@@ -1026,7 +932,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     let damage = roll.total;
     //If the formula is not trivial, display the roll in the chat
     if (damageFormula.includes("d") || damageFormula.includes("+"))
-      Chat.RollToSimpleCustomMessage({ roll: roll });
+      ChatOrc.RollToSimpleCustomMessage({ roll: roll });
 
     //Apply the armor
     if (applyArmor) damage -= actorData.ap.value;
@@ -1098,7 +1004,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     let heal = roll.total;
     //If the formula is not trivial, display the roll in the chat
     if (healFormula.includes("d") || healFormula.includes("+"))
-      Chat.RollToSimpleCustomMessage({ roll: roll });
+      ChatOrc.RollToSimpleCustomMessage({ roll: roll });
     //Apply the multiplier
     heal *= multiplier;
 
@@ -1223,6 +1129,9 @@ export default class ORCCharacterSheet extends ActorSheet {
     this.updateWeaponsEffectiveValues(data);
     //Update the spell effective values (rolls, effect...)
     this.updateSpellEffectiveValues(data);
+
+    //Delete items with 0 stock
+    ActorOrc.removeItemsWithoutStock(data);
   }
 
   calculateValues(data) {
@@ -1564,11 +1473,9 @@ export default class ORCCharacterSheet extends ActorSheet {
         if (itemData.intelModif != 0) modif.intel += itemData.intelModif;
         if (itemData.hpMaxModif != 0) modif.hpMax += itemData.hpMaxModif;
         if (itemData.mpMaxModif != 0) modif.mpMax += itemData.mpMaxModif;
-        if (itemData.apModif != 0) modif.ap += itemData.apModif;
         if (itemData.encumbranceLimitModif != 0)
           modif.encumbranceLimit += itemData.encumbranceLimitModif;
         if (itemData.attackModif != 0) modif.attack += itemData.attackModif;
-        if (itemData.defenceModif != 0) modif.defence += itemData.defenceModif;
         if (itemData.dodgeModif != 0) modif.dodge += itemData.dodgeModif;
         if (itemData.foodNeededDayModif != 0)
           modif.foodNeededDay += itemData.foodNeededDayModif;
@@ -1930,6 +1837,7 @@ export default class ORCCharacterSheet extends ActorSheet {
       //if the weapon is tagged as twin, cancel the ambidex malus
       if (actor.system.combatStyle == "ambidex" && item.system.twin)
         effectiveAttack += 20;
+      if (effectiveAttack > 100) effectiveAttack = 100;
 
       if (item.system.useAmmo) {
         let ammo = ammos.filter(function (i) {
@@ -1980,6 +1888,8 @@ export default class ORCCharacterSheet extends ActorSheet {
         effectiveControlRoll -=
           (actor.system.magic.nInvoc.invoked - 1) *
           actor.system.magic.nInvoc.controlDiffIncrease;
+      if (effectiveLaunchRoll > 100) effectiveLaunchRoll = 100;
+      if (effectiveControlRoll > 100) effectiveControlRoll = 100;
 
       let maj = {
         system: {
@@ -1996,5 +1906,27 @@ export default class ORCCharacterSheet extends ActorSheet {
     }
 
     return;
+  }
+
+  _calculateInitiative(data) {
+    let actor = data.actor;
+    const actorData = actor.system;
+
+    const physMult = 1 / 5,
+      intelMult = 1 / 10;
+
+    let initiative = Math.floor(
+      physMult * actorData.attributes.physical.value +
+        intelMult * actorData.attributes.intel.value
+    );
+    actor.update({
+      system: {
+        initiative: initiative,
+      },
+    });
+  }
+
+  async _onDropItem(event, data) {
+    return ActorOrc.onDropItem(event, data, this);
   }
 }
