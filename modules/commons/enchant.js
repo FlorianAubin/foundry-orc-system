@@ -55,11 +55,13 @@ export async function onEnchantActivate(event) {
     let durationFormula = enchant.use.duration;
     if (typeof durationFormula !== "string")
       durationFormula = durationFormula.toString();
-    let roll = new Roll(durationFormula).roll({ async: false });
-    durationEffective = roll.total;
-    //If the formula is not trivial, display the roll in the chat
-    if (durationFormula.includes("d") || durationFormula.includes("+"))
-      Chat.RollToSimpleCustomMessage({ roll: roll });
+    if (durationFormula != "") {
+      let roll = new Roll(durationFormula).roll({ async: false });
+      durationEffective = roll.total;
+      //If the formula is not trivial, display the roll in the chat
+      if (durationFormula.includes("d") || durationFormula.includes("+"))
+        Chat.RollToSimpleCustomMessage({ roll: roll });
+    }
   }
 
   //Update the enchant

@@ -181,9 +181,9 @@
       </tr>
       <tr class="header flexrow">
         <th class="content"></th>
+        <th class="content">{{localize "orc.ammo.stock"}}</th>
         <th class="content">{{localize "orc.ammo.damage"}}</th>
         <th class="content">{{localize "orc.ammo.effect"}}</th>
-        <th class="content">{{localize "orc.ammo.stock"}}</th>
         <th class="content">{{localize "orc.ammo.weight"}}</th>
         <th class="content"></th>
       </tr>
@@ -199,8 +199,6 @@
             />
             <div>{{ammo.name}}</div>
           </td>
-          <td class="content">{{ammo.system.damage}}</td>
-          <td class="content">{{ammo.system.effect}}</td>
           <td class="content" align="center">
             <input
               class="update-stock"
@@ -212,6 +210,8 @@
               style="width: 30px"
             />
           </td>
+          <td class="content">{{ammo.system.damage}}</td>
+          <td class="content">{{ammo.system.effect}}</td>
           <td class="content">{{ammo.system.weight.total}}</td>
           <td class="content" align="center">
             <a class="item-split" align="center" title="Split Item">
@@ -274,10 +274,10 @@
       </tr>
       <tr class="header flexrow">
         <th class="content"></th>
+        <th class="content">{{localize "orc.food.stock"}}</th>
         <th class="content">{{localize "orc.food.hp"}}</th>
         <th class="content">{{localize "orc.food.mp"}}</th>
         <th class="content">{{localize "orc.food.tipsiness"}}</th>
-        <th class="content">{{localize "orc.food.stock"}}</th>
         <th class="content">{{localize "orc.food.weight"}}</th>
         <th class="content">{{localize "orc.food.consume"}}</th>
         <th class="content"></th>
@@ -294,13 +294,6 @@
             />
             <div>{{food.name}}</div>
           </td>
-          <td class="content">{{food.system.hp}}</td>
-          <td class="content">{{food.system.mp}}</td>
-          <td class="content">
-            {{#if food.system.tipsiness}}
-              {{food.system.tipsiness}}
-            {{/if}}
-          </td>
           <td class="content" align="center">
             <input
               class="update-stock"
@@ -311,6 +304,13 @@
               onClick="this.select();"
               style="width: 30px"
             />
+          </td>
+          <td class="content">{{food.system.hp}}</td>
+          <td class="content">{{food.system.mp}}</td>
+          <td class="content">
+            {{#if food.system.tipsiness}}
+              {{food.system.tipsiness}}
+            {{/if}}
           </td>
           <td class="content">{{food.system.weight.total}}</td> 
           <td class="content item-consume button fas fa-meat"></td>

@@ -476,7 +476,7 @@
   height: 100%;
 }
 .orc.sheet.actor .character .main .content .central .sheet-body .active td {
-  width: 100px;
+  width: 150px;
 }
 .orc.sheet.actor .character .main .content .central .sheet-body .active .status {
   display: flex;
@@ -551,7 +551,7 @@
   align-self: center;
   place-content: center;
   width: 100%;
-  max-width: 100px;
+  max-width: 150px;
 }
 .orc.sheet.actor .character .main .content .central .sheet-body .active .consumable-list .header .effect-list,
 .orc.sheet.actor .character .main .content .central .sheet-body .active .enchant-list .header .effect-list,
@@ -572,7 +572,7 @@
   align-self: center;
   place-content: center;
   width: 100%;
-  max-width: 100px;
+  max-width: 150px;
 }
 .orc.sheet.actor .character .main .content .central .sheet-body .active .consumable-list .item .effect-list,
 .orc.sheet.actor .character .main .content .central .sheet-body .active .enchant-list .item .effect-list,
