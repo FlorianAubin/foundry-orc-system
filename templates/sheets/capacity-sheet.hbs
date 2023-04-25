@@ -186,6 +186,7 @@
               </td>
             {{/if}}
           {{/if}}
+        </tr>
         <tr class="sep"></tr>
         <tr>
           {{#if (or unlocked item.system.isAttributRoll)}}
@@ -355,11 +356,11 @@
             (not item.system.isAttackRoll)
         )}}
           <tr>
-            <th>{{localize "orc.capacity.modifStatusResist"}}</th>
+            <th colspan="2">{{localize "orc.capacity.modifStatusResist"}}</th>
           </tr>
           <tr>
             {{#if unlocked}}
-              <td align="center">
+              <td align="center" colspan="2">
                 <input
                   name="system.modifStatusResist"
                   type="Number"
@@ -368,7 +369,7 @@
                 />
               </td>
             {{else}}
-              <td align="center">
+              <td align="center" colspan="2">
                 <span>{{item.system.modifStatusResist}}</span>
               </td>
             {{/if}}
@@ -417,13 +418,8 @@
 
         <tr>
           {{#if (or unlocked item.system.dodgeEnable)}}
-          <th>{{localize "orc.capacity.dodgeEnable"}}</th>
+            <th>{{localize "orc.capacity.dodgeEnable"}}</th>
           {{/if}}
-          {{#if (or unlocked (isNotEmptyString item.system.addEffect))}}
-          <th>{{localize "orc.capacity.addEffect"}}</th>
-          {{/if}}
-        </tr>
-        <tr>
           {{#if unlocked}}
             <td align="center">
               <input
@@ -432,7 +428,23 @@
                 {{checked item.system.dodgeEnable}}
               />
             </td>
-            <td align="center">
+          {{else}}
+            {{#if item.system.dodgeEnable}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+
+        <tr>
+          {{#if (or unlocked (isNotEmptyString item.system.addEffect))}}
+          <th colspan="2">{{localize "orc.capacity.addEffect"}}</th>
+          {{/if}}
+        </tr>
+        <tr>
+          {{#if unlocked}}
+            <td align="center" colspan="2">
               <input
                 name="system.addEffect"
                 type="text"
@@ -441,13 +453,8 @@
               />
             </td>
           {{else}}
-            {{#if item.system.dodgeEnable}}
-            <td align="center">
-                <span class="fas fa-check"></span>
-            </td>
-            {{/if}}
             {{#if (isNotEmptyString item.system.addEffect)}}
-            <td align="center">
+            <td align="center" colspan="2">
               <span>{{item.system.addEffect}}</span>
             </td>
             {{/if}}

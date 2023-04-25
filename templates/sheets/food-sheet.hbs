@@ -38,100 +38,126 @@
     <div class="content">
       <table>
         <tr>
-          <th>{{localize "orc.food.hp"}}</th>
-          <th>{{localize "orc.food.mp"}}</th>
+          {{#if (or unlocked item.system.hp)}}
+            <th>{{localize "orc.food.hp"}}</th>
+          {{/if}}
+          {{#if (or unlocked item.system.mp)}}
+            <th>{{localize "orc.food.mp"}}</th>
+          {{/if}}
         </tr>
         <tr>
-          <td align="center">
-            {{#if unlocked}}
+          {{#if unlocked}}
+            <td align="center">
               <input
                 name="system.hp"
                 type="text"
                 value="{{item.system.hp}}"
                 placeholder="0"
               />
-            {{else}}
-              <span>{{item.system.hp}}</span>
+            </td>
+          {{else}}
+            {{#if item.system.hp}}
+              <td align="center">{{item.system.hp}}</td>
             {{/if}}
-          </td>
-          <td align="center">
-            {{#if unlocked}}
+          {{/if}}
+          {{#if unlocked}}
+            <td align="center">
               <input
                 name="system.mp"
                 type="text"
                 value="{{item.system.mp}}"
                 placeholder="0"
               />
-            {{else}}
-              <span>{{item.system.mp}}</span>
+            </td>
+          {{else}}
+            {{#if item.system.mp}}
+              <td align="center">{{item.system.mp}}</td>
             {{/if}}
+          {{/if}}
           </td>
         </tr>
       </table>
       <table>
         <tr>
-          <th>{{localize "orc.food.tipsiness"}}</th>
-          <th>{{localize "orc.food.poison"}}</th>
+          {{#if (or unlocked item.system.tipsiness)}}
+            <th>{{localize "orc.food.tipsiness"}}</th>
+          {{/if}}
+          {{#if (or unlocked item.system.poison)}}
+            <th>{{localize "orc.food.poison"}}</th>
+          {{/if}}
         </tr>
         <tr>
-          <td align="center">
-            {{#if unlocked}}
+          {{#if unlocked}}
+            <td align="center">
               <input
                 name="system.tipsiness"
-                type="number"
+                type="text"
                 value="{{item.system.tipsiness}}"
                 placeholder="0"
               />
-            {{else}}
-              <span>{{item.system.tipsiness}}</span>
+            </td>
+          {{else}}
+            {{#if item.system.tipsiness}}
+              <td align="center">{{item.system.tipsiness}}</td>
             {{/if}}
-          </td>
-          <td align="center">
-            {{#if unlocked}}
+          {{/if}}
+          {{#if unlocked}}
+            <td align="center">
               <input
                 name="system.poison"
-                type="number"
+                type="text"
                 value="{{item.system.poison}}"
                 placeholder="0"
               />
-            {{else}}
-              <span>{{item.system.poison}}</span>
+            </td>
+          {{else}}
+            {{#if item.system.poison}}
+              <td align="center">{{item.system.poison}}</td>
             {{/if}}
+          {{/if}}
           </td>
         </tr>
       </table>
       <table>
         <tr>
-          <th>{{localize "orc.food.type.food"}}</th>
-          <th>{{localize "orc.food.type.drink"}}</th>
+          {{#if (or unlocked item.system.type.food)}}
+            <th>{{localize "orc.food.type.food"}}</th>
+          {{/if}}
+          {{#if (or unlocked item.system.type.drink)}}
+            <th>{{localize "orc.food.type.drink"}}</th>
+          {{/if}}
         </tr>
         <tr>
-          <td align="center">
-            {{#if unlocked}}
+          {{#if unlocked}}
+            <td align="center">
               <input
                 name="system.type.food"
                 type="checkbox"
                 {{checked item.system.type.food}}
               />
-            {{else}}
-              {{#if item.system.type.food}}
+            </td>
+          {{else}}
+            {{#if item.system.type.food}}
+              <td align="center">      
                 <span class="fas fa-check"></span>
-              {{/if}}
+              </td>
             {{/if}}
-          </td>
-          <td align="center">
-            {{#if unlocked}}
+          {{/if}}
+          {{#if unlocked}}
+            <td align="center">
               <input
                 name="system.type.drink"
                 type="checkbox"
                 {{checked item.system.type.drink}}
               />
-            {{else}}
-              {{#if item.system.type.drink}}
+            </td>
+          {{else}}
+            {{#if item.system.type.drink}}
+              <td align="center">      
                 <span class="fas fa-check"></span>
-              {{/if}}
+              </td>
             {{/if}}
-          </td>
+          {{/if}}
         </tr>
       </table>
       <table>

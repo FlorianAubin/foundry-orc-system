@@ -31,7 +31,7 @@
       <th class="content">{{localize "orc.weapon.defenceModif"}}</th>
     </tr>
     {{#each weapons as |weapon id|}}
-    {{#if weapon.system.equipped}}
+    {{#if (and weapon.system.equipped weapon.system.defenceModif)}}
     <tr class="item flexrow">
       <td class="content">{{weapon.name}}</td>
       <td class="content">{{weapon.system.defenceModif}}</td>
@@ -50,14 +50,29 @@
       <th class="content">{{localize "orc.equipableitem.rollSpellBonus"}}</th>
     </tr>
     {{#each equipableitems as |equipableitem id|}}
-    {{#if equipableitem.system.equipped}}
+    {{#if (and equipableitem.system.equipped
+              (or equipableitem.system.nSpell 
+                  equipableitem.system.nInvoc 
+                  (isNotEmptyString equipableitem.system.magicPower)
+                  equipableitem.system.mpReduc 
+                  equipableitem.system.rollSpellBonus))}}
     <tr class="item flexrow">
       <td class="content">{{equipableitem.name}}</td>
-      <td class="content">{{equipableitem.system.nSpell}}</td>
-      <td class="content">{{equipableitem.system.nInvoc}}</td>
-      <td class="content">{{equipableitem.system.magicPower}}</td>
-      <td class="content">{{equipableitem.system.mpReduc}}</td>
-      <td class="content">{{equipableitem.system.rollSpellBonus}}</td>
+      {{#if equipableitem.system.nSpell}}
+        <td class="content">{{equipableitem.system.nSpell}}</td>
+      {{/if}}
+      {{#if equipableitem.system.nInvoc}}
+        <td class="content">{{equipableitem.system.nInvoc}}</td>
+      {{/if}}
+      {{#if (isNotEmptyString equipableitem.system.magicPower)}}
+        <td class="content">{{equipableitem.system.magicPower}}</td>
+      {{/if}}
+      {{#if equipableitem.system.mpReduc}}
+        <td class="content">{{equipableitem.system.mpReduc}}</td>
+      {{/if}}
+      {{#if equipableitem.system.rollSpellBonus}}
+        <td class="content">{{equipableitem.system.rollSpellBonus}}</td>
+      {{/if}}
     </tr>
     {{/if}}
     {{/each}}

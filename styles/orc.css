@@ -1,22 +1,22 @@
-.orc.sheet.actor textarea {
+.orc.sheet.actor .character textarea {
   resize: none;
 }
-.orc.sheet.actor form {
+.orc.sheet.actor .character form {
   display: flex;
   flex-direction: column;
 }
-.orc.sheet.actor .main {
+.orc.sheet.actor .character .main {
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
 }
-.orc.sheet.actor .main .content {
+.orc.sheet.actor .character .main .content {
   display: flex;
   flex-direction: row;
   height: 100%;
 }
-.orc.sheet.actor .attribute-value {
+.orc.sheet.actor .character .attribute-value {
   display: flex;
   flex-direction: column;
   min-height: 25px;
@@ -24,65 +24,65 @@
   width: 100%;
   box-shadow: inset 0 0 6px #484242;
 }
-.orc.sheet.actor .attribute-roll {
+.orc.sheet.actor .character .attribute-roll {
   display: table-cell;
   font-size: var(--font-size-15);
   width: 100px;
   height: 100%;
 }
-.orc.sheet.actor .button {
+.orc.sheet.actor .character .button {
   display: table-cell;
   align-self: center;
   place-content: center;
   font-size: var(--font-size-15);
   height: 100%;
 }
-.orc.sheet.actor .button:hover,
-.orc.sheet.actor .button:focus {
+.orc.sheet.actor .character .button:hover,
+.orc.sheet.actor .character .button:focus {
   color: #000;
   box-shadow: inset 0 0 6px #b41212;
   cursor: pointer;
 }
-.orc.sheet.actor textarea {
+.orc.sheet.actor .character textarea {
   resize: none;
 }
-.orc.sheet.actor form {
+.orc.sheet.actor .character form {
   display: flex;
   flex-direction: column;
 }
-.orc.sheet.actor .header {
+.orc.sheet.actor .character .header {
   display: flex;
   flex-direction: row;
   width: 100%;
 }
-.orc.sheet.actor .header .image {
+.orc.sheet.actor .character .header .image {
   display: flex;
   max-width: 220px;
   margin-left: -5px;
   margin-right: -5px;
 }
-.orc.sheet.actor .header .info {
+.orc.sheet.actor .character .header .info {
   display: flex;
   flex-direction: column;
   width: 100%;
   margin-left: 5px;
   margin-right: 10px;
 }
-.orc.sheet.actor .header .info .detail {
+.orc.sheet.actor .character .header .info .detail {
   display: flex;
   width: 100%;
 }
-.orc.sheet.actor .header .info .detail .details {
+.orc.sheet.actor .character .header .info .detail .details {
   display: flex;
   flex-direction: column;
   min-width: 100px;
 }
-.orc.sheet.actor .header .info .attributes {
+.orc.sheet.actor .character .header .info .attributes {
   display: flex;
   width: 100%;
   min-width: 100px;
 }
-.orc.sheet.actor .main .content .leftcolumn {
+.orc.sheet.actor .character .main .content .leftcolumn {
   display: flex;
   flex-direction: column;
   flex-grow: 0;
@@ -91,170 +91,180 @@
   margin-left: 10px;
   margin-right: -5px;
 }
-.orc.sheet.actor .main .content .leftcolumn .equipped-armor-bodypart {
+.orc.sheet.actor .character .main .content .leftcolumn .equipped-armor-bodypart {
   font-style: italic;
 }
-.orc.sheet.actor .main .content .leftcolumn .equipped-armor {
+.orc.sheet.actor .character .main .content .leftcolumn .equipped-armor {
   width: 50%;
 }
-.orc.sheet.actor .main .content .central {
+.orc.sheet.actor .character .main .content .central {
   display: flex;
   flex-direction: column;
   width: 100%;
   min-width: 400px;
   margin-right: 10px;
 }
-.orc.sheet.actor .main .content .central .sheet-body {
+.orc.sheet.actor .character .main .content .central .sheet-body {
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
 }
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .global-table {
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .global .global-table {
   margin: 0 0 1em 0;
 }
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .global-table th,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .global-table td {
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .global .global-table th,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .global .global-table td {
   border-left: 1px solid #000;
   border-right: 1px solid #000;
 }
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .column-container .table-container {
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .global .column-container .table-container {
   width: 100%;
 }
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .column-container .table-container .take-damage-table,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .column-container .table-container .heal-table {
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .global .column-container .table-container .take-damage-table,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .global .column-container .table-container .heal-table {
   margin: 0 0 0 0;
   border-top: 0;
   border-bottom: 0;
 }
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .column-container .table-container .take-damage-table th,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .column-container .table-container .heal-table th,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .column-container .table-container .take-damage-table td,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .column-container .table-container .heal-table td {
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .global .column-container .table-container .take-damage-table th,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .global .column-container .table-container .heal-table th,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .global .column-container .table-container .take-damage-table td,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .global .column-container .table-container .heal-table td {
   border-left: 0;
   border-right: 0;
 }
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .column-container .table-container .take-damage-row .choice,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .column-container .table-container .heal-hp-row .choice,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .global .column-container .table-container .heal-mp-row .choice {
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .global .column-container .table-container .take-damage-row .choice,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .global .column-container .table-container .heal-hp-row .choice,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .global .column-container .table-container .heal-mp-row .choice {
   text-align: center;
   place-content: center;
   align-items: center;
 }
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .weapon-list,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .spell-list,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .consumable-list,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .enchant-list,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .capacity-list {
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .weapon-list,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .spell-list,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .consumable-list,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .enchant-list,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .capacity-list {
   border-left: 1px solid #000;
   border-right: 1px solid #000;
 }
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .weapon-list .main-header,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .spell-list .main-header,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .consumable-list .main-header,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .enchant-list .main-header,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .capacity-list .main-header {
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .weapon-list .main-header,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .spell-list .main-header,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .consumable-list .main-header,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .enchant-list .main-header,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .capacity-list .main-header {
   display: flex;
   flex-direction: row;
 }
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .weapon-list .main-header .content,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .spell-list .main-header .content,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .consumable-list .main-header .content,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .enchant-list .main-header .content,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .capacity-list .main-header .content {
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .weapon-list .main-header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .spell-list .main-header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .consumable-list .main-header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .enchant-list .main-header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .capacity-list .main-header .content {
   align-self: center;
   place-content: center;
   align-items: center;
   width: 100%;
   max-width: 200px;
 }
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .weapon-list .header .content,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .spell-list .header .content,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .consumable-list .header .content,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .enchant-list .header .content,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .capacity-list .header .content {
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .weapon-list .header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .spell-list .header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .consumable-list .header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .enchant-list .header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .capacity-list .header .content {
   align-self: center;
   place-content: center;
   align-items: center;
   width: 100%;
   max-width: 300px;
 }
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .weapon-list .header .effect-list,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .spell-list .header .effect-list,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .consumable-list .header .effect-list,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .enchant-list .header .effect-list,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .capacity-list .header .effect-list {
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .weapon-list .header .effect-list,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .spell-list .header .effect-list,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .consumable-list .header .effect-list,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .enchant-list .header .effect-list,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .capacity-list .header .effect-list {
   align-self: center;
   place-content: center;
   width: 100%;
 }
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .weapon-list .item .content,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .spell-list .item .content,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .consumable-list .item .content,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .enchant-list .item .content,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .capacity-list .item .content {
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .weapon-list .item .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .spell-list .item .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .consumable-list .item .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .enchant-list .item .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .capacity-list .item .content {
   align-self: center;
   place-content: center;
   align-items: center;
+  text-align: center;
+  display: initial;
   width: 100%;
   max-width: 300px;
 }
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .weapon-list .item .effect-list,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .spell-list .item .effect-list,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .consumable-list .item .effect-list,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .enchant-list .item .effect-list,
-.orc.sheet.actor .main .content .central .sheet-body .shortcut .capacity-list .item .effect-list {
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .weapon-list .item .effect-list,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .spell-list .item .effect-list,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .consumable-list .item .effect-list,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .enchant-list .item .effect-list,
+.orc.sheet.actor .character .main .content .central .sheet-body .shortcut .capacity-list .item .effect-list {
   display: flex;
   flex-direction: row;
   align-self: center;
   place-content: center;
+  text-align: center;
   width: 100%;
 }
-.orc.sheet.actor .main .content .central .sheet-body .inventory {
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory {
   width: 100%;
   height: 100%;
 }
-.orc.sheet.actor .main .content .central .sheet-body .inventory td {
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory td {
   width: 100px;
 }
-.orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-equipableitem,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .food-consumable,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .bag-general {
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .ammo-equipableitem,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .food-consumable,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .bag,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .general {
   display: flex;
   flex-direction: row;
   width: 100%;
 }
-.orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-equipableitem .ammo,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .food-consumable .ammo,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .bag-general .ammo,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-equipableitem .equipableitem,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .food-consumable .equipableitem,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .bag-general .equipableitem,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-equipableitem .food,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .food-consumable .food,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .bag-general .food,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-equipableitem .consumable,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .food-consumable .consumable,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .bag-general .consumable,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-equipableitem .bag,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .food-consumable .bag,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .bag-general .bag,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-equipableitem .general,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .food-consumable .general,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .bag-general .general {
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .ammo-equipableitem .ammo,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .food-consumable .ammo,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .bag .ammo,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .general .ammo,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .ammo-equipableitem .equipableitem,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .food-consumable .equipableitem,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .bag .equipableitem,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .general .equipableitem,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .ammo-equipableitem .food,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .food-consumable .food,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .bag .food,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .general .food,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .ammo-equipableitem .consumable,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .food-consumable .consumable,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .bag .consumable,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .general .consumable,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .ammo-equipableitem .bag,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .food-consumable .bag,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .bag .bag,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .general .bag,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .ammo-equipableitem .general,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .food-consumable .general,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .bag .general,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .general .general {
   display: flex;
   flex-direction: row;
   float: left;
   width: 100%;
 }
-.orc.sheet.actor .main .content .central .sheet-body .inventory .weapon-list,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .armor-list,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-list,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .equipableitem-list,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .food-list,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .consumable-list,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .bag-list,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .general-list {
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .weapon-list,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .armor-list,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .ammo-list,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .equipableitem-list,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .food-list,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .consumable-list,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .bag-list,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .general-list {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -262,97 +272,99 @@
   border-left: 1px solid #000;
   border-right: 1px solid #000;
 }
-.orc.sheet.actor .main .content .central .sheet-body .inventory .weapon-list .main-header,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .armor-list .main-header,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-list .main-header,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .equipableitem-list .main-header,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .food-list .main-header,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .consumable-list .main-header,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .bag-list .main-header,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .general-list .main-header {
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .weapon-list .main-header,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .armor-list .main-header,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .ammo-list .main-header,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .equipableitem-list .main-header,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .food-list .main-header,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .consumable-list .main-header,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .bag-list .main-header,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .general-list .main-header {
   display: flex;
   flex-direction: row;
 }
-.orc.sheet.actor .main .content .central .sheet-body .inventory .weapon-list .main-header .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .armor-list .main-header .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-list .main-header .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .equipableitem-list .main-header .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .food-list .main-header .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .consumable-list .main-header .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .bag-list .main-header .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .general-list .main-header .content {
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .weapon-list .main-header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .armor-list .main-header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .ammo-list .main-header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .equipableitem-list .main-header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .food-list .main-header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .consumable-list .main-header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .bag-list .main-header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .general-list .main-header .content {
   align-self: center;
   place-content: center;
   width: 100%;
   max-width: 150px;
 }
-.orc.sheet.actor .main .content .central .sheet-body .inventory .weapon-list .header,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .armor-list .header,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-list .header,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .equipableitem-list .header,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .food-list .header,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .consumable-list .header,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .bag-list .header,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .general-list .header {
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .weapon-list .header,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .armor-list .header,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .ammo-list .header,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .equipableitem-list .header,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .food-list .header,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .consumable-list .header,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .bag-list .header,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .general-list .header {
   display: flex;
   flex-direction: row;
 }
-.orc.sheet.actor .main .content .central .sheet-body .inventory .weapon-list .header .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .armor-list .header .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-list .header .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .equipableitem-list .header .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .food-list .header .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .consumable-list .header .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .bag-list .header .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .general-list .header .content {
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .weapon-list .header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .armor-list .header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .ammo-list .header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .equipableitem-list .header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .food-list .header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .consumable-list .header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .bag-list .header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .general-list .header .content {
   align-self: center;
   place-content: center;
   width: 100%;
 }
-.orc.sheet.actor .main .content .central .sheet-body .inventory .weapon-list .bodypart,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .armor-list .bodypart,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-list .bodypart,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .equipableitem-list .bodypart,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .food-list .bodypart,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .consumable-list .bodypart,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .bag-list .bodypart,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .general-list .bodypart {
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .weapon-list .bodypart,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .armor-list .bodypart,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .ammo-list .bodypart,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .equipableitem-list .bodypart,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .food-list .bodypart,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .consumable-list .bodypart,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .bag-list .bodypart,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .general-list .bodypart {
   display: flex;
   flex-direction: row;
 }
-.orc.sheet.actor .main .content .central .sheet-body .inventory .weapon-list .bodypart .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .armor-list .bodypart .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-list .bodypart .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .equipableitem-list .bodypart .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .food-list .bodypart .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .consumable-list .bodypart .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .bag-list .bodypart .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .general-list .bodypart .content {
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .weapon-list .bodypart .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .armor-list .bodypart .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .ammo-list .bodypart .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .equipableitem-list .bodypart .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .food-list .bodypart .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .consumable-list .bodypart .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .bag-list .bodypart .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .general-list .bodypart .content {
   align-self: center;
   place-content: center;
   width: 100%;
 }
-.orc.sheet.actor .main .content .central .sheet-body .inventory .weapon-list .item .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .armor-list .item .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .ammo-list .item .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .equipableitem-list .item .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .food-list .item .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .consumable-list .item .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .bag-list .item .content,
-.orc.sheet.actor .main .content .central .sheet-body .inventory .general-list .item .content {
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .weapon-list .item .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .armor-list .item .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .ammo-list .item .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .equipableitem-list .item .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .food-list .item .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .consumable-list .item .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .bag-list .item .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .inventory .general-list .item .content {
   align-self: center;
   place-content: center;
+  display: initial;
+  text-align: center;
   width: 100%;
 }
-.orc.sheet.actor .main .content .central .sheet-body .magic {
+.orc.sheet.actor .character .main .content .central .sheet-body .magic {
   width: 100%;
   height: 100%;
 }
-.orc.sheet.actor .main .content .central .sheet-body .magic td {
+.orc.sheet.actor .character .main .content .central .sheet-body .magic td {
   width: 100px;
 }
-.orc.sheet.actor .main .content .central .sheet-body .magic .spell-list,
-.orc.sheet.actor .main .content .central .sheet-body .magic .invoc-list {
+.orc.sheet.actor .character .main .content .central .sheet-body .magic .spell-list,
+.orc.sheet.actor .character .main .content .central .sheet-body .magic .invoc-list {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -360,67 +372,70 @@
   border-left: 1px solid #000;
   border-right: 1px solid #000;
 }
-.orc.sheet.actor .main .content .central .sheet-body .magic .spell-list .main-header,
-.orc.sheet.actor .main .content .central .sheet-body .magic .invoc-list .main-header {
+.orc.sheet.actor .character .main .content .central .sheet-body .magic .spell-list .main-header,
+.orc.sheet.actor .character .main .content .central .sheet-body .magic .invoc-list .main-header {
   display: flex;
   flex-direction: row;
 }
-.orc.sheet.actor .main .content .central .sheet-body .magic .spell-list .main-header .content,
-.orc.sheet.actor .main .content .central .sheet-body .magic .invoc-list .main-header .content {
+.orc.sheet.actor .character .main .content .central .sheet-body .magic .spell-list .main-header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .magic .invoc-list .main-header .content {
   align-self: center;
   place-content: center;
   width: 100%;
   max-width: 150px;
 }
-.orc.sheet.actor .main .content .central .sheet-body .magic .spell-list .main-header .info,
-.orc.sheet.actor .main .content .central .sheet-body .magic .invoc-list .main-header .info {
+.orc.sheet.actor .character .main .content .central .sheet-body .magic .spell-list .main-header .info,
+.orc.sheet.actor .character .main .content .central .sheet-body .magic .invoc-list .main-header .info {
   align-self: center;
   place-content: center;
   align-items: center;
   width: 100%;
 }
-.orc.sheet.actor .main .content .central .sheet-body .magic .spell-list .header,
-.orc.sheet.actor .main .content .central .sheet-body .magic .invoc-list .header {
+.orc.sheet.actor .character .main .content .central .sheet-body .magic .spell-list .header,
+.orc.sheet.actor .character .main .content .central .sheet-body .magic .invoc-list .header {
   display: flex;
   flex-direction: row;
 }
-.orc.sheet.actor .main .content .central .sheet-body .magic .spell-list .header .content,
-.orc.sheet.actor .main .content .central .sheet-body .magic .invoc-list .header .content {
+.orc.sheet.actor .character .main .content .central .sheet-body .magic .spell-list .header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .magic .invoc-list .header .content {
   align-self: center;
   place-content: center;
   width: 100%;
   max-width: 200px;
 }
-.orc.sheet.actor .main .content .central .sheet-body .magic .spell-list .header .edit-button,
-.orc.sheet.actor .main .content .central .sheet-body .magic .invoc-list .header .edit-button {
+.orc.sheet.actor .character .main .content .central .sheet-body .magic .spell-list .header .edit-button,
+.orc.sheet.actor .character .main .content .central .sheet-body .magic .invoc-list .header .edit-button {
   width: 50px;
 }
-.orc.sheet.actor .main .content .central .sheet-body .magic .spell-list .item,
-.orc.sheet.actor .main .content .central .sheet-body .magic .invoc-list .item {
+.orc.sheet.actor .character .main .content .central .sheet-body .magic .spell-list .item,
+.orc.sheet.actor .character .main .content .central .sheet-body .magic .invoc-list .item {
   display: flex;
   flex-direction: row;
 }
-.orc.sheet.actor .main .content .central .sheet-body .magic .spell-list .item .content,
-.orc.sheet.actor .main .content .central .sheet-body .magic .invoc-list .item .content {
+.orc.sheet.actor .character .main .content .central .sheet-body .magic .spell-list .item .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .magic .invoc-list .item .content {
   align-self: center;
   place-content: center;
+  align-items: center;
+  text-align: center;
+  display: initial;
   width: 100%;
   max-width: 200px;
 }
-.orc.sheet.actor .main .content .central .sheet-body .magic .spell-list .item .edit-button,
-.orc.sheet.actor .main .content .central .sheet-body .magic .invoc-list .item .edit-button {
+.orc.sheet.actor .character .main .content .central .sheet-body .magic .spell-list .item .edit-button,
+.orc.sheet.actor .character .main .content .central .sheet-body .magic .invoc-list .item .edit-button {
   width: 50px;
   align-self: center;
   text-align: center;
 }
-.orc.sheet.actor .main .content .central .sheet-body .capacity {
+.orc.sheet.actor .character .main .content .central .sheet-body .capacity {
   width: 100%;
   height: 100%;
 }
-.orc.sheet.actor .main .content .central .sheet-body .capacity td {
+.orc.sheet.actor .character .main .content .central .sheet-body .capacity td {
   width: 100px;
 }
-.orc.sheet.actor .main .content .central .sheet-body .capacity .capacity-list {
+.orc.sheet.actor .character .main .content .central .sheet-body .capacity .capacity-list {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -428,42 +443,42 @@
   border-left: 1px solid #000;
   border-right: 1px solid #000;
 }
-.orc.sheet.actor .main .content .central .sheet-body .capacity .capacity-list .header {
+.orc.sheet.actor .character .main .content .central .sheet-body .capacity .capacity-list .header {
   display: flex;
   flex-direction: row;
 }
-.orc.sheet.actor .main .content .central .sheet-body .capacity .capacity-list .header .content {
+.orc.sheet.actor .character .main .content .central .sheet-body .capacity .capacity-list .header .content {
   align-self: center;
   place-content: center;
   width: 100%;
   max-width: 200px;
 }
-.orc.sheet.actor .main .content .central .sheet-body .capacity .capacity-list .header .edit-button {
+.orc.sheet.actor .character .main .content .central .sheet-body .capacity .capacity-list .header .edit-button {
   width: 50px;
 }
-.orc.sheet.actor .main .content .central .sheet-body .capacity .capacity-list .item {
+.orc.sheet.actor .character .main .content .central .sheet-body .capacity .capacity-list .item {
   display: flex;
   flex-direction: row;
 }
-.orc.sheet.actor .main .content .central .sheet-body .capacity .capacity-list .item .content {
+.orc.sheet.actor .character .main .content .central .sheet-body .capacity .capacity-list .item .content {
   align-self: center;
   place-content: center;
   width: 100%;
   max-width: 200px;
 }
-.orc.sheet.actor .main .content .central .sheet-body .capacity .capacity-list .item .edit-button {
+.orc.sheet.actor .character .main .content .central .sheet-body .capacity .capacity-list .item .edit-button {
   width: 50px;
   align-self: center;
   text-align: center;
 }
-.orc.sheet.actor .main .content .central .sheet-body .active {
+.orc.sheet.actor .character .main .content .central .sheet-body .active {
   width: 100%;
   height: 100%;
 }
-.orc.sheet.actor .main .content .central .sheet-body .active td {
-  width: 100px;
+.orc.sheet.actor .character .main .content .central .sheet-body .active td {
+  width: 150px;
 }
-.orc.sheet.actor .main .content .central .sheet-body .active .status {
+.orc.sheet.actor .character .main .content .central .sheet-body .active .status {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -471,38 +486,38 @@
   border-left: 1px solid #000;
   border-right: 1px solid #000;
 }
-.orc.sheet.actor .main .content .central .sheet-body .active .status .main-header {
+.orc.sheet.actor .character .main .content .central .sheet-body .active .status .main-header {
   display: flex;
   flex-direction: row;
   border-top: 1px solid #000;
 }
-.orc.sheet.actor .main .content .central .sheet-body .active .status .main-header .content {
+.orc.sheet.actor .character .main .content .central .sheet-body .active .status .main-header .content {
   align-self: center;
   place-content: center;
   width: 100%;
   max-width: 200px;
 }
-.orc.sheet.actor .main .content .central .sheet-body .active .status .header {
+.orc.sheet.actor .character .main .content .central .sheet-body .active .status .header {
   display: flex;
   flex-direction: row;
 }
-.orc.sheet.actor .main .content .central .sheet-body .active .status .header .content {
+.orc.sheet.actor .character .main .content .central .sheet-body .active .status .header .content {
   align-self: center;
   place-content: center;
   width: 100%;
 }
-.orc.sheet.actor .main .content .central .sheet-body .active .status .item {
+.orc.sheet.actor .character .main .content .central .sheet-body .active .status .item {
   display: flex;
   flex-direction: row;
 }
-.orc.sheet.actor .main .content .central .sheet-body .active .status .item .content {
+.orc.sheet.actor .character .main .content .central .sheet-body .active .status .item .content {
   align-self: center;
   place-content: center;
   width: 100%;
 }
-.orc.sheet.actor .main .content .central .sheet-body .active .consumable-list,
-.orc.sheet.actor .main .content .central .sheet-body .active .enchant-list,
-.orc.sheet.actor .main .content .central .sheet-body .active .wound-list {
+.orc.sheet.actor .character .main .content .central .sheet-body .active .consumable-list,
+.orc.sheet.actor .character .main .content .central .sheet-body .active .enchant-list,
+.orc.sheet.actor .character .main .content .central .sheet-body .active .wound-list {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -510,66 +525,115 @@
   border-left: 1px solid #000;
   border-right: 1px solid #000;
 }
-.orc.sheet.actor .main .content .central .sheet-body .active .consumable-list .main-header,
-.orc.sheet.actor .main .content .central .sheet-body .active .enchant-list .main-header,
-.orc.sheet.actor .main .content .central .sheet-body .active .wound-list .main-header {
+.orc.sheet.actor .character .main .content .central .sheet-body .active .consumable-list .main-header,
+.orc.sheet.actor .character .main .content .central .sheet-body .active .enchant-list .main-header,
+.orc.sheet.actor .character .main .content .central .sheet-body .active .wound-list .main-header {
   display: flex;
   flex-direction: row;
 }
-.orc.sheet.actor .main .content .central .sheet-body .active .consumable-list .main-header .content,
-.orc.sheet.actor .main .content .central .sheet-body .active .enchant-list .main-header .content,
-.orc.sheet.actor .main .content .central .sheet-body .active .wound-list .main-header .content {
+.orc.sheet.actor .character .main .content .central .sheet-body .active .consumable-list .main-header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .active .enchant-list .main-header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .active .wound-list .main-header .content {
   align-self: center;
   place-content: center;
   width: 100%;
   max-width: 200px;
 }
-.orc.sheet.actor .main .content .central .sheet-body .active .consumable-list .header,
-.orc.sheet.actor .main .content .central .sheet-body .active .enchant-list .header,
-.orc.sheet.actor .main .content .central .sheet-body .active .wound-list .header {
+.orc.sheet.actor .character .main .content .central .sheet-body .active .consumable-list .header,
+.orc.sheet.actor .character .main .content .central .sheet-body .active .enchant-list .header,
+.orc.sheet.actor .character .main .content .central .sheet-body .active .wound-list .header {
   display: flex;
   flex-direction: row;
 }
-.orc.sheet.actor .main .content .central .sheet-body .active .consumable-list .header .content,
-.orc.sheet.actor .main .content .central .sheet-body .active .enchant-list .header .content,
-.orc.sheet.actor .main .content .central .sheet-body .active .wound-list .header .content {
+.orc.sheet.actor .character .main .content .central .sheet-body .active .consumable-list .header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .active .enchant-list .header .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .active .wound-list .header .content {
   align-self: center;
   place-content: center;
   width: 100%;
-  max-width: 100px;
+  max-width: 150px;
 }
-.orc.sheet.actor .main .content .central .sheet-body .active .consumable-list .header .effect-list,
-.orc.sheet.actor .main .content .central .sheet-body .active .enchant-list .header .effect-list,
-.orc.sheet.actor .main .content .central .sheet-body .active .wound-list .header .effect-list {
+.orc.sheet.actor .character .main .content .central .sheet-body .active .consumable-list .header .effect-list,
+.orc.sheet.actor .character .main .content .central .sheet-body .active .enchant-list .header .effect-list,
+.orc.sheet.actor .character .main .content .central .sheet-body .active .wound-list .header .effect-list {
   align-self: center;
   place-content: center;
   width: 100%;
 }
-.orc.sheet.actor .main .content .central .sheet-body .active .consumable-list .item,
-.orc.sheet.actor .main .content .central .sheet-body .active .enchant-list .item,
-.orc.sheet.actor .main .content .central .sheet-body .active .wound-list .item {
+.orc.sheet.actor .character .main .content .central .sheet-body .active .consumable-list .item,
+.orc.sheet.actor .character .main .content .central .sheet-body .active .enchant-list .item,
+.orc.sheet.actor .character .main .content .central .sheet-body .active .wound-list .item {
   display: flex;
   flex-direction: row;
 }
-.orc.sheet.actor .main .content .central .sheet-body .active .consumable-list .item .content,
-.orc.sheet.actor .main .content .central .sheet-body .active .enchant-list .item .content,
-.orc.sheet.actor .main .content .central .sheet-body .active .wound-list .item .content {
+.orc.sheet.actor .character .main .content .central .sheet-body .active .consumable-list .item .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .active .enchant-list .item .content,
+.orc.sheet.actor .character .main .content .central .sheet-body .active .wound-list .item .content {
   align-self: center;
   place-content: center;
   width: 100%;
-  max-width: 100px;
+  max-width: 150px;
 }
-.orc.sheet.actor .main .content .central .sheet-body .active .consumable-list .item .effect-list,
-.orc.sheet.actor .main .content .central .sheet-body .active .enchant-list .item .effect-list,
-.orc.sheet.actor .main .content .central .sheet-body .active .wound-list .item .effect-list {
+.orc.sheet.actor .character .main .content .central .sheet-body .active .consumable-list .item .effect-list,
+.orc.sheet.actor .character .main .content .central .sheet-body .active .enchant-list .item .effect-list,
+.orc.sheet.actor .character .main .content .central .sheet-body .active .wound-list .item .effect-list {
   display: flex;
   flex-direction: row;
   align-self: center;
   place-content: center;
   width: 100%;
 }
-.orc.sheet.actor .main .content .central .sheet-body .biography {
+.orc.sheet.actor .character .main .content .central .sheet-body .biography {
   height: 100%;
+}
+.orc.sheet.actor .container textarea {
+  resize: none;
+}
+.orc.sheet.actor .container form {
+  display: flex;
+  flex-direction: column;
+}
+.orc.sheet.actor .container .main {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0 0 1em 0;
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
+}
+.orc.sheet.actor .container .main .main-header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.orc.sheet.actor .container .main .main-header .image {
+  display: flex;
+  max-width: 220px;
+  margin-left: -5px;
+  margin-right: -5px;
+}
+.orc.sheet.actor .container .main .main-header .name {
+  display: flex;
+  width: 100%;
+  align-self: center;
+  place-content: center;
+}
+.orc.sheet.actor .container .main .header {
+  display: flex;
+  flex-direction: row;
+}
+.orc.sheet.actor .container .main .header .content {
+  align-self: center;
+  place-content: center;
+  width: 100%;
+}
+.orc.sheet.actor .container .main .item .content {
+  align-self: center;
+  place-content: center;
+  display: initial;
+  text-align: center;
+  width: 100%;
 }
 .orc.sheet.item .weapon .main .header {
   display: flex;
@@ -981,6 +1045,10 @@
   box-shadow: inset 0 0 6px #b41212;
   cursor: pointer;
 }
+.description {
+  height: 100%;
+  width: 100%;
+}
 .description .description-header {
   display: flex;
 }
@@ -991,7 +1059,7 @@
   flex-grow: 1;
 }
 .editor {
-  min-height: 200px;
+  min-height: 500px;
   height: 100%;
   box-shadow: inset 0 0 6px black;
 }
@@ -1099,15 +1167,30 @@
   font-size: var(--font-size-15);
   font-weight: bold;
 }
-.spell-roll .add-info {
+.spell-roll .header {
   text-align: center;
   font-weight: bold;
+}
+.spell-roll .results {
+  height: 20px;
 }
 .spell-roll .results .dice-formula {
   text-align: center;
   place-content: center;
-  height: 20px;
+  width: 60px;
 }
 .spell-roll .results .dice-total {
   place-content: center;
+  width: 30px;
+}
+.spell-roll .results .add-info {
+  place-content: center;
+  text-align: center;
+  font-weight: bold;
+  width: 30px;
+}
+.spell-roll .results .effects {
+  place-content: center;
+  text-align: center;
+  width: 100%;
 }

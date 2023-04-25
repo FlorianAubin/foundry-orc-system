@@ -1,7 +1,7 @@
 import * as Dice from "../commons/dice.js";
 import * as Chat from "../commons/chat.js";
 
-export async function _onEnchantDeploy(event) {
+export async function onEnchantDeploy(event) {
   event.preventDefault();
 
   let item = null;
@@ -24,7 +24,7 @@ export async function _onEnchantDeploy(event) {
   await item.update(maj);
 }
 
-export async function _onEnchantRoll(event) {
+export async function onEnchantRoll(event) {
   Dice.EnchantRoll({
     actor: this.actor,
     item: this.item,
@@ -32,7 +32,7 @@ export async function _onEnchantRoll(event) {
   });
 }
 
-export async function _onEnchantActivate(event) {
+export async function onEnchantActivate(event) {
   event.preventDefault();
 
   let item = null;
@@ -55,11 +55,13 @@ export async function _onEnchantActivate(event) {
     let durationFormula = enchant.use.duration;
     if (typeof durationFormula !== "string")
       durationFormula = durationFormula.toString();
-    let roll = new Roll(durationFormula).roll({ async: false });
-    durationEffective = roll.total;
-    //If the formula is not trivial, display the roll in the chat
-    if (durationFormula.includes("d") || durationFormula.includes("+"))
-      Chat.RollToSimpleCustomMessage({ roll: roll });
+    if (durationFormula != "") {
+      let roll = new Roll(durationFormula).roll({ async: false });
+      durationEffective = roll.total;
+      //If the formula is not trivial, display the roll in the chat
+      if (durationFormula.includes("d") || durationFormula.includes("+"))
+        Chat.RollToSimpleCustomMessage({ roll: roll });
+    }
   }
 
   //Update the enchant
@@ -103,6 +105,15 @@ export async function _onEnchantReduceDuration(event) {
     await item.update({
       system: { enchant: { use: { durationEffective: newDuration } } },
     });
+
+  return;
+}
+
+export async function onEnchantSetUse(event) {
+  let item = this.item;
+  await item.update({
+    system: { enchant: { use: { available: event.currentTarget.value } } },
+  });
 
   return;
 }

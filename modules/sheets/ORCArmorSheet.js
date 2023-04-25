@@ -1,5 +1,5 @@
-import * as Enchant from "../commons/enchant.js";
-import * as Item from "../commons/item.js";
+import * as EnchantOrc from "../commons/enchant.js";
+import * as ItemOrc from "../commons/item.js";
 export default class ORCArmorSheet extends ItemSheet {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
@@ -42,13 +42,14 @@ export default class ORCArmorSheet extends ItemSheet {
   activateListeners(html) {
     super.activateListeners(html);
 
-    html.find(".sheet-change-lock").click(Item._onSheetChangelock.bind(this));
+    html.find(".sheet-change-lock").click(ItemOrc.onSheetChangelock.bind(this));
 
-    html.find(".enchant-deploy").click(Enchant._onEnchantDeploy.bind(this));
-    html.find(".enchant-roll").click(Enchant._onEnchantRoll.bind(this));
+    html.find(".enchant-deploy").click(EnchantOrc.onEnchantDeploy.bind(this));
+    html.find(".enchant-roll").click(EnchantOrc.onEnchantRoll.bind(this));
+    html.find(".enchant-set-use").change(EnchantOrc.onEnchantSetUse.bind(this));
 
     html
       .find(".description-deploy")
-      .click(Item._onDescriptionDeploy.bind(this));
+      .click(ItemOrc.onDescriptionDeploy.bind(this));
   }
 }

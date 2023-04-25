@@ -1,6 +1,6 @@
-import * as Dice from "../commons/dice.js";
-import * as Enchant from "../commons/enchant.js";
-import * as Item from "../commons/item.js";
+import * as DiceOrc from "../commons/dice.js";
+import * as EnchantOrc from "../commons/enchant.js";
+import * as ItemOrc from "../commons/item.js";
 
 export default class ORCWeaponSheet extends ItemSheet {
   static get defaultOptions() {
@@ -51,16 +51,17 @@ export default class ORCWeaponSheet extends ItemSheet {
   activateListeners(html) {
     super.activateListeners(html);
 
-    html.find(".sheet-change-lock").click(Item._onSheetChangelock.bind(this));
+    html.find(".sheet-change-lock").click(ItemOrc.onSheetChangelock.bind(this));
 
     html.find(".damage-roll").click(this._onDamageRoll.bind(this));
 
-    html.find(".enchant-deploy").click(Enchant._onEnchantDeploy.bind(this));
-    html.find(".enchant-roll").click(Enchant._onEnchantRoll.bind(this));
+    html.find(".enchant-deploy").click(EnchantOrc.onEnchantDeploy.bind(this));
+    html.find(".enchant-roll").click(EnchantOrc.onEnchantRoll.bind(this));
+    html.find(".enchant-set-use").change(EnchantOrc.onEnchantSetUse.bind(this));
 
     html
       .find(".description-deploy")
-      .click(Item._onDescriptionDeploy.bind(this));
+      .click(ItemOrc.onDescriptionDeploy.bind(this));
   }
 
   /* -------------------------------------------- */
@@ -68,6 +69,6 @@ export default class ORCWeaponSheet extends ItemSheet {
   /* -------------------------------------------- */
 
   async _onDamageRoll(event) {
-    Dice.DamageRoll({ weapon: this.item });
+    DiceOrc.DamageRoll({ weapon: this.item });
   }
 }

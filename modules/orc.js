@@ -2,6 +2,8 @@ import { ORC } from "./commons/config.js";
 import * as Macro from "./commons/macro.js";
 import * as Chat from "./commons/chat.js";
 import ORCCharacterSheet from "./sheets/ORCCharacterSheet.js";
+import ORCContainerSheet from "./sheets/ORCContainerSheet.js";
+
 import ORCWeaponSheet from "./sheets/ORCWeaponSheet.js";
 import ORCAmmoSheet from "./sheets/ORCAmmoSheet.js";
 import ORCArmorSheet from "./sheets/ORCArmorSheet.js";
@@ -24,6 +26,10 @@ Hooks.once("init", async function () {
 
   CONFIG.ORC = ORC;
 
+  CONFIG.Combat.initiative = {
+    formula: "2d10 + @initiative",
+  };
+
   game.orc = {
     macro: Macro,
   };
@@ -31,6 +37,10 @@ Hooks.once("init", async function () {
   Actors.unregisterSheet("core", ActorSheet);
   Actors.registerSheet("character", ORCCharacterSheet, {
     types: ["character"],
+    makeDefault: true,
+  });
+  Actors.registerSheet("container", ORCContainerSheet, {
+    types: ["container"],
     makeDefault: true,
   });
 

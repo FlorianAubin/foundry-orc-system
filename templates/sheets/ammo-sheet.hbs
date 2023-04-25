@@ -40,9 +40,6 @@
         <tr>
           <th>{{localize "orc.ammo.damage"}}</th>
           <th>{{localize "orc.ammo.effect"}}</th>
-          {{#if (or unlocked item.system.precise)}}
-            <th>{{localize "orc.ammo.precise"}}</th>
-          {{/if}}
         </tr>
         <tr>
           <td align="center">
@@ -69,6 +66,10 @@
               <span>{{item.system.effect}}</span>
             {{/if}}
           </td>
+        </tr>
+          {{#if (or unlocked item.system.precise)}}
+            <th>{{localize "orc.ammo.precise"}}</th>
+          {{/if}}
           {{#if unlocked}}
             <td align="center">
               <input
@@ -80,12 +81,7 @@
           {{else}}
             {{#if item.system.precise}}
               <td align="center">
-                <input
-                  name="system.precise"
-                  type="checkbox"
-                  {{checked item.system.precise}}
-                  disabled="true"
-                />
+                <span class="fas fa-check"></span>
               </td>
             {{/if}}
           {{/if}}
