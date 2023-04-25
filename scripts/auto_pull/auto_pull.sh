@@ -1,6 +1,9 @@
 #!/bin/bash
 
-echo "Call auto pull $(date)"
+
+cd $ORCS_SYSTEM_PATH
+
+echo "Call auto pull $(date) from $(pwd)"
 
 remote_commit="$(git rev-parse origin/main)"
 local_commit="$(git rev-parse main)"
