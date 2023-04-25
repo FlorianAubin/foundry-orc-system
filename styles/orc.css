@@ -2582,7 +2582,7 @@
 }
 .orc.sheet.item .generalitem .main .content th,
 .orc.sheet.item .generalitem .main .content td {
-  width: 110px;
+  width: 100px;
 }
 .orc.sheet.item .generalitem .button {
   display: table-cell;
