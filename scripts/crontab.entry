@@ -1,0 +1,1 @@
+@reboot watch -n30 -x sh /home/__USER__/.local/share/FoundryVTT/Data/systems/orc/scripts/auto_pull.sh
