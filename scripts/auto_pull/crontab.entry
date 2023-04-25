@@ -1,1 +1,1 @@
-@reboot watch -n30 -x sh $ORCS_SYSTEM_PATH/scripts/auto_pull/auto_pull.sh
+@reboot sh $ORCS_SYSTEM_PATH/scripts/auto_pull/auto_pull.sh
