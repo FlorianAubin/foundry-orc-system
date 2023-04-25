@@ -8,6 +8,8 @@ For example, if your user is named ```pi```:
 
 ```(bash)
 sed -i 's/__USER__/pi/g' .env
-source .env
 sudo sh install.sh
+sudo reboot
 ```
+
+NB: make sure you crontab entries environment variables are clean.
