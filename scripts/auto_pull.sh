@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Call auto pull $(date)"
+
 remote_commit="$(git rev-parse origin/main)"
 local_commit="$(git rev-parse main)"
 
