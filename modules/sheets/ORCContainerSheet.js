@@ -88,7 +88,7 @@ export default class ORCContainerSheet extends ActorSheet {
             : itemData.weight;
       }
     }
-
+    capacityUsed = Math.floor(100 * capacityUsed) / 100;
     actor.update({ system: { capacityUsed: capacityUsed } });
   }
 }
