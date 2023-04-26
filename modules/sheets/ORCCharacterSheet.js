@@ -1009,7 +1009,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     heal *= multiplier;
 
     //Calculate the new value
-    let newValue = value + heal;
+    let newValue = Math.floor(value + heal);
     if (newValue > limitValue) newValue = limitValue;
 
     //Apply the heal
@@ -1638,16 +1638,16 @@ export default class ORCCharacterSheet extends ActorSheet {
     //Food
     const food = actorData.nutrition.foodDay;
     const foodNedeed = actorData.nutrition.foodNeededDay.value;
-    if (food >= foodNedeed + 3) {
+    if (food > foodNedeed + 3) {
       updated = true;
       actorData.attributes.social.valueModif.food = -5;
       actorData.attributes.intel.valueModif.food = -5;
-      if (food >= foodNedeed + 4) {
+      if (food > foodNedeed + 4) {
         actorData.attributes.physical.valueModif.food =
-          -10 * (food - (foodNedeed + 3));
+          -10 * (food - (foodNedeed + 4));
         actorData.attributes.social.valueModif.food = -10;
         actorData.attributes.intel.valueModif.food =
-          -10 * (food - (foodNedeed + 3));
+          -10 * (food - (foodNedeed + 4));
       }
     } else if (food < 0) {
       updated = true;
@@ -1666,14 +1666,14 @@ export default class ORCCharacterSheet extends ActorSheet {
     //Drink
     const drink = actorData.nutrition.drinkDay;
     const drinkNedeed = actorData.nutrition.drinkNeededDay.value;
-    if (drink >= drinkNedeed + 3) {
+    if (drink > drinkNedeed + 3) {
       updated = true;
       actorData.attributes.physical.valueModif.drink =
-        -5 * (drink - (drinkNedeed + 2));
-      if (drink >= drinkNedeed + 4) {
+        -5 * (drink - (drinkNedeed + 3));
+      if (drink > drinkNedeed + 4) {
         actorData.attributes.intel.valueModif.drink =
-          -10 * (drink - (drinkNedeed + 3));
-        actorData.hp.valueMaxModif.drink = -10 * (drink - (drinkNedeed + 3));
+          -10 * (drink - (drinkNedeed + 4));
+        actorData.hp.valueMaxModif.drink = -10 * (drink - (drinkNedeed + 4));
       }
     } else if (drink < 0) {
       updated = true;
