@@ -1,0 +1,1 @@
+@reboot sh $ORCS_SYSTEM_PATH/scripts/auto_pull/auto_pull.sh
