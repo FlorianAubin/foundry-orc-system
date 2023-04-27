@@ -21,6 +21,7 @@ export async function onSheetChangelock(event) {
 //Overide the onDropItem
 export async function onDropItem(event, data, sheet) {
   if (!sheet.actor.isOwner) return false;
+
   const item = await Item.implementation.fromDropData(data);
   let itemData = item.toObject();
 

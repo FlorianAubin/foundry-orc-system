@@ -1738,7 +1738,9 @@ export default class ORCCharacterSheet extends ActorSheet {
         );
       }
       modif.modifAllAttributes += itemData.modifAllAttributes;
-      modif.modifResist += itemData.modifStatusResist;
+      if (itemData.isStatusResistRoll)
+        modif.modifResist += itemData.modifStatusResist;
+
       if (itemData.dodgeEnable) modif.dodgeEnable = true;
       if (itemData.damageBonusModif != "")
         if (modif.damageBonus == "")
