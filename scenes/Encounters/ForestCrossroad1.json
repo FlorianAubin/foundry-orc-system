@@ -1,0 +1,92 @@
+{
+  "name": "ForestCrossroad",
+  "width": 7200,
+  "height": 5400,
+  "grid": 150,
+  "shiftX": 0,
+  "shiftY": 0,
+  "gridDistance": 5.0,
+  "gridUnits": "ft",
+  "padding": 0.0,
+  "gridColor": "#000000",
+  "gridAlpha": 0.2,
+  "globalLight": true,
+  "darkness": 0.0,
+  "lights": [
+    {
+      "x": 613,
+      "y": 2584,
+      "dim": 30.0,
+      "bright": 15.0,
+      "tintColor": "#FFC140",
+      "tintAlpha": 0.13
+    },
+    {
+      "x": 1630,
+      "y": 2818,
+      "dim": 30.0,
+      "bright": 15.0,
+      "tintColor": "#FFC140",
+      "tintAlpha": 0.13
+    },
+    {
+      "x": 2303,
+      "y": 2000,
+      "dim": 30.0,
+      "bright": 15.0,
+      "tintColor": "#FFC140",
+      "tintAlpha": 0.13
+    },
+    {
+      "x": 3449,
+      "y": 1549,
+      "dim": 30.0,
+      "bright": 15.0,
+      "tintColor": "#FFC140",
+      "tintAlpha": 0.13
+    },
+    {
+      "x": 3324,
+      "y": 628,
+      "dim": 30.0,
+      "bright": 15.0,
+      "tintColor": "#FFC140",
+      "tintAlpha": 0.13
+    },
+    {
+      "x": 2829,
+      "y": 2677,
+      "dim": 30.0,
+      "bright": 15.0,
+      "tintColor": "#FFC140",
+      "tintAlpha": 0.13
+    },
+    {
+      "x": 4203,
+      "y": 2824,
+      "dim": 30.0,
+      "bright": 15.0,
+      "tintColor": "#FFC140",
+      "tintAlpha": 0.13
+    },
+    {
+      "x": 4964,
+      "y": 3936,
+      "dim": 30.0,
+      "bright": 15.0,
+      "tintColor": "#FFC140",
+      "tintAlpha": 0.13
+    },
+    {
+      "x": 6368,
+      "y": 3663,
+      "dim": 30.0,
+      "bright": 15.0,
+      "tintColor": "#FFC140",
+      "tintAlpha": 0.13
+    }
+  ],
+  "walls": [],
+  "img": null,
+  "foreground": null
+}
