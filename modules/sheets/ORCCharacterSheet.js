@@ -85,7 +85,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     html.find(".ap-deploy").click(this._onAPDeploy.bind(this));
     html.find(".nutrition-deploy").click(this._onNutritionDeploy.bind(this));
 
-    //html.find(".item-create").click(this._onItemCreate.bind(this));
+    html.find(".item-create").click(ItemOrc.onItemCreate.bind(this));
     html.find(".item-edit").click(ItemOrc.onItemEdit.bind(this));
     html.find(".item-delete").click(ItemOrc.onItemDelete.bind(this));
     html.find(".item-split").click(ItemOrc.onItemSplit.bind(this));
