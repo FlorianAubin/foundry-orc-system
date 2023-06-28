@@ -45,6 +45,17 @@ export function onDescriptionDeploy(event) {
   return;
 }
 
+export async function onItemCreate(event) {
+  let element = event.currentTarget;
+  const actor = this.actor;
+
+  let itemData = {
+    name: game.i18n.localize("orc.newItem"),
+    type: element.dataset.type,
+  };
+  return actor.createEmbeddedDocuments("Item", [itemData]);
+}
+
 export async function onItemEdit(event) {
   const actor = this.actor;
   if (event == null || actor == null) return;

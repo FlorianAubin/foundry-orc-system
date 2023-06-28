@@ -49,7 +49,7 @@ export default class ORCContainerSheet extends ActorSheet {
       .find(".sheet-change-lock")
       .click(ActorOrc.onSheetChangelock.bind(this));
 
-    //html.find(".item-create").click(this._onItemCreate.bind(this));
+    html.find(".item-create").click(ItemOrc.onItemCreate.bind(this));
     html.find(".item-edit").click(ItemOrc.onItemEdit.bind(this));
     html.find(".item-delete").click(ItemOrc.onItemDelete.bind(this));
     html.find(".item-split").click(ItemOrc.onItemSplit.bind(this));
