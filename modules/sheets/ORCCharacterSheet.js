@@ -23,7 +23,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   }
 
   getData(options) {
-    console.log("getData");
     const data = super.getData(options);
 
     data.config = CONFIG.ORC;
@@ -170,21 +169,21 @@ export default class ORCCharacterSheet extends ActorSheet {
   async _onAPDeploy(event) {
     event.preventDefault();
 
-    let maj = {
-      system: { ap: { optionDeploy: !this.actor.system.ap.optionDeploy } },
-    };
-    await this.actor.update(maj);
+    let actor = this.actor;
+    actor.update({
+      system: { ap: { optionDeploy: !actor.system.ap.optionDeploy } },
+    });
   }
 
   async _onNutritionDeploy(event) {
     event.preventDefault();
 
-    let maj = {
+    let actor = this.actor;
+    actor.update({
       system: {
-        nutrition: { optionDeploy: !this.actor.system.nutrition.optionDeploy },
+        nutrition: { optionDeploy: !actor.system.nutrition.optionDeploy },
       },
-    };
-    await this.actor.update(maj);
+    });
   }
 
   _onItemEquipped(event) {
@@ -1245,7 +1244,7 @@ export default class ORCCharacterSheet extends ActorSheet {
       }
       //Armors
       if (item.type == "armor" && itemData.equipped) {
-        actorData.ap.value += actorData.ap.value;
+        actorData.ap.value += itemData.ap;
       }
 
       //Equipable items
@@ -1269,6 +1268,7 @@ export default class ORCCharacterSheet extends ActorSheet {
           actorData.hp.valueMax += effect.hpMaxModif;
           actorData.mp.valueMax += effect.mpMaxModif;
           actorData.ap.value += effect.apModif;
+
           actorData.defence.value += effect.defenceModif;
           actorData.roll.limitCritical.value += effect.limitCriticalModif;
           actorData.roll.limitFumble.value += effect.limitFumbleModif;
@@ -1297,6 +1297,7 @@ export default class ORCCharacterSheet extends ActorSheet {
         actorData.hp.valueMax += enchant.hpMaxModif;
         actorData.mp.valueMax += enchant.mpMaxModif;
         actorData.ap.value += enchant.apModif;
+
         actorData.defence.value += enchant.defenceModif;
         actorData.roll.limitCritical.value += enchant.limitCriticalModif;
         actorData.roll.limitFumble.value += enchant.limitFumbleModif;
@@ -1640,6 +1641,9 @@ export default class ORCCharacterSheet extends ActorSheet {
         effectiveDamage += "+" + actor.system.damageBonus.value;
       }
 
+      //item.system.effective.damage = effectiveDamage;
+      //item.system.effective.effect = effectiveEffect;
+      //item.system.effective.attack = effectiveAttack;
       item.update({
         system: {
           effective: {
@@ -1650,8 +1654,6 @@ export default class ORCCharacterSheet extends ActorSheet {
         },
       });
     }
-
-    return;
   }
 
   updateSpellEffectiveValues(data) {
@@ -1690,9 +1692,12 @@ export default class ORCCharacterSheet extends ActorSheet {
           },
         },
       });
+      //item.system.effective.power = effectivePower;
+      //item.system.effective.effect = effectiveEffect;
+      //item.system.effective.cost = effectiveCost;
+      //item.system.effective.rollLaunch = effectiveLaunchRoll;
+      //item.system.effective.rollControl = effectiveControlRoll;
     }
-
-    return;
   }
 
   calculateInitiative(data) {
@@ -1706,11 +1711,7 @@ export default class ORCCharacterSheet extends ActorSheet {
       physMult * actorData.attributes.physical.value +
         intelMult * actorData.attributes.intel.value
     );
-    actor.update({
-      system: {
-        initiative: initiative,
-      },
-    });
+    actor.system.initiative = initiative;
   }
 
   async _onDropItem(event, data) {
