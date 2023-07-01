@@ -6,16 +6,13 @@ import * as ItemOrc from "../commons/item.js";
 export async function onSheetChangelock(event) {
   event.preventDefault();
 
-  let flagData = await this.actor.getFlag(game.system.id, "SheetUnlocked");
+  const actor = this.actor;
+  let flagData = await actor.getFlag(game.system.id, "SheetUnlocked");
   flagData
-    ? await this.actor.unsetFlag(game.system.id, "SheetUnlocked")
-    : await this.actor.setFlag(
-        game.system.id,
-        "SheetUnlocked",
-        "SheetUnlocked"
-      );
+    ? await actor.unsetFlag(game.system.id, "SheetUnlocked")
+    : await actor.setFlag(game.system.id, "SheetUnlocked", "SheetUnlocked");
 
-  this.actor.sheet.render(true);
+  actor.sheet.render(true);
 }
 
 //Overide the onDropItem

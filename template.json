@@ -7,52 +7,43 @@
         "physical": {
           "name": "orc.character.attributes.physical",
           "native": 0,
-          "valueModif": {},
           "value": 0
         },
         "social": {
           "name": "orc.character.attributes.social",
           "native": 0,
-          "valueModif": {},
           "value": 0
         },
         "intel": {
           "name": "orc.character.attributes.intel",
           "native": 0,
-          "valueModif": {},
           "value": 0
         }
       },
       "modifAllAttributes": 0,
       "roll": {
         "limitCritical": {
-          "native": 1,
-          "valueModif": {},
           "value": 0
         },
         "limitFumble": {
-          "native": 100,
-          "valueModif": {},
           "value": 0
         }
       },
       "hp": {
         "value": 0,
         "valueMaxNative": 0,
-        "valueMaxModif": {},
         "valueMax": 0,
         "surplus": 0
       },
       "mp": {
         "value": 0,
         "valueMaxNative": 0,
-        "valueMaxModif": {},
         "valueMax": 0,
         "surplus": 0
       },
       "ap": {
         "native": 0,
-        "valueModif": {},
+
         "value": 0,
         "bodyParts": {
           "head": "",
@@ -63,31 +54,23 @@
         "optionDeploy": false
       },
       "encumbrance": {
-        "valueModif": {},
         "value": 0,
         "limitMultiplier": 0.5,
-        "limitModif": {},
         "limit": 0
       },
       "attack": {
         "native": 0,
-        "valueModif": {},
         "value": 0
       },
       "defence": {
-        "native": 0,
-        "valueModif": {},
         "value": 0
       },
       "dodge": {
         "enable": false,
         "native": 0,
-        "valueModif": {},
         "value": 0
       },
       "damageBonus": {
-        "native": "",
-        "valueModif": {},
         "value": ""
       },
       "combatStyle": "standard",
@@ -95,31 +78,25 @@
         "canLaunchSpell": false,
         "nSpell": {
           "native": 0,
-          "valueModif": {},
           "value": 0,
           "effective": 0
         },
         "nInvoc": {
           "native": 0,
-          "valueModif": {},
           "value": 0,
           "effective": 0,
           "invoked": 0,
           "controlDiffIncrease": 20
         },
         "power": {
-          "native": "",
-          "valueModif": {},
           "value": ""
         },
         "mpReduc": {
-          "native": 0,
-          "valueModif": {},
           "value": 0
         },
         "roll": {
           "native": 0,
-          "valueModif": {},
+
           "value": 0
         }
       },
@@ -141,12 +118,12 @@
         "drinkDay": 0,
         "foodNeededDay": {
           "native": 1,
-          "valueModif": {},
+
           "value": 0
         },
         "drinkNeededDay": {
           "native": 1,
-          "valueModif": {},
+
           "value": 0
         },
         "tipsiness": 0,
@@ -165,7 +142,7 @@
         "heal": "",
         "multiplier": {
           "native": 1,
-          "valueModif": {},
+
           "value": 0
         }
       },
