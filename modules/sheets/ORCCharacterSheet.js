@@ -1663,6 +1663,8 @@ export default class ORCCharacterSheet extends ActorSheet {
     const weapons = data.weapons;
     const ammos = data.ammos;
 
+    let count = 0;
+
     for (let [key, weapon] of Object.entries(weapons)) {
       let item = actor.items.get(weapon._id);
 
@@ -1700,14 +1702,21 @@ export default class ORCCharacterSheet extends ActorSheet {
         },
         { render: false }
       );
+      count++;
     }
 
-    return;
+    //Update that does nothing to force rendering
+    if (count > 0)
+      actor.update({
+        system: { attack: { value: actor.system.attack.value } },
+      });
   }
 
   updateSpellEffectiveValues(data) {
     const actor = data.actor;
     const spells = data.spells;
+
+    let count = 0;
 
     for (let [key, spell] of Object.entries(spells)) {
       let item = actor.items.get(spell._id);
@@ -1746,9 +1755,14 @@ export default class ORCCharacterSheet extends ActorSheet {
         },
         { render: false }
       );
+      count++;
     }
 
-    return;
+    //Update that does nothing to force rendering
+    if (count > 0)
+      actor.update({
+        system: { magic: { roll: { value: actor.system.magic.roll.value } } },
+      });
   }
 
   calculateInitiative(data) {
