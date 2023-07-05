@@ -1387,9 +1387,9 @@ export default class ORCCharacterSheet extends ActorSheet {
       actorData.attributes.social.value += -5;
       actorData.attributes.intel.value += -5;
     } else if (food > foodNedeed + 4) {
-      actorData.attributes.physical.value = -10 * (food - (foodNedeed + 4));
-      actorData.attributes.social.value = -10;
-      actorData.attributes.intel.value = -10 * (food - (foodNedeed + 4));
+      actorData.attributes.physical.value += -10 * (food - (foodNedeed + 4));
+      actorData.attributes.social.value += -10;
+      actorData.attributes.intel.value += -10 * (food - (foodNedeed + 4));
     } else if (food < 0) {
       if (food == -1) {
         actorData.attributes.physical.value += -5;
@@ -1423,6 +1423,9 @@ export default class ORCCharacterSheet extends ActorSheet {
         actorData.hp.valueMax += -20;
         actorData.mp.valueMax += -5;
       } else if (drink <= -4) {
+        actorData.attributes.physical.value += -100000;
+        actorData.hp.valueMax = 1;
+        actorData.mp.valueMax += -100000;
         this.takeDamage({ damageFormula: 100000 });
       }
     }
