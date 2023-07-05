@@ -3,6 +3,7 @@ import * as ChatOrc from "../commons/chat.js";
 import * as EnchantOrc from "../commons/enchant.js";
 import * as ItemOrc from "../commons/item.js";
 import * as ActorOrc from "../commons/actor.js";
+
 export default class ORCCharacterSheet extends ActorSheet {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
@@ -22,10 +23,12 @@ export default class ORCCharacterSheet extends ActorSheet {
     return `systems/orc/templates/sheets/character-sheet.hbs`;
   }
 
-  getData(options) {
+  getData(options = {}) {
+    console.log("getdata");
     const data = super.getData(options);
 
     data.config = CONFIG.ORC;
+
     //Recover the onwed items
     data.weapons = data.items.filter(function (item) {
       return item.type == "weapon";
@@ -858,6 +861,8 @@ export default class ORCCharacterSheet extends ActorSheet {
     for (let [key, item] of Object.entries(items)) {
       let itemData = item.system;
 
+      if (!itemData.equipped) continue;
+
       let enchant = itemData.enchant;
       if (
         enchant != null &&
@@ -869,11 +874,17 @@ export default class ORCCharacterSheet extends ActorSheet {
       ) {
         let newDuration = enchant.use.durationEffective - 1;
         if (newDuration <= 0)
-          item.update({ system: { enchant: { activated: false } } });
+          item.update(
+            { system: { enchant: { activated: false } } },
+            { render: false }
+          );
         else
-          item.update({
-            system: { enchant: { use: { durationEffective: newDuration } } },
-          });
+          item.update(
+            {
+              system: { enchant: { use: { durationEffective: newDuration } } },
+            },
+            { render: false }
+          );
       }
       if (
         item.type == "capacity" &&
@@ -885,11 +896,17 @@ export default class ORCCharacterSheet extends ActorSheet {
       ) {
         let newDuration = itemData.ifActivable.durationEffective - 1;
         if (newDuration <= 0)
-          item.update({ system: { ifActivable: { activated: false } } });
+          item.update(
+            { system: { ifActivable: { activated: false } } },
+            { render: false }
+          );
         else
-          item.update({
-            system: { ifActivable: { durationEffective: newDuration } },
-          });
+          item.update(
+            {
+              system: { ifActivable: { durationEffective: newDuration } },
+            },
+            { render: false }
+          );
       }
       if (
         item.type == "consumable" &&
@@ -901,13 +918,20 @@ export default class ORCCharacterSheet extends ActorSheet {
       ) {
         let newDuration = itemData.ifActivable.duration - 1;
         if (newDuration <= 0)
-          item.update({ system: { ifActivable: { activated: false } } });
+          item.update(
+            { system: { ifActivable: { activated: false } } },
+            { render: false }
+          );
         else
-          item.update({
-            system: { ifActivable: { duration: newDuration } },
-          });
+          item.update(
+            {
+              system: { ifActivable: { duration: newDuration } },
+            },
+            { render: false }
+          );
       }
     }
+    return;
   }
 
   async takeDamage({
@@ -1049,18 +1073,27 @@ export default class ORCCharacterSheet extends ActorSheet {
     });
 
     //Update the owned items
-    for (let [key, item] of Object.entries(items)) {
+    for (let [key, it] of Object.entries(items)) {
+      let item = actor.items.get(it._id);
       //Deactivate and reset enchants
       if (item.system.enchant != null) {
         if (
           item.system.enchant.activeEffect &&
           item.system.enchant.use.perDay > 0
         ) {
-          item.system.enchant.use.available = item.system.enchant.use.perDay;
-          item.system.enchant.activated = item.system.enchant.use
-            .disableOnNewDay
-            ? false
-            : true;
+          await item.update(
+            {
+              system: {
+                enchant: {
+                  use: { available: item.system.enchant.use.perDay },
+                  activated: item.system.enchant.use.disableOnNewDay
+                    ? false
+                    : true,
+                },
+              },
+            },
+            { render: false }
+          );
         }
       }
       //Deactivate capacities
@@ -1069,10 +1102,18 @@ export default class ORCCharacterSheet extends ActorSheet {
         item.system.activeEffect &&
         item.system.ifActivable.activated
       ) {
-        item.system.ifActivable.activated = item.system.ifActivable
-          .disableOnNewDay
-          ? false
-          : true;
+        await item.update(
+          {
+            system: {
+              ifActivable: {
+                activated: item.system.ifActivable.disableOnNewDay
+                  ? false
+                  : true,
+              },
+            },
+          },
+          { render: false }
+        );
       }
 
       //Delete activated consumables
@@ -1081,9 +1122,10 @@ export default class ORCCharacterSheet extends ActorSheet {
         item.system.ifActivable.activated &&
         item.system.ifActivable.disableOnNewDay
       ) {
-        actor.items.get(item._id).delete();
+        await item.delete();
       }
     }
+
     return;
   }
 
@@ -1621,6 +1663,8 @@ export default class ORCCharacterSheet extends ActorSheet {
     for (let [key, weapon] of Object.entries(weapons)) {
       let item = actor.items.get(weapon._id);
 
+      if (!item.system.equipped) continue;
+
       let effectiveDamage = item.system.damage;
       let effectiveEffect = item.system.effect;
       let effectiveAttack = actor.system.attack.value + item.system.attackModif;
@@ -1641,19 +1685,21 @@ export default class ORCCharacterSheet extends ActorSheet {
         effectiveDamage += "+" + actor.system.damageBonus.value;
       }
 
-      //item.system.effective.damage = effectiveDamage;
-      //item.system.effective.effect = effectiveEffect;
-      //item.system.effective.attack = effectiveAttack;
-      item.update({
-        system: {
-          effective: {
-            damage: effectiveDamage,
-            effect: effectiveEffect,
-            attack: effectiveAttack,
+      item.update(
+        {
+          system: {
+            effective: {
+              damage: effectiveDamage,
+              effect: effectiveEffect,
+              attack: effectiveAttack,
+            },
           },
         },
-      });
+        { render: false }
+      );
     }
+
+    return;
   }
 
   updateSpellEffectiveValues(data) {
@@ -1662,6 +1708,8 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     for (let [key, spell] of Object.entries(spells)) {
       let item = actor.items.get(spell._id);
+
+      if (!item.system.memorized) continue;
 
       let effectivePower = item.system.power;
       if (actor.system.magic.power.value != "") {
@@ -1681,23 +1729,23 @@ export default class ORCCharacterSheet extends ActorSheet {
       if (effectiveLaunchRoll > 100) effectiveLaunchRoll = 100;
       if (effectiveControlRoll > 100) effectiveControlRoll = 100;
 
-      item.update({
-        system: {
-          effective: {
-            power: effectivePower,
-            effect: effectiveEffect,
-            cost: effectiveCost,
-            rollLaunch: effectiveLaunchRoll,
-            rollControl: effectiveControlRoll,
+      item.update(
+        {
+          system: {
+            effective: {
+              power: effectivePower,
+              effect: effectiveEffect,
+              cost: effectiveCost,
+              rollLaunch: effectiveLaunchRoll,
+              rollControl: effectiveControlRoll,
+            },
           },
         },
-      });
-      //item.system.effective.power = effectivePower;
-      //item.system.effective.effect = effectiveEffect;
-      //item.system.effective.cost = effectiveCost;
-      //item.system.effective.rollLaunch = effectiveLaunchRoll;
-      //item.system.effective.rollControl = effectiveControlRoll;
+        { render: false }
+      );
     }
+
+    return;
   }
 
   calculateInitiative(data) {
