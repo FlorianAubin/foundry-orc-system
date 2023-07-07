@@ -74,7 +74,7 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     this._prepareCharacterData(data);
 
-    console.log(data);
+    //console.log(data);
     return data;
   }
 
