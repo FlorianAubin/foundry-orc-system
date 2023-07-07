@@ -3,6 +3,7 @@
     "types": ["character", "container"],
     "character": {
       "initiative": 0,
+      "initiativeNative": 0,
       "attributes": {
         "physical": {
           "name": "orc.character.attributes.physical",
@@ -43,7 +44,6 @@
       },
       "ap": {
         "native": 0,
-
         "value": 0,
         "bodyParts": {
           "head": "",
@@ -73,6 +73,7 @@
       "damageBonus": {
         "value": ""
       },
+
       "combatStyle": "standard",
       "magic": {
         "canLaunchSpell": false,

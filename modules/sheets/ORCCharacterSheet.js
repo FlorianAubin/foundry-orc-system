@@ -24,7 +24,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   }
 
   getData(options = {}) {
-    console.log("getdata");
     const data = super.getData(options);
 
     data.config = CONFIG.ORC;
@@ -75,7 +74,7 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     this._prepareCharacterData(data);
 
-    //console.log(data);
+    console.log(data);
     return data;
   }
 
@@ -1134,6 +1133,7 @@ export default class ORCCharacterSheet extends ActorSheet {
    */
   async _prepareCharacterData(data) {
     this.initPrincipaleValues(data);
+
     this.applyItemsOnPrincipales(data);
     this.applyNutrition(data);
     this.applyCapacities(data);
@@ -1145,6 +1145,8 @@ export default class ORCCharacterSheet extends ActorSheet {
     this.initDerivatedValues(data);
     this.applyItemsOnDerivated(data);
     this.applyEncumbranceOnDerivated(data);
+
+    this.applyCombatStyle(data);
 
     //Calculate the HP and MP surplus
     this.calculateSurplus(data);
@@ -1233,41 +1235,29 @@ export default class ORCCharacterSheet extends ActorSheet {
     const style = actorData.combatStyle;
 
     if (style === "standard") {
-      actorData.attack.value += 0;
-      actorData.defence.value += 0;
       actorData.dodge.value += -20;
-      actorData.dodge.enable = false;
       actorData.damageBonus.value += "";
     } else if (style === "offensive") {
       actorData.attack.value += +10;
       actorData.defence.value += -15;
       actorData.dodge.value += -20;
-      actorData.dodge.enable = false;
-      actorData.damageBonus.value += "";
     } else if (style === "defensive") {
       actorData.attack.value += -15;
       actorData.defence.value += +10;
       actorData.dodge.value += -20;
-      actorData.dodge.enable = false;
-      actorData.damageBonus.value += "";
     } else if (style === "dodge") {
       actorData.attack.value += -15;
       actorData.defence.value += -5;
       actorData.dodge.value += -10;
       actorData.dodge.enable = true;
-      actorData.damageBonus.value += "";
     } else if (style === "aggressive") {
       actorData.attack.value += -10;
       actorData.defence.value += -15;
       actorData.dodge.value += -20;
-      actorData.dodge.enable = false;
       actorData.damageBonus.value += "2d10";
     } else if (style === "ambidex") {
       actorData.attack.value += -20;
-      actorData.defence.value += 0;
       actorData.dodge.value += -20;
-      actorData.dodge.enable = false;
-      actorData.damageBonus.value += "";
     }
   }
 
@@ -1463,7 +1453,7 @@ export default class ORCCharacterSheet extends ActorSheet {
       if (itemData.isStatusResistRoll)
         actorData.status.modifResist += itemData.modifStatusResist;
 
-      if (itemData.dodgeEnable) actorData.dodgeEnable = true;
+      if (itemData.dodgeEnable) actorData.dodge.enable = true;
       if (itemData.damageBonusModif != "")
         if (actorData.damageBonus.value == "")
           actorData.damageBonus.value += itemData.damageBonusModif;
@@ -1767,16 +1757,19 @@ export default class ORCCharacterSheet extends ActorSheet {
 
   calculateInitiative(data) {
     let actor = data.actor;
-    const actorData = actor.system;
+    let actorData = actor.system;
 
     const physMult = 1 / 5,
+      socMult = 0,
       intelMult = 1 / 10;
 
-    let initiative = Math.floor(
-      physMult * actorData.attributes.physical.value +
-        intelMult * actorData.attributes.intel.value
-    );
-    actor.system.initiative = initiative;
+    actorData.initiative =
+      actorData.initiativeNative +
+      Math.floor(
+        physMult * actorData.attributes.physical.value +
+          socMult * actorData.attributes.social.value +
+          intelMult * actorData.attributes.intel.value
+      );
   }
 
   async _onDropItem(event, data) {

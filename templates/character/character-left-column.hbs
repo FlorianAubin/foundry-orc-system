@@ -246,6 +246,25 @@
       <td class="damage-roll button fas fa-dice"></td>
     </tr>
   {{/if}}
+  <tr align="center">
+    <th>{{localize "orc.character.initiative"}}</th>
+    {{#if unlocked}}
+      <td align="center" colspan="2">
+        <input
+          type="number"
+          name="system.initiativeNative"
+          value="{{actor.system.initiativeNative}}"
+          placeholder="0"
+          onClick="this.select();"
+          style="width: 40px"
+        />
+      </td>
+    {{else}}
+      <td align="center">
+        <span>2d10 + {{actor.system.initiative}}</span>
+      </td>
+    {{/if}}
+  </tr>
 </table>
 <table style="width: 200px">
   <th></th>
