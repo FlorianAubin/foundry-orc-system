@@ -252,8 +252,8 @@
       <td align="center" colspan="2">
         <input
           type="number"
-          name="system.initiativeNative"
-          value="{{actor.system.initiativeNative}}"
+          name="system.ini.flatNative"
+          value="{{actor.system.ini.flatNative}}"
           placeholder="0"
           onClick="this.select();"
           style="width: 40px"
@@ -261,7 +261,7 @@
       </td>
     {{else}}
       <td align="center">
-        <span>2d10 + {{actor.system.initiative}}</span>
+        <span>{{actor.system.ini.ndice}}d{{actor.system.ini.dice}} + {{actor.system.ini.flat}}</span>
       </td>
     {{/if}}
   </tr>

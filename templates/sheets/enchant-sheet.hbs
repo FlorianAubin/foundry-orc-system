@@ -359,7 +359,33 @@
           {{/if}}
         {{/if}}
       </tr>
-
+    </table>
+    <table>
+      <tr>
+        {{#if (or unlocked item.system.enchant.initiativeModif)}}
+          <th>{{localize "orc.enchant.initiativeModif"}}</th>
+        {{/if}}
+      </tr>
+      <tr>
+        {{#if unlocked}}
+          <td align="center">
+            <input
+              name="system.enchant.initiativeModif"
+              type="number"
+              value="{{item.system.enchant.initiativeModif}}"
+              placeholder="0"
+            />
+          </td>
+        {{else}}
+          {{#if item.system.enchant.initiativeModif}}
+            <td align="center">
+              <span>{{item.system.enchant.initiativeModif}}</span>
+            </td>
+          {{/if}}
+        {{/if}}
+      </tr>
+    </table>
+    <table>
       <tr>
         {{#if (or unlocked item.system.enchant.encumbranceLimitModif)}}
           <th>{{localize "orc.enchant.encumbranceLimitModif"}}</th>

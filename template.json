@@ -2,8 +2,12 @@
   "Actor": {
     "types": ["character", "container"],
     "character": {
-      "initiative": 0,
-      "initiativeNative": 0,
+      "ini": {
+        "flatNative": 0,
+        "flat": 0,
+        "ndice": 0,
+        "dice": 0
+      },
       "attributes": {
         "physical": {
           "name": "orc.character.attributes.physical",
@@ -199,6 +203,7 @@
           "limitCriticalModif": 0,
           "limitFumbleModif": 0,
           "damageBonusModif": "",
+          "initiativeModif": 0,
           "roll": "",
           "addEffect": "",
           "use": {
@@ -308,6 +313,7 @@
         "limitCriticalModif": 0,
         "limitFumbleModif": 0,
         "damageBonusModif": "",
+        "initiativeModif": 0,
         "duration": "1",
         "durationUnit": "min",
         "consumeOnRoll": false,

@@ -311,6 +311,31 @@
         {{/if}}
       </tr>
     </table>
+   <table>
+      <tr>
+        {{#if (or unlocked item.system.ifActivable.initiativeModif)}}
+          <th>{{localize "orc.consumable.ifActivable.initiativeModif"}}</th>
+        {{/if}}
+      </tr>
+      <tr>
+        {{#if unlocked}}
+          <td align="center">
+            <input
+              name="system.ifActivable.initiativeModif"
+              type="number"
+              value="{{item.system.ifActivable.initiativeModif}}"
+              placeholder="0"
+            />
+          </td>
+        {{else}}
+          {{#if item.system.ifActivable.initiativeModif}}
+            <td align="center">
+              <span>{{item.system.ifActivable.initiativeModif}}</span>
+            </td>
+          {{/if}}
+        {{/if}}
+      </tr>
+    </table>
     <table>
       <tr>
         {{#if

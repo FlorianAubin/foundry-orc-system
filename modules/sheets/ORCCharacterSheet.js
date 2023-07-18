@@ -1227,6 +1227,11 @@ export default class ORCCharacterSheet extends ActorSheet {
     //Drink
     actorData.nutrition.drinkNeededDay.value =
       actorData.nutrition.drinkNeededDay.native;
+
+    //Initiative
+    actorData.ini.ndice = 0;
+    actorData.ini.dice = 0;
+    actorData.ini.flat = actorData.ini.flatNative;
   }
 
   applyCombatStyle(data) {
@@ -1304,6 +1309,7 @@ export default class ORCCharacterSheet extends ActorSheet {
           actorData.defence.value += effect.defenceModif;
           actorData.roll.limitCritical.value += effect.limitCriticalModif;
           actorData.roll.limitFumble.value += effect.limitFumbleModif;
+          actorData.ini.flat += effect.initiativeModif;
           if (actorData.damageBonus.value == "")
             actorData.damageBonus.value += effect.damageBonusModif;
           else actorData.damageBonus.value += "+" + effect.damageBonusModif;
@@ -1333,6 +1339,7 @@ export default class ORCCharacterSheet extends ActorSheet {
         actorData.defence.value += enchant.defenceModif;
         actorData.roll.limitCritical.value += enchant.limitCriticalModif;
         actorData.roll.limitFumble.value += enchant.limitFumbleModif;
+        actorData.ini.flat += enchant.initiativeModif;
         actorData.nutrition.foodNeededDay.value += enchant.foodNeededDayModif;
         actorData.nutrition.drinkNeededDay.value += enchant.drinkNeededDayModif;
         if (actorData.damageBonus.value == "")
@@ -1759,17 +1766,15 @@ export default class ORCCharacterSheet extends ActorSheet {
     let actor = data.actor;
     let actorData = actor.system;
 
-    const physMult = 1 / 5,
-      socMult = 0,
-      intelMult = 1 / 10;
-
-    actorData.initiative =
-      actorData.initiativeNative +
-      Math.floor(
-        physMult * actorData.attributes.physical.value +
-          socMult * actorData.attributes.social.value +
-          intelMult * actorData.attributes.intel.value
-      );
+    const physMult = 1 / 10,
+      intelMult = 1 / 5;
+    actorData.ini.ndice += Math.floor(
+      physMult * actorData.attributes.physical.value
+    );
+    actorData.ini.dice = 8;
+    actorData.ini.flat += Math.floor(
+      intelMult * actorData.attributes.intel.value
+    );
   }
 
   async _onDropItem(event, data) {

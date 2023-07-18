@@ -27,7 +27,7 @@ Hooks.once("init", async function () {
   CONFIG.ORC = ORC;
 
   CONFIG.Combat.initiative = {
-    formula: "2d10 + @initiative",
+    formula: "(@ini.ndice)d(@ini.dice) + @ini.flat",
   };
 
   game.orc = {
