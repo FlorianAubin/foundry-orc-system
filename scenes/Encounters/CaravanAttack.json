@@ -1,0 +1,19 @@
+{
+  "name": "CaravanAttack",
+  "width": 4500,
+  "height": 6000,
+  "grid": 150,
+  "shiftX": 0,
+  "shiftY": 0,
+  "gridDistance": 5.0,
+  "gridUnits": "ft",
+  "padding": 0.0,
+  "gridColor": "#000000",
+  "gridAlpha": 0.2,
+  "globalLight": true,
+  "darkness": 0.3,
+  "lights": [],
+  "walls": [],
+  "img": null,
+  "foreground": null
+}

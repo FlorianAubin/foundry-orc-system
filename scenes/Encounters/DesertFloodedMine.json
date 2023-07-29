@@ -1,0 +1,165 @@
+{
+  "name": "DesertFloodedMine",
+  "width": 9600,
+  "height": 9600,
+  "grid": 150,
+  "shiftX": 0,
+  "shiftY": 0,
+  "gridDistance": 5.0,
+  "gridUnits": "ft",
+  "padding": 0.0,
+  "gridColor": "#000000",
+  "gridAlpha": 0.2,
+  "globalLight": true,
+  "darkness": 0.0,
+  "lights": [
+    {
+      "x": 3042,
+      "y": 4761,
+      "dim": 30.0,
+      "bright": 15.0,
+      "tintColor": "#A80000",
+      "tintAlpha": 0.0
+    },
+    {
+      "x": 3045,
+      "y": 4760,
+      "dim": 30.0,
+      "bright": 15.0,
+      "tintColor": "#A80000",
+      "tintAlpha": 0.0
+    },
+    {
+      "x": 3078,
+      "y": 4760,
+      "dim": 1.26339293,
+      "bright": 0.631696463,
+      "tintColor": "#A80000",
+      "tintAlpha": 0.0
+    },
+    {
+      "x": 3046,
+      "y": 4698,
+      "dim": 30.0,
+      "bright": 15.0,
+      "tintColor": "#A80000",
+      "tintAlpha": 0.0
+    },
+    {
+      "x": 3079,
+      "y": 4698,
+      "dim": 1.26339293,
+      "bright": 0.631696463,
+      "tintColor": "#A80000",
+      "tintAlpha": 0.0
+    },
+    {
+      "x": 3039,
+      "y": 4697,
+      "dim": 30.0,
+      "bright": 15.0,
+      "tintColor": "#A80000",
+      "tintAlpha": 0.0
+    }
+  ],
+  "walls": [
+    {
+      "c": [
+        5606,
+        2370,
+        5606,
+        2532
+      ],
+      "move": 1,
+      "sense": 1,
+      "sound": 1,
+      "door": 0
+    },
+    {
+      "c": [
+        5785,
+        2659,
+        5785,
+        2497
+      ],
+      "move": 1,
+      "sense": 1,
+      "sound": 1,
+      "door": 0
+    },
+    {
+      "c": [
+        5107,
+        4482,
+        5107,
+        4319
+      ],
+      "move": 1,
+      "sense": 1,
+      "sound": 1,
+      "door": 0
+    },
+    {
+      "c": [
+        5109,
+        5119,
+        5109,
+        4956
+      ],
+      "move": 1,
+      "sense": 1,
+      "sound": 1,
+      "door": 0
+    },
+    {
+      "c": [
+        5405,
+        4336,
+        5405,
+        4173
+      ],
+      "move": 1,
+      "sense": 1,
+      "sound": 1,
+      "door": 0
+    },
+    {
+      "c": [
+        5406,
+        5122,
+        5406,
+        4959
+      ],
+      "move": 1,
+      "sense": 1,
+      "sound": 1,
+      "door": 0
+    },
+    {
+      "c": [
+        5403,
+        5273,
+        5403,
+        5110
+      ],
+      "move": 1,
+      "sense": 1,
+      "sound": 1,
+      "door": 0
+    },
+    {
+      "c": [
+        5403,
+        4485,
+        5403,
+        4321
+      ],
+      "move": 1,
+      "sense": 1,
+      "sound": 1,
+      "door": 0
+    }
+  ],
+  "img": null,
+  "foreground": null
+}

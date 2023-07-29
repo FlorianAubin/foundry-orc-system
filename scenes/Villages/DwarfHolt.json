@@ -1,0 +1,108 @@
+{
+  "name": "DwarfHolt",
+  "width": 5850,
+  "height": 5850,
+  "grid": 150,
+  "shiftX": 0,
+  "shiftY": 0,
+  "gridDistance": 5.0,
+  "gridUnits": "ft",
+  "padding": 0.0,
+  "gridColor": "#000000",
+  "gridAlpha": 0.2,
+  "globalLight": true,
+  "darkness": 0.0,
+  "lights": [
+    {
+      "x": 2938,
+      "y": 3553,
+      "dim": 45.0,
+      "bright": 22.5,
+      "tintColor": "#95C300",
+      "tintAlpha": 0.0
+    },
+    {
+      "x": 2938,
+      "y": 3582,
+      "dim": 1.89508927,
+      "bright": 0.947544634,
+      "tintColor": "#95C300",
+      "tintAlpha": 0.0
+    },
+    {
+      "x": 2841,
+      "y": 3572,
+      "dim": 45.0,
+      "bright": 22.5,
+      "tintColor": "#95C300",
+      "tintAlpha": 0.0
+    },
+    {
+      "x": 2841,
+      "y": 3601,
+      "dim": 1.89508927,
+      "bright": 0.947544634,
+      "tintColor": "#95C300",
+      "tintAlpha": 0.0
+    },
+    {
+      "x": 2442,
+      "y": 4030,
+      "dim": 20.0,
+      "bright": 10.0,
+      "tintColor": "#FFAD40",
+      "tintAlpha": 0.0
+    },
+    {
+      "x": 2854,
+      "y": 3571,
+      "dim": 30.0,
+      "bright": 15.0,
+      "tintColor": "#95C300",
+      "tintAlpha": 0.0
+    },
+    {
+      "x": 2013,
+      "y": 4160,
+      "dim": 28.8612576,
+      "bright": 14.4306288,
+      "tintColor": "#FF9A00",
+      "tintAlpha": 0.0
+    },
+    {
+      "x": 3436,
+      "y": 4341,
+      "dim": 28.8612576,
+      "bright": 14.4306288,
+      "tintColor": "#FF9A00",
+      "tintAlpha": 0.0
+    },
+    {
+      "x": 2792,
+      "y": 3145,
+      "dim": 20.0,
+      "bright": 10.0,
+      "tintColor": "#FFAD40",
+      "tintAlpha": 0.0
+    },
+    {
+      "x": 3517,
+      "y": 3411,
+      "dim": 28.8481674,
+      "bright": 14.4240837,
+      "tintColor": "#FFAD40",
+      "tintAlpha": 0.0
+    },
+    {
+      "x": 3072,
+      "y": 4374,
+      "dim": 25.0,
+      "bright": 12.5,
+      "tintColor": "#FF9A00",
+      "tintAlpha": 0.0
+    }
+  ],
+  "walls": [],
+  "img": null,
+  "foreground": null
+}
