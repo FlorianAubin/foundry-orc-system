@@ -476,7 +476,7 @@
     {{/if}}
   {{/each}}
 </table>
-<!--
+
 <table class="item-list status">
   <tr class="main-header flexrow">
       <th class="content">{{localize "orc.character.encumbrance"}}</th>
@@ -492,12 +492,12 @@
     </tr>
     <tr class="item flexrow">
       <td class="content"></td>
-      <td class="content">{{actor.system.attributes.physical.valueModif.encumbrance}}</td>
-      <td class="content">{{actor.system.attack.valueModif.encumbrance}}</td>
-      <td class="content">{{actor.system.defence.valueModif.encumbrance}}</td>
-      <td class="content">{{actor.system.dodge.valueModif.encumbrance}}</td>
-      <td class="content">{{actor.system.nutrition.foodNeededDay.valueModif.encumbrance}}</td>
-      <td class="content">{{actor.system.nutrition.drinkNeededDay.valueModif.encumbrance}}</td>
+      <td class="content">{{actor.system.encumbrance.malus.physical}}</td>
+      <td class="content">{{actor.system.encumbrance.malus.attack}}</td>
+      <td class="content">{{actor.system.encumbrance.malus.defence}}</td>
+      <td class="content">{{actor.system.encumbrance.malus.dodge}}</td>
+      <td class="content">{{actor.system.encumbrance.malus.foodNeededDay}}</td>
+      <td class="content">{{actor.system.encumbrance.malus.drinkNeededDay}}</td>
     </tr>
 
   <tr class="main-header flexrow">
@@ -513,30 +513,30 @@
     </tr>
     <tr class="item flexrow">
       <td class="content">{{localize "orc.character.food"}}</td>
-      <td class="content">{{actor.system.attributes.physical.valueModif.food}}</td>
-      <td class="content">{{actor.system.attributes.social.valueModif.food}}</td>
-      <td class="content">{{actor.system.attributes.intel.valueModif.food}}</td>
-      <td class="content">{{actor.system.hp.valueMaxModif.food}}</td>
-      <td class="content">{{actor.system.mp.valueMaxModif.food}}</td>
+      <td class="content">{{actor.system.nutrition.foodNeededDay.malus.physical}}</td>
+      <td class="content">{{actor.system.nutrition.foodNeededDay.malus.social}}</td>
+      <td class="content">{{actor.system.nutrition.foodNeededDay.malus.intel}}</td>
+      <td class="content">{{actor.system.nutrition.foodNeededDay.malus.hpMax}}</td>
+      <td class="content">-</td>
     </tr>
     <tr class="item flexrow">
       <td class="content">{{localize "orc.character.drink"}}</td>
-      <td class="content">{{actor.system.attributes.physical.valueModif.drink}}</td>
-      <td class="content">{{actor.system.attributes.social.valueModif.drink}}</td>
-      <td class="content">{{actor.system.attributes.intel.valueModif.drink}}</td>
-      <td class="content">{{actor.system.hp.valueMaxModif.drink}}</td>
-      <td class="content">{{actor.system.mp.valueMaxModif.drink}}</td>
+      <td class="content">{{actor.system.nutrition.drinkNeededDay.malus.physical}}</td>
+      <td class="content">-</td>
+      <td class="content">{{actor.system.nutrition.drinkNeededDay.malus.intel}}</td>
+      <td class="content">{{actor.system.nutrition.drinkNeededDay.malus.hpMax}}</td>
+      <td class="content">{{actor.system.nutrition.drinkNeededDay.malus.mpMax}}</td>
     </tr>
     <tr class="item flexrow">
       <td class="content">{{localize "orc.character.tipsiness"}}</td>
-      <td class="content">{{actor.system.attributes.physical.valueModif.tipsiness}}</td>
-      <td class="content">{{actor.system.attributes.social.valueModif.tipsiness}}</td>
-      <td class="content">{{actor.system.attributes.intel.valueModif.tipsiness}}</td>
-      <td class="content">{{actor.system.hp.valueMaxModif.tipsiness}}</td>
-      <td class="content">{{actor.system.mp.valueMaxModif.tipsiness}}</td>
+      <td class="content">-</td>
+      <td class="content">{{actor.system.nutrition.tips.malus.social}}</td>
+      <td class="content">{{actor.system.nutrition.tips.malus.intel}}</td>
+      <td class="content">-</td>
+      <td class="content">-</td>
     </tr>
 </table>
--->
+
 
 <table class="item-list wound-list">
   <tr class="main-header flexrow">

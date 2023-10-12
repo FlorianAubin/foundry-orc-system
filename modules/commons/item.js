@@ -78,6 +78,8 @@ export async function onItemDelete(event) {
     this._onSpellMemorized(event);
   }
   item.delete();
+
+  return;
 }
 
 export async function onItemSplit(event) {

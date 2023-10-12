@@ -8,10 +8,10 @@
       "flags": {}
     }
   ],
-  "version": 1.7,
+  "version": 1.8,
   "compatibility": {
     "minimum": "10",
-    "verified": "10"
+    "verified": "11"
   },
   "esmodules": ["./modules/orc.js"],
   "styles": ["./styles/orc.css"],

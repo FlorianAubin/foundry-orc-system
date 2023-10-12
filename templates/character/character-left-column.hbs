@@ -188,7 +188,7 @@
 </table>
 <table style="width: 200px">
   <tr>
-    <th>{{localize "orc.character.combatStyle"}}</th>
+    <th colspan="3">{{localize "orc.character.combatStyle"}}</th>
     <td align="center" colspan="2">
       <select name="system.combatStyle" align="center">
         {{#select actor.system.combatStyle}}
@@ -201,55 +201,132 @@
   </tr>
   <tr align="center">
     <th>{{localize "orc.character.attack"}}</th>
-    <td>{{actor.system.attack.value}}</td>
+    <td colspan="2">{{actor.system.attack.value}}</td>
     <td
       class="attack-roll button fas fa-dice"
       data-attributename="{{localize 'orc.character.attack'}}"
       data-attributevalue="{{actor.system.attack.value}}"
       data-attributevaluebase="{{actor.system.attack.native}}"
     ></td>
+    {{#if actor.system.modifiers.deploy}}
+      <td align="center">
+        <input
+          type="number"
+          name="system.modifiers.attack"
+          value="{{actor.system.modifiers.attack}}"
+          placeholder="0"
+          onClick="this.select();"
+          style="width: 30px"
+        />
+      </td>
+    {{/if}}
   </tr>
-  {{#if actor.system.magic.canLaunchSpell}}
+  {{#if (or actor.system.magic.canLaunchSpell actor.system.modifiers.deploy)}}
   <tr align="center">
     <th>{{localize "orc.character.magicRoll"}}</th>
-    <td>{{actor.system.magic.roll.value}}</td>
+    <td colspan="2">{{actor.system.magic.roll.value}}</td>
     <td
       class="launch-spell-roll button fas fa-dice"
       data-attributename="{{localize 'orc.character.magicRoll'}}"
       data-attributevalue="{{actor.system.magic.roll.value}}"
       data-attributevaluebase="{{actor.system.magic.roll.native}}"
     ></td>
+    {{#if actor.system.modifiers.deploy}}
+      <td align="center">
+        <input
+          type="number"
+          name="system.modifiers.magicRoll"
+          value="{{actor.system.modifiers.magicRoll}}"
+          placeholder="0"
+          onClick="this.select();"
+          style="width: 30px"
+        />
+      </td>
+    {{/if}}
   </tr>
   {{/if}}
-  {{#if actor.system.defence.value}}
+  {{#if (or actor.system.defence.value actor.system.modifiers.deploy)}}
     <tr align="center">
       <th>{{localize "orc.character.defence"}}</th>
-      <td class="defence" colspan="2">{{actor.system.defence.value}}</td>
+      <td class="defence" colspan="3">{{actor.system.defence.value}}</td>
+      {{#if actor.system.modifiers.deploy}}
+        <td align="center">
+          <input
+            type="number"
+            name="system.modifiers.defence"
+            value="{{actor.system.modifiers.defence}}"
+            placeholder="0"
+            onClick="this.select();"
+            style="width: 30px"
+          />
+        </td>
+      {{/if}}
     </tr>
   {{/if}}
   {{#if actor.system.dodge.enable}}
     <tr align="center">
       <th>{{localize "orc.character.dodge"}}</th>
-      <td>{{actor.system.dodge.value}}</td>
+      <td colspan="2">{{actor.system.dodge.value}}</td>
       <td
         class="dodge-roll button fas fa-dice"
         data-attributename="{{localize 'orc.character.dodge'}}"
         data-attributevalue="{{actor.system.dodge.value}}"
         data-attributevaluebase="{{actor.system.dodge.native}}"
       ></td>
+      {{#if actor.system.modifiers.deploy}}
+        <td align="center">
+          <input
+            type="number"
+            name="system.modifiers.dodge"
+            value="{{actor.system.modifiers.dodge}}"
+            placeholder="0"
+            onClick="this.select();"
+            style="width: 30px"
+          />
+        </td>
+      {{/if}}
     </tr>
   {{/if}}
-  {{#if actor.system.damageBonus.value}}
+  {{#if (or actor.system.damageBonus.value actor.system.modifiers.deploy)}}
     <tr align="center">
       <th>{{localize "orc.character.damageBonus"}}</th>
-      <td>{{actor.system.damageBonus.value}}</td>
-      <td class="damage-roll button fas fa-dice"></td>
+      <td colspan="3">{{actor.system.damageBonus.value}}</td>
+      {{#if actor.system.modifiers.deploy}}
+        <td align="center">
+          <input
+            type="text"
+            name="system.modifiers.damageBonus"
+            value="{{actor.system.modifiers.damageBonus}}"
+            placeholder="0"
+            onClick="this.select();"
+            style="width: 30px"
+          />
+        </td>
+      {{/if}}
+    </tr>
+  {{/if}}
+  {{#if (or (and actor.system.magic.canLaunchSpell actor.system.magic.power.value) actor.system.modifiers.deploy)}}
+    <tr align="center">
+      <th>{{localize "orc.character.magicPower"}}</th>
+      <td colspan="3">{{actor.system.magic.power.value}}</td>
+      {{#if actor.system.modifiers.deploy}}
+        <td align="center">
+          <input
+            type="text"
+            name="system.modifiers.powerBonus"
+            value="{{actor.system.modifiers.powerBonus}}"
+            placeholder="0"
+            onClick="this.select();"
+            style="width: 30px"
+          />
+        </td>
+      {{/if}}
     </tr>
   {{/if}}
   <tr align="center">
     <th>{{localize "orc.character.initiative"}}</th>
     {{#if unlocked}}
-      <td align="center" colspan="2">
+      <td align="center" colspan="3">
         <input
           type="number"
           name="system.ini.flatNative"
@@ -260,12 +337,32 @@
         />
       </td>
     {{else}}
-      <td align="center">
+      <td align="center" colspan="3">
         <span>{{actor.system.ini.ndice}}d{{actor.system.ini.dice}} + {{actor.system.ini.flat}}</span>
       </td>
     {{/if}}
+    {{#if actor.system.modifiers.deploy}}
+      <td align="center">
+        <input
+          type="number"
+          name="system.modifiers.initiative"
+          value="{{actor.system.modifiers.initiative}}"
+          placeholder="0"
+          onClick="this.select();"
+          style="width: 30px"
+        />
+      </td>
+    {{/if}}
+  </tr>
+  <tr align="center">
+    {{#if actor.system.modifiers.deploy}}
+      <td class="modifier-deploy button fas fa-arrow-left-to-line" colspan="5"></td>
+    {{else}}
+      <td class="modifier-deploy button fas fa-arrow-right-to-line" colspan="5"></td>
+    {{/if}}
   </tr>
 </table>
+
 <table style="width: 200px">
   <th></th>
   {{#if

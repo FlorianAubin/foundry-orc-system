@@ -90,7 +90,7 @@ export const highlightSuccessFailure = function (message, html, data) {
       if (d.total <= critical) {
         totalHtml.classList.add("critical");
       } else if (d.total >= fumble) {
-        totalHtml.classList.add("fumble");
+         totalHtml.classList.add("fumble");
       }
     }
     i++;
@@ -126,8 +126,39 @@ export async function StatusRollToCustomMessage(rollResult, extraData) {
   await ChatMessage.create(chatData);
 }
 
-export async function DamageRollToCustomMessage(rollResult, extraData) {
-  const template = "systems/orc/templates/chat/roll-damage-result.hbs";
+export async function DamageRollToCustomFullMessage(rollResult, extraData) {
+  const template = "systems/orc/templates/chat/roll-damage-full-result.hbs";
+
+  let templateContext = {
+    ...extraData,
+    roll: rollResult,
+    tooltip: rollResult ? await rollResult.getTooltip() : null,
+  };
+
+  let chatData = {
+    user: game.user._id,
+    speaker: ChatMessage.getSpeaker(),
+    roll: rollResult,
+    sound: CONFIG.sounds.dice,
+    content: await renderTemplate(template, templateContext),
+    type: CONST.CHAT_MESSAGE_TYPES.ROLL,
+  };
+
+   //only visible to the GM and GM assistants
+   if (rollResult.options.visibleByPlayers == 0) {
+    chatData.blind = true;
+    chatData.whisper = game.users.filter(function (user) {
+      return user.role > 2;
+    });
+    chatData.type = CONST.CHAT_MESSAGE_TYPES.BLIND;
+  }
+
+  await ChatMessage.create(chatData);
+}
+
+
+export async function DamageRollToCustomLimitedMessage(rollResult, extraData) {
+  const template = "systems/orc/templates/chat/roll-damage-limited-result.hbs";
 
   let templateContext = {
     ...extraData,
@@ -147,11 +178,59 @@ export async function DamageRollToCustomMessage(rollResult, extraData) {
   await ChatMessage.create(chatData);
 }
 
-export async function SpellRollToCustomMessage(
+export async function SpellRollToCustomFullMessage(
   rollResults = { costRoll: null, powerRoll: null, durationRoll: null },
   extraData
 ) {
-  const template = "systems/orc/templates/chat/roll-spell-result.hbs";
+  const template = "systems/orc/templates/chat/roll-spell-full-result.hbs";
+
+  let templateContext = {
+    ...extraData,
+    costRoll: rollResults.costRoll,
+    powerRoll: rollResults.powerRoll,
+    durationRoll: rollResults.durationRoll,
+    costTooltip: rollResults.costRoll
+      ? await rollResults.costRoll.getTooltip()
+      : null,
+    powerTooltip: rollResults.powerRoll
+      ? await rollResults.powerRoll.getTooltip()
+      : null,
+    durationTooltip: rollResults.durationRoll
+      ? await rollResults.durationRoll.getTooltip()
+      : null,
+  };
+
+  let chatData = {
+    user: game.user._id,
+    speaker: ChatMessage.getSpeaker(),
+    sound: CONFIG.sounds.dice,
+    content: await renderTemplate(template, templateContext),
+    type: CONST.CHAT_MESSAGE_TYPES.ROLL,
+  };
+  //only visible to the GM and GM assistants
+  let visibleByPlayers = 1;
+  if (rollResults.costRoll != null)
+    visibleByPlayers = rollResults.costRoll.options.visibleByPlayers;
+  else if (rollResults.powerRoll != null)
+    visibleByPlayers = rollResults.powerRoll.options.visibleByPlayers;
+  else if (rollResults.durationRoll != null)
+    visibleByPlayers = rollResults.durationRoll.options.visibleByPlayers;
+  if(visibleByPlayers == 0) {
+    chatData.blind = true;
+    chatData.whisper = game.users.filter(function (user) {
+      return user.role > 2;
+    });
+    chatData.type = CONST.CHAT_MESSAGE_TYPES.BLIND;
+  }
+
+  await ChatMessage.create(chatData);
+}
+
+export async function SpellRollToCustomLimitedMessage(
+  rollResults = { costRoll: null, powerRoll: null, durationRoll: null },
+  extraData
+) {
+  const template = "systems/orc/templates/chat/roll-spell-limited-result.hbs";
 
   let templateContext = {
     ...extraData,

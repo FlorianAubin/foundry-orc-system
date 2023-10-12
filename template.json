@@ -27,12 +27,8 @@
       },
       "modifAllAttributes": 0,
       "roll": {
-        "limitCritical": {
-          "value": 0
-        },
-        "limitFumble": {
-          "value": 0
-        }
+        "limitCritical": 1,
+        "limitFumble": 100
       },
       "hp": {
         "value": 0,
@@ -60,7 +56,25 @@
       "encumbrance": {
         "value": 0,
         "limitMultiplier": 0.5,
-        "limit": 0
+        "limit": 0,
+        "malus":{
+          "physical":0,
+          "defence": 0,
+          "attack":0,
+          "dodge":0,
+          "foodNeededDay":0,
+          "drinkNeededDay":0
+        }
+      },
+      "modifiers":{
+        "deploy": false,
+        "attack": 0,
+        "magicRoll": 0,
+        "defence": 0,
+        "dodge": 0,
+        "damageBonus": "",
+        "powerBonus": "",
+        "initiative": 0
       },
       "attack": {
         "native": 0,
@@ -77,7 +91,6 @@
       "damageBonus": {
         "value": ""
       },
-
       "combatStyle": "standard",
       "magic": {
         "canLaunchSpell": false,
@@ -101,7 +114,6 @@
         },
         "roll": {
           "native": 0,
-
           "value": 0
         }
       },
@@ -123,20 +135,37 @@
         "drinkDay": 0,
         "foodNeededDay": {
           "native": 1,
-
-          "value": 0
+          "value": 0,
+          "malus":{
+            "physical":0,
+            "social":0,
+            "intel":0,
+            "hpMax":0
+          }
         },
         "drinkNeededDay": {
           "native": 1,
-
-          "value": 0
+          "value": 0,
+          "malus":{
+            "physical":0,
+            "intel":0,
+            "hpMax":0,
+            "mpMax":0
+          }
         },
-        "tipsiness": 0,
+        "tips": {
+          "value": 0,
+          "malus":{
+            "social":0,
+            "intel":0
+          }
+        },
         "optionDeploy": false
       },
       "takeDamage": {
         "damage": "",
         "applyArmor": true,
+        "applyNativeArmor": true,
         "onMP": false
       },
       "takeDamageArmor": {

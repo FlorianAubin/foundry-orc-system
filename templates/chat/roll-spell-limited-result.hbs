@@ -1,0 +1,57 @@
+<div class="orc spell-roll dice-roll">
+  <table class="results">
+    <tr class="title">
+      <th colspan="4">{{title}}</th>
+    </tr>
+    <!--
+    {{#if costRoll.formula}}
+      <tr>
+        <th class="header">{{localize "orc.spell.cost"}}</th>
+        <td class="dice-total">
+          {{costRoll.total}}
+        </td>
+        <td class="add-info">
+          {{#if useHP}}
+            {{localize "orc.character.hp"}}
+          {{else}}
+            {{localize "orc.character.mp"}}
+          {{/if}}
+        </td>
+      </tr>
+      <tr>{{{costTooltip}}}</tr>
+    {{/if}}
+    -->
+
+    {{#if powerRoll.formula}}
+      <tr>
+        <th class="header">{{localize "orc.spell.power"}}</th>
+        <td class="dice-total" colspan="2">
+          {{powerRoll.total}}
+        </td>
+      </tr>
+      <tr>{{{powerTooltip}}}</tr>
+    {{/if}}
+
+  <!--
+    {{#if durationRoll.formula}}
+      <tr>
+        <th class="header">{{localize "orc.spell.duration"}}</th>
+        <td class="dice-total">
+          {{durationRoll.total}}
+        </td>
+        <td class="add-info">
+          {{durationUnit}}
+        </td>
+      </tr>
+      <tr>{{{durationTooltip}}}</tr>
+    {{/if}}
+  -->
+
+    {{#if effect}}
+      <tr class="effects">
+        <td colspan="4">{{effect}}</td>
+      </tr>
+    {{/if}}
+  
+  </table>
+</div>

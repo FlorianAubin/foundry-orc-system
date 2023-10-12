@@ -35,12 +35,13 @@ export async function onEnchantRoll(event) {
 export async function onEnchantActivate(event) {
   event.preventDefault();
 
+  let actor = this.actor;
   let item = null;
   //If the event occurs from a item sheet, simply take that item
   if (this.item) item = this.item;
   //If the event occurs from an actor sheet, retrieve the item from the given identifier
-  else if (this.actor)
-    item = this.actor.items.get(event.currentTarget.dataset.itemid);
+  else if (actor)
+    item = actor.items.get(event.currentTarget.dataset.itemid);
 
   //Does nothing if no item or no enchant has been found
   if (item == null) return;
@@ -90,8 +91,10 @@ export async function onEnchantActivate(event) {
 }
 
 export async function _onEnchantReduceDuration(event) {
-  if (this.actor == null) return;
-  let item = this.actor.items.get(event.currentTarget.dataset.itemid);
+  let actor = this.actor;
+  if (actor == null) return;
+
+  let item = actor.items.get(event.currentTarget.dataset.itemid);
 
   //Does nothing if no item or no enchant has been found
   if (item == null) return;
@@ -115,5 +118,4 @@ export async function onEnchantSetUse(event) {
     system: { enchant: { use: { available: event.currentTarget.value } } },
   });
 
-  return;
 }

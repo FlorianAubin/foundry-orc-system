@@ -29,7 +29,7 @@
     "multiplier": "Multiplicateur",
     "effective": "Effective",
     "max": "Max.",
-    "native": "Native",
+    "native": "Innée",
     "cure": "Soin",
     "stack": "Stacks",
     "effect": "Effet",
@@ -56,6 +56,7 @@
       "defence": "Défense",
       "dodge": "Esquive",
       "damageBonus": "Bonus de dégâts",
+      "magicPower": "Puissance magique bonus",
       "initiative": "Initiative",
       "bleed": "Saignement",
       "poison": "Poison",
@@ -345,7 +346,8 @@
         "excess": "Succès excédentaires :"
       },
       "damageFromWeapon": {
-        "title": "Jet de dégâts avec {weaponName} :",
+        "titleLimited": "Jet de dégâts de {actorName}",
+        "title": "Jet de dégâts de {actorName} avec {weaponName} :",
         "ammo": "Munition utilisée : {ammoName}",
         "notEnoughAmmo": "Pas assez de {ammoName} !"
       },
@@ -353,7 +355,8 @@
         "title": "Jet de dégâts bonus :"
       },
       "rollSpell": {
-        "title": "Jet du sort {spellName} :"
+        "titleLimited": "Jet d'un sort par {actorName} :",
+        "title": "Jet du sort {spellName} par {actorName} :"
       },
       "bleed": {
         "title": "{charName} saigne !"

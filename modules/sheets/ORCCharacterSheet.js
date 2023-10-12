@@ -110,6 +110,8 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     html.find(".damage-roll").click(this._onDamageRoll.bind(this));
 
+    html.find(".modifier-deploy").click(this._onModifierDeploy.bind(this));
+
     html.find(".bleed-roll").click(this._onBleedRoll.bind(this));
     html.find(".bleed-off").click(this._onBleedOff.bind(this));
     html.find(".poison-roll").click(this._onPoisonRoll.bind(this));
@@ -174,6 +176,15 @@ export default class ORCCharacterSheet extends ActorSheet {
     let actor = this.actor;
     actor.update({
       system: { ap: { optionDeploy: !actor.system.ap.optionDeploy } },
+    });
+  }
+
+  async _onModifierDeploy(event) {
+    event.preventDefault();
+
+    let actor = this.actor;
+    actor.update({
+      system: { modifiers: { deploy: !actor.system.modifiers.deploy } },
     });
   }
 
@@ -354,13 +365,16 @@ export default class ORCCharacterSheet extends ActorSheet {
   }
 
   _onTakeDamage(event) {
+    console.log(event)
     const damage = event.currentTarget.dataset.damage;
     const applyArmor = event.currentTarget.dataset.applyarmor === "true";
+    const applyNativeArmor = event.currentTarget.dataset.applynativearmor === "true";
     const onMP = event.currentTarget.dataset.onmp === "true";
     if (!damage) return;
     this.takeDamage({
       damageFormula: damage,
       applyArmor: applyArmor,
+      applyNativeArmor: applyNativeArmor,
       onMP: onMP,
     });
   }
@@ -498,7 +512,7 @@ export default class ORCCharacterSheet extends ActorSheet {
   }
 
   async _onNewDay(event) {
-    await this.newDay();
+     this.newDay();
     return;
   }
 
@@ -601,7 +615,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     let newValues = {
       foodDay: actorData.nutrition.foodDay,
       drinkDay: actorData.nutrition.drinkDay,
-      tipsiness: actorData.nutrition.tipsiness,
+      tipsiness: actorData.nutrition.tips.value,
       poison: actorData.status.poison,
     };
     if (item.type == "food") {
@@ -657,7 +671,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     await actor.update({
       system: {
         nutrition: {
-          tipsiness: newValues.tipsiness,
+          tips: {value: newValues.tipsiness},
           foodDay: newValues.foodDay,
           drinkDay: newValues.drinkDay,
         },
@@ -857,13 +871,13 @@ export default class ORCCharacterSheet extends ActorSheet {
   consumeOnRoll({ onRoll = false, onAttack = false, onSpell = false }) {
     let actor = this.actor;
     let items = this.getData().items;
-    for (let [key, item] of Object.entries(items)) {
+    for (let [key, it] of Object.entries(items)) {
+      let item = actor.items.get(it._id);
       let itemData = item.system;
-
-      if (!itemData.equipped) continue;
 
       let enchant = itemData.enchant;
       if (
+        itemData.equipped &&
         enchant != null &&
         enchant.activeEffect &&
         enchant.activated &&
@@ -875,16 +889,15 @@ export default class ORCCharacterSheet extends ActorSheet {
         if (newDuration <= 0)
           item.update(
             { system: { enchant: { activated: false } } },
-            { render: false }
           );
         else
           item.update(
             {
               system: { enchant: { use: { durationEffective: newDuration } } },
             },
-            { render: false }
           );
       }
+
       if (
         item.type == "capacity" &&
         itemData.activeEffect &&
@@ -897,14 +910,12 @@ export default class ORCCharacterSheet extends ActorSheet {
         if (newDuration <= 0)
           item.update(
             { system: { ifActivable: { activated: false } } },
-            { render: false }
           );
         else
           item.update(
             {
               system: { ifActivable: { durationEffective: newDuration } },
             },
-            { render: false }
           );
       }
       if (
@@ -919,23 +930,23 @@ export default class ORCCharacterSheet extends ActorSheet {
         if (newDuration <= 0)
           item.update(
             { system: { ifActivable: { activated: false } } },
-            { render: false }
           );
         else
-          item.update(
+         item.update(
             {
               system: { ifActivable: { duration: newDuration } },
             },
-            { render: false }
           );
       }
     }
+
     return;
   }
 
   async takeDamage({
     damageFormula,
     applyArmor = false,
+    applyNativeArmor = false,
     onMP = false,
     onArmor = { validate: false, armorId: "" },
     limitValue = -1000,
@@ -955,6 +966,7 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     //Apply the armor
     if (applyArmor) damage -= actorData.ap.value;
+    else if(applyNativeArmor) damage -= actorData.ap.native;
     if (damage <= 0) return;
 
     //Apply damage on an owned armor piece
@@ -984,6 +996,7 @@ export default class ORCCharacterSheet extends ActorSheet {
           await this.takeDamage({
             damageFormula: damage - value,
             applyArmor: false,
+            applyNativeArmor: false,
             onMP: false,
           });
           damage = value;
@@ -1040,11 +1053,63 @@ export default class ORCCharacterSheet extends ActorSheet {
     return heal;
   }
 
-  async newDay() {
+  newDay() {
     let actor = this.actor;
     let items = this.getData().items;
 
-    //Update the actors
+    //Update the owned items
+    for (let [key, it] of Object.entries(items)) {
+      let item = actor.items.get(it._id);
+      //Deactivate and reset enchants
+      if (item.system.enchant != null) {
+        if (
+          item.system.enchant.activeEffect &&
+          item.system.enchant.use.perDay > 0
+        ) {
+          item.update(
+            {
+              system: {
+                enchant: {
+                  use: { available: item.system.enchant.use.perDay },
+                  activated: item.system.enchant.use.disableOnNewDay
+                    ? false
+                    : true,
+                },
+              },
+            },
+          );
+        }
+      }
+      //Deactivate capacities
+      if (
+        item.type == "capacity" &&
+        item.system.activeEffect &&
+        item.system.ifActivable.activated
+      ) {
+        item.update(
+          {
+            system: {
+              ifActivable: {
+                activated: item.system.ifActivable.disableOnNewDay
+                  ? false
+                  : true,
+              },
+            },
+          },
+        );
+      }
+
+      //Delete activated consumables
+      if (
+        item.type == "consumable" &&
+        item.system.ifActivable.activated &&
+        item.system.ifActivable.disableOnNewDay
+      ) {
+        item.delete();
+      }
+    }
+
+    //Update the actor
     //Add 10 MP
     const valueMP = actor.system.mp.value;
     const limitValueMP = actor.system.mp.valueMax;
@@ -1066,64 +1131,10 @@ export default class ORCCharacterSheet extends ActorSheet {
         nutrition: {
           foodDay: newFood,
           drinkDay: newDrink,
-          tipsiness: 0,
+          tips: {value: 0},
         },
       },
     });
-
-    //Update the owned items
-    for (let [key, it] of Object.entries(items)) {
-      let item = actor.items.get(it._id);
-      //Deactivate and reset enchants
-      if (item.system.enchant != null) {
-        if (
-          item.system.enchant.activeEffect &&
-          item.system.enchant.use.perDay > 0
-        ) {
-          await item.update(
-            {
-              system: {
-                enchant: {
-                  use: { available: item.system.enchant.use.perDay },
-                  activated: item.system.enchant.use.disableOnNewDay
-                    ? false
-                    : true,
-                },
-              },
-            },
-            { render: false }
-          );
-        }
-      }
-      //Deactivate capacities
-      if (
-        item.type == "capacity" &&
-        item.system.activeEffect &&
-        item.system.ifActivable.activated
-      ) {
-        await item.update(
-          {
-            system: {
-              ifActivable: {
-                activated: item.system.ifActivable.disableOnNewDay
-                  ? false
-                  : true,
-              },
-            },
-          },
-          { render: false }
-        );
-      }
-
-      //Delete activated consumables
-      if (
-        item.type == "consumable" &&
-        item.system.ifActivable.activated &&
-        item.system.ifActivable.disableOnNewDay
-      ) {
-        await item.delete();
-      }
-    }
 
     return;
   }
@@ -1138,7 +1149,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     this.applyNutrition(data);
     this.applyCapacities(data);
 
-    this.initEncumbranceLimit(data);
+    this.initEncumbrance(data);
     this.applyItemsOnEncumbranceLimit(data);
     this.applyEncumbranceOnPrincipales(data);
 
@@ -1147,6 +1158,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     this.applyEncumbranceOnDerivated(data);
 
     this.applyCombatStyle(data);
+    this.applyModifiers(data);
 
     //Calculate the HP and MP surplus
     this.calculateSurplus(data);
@@ -1164,6 +1176,8 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     //Delete items with 0 stock
     ActorOrc.removeItemsWithoutStock(data);
+
+    return;
   }
 
   initPrincipaleValues(data) {
@@ -1212,9 +1226,9 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     //Roll limits
     //Critical
-    actorData.roll.limitCritical.value = 1;
+    actorData.roll.limitCritical = 1;
     //Fumble
-    actorData.roll.limitFumble.value = 100;
+    actorData.roll.limitFumble = 100;
 
     //Healing multiplier
     actorData.recoverHP.multiplier.value =
@@ -1266,6 +1280,30 @@ export default class ORCCharacterSheet extends ActorSheet {
     }
   }
 
+  applyModifiers(data) {
+    let actor = data.actor;
+    let actorData = actor.system;
+
+    actorData.attack.value += actorData.modifiers.attack;
+    actorData.magic.roll.value += actorData.modifiers.magicRoll;
+    actorData.defence.value += actorData.modifiers.defence;
+    actorData.dodge.value += actorData.modifiers.dodge;
+
+    if(actorData.modifiers.damageBonus != "")
+      if(actorData.damageBonus.value == "")
+        actorData.damageBonus.value += actorData.modifiers.damageBonus;
+      else
+        actorData.damageBonus.value += "+" + actorData.modifiers.damageBonus;
+
+    if(actorData.modifiers.powerBonus != "")
+      if(actorData.magic.power.value == "")
+        actorData.magic.power.value += actorData.modifiers.powerBonus;
+      else
+        actorData.magic.power.value += "+" + actorData.modifiers.powerBonus;
+
+    actorData.ini.flat += actorData.modifiers.initiative;
+  }
+
   applyItemsOnPrincipales(data) {
     let actor = data.actor;
     let actorData = actor.system;
@@ -1307,15 +1345,19 @@ export default class ORCCharacterSheet extends ActorSheet {
           actorData.ap.value += effect.apModif;
 
           actorData.defence.value += effect.defenceModif;
-          actorData.roll.limitCritical.value += effect.limitCriticalModif;
-          actorData.roll.limitFumble.value += effect.limitFumbleModif;
+          actorData.roll.limitCritical += effect.limitCriticalModif;
+          actorData.roll.limitFumble += effect.limitFumbleModif;
           actorData.ini.flat += effect.initiativeModif;
-          if (actorData.damageBonus.value == "")
-            actorData.damageBonus.value += effect.damageBonusModif;
-          else actorData.damageBonus.value += "+" + effect.damageBonusModif;
-          if (actorData.magic.power.value == "")
-            actorData.magic.power.value += effect.magicPower;
-          else actorData.magic.power.value += "+" + effect.magicPower;
+          if(effect.damageBonusModif !== "") {
+            if (actorData.damageBonus.value == "")
+              actorData.damageBonus.value += effect.damageBonusModif;
+            else actorData.damageBonus.value += "+" + effect.damageBonusModif;
+          }
+          if(effect.magicPower!== "") {
+            if (actorData.magic.power.value == "")
+              actorData.magic.power.value += effect.magicPower;
+            else actorData.magic.power.value += "+" + effect.magicPower;
+          }
           actorData.magic.mpReduc.value += effect.mpReduc;
         }
       }
@@ -1337,19 +1379,24 @@ export default class ORCCharacterSheet extends ActorSheet {
         actorData.ap.value += enchant.apModif;
 
         actorData.defence.value += enchant.defenceModif;
-        actorData.roll.limitCritical.value += enchant.limitCriticalModif;
-        actorData.roll.limitFumble.value += enchant.limitFumbleModif;
+
+        actorData.roll.limitCritical += enchant.limitCriticalModif;
+        actorData.roll.limitFumble += enchant.limitFumbleModif;
         actorData.ini.flat += enchant.initiativeModif;
         actorData.nutrition.foodNeededDay.value += enchant.foodNeededDayModif;
         actorData.nutrition.drinkNeededDay.value += enchant.drinkNeededDayModif;
-        if (actorData.damageBonus.value == "")
-          actorData.damageBonus.value += enchant.damageBonusModif;
-        else actorData.damageBonus.value += "+" + enchant.damageBonusModif;
+        if(enchant.damageBonusModif !== ""){
+          if (actorData.damageBonus.value == "")
+            actorData.damageBonus.value += enchant.damageBonusModif;
+          else actorData.damageBonus.value += "+" + enchant.damageBonusModif;
+        }
         actorData.magic.nSpell.value += enchant.nSpell;
         actorData.magic.nInvoc.value += enchant.nInvoc;
-        if (actorData.magic.power.value == "")
-          actorData.magic.power.value += enchant.magicPower;
-        else actorData.magic.power.value += "+" + enchant.magicPower;
+        if(enchant.magicPower !== ""){
+          if (actorData.magic.power.value == "")
+            actorData.magic.power.value += enchant.magicPower;
+          else actorData.magic.power.value += "+" + enchant.magicPower;
+        }
         actorData.magic.mpReduc.value += enchant.mpReduc;
       }
 
@@ -1363,9 +1410,11 @@ export default class ORCCharacterSheet extends ActorSheet {
         actorData.nutrition.foodNeededDay.value += itemData.foodNeededDayModif;
         actorData.nutrition.drinkNeededDay.value +=
           itemData.drinkNeededDayModif;
-        if (actorData.damageBonus.value == "")
-          actorData.damageBonus.value += itemData.damageBonusModif;
-        else actorData.damageBonus.value += "+" + itemData.damageBonusModif;
+        if(itemData.damageBonusModif != ""){
+          if (actorData.damageBonus.value == "")
+            actorData.damageBonus.value += itemData.damageBonusModif;
+          else actorData.damageBonus.value += "+" + itemData.damageBonusModif;
+        }
       }
     }
 
@@ -1375,71 +1424,102 @@ export default class ORCCharacterSheet extends ActorSheet {
   }
 
   applyNutrition(data) {
+    this.initNutritionMalus(data);
+
     let actor = data.actor;
     let actorData = actor.system;
 
     const food = actorData.nutrition.foodDay;
     const foodNedeed = actorData.nutrition.foodNeededDay.value;
     if (food == foodNedeed + 4) {
-      actorData.attributes.social.value += -5;
-      actorData.attributes.intel.value += -5;
+      actorData.nutrition.foodNeededDay.malus.social = -5;
+      actorData.nutrition.foodNeededDay.malus.intel = -5;
     } else if (food > foodNedeed + 4) {
-      actorData.attributes.physical.value += -10 * (food - (foodNedeed + 4));
-      actorData.attributes.social.value += -10;
-      actorData.attributes.intel.value += -10 * (food - (foodNedeed + 4));
+      actorData.nutrition.foodNeededDay.malus.physical = -10 * (food - (foodNedeed + 4));
+      actorData.nutrition.foodNeededDay.malus.social = -10;
+      actorData.nutrition.foodNeededDay.malus.intel = -10 * (food - (foodNedeed + 4));
     } else if (food < 0) {
       if (food == -1) {
-        actorData.attributes.physical.value += -5;
+        actorData.nutrition.foodNeededDay.malus.physical = -5;
       } else if (food == -2) {
-        actorData.attributes.physical.value += -10;
+        actorData.nutrition.foodNeededDay.malus.physical = -10;
       } else if (food == -3) {
-        actorData.attributes.physical.value += -20;
+        actorData.nutrition.foodNeededDay.malus.physical = -20;
       } else if (food <= -4) {
-        actorData.attributes.physical.value += -40;
-        actorData.hp.valueMax += 10 * (food + 3);
+        actorData.nutrition.foodNeededDay.malus.physical = -40;
+        actorData.nutrition.foodNeededDay.malus.hpMax = 10 * (food + 3);
       }
     }
+    actorData.attributes.physical.value += actorData.nutrition.foodNeededDay.malus.physical;
+    actorData.attributes.social.value += actorData.nutrition.foodNeededDay.malus.social;
+    actorData.attributes.intel.value += actorData.nutrition.foodNeededDay.malus.intel;
+    actorData.hp.valueMax += actorData.nutrition.foodNeededDay.malus.hpMax;
 
     const drink = actorData.nutrition.drinkDay;
     const drinkNedeed = actorData.nutrition.drinkNeededDay.value;
-    if (drink == drinkNedeed + 4)
-      actorData.attributes.physical.value += -5 * (drink - (drinkNedeed + 3));
-    else if (drink > drinkNedeed + 4) {
-      actorData.attributes.intel.value += -10 * (drink - (drinkNedeed + 4));
-      actorData.hp.valueMax += -10 * (drink - (drinkNedeed + 4));
+    if (drink >= drinkNedeed + 4)
+      actorData.nutrition.drinkNeededDay.malus.physical = -5 * (drink - (drinkNedeed + 3));
+    if (drink > drinkNedeed + 4) {
+      actorData.nutrition.drinkNeededDay.malus.intel = -10 * (drink - (drinkNedeed + 4));
+      actorData.nutrition.drinkNeededDay.malus.hpMax = -10 * (drink - (drinkNedeed + 4));
     } else if (drink < 0) {
       if (drink == -1) {
-        actorData.attributes.physical.value += -10;
-        actorData.mp.valueMax += -1;
+        actorData.nutrition.drinkNeededDay.malus.physical = -10;
+        actorData.nutrition.drinkNeededDay.malus.mpMax = -1;
       } else if (drink == -2) {
-        actorData.attributes.physical.value += -20;
-        actorData.hp.valueMax += -10;
-        actorData.mp.valueMax += -3;
+        actorData.nutrition.drinkNeededDay.malus.physical = -20;
+        actorData.nutrition.drinkNeededDay.malus.hpMax = -10;
+        actorData.nutrition.drinkNeededDay.malus.mpMax = -3;
       } else if (drink == -3) {
-        actorData.attributes.physical.value += -30;
-        actorData.hp.valueMax += -20;
-        actorData.mp.valueMax += -5;
+        actorData.nutrition.drinkNeededDay.malus.physical = -30;
+        actorData.nutrition.drinkNeededDay.malus.hpMax = -20;
+        actorData.nutrition.drinkNeededDay.malus.mpMax = -5;
       } else if (drink <= -4) {
-        actorData.attributes.physical.value += -100000;
-        actorData.hp.valueMax = 1;
-        actorData.mp.valueMax += -100000;
         this.takeDamage({ damageFormula: 100000 });
       }
     }
+    actorData.attributes.physical.value += actorData.nutrition.drinkNeededDay.malus.physical;
+    actorData.attributes.intel.value += actorData.nutrition.drinkNeededDay.malus.intel;
+    actorData.hp.valueMax += actorData.nutrition.drinkNeededDay.malus.hpMax;
+    actorData.mp.valueMax += actorData.nutrition.drinkNeededDay.malus.mpMax;
 
-    const tipsiness = actorData.nutrition.tipsiness;
+
+    const tipsiness = actorData.nutrition.tips.value;
     if (tipsiness > 0) {
       if (tipsiness == 1) {
-        actorData.attributes.social.value += +5;
-        actorData.attributes.intel.value += -5;
+        actorData.nutrition.tips.malus.social = +5;
+        actorData.nutrition.tips.malus.intel = -5;
       } else if (tipsiness == 2) {
-        actorData.attributes.social.value += +10;
-        actorData.attributes.intel.value += -10;
+        actorData.nutrition.tips.malus.social = +10;
+        actorData.nutrition.tips.malus.intel = -10;
       } else if (tipsiness >= 3) {
-        actorData.attributes.social.value += -5 * (tipsiness - 1);
-        actorData.attributes.intel.value += -10 * (tipsiness - 1);
+        actorData.nutrition.tips.malus.social = -5 * (tipsiness - 1);
+        actorData.nutrition.tips.malus.intel = -10 * (tipsiness - 1);
       }
     }
+    actorData.attributes.social.value += actorData.nutrition.tips.malus.social;
+    actorData.attributes.intel.value += actorData.nutrition.tips.malus.intel;
+  }
+
+  initNutritionMalus(data){
+    let actor = data.actor;
+    let actorData = actor.system;
+    let foodNeededDayMalus = actorData.nutrition.foodNeededDay.malus;
+    let drinkNeededDayMalus = actorData.nutrition.drinkNeededDay.malus;
+    let tipsinessMalus = actorData.nutrition.tips.malus;
+
+    foodNeededDayMalus.physical = 0;
+    foodNeededDayMalus.social = 0;
+    foodNeededDayMalus.intel = 0;
+    foodNeededDayMalus.hpMax = 0;
+
+    drinkNeededDayMalus.physical = 0;
+    drinkNeededDayMalus.intel = 0;
+    drinkNeededDayMalus.hpMax = 0;
+    drinkNeededDayMalus.mpMax = 0;
+
+    tipsinessMalus.social = 0;
+    tipsinessMalus.intel = 0;
   }
 
   applyCapacities(data) {
@@ -1468,7 +1548,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     }
   }
 
-  initEncumbranceLimit(data) {
+  initEncumbrance(data) {
     let actor = data.actor;
     let actorData = actor.system;
 
@@ -1477,6 +1557,14 @@ export default class ORCCharacterSheet extends ActorSheet {
       actorData.attributes.physical.value *
         actorData.encumbrance.limitMultiplier
     );
+
+    //Malus
+    actorData.encumbrance.malus.physical = 0;
+    actorData.encumbrance.malus.defence = 0;
+    actorData.encumbrance.malus.attack = 0;
+    actorData.encumbrance.malus.dodge = 0;
+    actorData.encumbrance.malus.foodNeededDay = 0;
+    actorData.encumbrance.malus.drinkNeededDay = 0;
   }
 
   applyItemsOnEncumbranceLimit(data) {
@@ -1495,21 +1583,20 @@ export default class ORCCharacterSheet extends ActorSheet {
       //Activated consumables
       if (item.type == "consumable")
         if (itemData.isActivable && itemData.ifActivable.activated)
-          actorData.encumbrance.limit += effect.encumbranceLimitModif;
+            actorData.encumbrance.limit += itemData.ifActivable.encumbranceLimitModif;
 
       //Add the enchant
       const enchant = itemData.enchant;
       if (enchant && enchant.activated)
-        actorData.encumbrance.limit += enchant.encumbranceLimitModif;
+          actorData.encumbrance.limit += enchant.encumbranceLimitModif;
 
       //Wounds
       if (item.type == "wound")
-        actorData.encumbrance.limit += itemData.encumbranceLimitModif;
+          actorData.encumbrance.limit += itemData.encumbranceLimitModif;
     }
   }
 
   applyEncumbranceOnPrincipales(data) {
-    //Ajouter les food et drink needed !!!!!!!!!!!!!!!!!!!
     let actor = data.actor;
     let actorData = actor.system;
 
@@ -1517,25 +1604,28 @@ export default class ORCCharacterSheet extends ActorSheet {
     const limit = actorData.encumbrance.limit;
     if (encumbrance > 1 * limit) {
       //Malus in physical
-      actorData.attributes.physical.value +=
-        -5 * Math.floor(10 * (encumbrance / limit - 1 + 0.1));
+      actorData.encumbrance.malus.physical = -5 * Math.floor(10 * (encumbrance / limit - 1 + 0.1));
     }
     if (encumbrance > 1.2 * limit) {
       //Malus in defence
-      actorData.defence.value +=
-        -5 * Math.floor(10 * (encumbrance / limit - 1.2 + 0.1));
+      actorData.encumbrance.malus.defence =  -5 * Math.floor(10 * (encumbrance / limit - 1.2 + 0.1));
     }
     if (encumbrance > 1.4 * limit) {
-      actorData.nutrition.drinkNeededDay.value += 1;
+      actorData.encumbrance.malus.drinkNeededDay = 1;    
     }
     if (encumbrance > 1.6 * limit) {
       //Automatically hit
-      actorData.defence.value = -100;
-      actorData.nutrition.foodNeededDay.value += 1;
+      actorData.encumbrance.malus.defence =  -100;    
+      actorData.encumbrance.malus.foodNeededDay = 1;    
     }
     if (encumbrance > 1.8 * limit) {
-      actorData.nutrition.drinkNeededDay.value += 1;
+      actorData.encumbrance.malus.drinkNeededDay = 2;    
     }
+
+    actorData.attributes.physical.value += actorData.encumbrance.malus.physical;
+    actorData.defence.value += actorData.encumbrance.malus.defence;
+    actorData.nutrition.foodNeededDay.value += actorData.encumbrance.malus.foodNeededDay;
+    actorData.nutrition.drinkNeededDay.value += actorData.encumbrance.malus.drinkNeededDay;
   }
 
   initDerivatedValues(data) {
@@ -1599,12 +1689,15 @@ export default class ORCCharacterSheet extends ActorSheet {
     const limit = actorData.encumbrance.limit;
     if (encumbrance > 1.4 * limit) {
       //No dodge
-      actorData.dodge.value = -100;
+      actorData.encumbrance.malus.dodge = -100;
     }
     if (encumbrance > 2 * limit) {
       //No attack possible
-      actorData.attack.value = -100;
+      actorData.encumbrance.malus.attack = -100;
     }
+
+    actorData.dodge.value += actorData.encumbrance.malus.dodge;
+    actorData.attack.value += actorData.encumbrance.malus.attack;
   }
 
   /////////////////////
@@ -1660,8 +1753,6 @@ export default class ORCCharacterSheet extends ActorSheet {
     const weapons = data.weapons;
     const ammos = data.ammos;
 
-    let count = 0;
-
     for (let [key, weapon] of Object.entries(weapons)) {
       let item = actor.items.get(weapon._id);
 
@@ -1697,23 +1788,16 @@ export default class ORCCharacterSheet extends ActorSheet {
             },
           },
         },
-        { render: false }
+        { render: item._id == weapons[weapons.length-1]._id ? true : false }    //Render only the last item (to avoid huge loop)
       );
-      count++;
     }
 
-    //Update that does nothing to force rendering
-    if (count > 0)
-      actor.update({
-        system: { attack: { value: actor.system.attack.value } },
-      });
+    return;
   }
 
   updateSpellEffectiveValues(data) {
     const actor = data.actor;
     const spells = data.spells;
-
-    let count = 0;
 
     for (let [key, spell] of Object.entries(spells)) {
       let item = actor.items.get(spell._id);
@@ -1750,16 +1834,11 @@ export default class ORCCharacterSheet extends ActorSheet {
             },
           },
         },
-        { render: false }
+        { render: item._id == spells[spells.length-1]._id ? true : false }    //Render only the last item (to avoid huge loop)
       );
-      count++;
     }
 
-    //Update that does nothing to force rendering
-    if (count > 0)
-      actor.update({
-        system: { magic: { roll: { value: actor.system.magic.roll.value } } },
-      });
+    return;
   }
 
   calculateInitiative(data) {

@@ -15,8 +15,8 @@ export function AttributeRoll({
     attributeName: attribute.attributename,
     attributeValue: (parseFloat(attribute.attributevalue) + modif).toString(),
     actorName: actor.name,
-    actorLimitCritical: actor.system.roll.limitCritical.value,
-    actorLimitFumble: actor.system.roll.limitFumble.value,
+    actorLimitCritical: actor.system.roll.limitCritical,
+    actorLimitFumble: actor.system.roll.limitFumble,
     visibleByPlayers: actor.ownership.default,
   };
 
@@ -91,16 +91,24 @@ export function SpellRoll({
   extraMessageData = {},
 }) {
   let costFormula, powerFormula, durationFormula;
+  let costroll = null, powerroll = null, durationroll = null;
   let costRoll = null,
     powerRoll = null,
     durationRoll = null;
+
+  let roll;
+  let rollData = {}; 
+  let rollOptions = {
+    visibleByPlayers: actor.ownership.default,
+  }; 
 
   if (spell != null) {
     //Consume ressource
     costFormula = spell.system.effective.cost;
     if (typeof costFormula !== "string") costFormula = costFormula.toString();
     if (costFormula != "") {
-      costRoll = new Roll(costFormula).roll({ async: false });
+      costroll = new Roll(costFormula, rollData, rollOptions);
+      costRoll = costroll.roll({ async: false });
       if (spell.system.useHP) {
         if (actor.system.hp.value <= 0) return;
         let newValue = actor.system.hp.value - costRoll.total;
@@ -118,15 +126,19 @@ export function SpellRoll({
     powerFormula = spell.system.effective.power;
     if (typeof powerFormula !== "string")
       powerFormula = powerFormula.toString();
-    if (powerFormula != "")
-      powerRoll = new Roll(powerFormula).roll({ async: false });
+    if (powerFormula != ""){
+      powerroll = new Roll(powerFormula, rollData, rollOptions);
+      powerRoll = powerroll.roll({ async: false });
+    }
 
     //Roll duration
     durationFormula = spell.system.duration;
     if (typeof durationFormula !== "string")
       durationFormula = durationFormula.toString();
-    if (durationFormula != "")
-      durationRoll = new Roll(durationFormula).roll({ async: false });
+    if (durationFormula != ""){
+      durationroll = new Roll(durationFormula, rollData, rollOptions);
+      durationRoll = durationroll.roll({ async: false });
+    }
   }
 
   this.AttributeRoll({
@@ -140,12 +152,23 @@ export function SpellRoll({
   if (spell != null) {
     extraMessageData.title = game.i18n.format("orc.dialog.rollSpell.title", {
       spellName: spell.name,
+      actorName: actor.name,
     });
     extraMessageData.effect = spell.system.effect;
     extraMessageData.useHP = spell.system.useHP;
     extraMessageData.durationUnit = spell.system.durationUnit;
 
-    Chat.SpellRollToCustomMessage(
+    //Display the message
+    /*
+    //Display a limited message if the player is not allowed to see the form
+    if (rollOptions.visibleByPlayers == 0) {
+      Chat.SpellRollToCustomLimitedMessage(
+        { costRoll, powerRoll, durationRoll },
+        { ...extraMessageData }
+      );
+    }
+    */
+    Chat.SpellRollToCustomFullMessage(
       { costRoll, powerRoll, durationRoll },
       { ...extraMessageData }
     );
@@ -196,7 +219,9 @@ export function DamageRoll({
   let rollFormula = "";
   extraMessageData.effect = "";
   let rollData = {};
-  let rollOptions = {};
+  let rollOptions = {
+    visibleByPlayers: actor == null ? 1 : actor.ownership.default,
+  };
   let precise = false;
   let damageMin = 0;
 
@@ -303,9 +328,16 @@ export function DamageRoll({
     }
 
     //Define the message title
+    extraMessageData.titleLimited = game.i18n.format(
+      "orc.dialog.damageFromWeapon.titleLimited",
+      {
+        actorName: actor == null ? "XXX" : actor.name,
+      }
+    );
     extraMessageData.title = game.i18n.format(
       "orc.dialog.damageFromWeapon.title",
       {
+        actorName: actor == null ? "XXX" : actor.name,
         weaponName: weapon.name,
       }
     );
@@ -318,9 +350,16 @@ export function DamageRoll({
   if (rollResult._total < damageMin) rollResult._total = damageMin;
 
   //Display the message
-  Chat.DamageRollToCustomMessage(rollResult, {
+  //Display a limited message if the player is not allowed to see the form
+  if (rollOptions.visibleByPlayers == 0) {
+    Chat.DamageRollToCustomLimitedMessage(rollResult, {
+      ...extraMessageData,
+    });
+  }
+  Chat.DamageRollToCustomFullMessage(rollResult, {
     ...extraMessageData,
   });
+
 
   return rollResult.total;
 }

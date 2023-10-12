@@ -3,10 +3,15 @@
     <tr class="column-container flexrow">
       <td class="table-container">
         <table class="take-damage-table">
-          <tr><th colspan="4">{{localize "orc.takeDamage"}}</th></tr>
+          <tr><th colspan="5">{{localize "orc.takeDamage"}}</th></tr>
           <tr class="take-damage-row">
             <td class="choice">{{localize "orc.damage"}}</td>
-            <td class="choice">{{localize "orc.character.ap"}}?</td>
+            {{#if actor.system.takeDamage.applyArmor}}
+              <td class="choice" colspan="2">{{localize "orc.character.ap"}}?</td>
+            {{else}}
+              <td class="choice">{{localize "orc.character.ap"}}?</td>
+              <td class="choice">{{localize "orc.character.ap"}} {{localize "orc.native"}}?</td>
+            {{/if}}
             <td class="choice">{{localize "orc.character.mp"}}?</td>
             <td class="choice"></td>
           </tr>
@@ -21,13 +26,30 @@
                 style="width: 40px"
               />
             </td>
-            <td class="choice">
-              <input
-                name="system.takeDamage.applyArmor"
-                type="checkbox"
-                {{checked actor.system.takeDamage.applyArmor}}
-              />
-            </td>
+            {{#if actor.system.takeDamage.applyArmor}}
+              <td class="choice" colspan="2">
+                <input
+                  name="system.takeDamage.applyArmor"
+                  type="checkbox"
+                  {{checked actor.system.takeDamage.applyArmor}}
+                />
+              </td>
+            {{else}}
+              <td class="choice">
+                <input
+                  name="system.takeDamage.applyArmor"
+                  type="checkbox"
+                  {{checked actor.system.takeDamage.applyArmor}}
+                />
+              </td>
+              <td class="choice">
+                <input
+                  name="system.takeDamage.applyNativeArmor"
+                  type="checkbox"
+                  {{checked actor.system.takeDamage.applyNativeArmor}}
+                />
+              </td>
+            {{/if}}
             <td class="choice">
               <input
                 name="system.takeDamage.onMP"
@@ -38,7 +60,8 @@
             <td
               class="choice button take-damage fas fa-heart-crack"
               data-damage="{{actor.system.takeDamage.damage}}"
-              data-applyArmor="{{actor.system.takeDamage.applyArmor}}"
+              data-applyarmor="{{actor.system.takeDamage.applyArmor}}"
+              data-applynativearmor="{{actor.system.takeDamage.applyNativeArmor}}"
               data-onmp="{{actor.system.takeDamage.onMP}}"
               align="center"
             ></td>
