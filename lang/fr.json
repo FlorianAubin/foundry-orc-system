@@ -70,7 +70,7 @@
       "magic": "Grimoire",
       "nSpell": " sorts mémorisés",
       "nInvoc": " invocations mémorisées",
-      "invocControlDiff": "Difficulté de contrôle : ",
+      "invocControlDiff": "Modificateur de contrôle (par invoc > 1) : ",
       "capacity": "Capacités",
       "active": "Effets actifs",
       "inventory": "Inventaire",
@@ -293,7 +293,7 @@
     "spell": {
       "school": "Domaine de magie",
       "level": "Niveau du sort",
-      "difficulty": "Difficulté",
+      "difficulty": "Modificateur de lancer",
       "fixed": "Fixée",
       "cost": " Coût en ressource",
       "useHP": "Consomme des HP",
@@ -307,7 +307,8 @@
       "memorized": "Mémorisé",
       "launch": "Lancer le sort",
       "control": "Contrôler l'invocation",
-      "invoked": "Invoqué"
+      "invoked": "Invoqué",
+      "invocDifficulty": "Modificateur de contrôle"
     },
     "combatStyleList": {
       "standard": "Standard",

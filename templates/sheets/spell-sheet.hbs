@@ -127,26 +127,45 @@
           {{/if}}
         </tr>
         {{#if item.system.isInvoc}}
-        <tr>
-          {{#if (or unlocked item.system.ifInvoc.fixed)}}
-            <th>{{localize "orc.spell.fixed"}}</th>
-          {{/if}}
-          {{#if unlocked}}
-            <td align="center">
-              <input
-                name="system.ifInvoc.fixed"
-                type="checkbox"
-                {{checked item.system.ifInvoc.fixed}}
-              />
-            </td>
-          {{else}}
-            {{#if item.system.ifInvoc.fixed}}
-              <td align="center">
-                <span class="fas fa-check"></span>
-              </td>
+          <tr>
+            {{#if (or unlocked item.system.ifInvoc.fixed)}}
+              <th>{{localize "orc.spell.fixed"}}</th>
             {{/if}}
+            {{#if unlocked}}
+              <td align="center">
+                <input
+                  name="system.ifInvoc.fixed"
+                  type="checkbox"
+                  {{checked item.system.ifInvoc.fixed}}
+                />
+              </td>
+            {{else}}
+              {{#if item.system.ifInvoc.fixed}}
+                <td align="center">
+                  <span class="fas fa-check"></span>
+                </td>
+              {{/if}}
+            {{/if}}
+          </tr>
+          {{#if (or unlocked (not item.system.ifInvoc.fixed))}}
+            <tr>
+                <th>{{localize "orc.spell.invocDifficulty"}}</th>
+              {{#if unlocked}}
+                <td align="center">
+                  <input
+                    name="system.ifInvoc.difficulty"
+                    type="number"
+                    value="{{item.system.ifInvoc.difficulty}}"
+                    placeholder="0"
+                  />
+                </td>
+              {{else}}
+                <td align="center">
+                  <span>{{item.system.ifInvoc.difficulty}}</span>
+                </td>
+              {{/if}}
+            </tr>
           {{/if}}
-        </tr>
         {{/if}}
         <tr>
           {{#if (or unlocked item.system.isRitual)}}

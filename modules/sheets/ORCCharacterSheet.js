@@ -1812,11 +1812,10 @@ export default class ORCCharacterSheet extends ActorSheet {
       let effectiveCost = item.system.cost;
       if (!item.system.useHP && actor.system.magic.mpReduc.value != 0)
         effectiveCost += "+" + actor.system.magic.mpReduc.value.toString();
-      let effectiveLaunchRoll =
-        actor.system.magic.roll.value + item.system.difficulty;
-      let effectiveControlRoll = effectiveLaunchRoll;
+      let effectiveLaunchRoll = actor.system.magic.roll.value + item.system.difficulty;
+      let effectiveControlRoll = actor.system.magic.roll.value + item.system.ifInvoc.difficulty;
       if (actor.system.magic.nInvoc.invoked > 1)
-        effectiveControlRoll -=
+        effectiveControlRoll +=
           (actor.system.magic.nInvoc.invoked - 1) *
           actor.system.magic.nInvoc.controlDiffIncrease;
       if (effectiveLaunchRoll > 100) effectiveLaunchRoll = 100;

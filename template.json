@@ -389,7 +389,7 @@
       "useHP": false,
       "isInvoc": false,
       "isRitual": false,
-      "ifInvoc": { "invoked": false, "fixed": false },
+      "ifInvoc": { "invoked": false, "fixed": false, "difficulty": 0 },
       "power": "",
       "duration": "",
       "durationUnit": "",
