@@ -68,6 +68,11 @@
       },
       "modifiers":{
         "deploy": false,
+        "attr":{
+          "physical":0,
+          "social": 0,
+          "intel":0
+        },
         "attack": 0,
         "magicRoll": 0,
         "defence": 0,

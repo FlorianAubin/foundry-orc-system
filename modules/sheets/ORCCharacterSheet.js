@@ -74,7 +74,7 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     this._prepareCharacterData(data);
 
-    //console.log(data);
+    console.log(data);
     return data;
   }
 
@@ -1145,6 +1145,8 @@ export default class ORCCharacterSheet extends ActorSheet {
   async _prepareCharacterData(data) {
     this.initPrincipaleValues(data);
 
+    this.applyAttributModifiers(data);
+
     this.applyItemsOnPrincipales(data);
     this.applyNutrition(data);
     this.applyCapacities(data);
@@ -1246,6 +1248,15 @@ export default class ORCCharacterSheet extends ActorSheet {
     actorData.ini.ndice = 0;
     actorData.ini.dice = 0;
     actorData.ini.flat = actorData.ini.flatNative;
+  }
+
+  applyAttributModifiers(data){
+    let actor = data.actor;
+    let actorData = actor.system;
+
+    actorData.attributes.physical.value += actorData.modifiers.attr.physical;
+    actorData.attributes.social.value += actorData.modifiers.attr.social;
+    actorData.attributes.intel.value += actorData.modifiers.attr.intel;
   }
 
   applyCombatStyle(data) {
