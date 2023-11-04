@@ -1273,7 +1273,7 @@ export default class ORCCharacterSheet extends ActorSheet {
       actorData.dodge.value += -20;
     } else if (style === "defensive") {
       actorData.attack.value += -15;
-      actorData.defence.value += +10;
+      actorData.defence.value += +10; 
       actorData.dodge.value += -20;
     } else if (style === "dodge") {
       actorData.attack.value += -15;
