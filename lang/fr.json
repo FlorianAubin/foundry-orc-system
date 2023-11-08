@@ -33,6 +33,8 @@
     "cure": "Soin",
     "stack": "Stacks",
     "effect": "Effet",
+    "resistance": "Rési.",
+    "vulnerability": "Vuln.",
     "day": "Jour",
     "needed": "Besoin",
     "newDay": "Nouveau jour",

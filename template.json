@@ -135,6 +135,18 @@
         "onfire": false,
         "modifResist": 0
       },
+      "resistances":{
+        "fire": false,
+        "bleed": false,
+        "poison": false,
+        "general": false
+      },
+      "vulnerabilities":{
+        "fire": false,
+        "bleed": false,
+        "poison": false,
+        "general": false
+      },
       "nutrition": {
         "foodDay": 0,
         "drinkDay": 0,

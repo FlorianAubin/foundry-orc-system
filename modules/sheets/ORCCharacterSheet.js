@@ -74,7 +74,7 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     this._prepareCharacterData(data);
 
-    console.log(data);
+    //console.log(data);
     return data;
   }
 
@@ -365,7 +365,7 @@ export default class ORCCharacterSheet extends ActorSheet {
   }
 
   _onTakeDamage(event) {
-    console.log(event)
+    let actor = this.actor;
     const damage = event.currentTarget.dataset.damage;
     const applyArmor = event.currentTarget.dataset.applyarmor === "true";
     const applyNativeArmor = event.currentTarget.dataset.applynativearmor === "true";
@@ -376,6 +376,8 @@ export default class ORCCharacterSheet extends ActorSheet {
       applyArmor: applyArmor,
       applyNativeArmor: applyNativeArmor,
       onMP: onMP,
+      resistance: actor.system.resistances.general, 
+      vulnerability: actor.system.vulnerabilities.general,
     });
   }
 
@@ -439,36 +441,45 @@ export default class ORCCharacterSheet extends ActorSheet {
   }
 
   async _onDamageRoll(event) {
+    let actor = this.actor;
     DiceOrc.DamageRoll({
-      actor: this.actor,
+      actor: actor,
       attribute: event.currentTarget.dataset,
     });
   }
 
   async _onPoisonRoll(event) {
+    let actor = this.actor;
     let damage = DiceOrc.BleedPoisonRoll({
-      actor: this.actor,
+      actor: actor,
       type: event.currentTarget.dataset.type,
     });
     await this.takeDamage({
       damageFormula: damage,
       limitValue: 1,
+      resistance: actor.system.resistances.poison, 
+      vulnerability: actor.system.vulnerabilities.poison,
     });
+    await actor.update({ system: { status: { poison: this.actor.system.status.poison - 1 } } });
   }
 
   async _onBleedRoll(event) {
+    let actor = this.actor;
     let damage = DiceOrc.BleedPoisonRoll({
-      actor: this.actor,
+      actor: actor,
       type: event.currentTarget.dataset.type,
     });
     await this.takeDamage({
       damageFormula: damage,
+      resistance: actor.system.resistances.bleed, 
+      vulnerability: actor.system.vulnerabilities.bleed,
     });
   }
 
   async _onBurnRoll(event) {
+    let actor = this.actor;
     const rollResult = DiceOrc.BurnRoll({
-      actor: this.actor,
+      actor: actor,
     });
 
     //If it rolls a 100, the burn stacks are removed
@@ -476,9 +487,9 @@ export default class ORCCharacterSheet extends ActorSheet {
       this._onBurnOff(event);
       return;
       //If it rolls a value lower than the number of stacks, the character catches fire.
-    } else if (rollResult <= this.actor.system.status.burn) {
+    } else if (rollResult <= actor.system.status.burn) {
       let maj = { system: { status: { onfire: true } } };
-      await this.actor.update(maj);
+      await actor.update(maj);
     }
     return rollResult;
   }
@@ -499,10 +510,13 @@ export default class ORCCharacterSheet extends ActorSheet {
   }
 
   async _onBurnDamage(event) {
-    let damage = this.actor.system.status.burn;
+    let actor = this.actor;
+    let damage = actor.system.status.burn;
     await this.takeDamage({
       damageFormula: damage,
       applyArmor: true,
+      resistance: actor.system.resistances.fire, 
+      vulnerability: actor.system.vulnerabilities.fire,
     });
 
     //Add 5 burn stacks
@@ -663,7 +677,7 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     //Take the damage
     if (itemData.damage != null && itemData.damage != "")
-      await this.takeDamage({ damageFormula: itemData.damage });
+      await this.takeDamage({ damageFormula: itemData.damage});
     if (itemData.damageMP != null && itemData.damageMP != "")
       await this.takeDamage({ damageFormula: itemData.damageMP, onMP: true });
 
@@ -950,6 +964,8 @@ export default class ORCCharacterSheet extends ActorSheet {
     onMP = false,
     onArmor = { validate: false, armorId: "" },
     limitValue = -1000,
+    resistance = false,
+    vulnerability = false,
   }) {
     //Recover the actor informations
     let actor = this.actor;
@@ -968,6 +984,16 @@ export default class ORCCharacterSheet extends ActorSheet {
     if (applyArmor) damage -= actorData.ap.value;
     else if(applyNativeArmor) damage -= actorData.ap.native;
     if (damage <= 0) return;
+
+    //Apply possible resistance or vulnerability
+    if(resistance)
+      damage /= 2;
+    else if(vulnerability)
+      damage *= 2; 
+
+
+    //Take the lowest integer 
+    damage = Math.floor(damage);
 
     //Apply damage on an owned armor piece
     if (onArmor.validate) {
@@ -998,6 +1024,8 @@ export default class ORCCharacterSheet extends ActorSheet {
             applyArmor: false,
             applyNativeArmor: false,
             onMP: false,
+            resistance: resistance,
+            vulnerability: vulnerability,
           });
           damage = value;
         }
@@ -1864,6 +1892,11 @@ export default class ORCCharacterSheet extends ActorSheet {
     actorData.ini.flat += Math.floor(
       intelMult * actorData.attributes.intel.value
     );
+
+    //Ini min = 1
+    if(  (actorData.ini.ndice == 0 || actorData.ini.dice == 0)
+      && (actorData.ini.flat == 0) )
+      actorData.ini.flat = 1;
   }
 
   async _onDropItem(event, data) {

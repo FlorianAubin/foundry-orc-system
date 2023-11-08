@@ -365,36 +365,53 @@
 
 <table style="width: 200px">
   <th></th>
-  {{#if
-    (or
-      actor.system.status.bleed
-      actor.system.status.poison
-      actor.system.status.onfire
-    )
-  }}
-    <th>{{localize "orc.cure"}}</th>
+  {{#if unlocked}}
+    <th>{{localize "orc.resistance"}}</th>
   {{else}}
-    <th></th>
+    {{#if
+      (or
+        actor.system.status.bleed
+        actor.system.status.poison
+        actor.system.status.onfire
+      )
+    }}
+      <th>{{localize "orc.cure"}}</th>
+    {{else}}
+      <th></th>
+    {{/if}}
   {{/if}}
   <th>{{localize "orc.stack"}}</th>
-  {{#if
-    (or
-      actor.system.status.bleed
-      actor.system.status.poison
-      actor.system.status.burn
-      actor.system.status.onfire
-    )
-  }}
-    <th>{{localize "orc.effect"}}</th>
+  {{#if unlocked}}
+    <th>{{localize "orc.vulnerability"}}</th>
   {{else}}
-    <th></th>
+    {{#if
+      (or
+        actor.system.status.bleed
+        actor.system.status.poison
+        actor.system.status.onfire
+      )
+    }}
+      <th>{{localize "orc.effect"}}</th>
+    {{else}}
+      <th></th>
+    {{/if}}
   {{/if}}
   <tr>
     <th>{{localize "orc.character.bleed"}}</th>
-    {{#if actor.system.status.bleed}}
-      <td class="bleed-off button fas fa-bandage" align="center"></td>
+    {{#if unlocked}}
+      <td align="center">
+        <input
+          name="system.resistances.bleed"
+          type="checkbox"
+          {{checked actor.system.resistances.bleed}}
+        />
+      </td>
     {{else}}
-      <td></td>
+      {{#if actor.system.status.bleed}}
+        <td class="bleed-off button fas fa-bandage" align="center"></td>
+      {{else}}
+        <td></td>
+      {{/if}}
     {{/if}}
     <td align="center">
       <input
@@ -406,23 +423,43 @@
         style="width: 30px"
       />
     </td>
-    {{#if actor.system.status.bleed}}
-      <td
-        class="bleed-roll button fas fa-droplet"
-        data-type="bleed"
-        align="center"
-      ></td>
+    {{#if unlocked}}
+      <td align="center">
+        <input
+          name="system.vulnerabilities.bleed"
+          type="checkbox"
+          {{checked actor.system.vulnerabilities.bleed}}
+        />
+      </td>
+    {{else}}
+      {{#if actor.system.status.bleed}}
+        <td
+          class="bleed-roll button fas fa-droplet"
+          data-type="bleed"
+          align="center"
+        ></td>
+      {{/if}}
     {{/if}}
   </tr>
   <tr>
     <th>{{localize "orc.character.poison"}}</th>
-    {{#if actor.system.status.poison}}
-      <td
-        class="poison-off button fas fa-flask-round-potion"
-        align="center"
-      ></td>
+    {{#if unlocked}}
+      <td align="center">
+        <input
+          name="system.resistances.poison"
+          type="checkbox"
+          {{checked actor.system.resistances.poison}}
+        />
+      </td>
     {{else}}
-      <td></td>
+      {{#if actor.system.status.poison}}
+        <td
+          class="poison-off button fas fa-flask-round-potion"
+          align="center"
+        ></td>
+      {{else}}
+        <td></td>
+      {{/if}}
     {{/if}}
     <td align="center">
       <input
@@ -434,20 +471,40 @@
         style="width: 30px"
       />
     </td>
-    {{#if actor.system.status.poison}}
-      <td
-        class="poison-roll button fas fa-flask-round-poison"
-        data-type="poison"
-        align="center"
-      ></td>
+    {{#if unlocked}}
+      <td align="center">
+        <input
+          name="system.vulnerabilities.poison"
+          type="checkbox"
+          {{checked actor.system.vulnerabilities.poison}}
+        />
+      </td>
+    {{else}}
+      {{#if actor.system.status.poison}}      
+        <td
+          class="poison-roll button fas fa-flask-round-poison"
+          data-type="poison"
+          align="center"
+        ></td>
+      {{/if}}
     {{/if}}
   </tr>
   <tr>
     <th>{{localize "orc.character.burn"}}</th>
-    {{#if actor.system.status.onfire}}
-      <td class="burn-off button fas fa-fire-extinguisher" align="center"></td>
+    {{#if unlocked}}
+      <td align="center">
+        <input
+          name="system.resistances.fire"
+          type="checkbox"
+          {{checked actor.system.resistances.fire}}
+        />
+      </td>
     {{else}}
-      <td></td>
+      {{#if actor.system.status.onfire}}
+        <td class="burn-off button fas fa-fire-extinguisher" align="center"></td>
+      {{else}}
+        <td></td>
+      {{/if}}
     {{/if}}
     <td align="center">
       <input
@@ -459,16 +516,26 @@
         style="width: 30px"
       />
     </td>
-    {{#if actor.system.status.burn}}
-      {{#if actor.system.status.onfire}}
-        <td class="burn-damage button fas fa-fire" align="center"></td>
-      {{else}}
-        <td class="burn-roll button fas fa-dice" align="center"></td>
-
+    {{#if unlocked}}
+      <td align="center">
+        <input
+          name="system.vulnerabilities.fire"
+          type="checkbox"
+          {{checked actor.system.vulnerabilities.fire}}
+        />
+      </td>
+    {{else}}
+      {{#if actor.system.status.burn}}
+        {{#if actor.system.status.onfire}}
+          <td class="burn-damage button fas fa-fire" align="center"></td>
+        {{else}}
+          <td class="burn-roll button fas fa-dice" align="center"></td>
+        {{/if}}
       {{/if}}
     {{/if}}
   </tr>
 </table>
+
 <table style="width: 200px">
   <tr>
     <th colspan="2"></th>

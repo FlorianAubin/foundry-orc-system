@@ -420,6 +420,8 @@ export function BurnRoll({ actor = null, extraMessageData = {} }) {
       charName: actor.name,
     });
   }
+  else
+    actor.update({ system: { status: { burn: actor.system.status.burn - 5 } } });
 
   Chat.StatusRollToCustomMessage(rollResult, {
     ...extraMessageData,

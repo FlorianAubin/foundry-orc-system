@@ -3,7 +3,7 @@
     <tr class="column-container flexrow">
       <td class="table-container">
         <table class="take-damage-table">
-          <tr><th colspan="5">{{localize "orc.takeDamage"}}</th></tr>
+          <tr><th colspan="7">{{localize "orc.takeDamage"}}</th></tr>
           <tr class="take-damage-row">
             <td class="choice">{{localize "orc.damage"}}</td>
             {{#if actor.system.takeDamage.applyArmor}}
@@ -13,6 +13,8 @@
               <td class="choice">{{localize "orc.character.ap"}} {{localize "orc.native"}}?</td>
             {{/if}}
             <td class="choice">{{localize "orc.character.mp"}}?</td>
+            <td class="choice">{{localize "orc.resistance"}}?</td>
+            <td class="choice">{{localize "orc.vulnerability"}}?</td>
             <td class="choice"></td>
           </tr>
           <tr class="take-damage-row">
@@ -55,6 +57,20 @@
                 name="system.takeDamage.onMP"
                 type="checkbox"
                 {{checked actor.system.takeDamage.onMP}}
+              />
+            </td>
+            <td class="choice">
+              <input
+                name="system.resistances.general"
+                type="checkbox"
+                {{checked actor.system.resistances.general}}
+              />
+            </td>
+            <td class="choice">
+              <input
+                name="system.vulnerabilities.general"
+                type="checkbox"
+                {{checked actor.system.vulnerabilities.general}}
               />
             </td>
             <td
