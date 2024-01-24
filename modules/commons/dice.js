@@ -102,7 +102,20 @@ export function SpellRoll({
     visibleByPlayers: actor.ownership.default,
   }; 
 
-  if (spell != null) {
+  if (spell == null) 
+    return;
+
+  let critical = null;
+  if(!spell.system.noRoll)
+    if (this.AttributeRoll({
+                actor,
+                attribute,
+                modif,
+                extraMessageData,
+              }) 
+          <= actor.system.roll.limitCritical)
+          critical = 1;
+
     //Consume ressource
     costFormula = spell.system.effective.cost;
     if (typeof costFormula !== "string") costFormula = costFormula.toString();
@@ -130,6 +143,24 @@ export function SpellRoll({
       powerroll = new Roll(powerFormula, rollData, rollOptions);
       powerRoll = powerroll.roll({ async: false });
     }
+    if (powerRoll != null){
+      let powerMin= 0;
+      //If critical -> max power
+      if (critical) {
+        //Split the formula between the "+"
+        let formulaSplitPlus = powerFormula.split("+");
+        for (let i = 0; i < formulaSplitPlus.length; i++) {
+          //Split the sub-formula related to dices between the "d"
+          if (formulaSplitPlus[i].includes("d")) {
+            let formulatSplitDice = formulaSplitPlus[i].split("d");
+            powerMin +=
+              parseFloat(formulatSplitDice[0]) * parseFloat(formulatSplitDice[1]);
+          } else powerMin += parseFloat(formulaSplitPlus[i]);
+        }
+      }
+      if (powerRoll._total < powerMin) powerRoll._total = powerMin;
+    }
+
 
     //Roll duration
     durationFormula = spell.system.duration;
@@ -139,17 +170,7 @@ export function SpellRoll({
       durationroll = new Roll(durationFormula, rollData, rollOptions);
       durationRoll = durationroll.roll({ async: false });
     }
-  }
 
-  this.AttributeRoll({
-    actor,
-    attribute,
-    modif,
-    extraMessageData,
-  });
-
-  //Roll to custom message
-  if (spell != null) {
     extraMessageData.title = game.i18n.format("orc.dialog.rollSpell.title", {
       spellName: spell.name,
       actorName: actor.name,
@@ -172,8 +193,7 @@ export function SpellRoll({
       { costRoll, powerRoll, durationRoll },
       { ...extraMessageData }
     );
-  }
-
+  
   return;
 }
 
@@ -212,6 +232,7 @@ export function DamageRoll({
   actor = null,
   weapon = null,
   attribute = null,
+  critical = null,
   extraMessageData = {},
 } = {}) {
   //Init
@@ -270,6 +291,7 @@ export function DamageRoll({
         if (ammo == null) return;
 
         const ammoStock = ammo.system.stock;
+        let maj;
         if (ammoStock > 0) {
           if (ammo.system.damage)
             //Add the ammo to the formula
@@ -279,7 +301,10 @@ export function DamageRoll({
             extraMessageData.effect += " " + ammo.system.effect;
           precise = precise || ammo.system.precise;
           //Remove one ammo
-          let maj = { system: { stock: ammoStock - 1 } };
+          if(attribute.nammo == null)
+            maj = { system: { stock: ammoStock - 1 } };
+          else
+            maj = { system: { stock: ammoStock - attribute.nammo } };
           ammo.update(maj);
           //Add the ammo information to the message
           extraMessageData.ammoTag = 1;
@@ -325,6 +350,20 @@ export function DamageRoll({
         } else damageMin += parseFloat(formulaSplitPlus[i]);
       }
       damageMin = Math.floor(damageMin);
+    }
+
+    //If critical -> deal max damage
+    if (critical) {
+      //Split the formula between the "+"
+      let formulaSplitPlus = rollFormula.split("+");
+      for (let i = 0; i < formulaSplitPlus.length; i++) {
+        //Split the sub-formula related to dices between the "d"
+        if (formulaSplitPlus[i].includes("d")) {
+          let formulatSplitDice = formulaSplitPlus[i].split("d");
+          damageMin +=
+            parseFloat(formulatSplitDice[0]) * parseFloat(formulatSplitDice[1]);
+        } else damageMin += parseFloat(formulaSplitPlus[i]);
+      }
     }
 
     //Define the message title

@@ -28,6 +28,7 @@ Hooks.once("init", async function () {
 
   CONFIG.Combat.initiative = {
     formula: "(@ini.ndice)d(@ini.dice) + @ini.flat",
+    //formula: "floor((@attributes.physical.value) / 10)d8 + floor(@attributes.intel.value / 5)",
   };
 
   game.orc = {

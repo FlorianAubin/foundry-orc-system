@@ -293,6 +293,25 @@
               {{/if}}
             {{/if}}
           </tr>
+          {{#if item.system.rangeWeapon}}
+            <tr>
+              <th>{{localize "orc.capacity.nammo"}}</th>
+              {{#if unlocked}}
+                <td align="center">
+                  <input
+                    name="system.nammo"
+                    type="Number"
+                    value="{{item.system.nammo}}"
+                    placeholder="0"
+                  />
+                </td>
+              {{else}}
+                <td align="center">
+                  <span>{{item.system.nammo}}</span>
+                </td>
+              {{/if}}
+            </tr>
+          {{/if}}
           <tr>
             <th>{{localize "orc.capacity.weaponLocal"}}</th>
             <th>{{localize "orc.capacity.modifLocal"}}</th>

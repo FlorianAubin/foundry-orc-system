@@ -24,7 +24,7 @@
     </tr>
     <tr class="header flexrow">
       <th class="content"></th>
-      <th class="content">{{localize "orc.spell.difficulty"}}</th>
+      <th class="content">{{localize "orc.spell.noRoll"}}</th>
       <th class="content">{{localize "orc.spell.cost"}}</th>
       <th class="content">{{localize "orc.spell.power"}}</th>
       <th class="content">{{localize "orc.spell.range"}}</th>
@@ -51,7 +51,11 @@
               />
               <div>{{spell.name}}</div>
             </td>
-            <td class="content">{{spell.system.difficulty}}</td>
+            {{#if spell.system.noRoll}}
+              <td class="content fas fa-check"></td>
+            {{else}}
+              <td></td>
+            {{/if}}
             <td class="content">
               {{#if spell.system.effective.cost}}
               {{spell.system.cost}}&nbsp;{{#if spell.system.useHP}}{{localize "orc.character.hp"}}{{else}}{{localize "orc.character.mp"}}{{/if}}
@@ -116,7 +120,7 @@
     </tr>
     <tr class="header flexrow">
       <th class="content"></th>
-      <th class="content">{{localize "orc.spell.difficulty"}}</th>
+      <th class="content">{{localize "orc.spell.noRoll"}}</th>
       <th class="content">{{localize "orc.spell.cost"}}</th>
       <th class="content">{{localize "orc.spell.duration"}}</th>
       <th class="content">{{localize "orc.spell.memorized"}}</th>
@@ -140,10 +144,14 @@
               />
               <div>{{spell.name}}</div>
             </td>
-            <td class="content">{{spell.system.difficulty}}</td> 
+            {{#if spell.system.noRoll}}
+              <td class="content fas fa-check"></td>
+            {{else}}
+              <td></td>
+            {{/if}}
             <td class="content">
               {{#if spell.system.effective.cost}}
-              {{spell.system.cost}}&nbsp;{{#if spell.system.useHP}}{{localize "orc.character.hp"}}{{else}}{{localize "orc.character.mp"}}{{/if}}
+                {{spell.system.cost}}&nbsp;{{#if spell.system.useHP}}{{localize "orc.character.hp"}}{{else}}{{localize "orc.character.mp"}}{{/if}}
               {{/if}}
             </td>            <td class="content">{{spell.system.duration}}&nbsp;{{spell.system.durationUnit}}</td>
             {{#if spell.system.memorized}}

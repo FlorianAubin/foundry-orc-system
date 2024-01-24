@@ -39,7 +39,9 @@
       <table>
         <tr>
           <th>{{localize "orc.spell.school"}}</th>
-          <th>{{localize "orc.spell.difficulty"}}</th>
+          {{#if (or unlocked item.system.noRoll)}}
+            <th>{{localize "orc.spell.noRoll"}}</th>
+          {{/if}}
         </tr>
         <tr>
           {{#if unlocked}}
@@ -55,25 +57,26 @@
             </td>
             <td align="center">
               <input
-                name="system.difficulty"
-                type="number"
-                value="{{item.system.difficulty}}"
-                placeholder="0"
+                name="system.noRoll"
+                type="checkbox"
+                {{checked item.system.noRoll}}
               />
             </td>
           {{else}}
             <td align="center">
               <span>{{localize item.system.school}}</span>
             </td>
-            <td align="center">
-              <span>{{item.system.difficulty}}</span>
-            </td>
+              {{#if item.system.noRoll}}
+                <td align="center">
+                  <span class="fas fa-check"></span>
+                </td>
+              {{/if}}
           {{/if}}
         </tr>
         <tr>
           <th {{#if (or unlocked item.system.useHP)}} {{else}} colspan="2" {{/if}}>{{localize "orc.spell.cost"}}</th>
           {{#if (or unlocked item.system.useHP)}}
-          <th>{{localize "orc.spell.useHP"}}</th>
+            <th>{{localize "orc.spell.useHP"}}</th>
           {{/if}}
         </tr>
         <tr>
@@ -147,7 +150,7 @@
               {{/if}}
             {{/if}}
           </tr>
-          {{#if (or unlocked (not item.system.ifInvoc.fixed))}}
+          {{#if (not item.system.ifInvoc.fixed)}}
             <tr>
                 <th>{{localize "orc.spell.invocDifficulty"}}</th>
               {{#if unlocked}}

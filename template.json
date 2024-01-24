@@ -82,6 +82,7 @@
         "initiative": 0
       },
       "attack": {
+        "attribut": "orc.character.attributes.physical",
         "native": 0,
         "value": 0
       },
@@ -89,6 +90,7 @@
         "value": 0
       },
       "dodge": {
+        "attribut": "orc.character.attributes.physical",
         "enable": false,
         "native": 0,
         "value": 0
@@ -96,7 +98,13 @@
       "damageBonus": {
         "value": ""
       },
-      "combatStyle": "standard",
+      "combatStyle": {
+        "style": "standard",
+        "attack": 0,
+        "defence": 0,
+        "dodge": 0,
+        "damageBonus": 0
+      },
       "magic": {
         "canLaunchSpell": false,
         "nSpell": {
@@ -118,6 +126,7 @@
           "value": 0
         },
         "roll": {
+          "attribut": "orc.character.attributes.intel",
           "native": 0,
           "value": 0
         }
@@ -402,6 +411,7 @@
     "spell": {
       "school": "",
       "difficulty": 0,
+      "noRoll": false,
       "cost": "",
       "useHP": false,
       "isInvoc": false,
@@ -441,6 +451,7 @@
       "isAttackRoll": false,
       "weaponLocal": "",
       "rangeWeapon": false,
+      "nammo": 1,
       "isStatusResistRoll": false,
       "modifStatusResist": 0,
       "modifLocal": 0,

@@ -303,7 +303,9 @@
           </td>
           <td class="effect-list">{{spell.system.effect}}</td>
           <td class="content" style="display: flex">
-            {{spell.system.effective.rollLaunch}}
+            {{#if (not spell.system.noRoll)}}
+              {{spell.system.effective.rollLaunch}}
+            {{/if}}
             {{#if ../actor.system.magic.canLaunchSpell}}
               <span
                 class="launch-spell-roll button fas fa-dice"
@@ -472,6 +474,7 @@
                     data-attributevaluebase="{{../../actor.system.attack.native}}"
                     data-attributelocalmodif="{{capacity.system.modifLocal}}"
                     data-weaponid="{{weapon._id}}"
+                    data-nammo="{{capacity.system.nammo}}"
                     style="height: 15px"
                 ></span>
                 {{/if}}

@@ -13,14 +13,14 @@
     </tr>
     <tr class="item flexrow">
       <td class="content"></td>
-      <td class="content">{{actor.system.attack.valueModif.style}}</td>
-      <td class="content">{{actor.system.defence.valueModif.style}}</td>
+      <td class="content">{{actor.system.combatStyle.attack}}</td>
+      <td class="content">{{actor.system.combatStyle.defence}}</td>
       {{#if actor.system.dodge.enable}}
-        <td class="content">{{actor.system.dodge.valueModif.style}}</td>
+        <td class="content">{{actor.system.combatStyle.dodge}}</td>
       {{else}}
         <td class="content fas fa-minus"></td>
       {{/if}}
-      <td class="content">{{actor.system.damageBonus.valueModif.style}}</td>
+      <td class="content">{{actor.system.combatStyle.damageBonus}}</td>
     </tr>
 
   <tr class="main-header flexrow">

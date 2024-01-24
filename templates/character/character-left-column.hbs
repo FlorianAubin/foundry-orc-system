@@ -190,8 +190,8 @@
   <tr>
     <th colspan="3">{{localize "orc.character.combatStyle"}}</th>
     <td align="center" colspan="2">
-      <select name="system.combatStyle" align="center">
-        {{#select actor.system.combatStyle}}
+      <select name="system.combatStyle.style" align="center">
+        {{#select actor.system.combatStyle.style}}
           {{#each config.combatStyleList as |combatstyle style|}}
             <option value="{{style}}">{{localize combatstyle}}</option>
           {{/each}}
@@ -202,12 +202,27 @@
   <tr align="center">
     <th>{{localize "orc.character.attack"}}</th>
     <td colspan="2">{{actor.system.attack.value}}</td>
-    <td
-      class="attack-roll button fas fa-dice"
-      data-attributename="{{localize 'orc.character.attack'}}"
-      data-attributevalue="{{actor.system.attack.value}}"
-      data-attributevaluebase="{{actor.system.attack.native}}"
-    ></td>
+    {{#if unlocked}}
+      <td align="center">
+        <select name="system.attack.attribut" align="center">
+          {{#select actor.system.attack.attribut}}
+            <option value=""></option>
+            {{#each actor.system.attributes as |attribut|}}
+              <option
+                value="{{attribut.name}}"
+              >{{localize attribut.name}}</option>
+            {{/each}}
+          {{/select}}
+        </select>
+      </td>
+    {{else}}
+      <td
+        class="attack-roll button fas fa-dice"
+        data-attributename="{{localize 'orc.character.attack'}}"
+        data-attributevalue="{{actor.system.attack.value}}"
+        data-attributevaluebase="{{actor.system.attack.native}}"
+      ></td>
+    {{/if}}
     {{#if actor.system.modifiers.deploy}}
       <td align="center">
         <input
@@ -225,12 +240,27 @@
   <tr align="center">
     <th>{{localize "orc.character.magicRoll"}}</th>
     <td colspan="2">{{actor.system.magic.roll.value}}</td>
-    <td
-      class="launch-spell-roll button fas fa-dice"
-      data-attributename="{{localize 'orc.character.magicRoll'}}"
-      data-attributevalue="{{actor.system.magic.roll.value}}"
-      data-attributevaluebase="{{actor.system.magic.roll.native}}"
-    ></td>
+    {{#if unlocked}}
+      <td align="center">
+        <select name="system.magic.roll.attribut" align="center">
+          {{#select actor.system.magic.roll.attribut}}
+            <option value=""></option>
+            {{#each actor.system.attributes as |attribut|}}
+              <option
+                value="{{attribut.name}}"
+              >{{localize attribut.name}}</option>
+            {{/each}}
+          {{/select}}
+        </select>
+      </td>
+    {{else}}
+      <td
+        class="launch-spell-roll button fas fa-dice"
+        data-attributename="{{localize 'orc.character.magicRoll'}}"
+        data-attributevalue="{{actor.system.magic.roll.value}}"
+        data-attributevaluebase="{{actor.system.magic.roll.native}}"
+      ></td>
+    {{/if}}
     {{#if actor.system.modifiers.deploy}}
       <td align="center">
         <input
@@ -267,12 +297,16 @@
     <tr align="center">
       <th>{{localize "orc.character.dodge"}}</th>
       <td colspan="2">{{actor.system.dodge.value}}</td>
-      <td
-        class="dodge-roll button fas fa-dice"
-        data-attributename="{{localize 'orc.character.dodge'}}"
-        data-attributevalue="{{actor.system.dodge.value}}"
-        data-attributevaluebase="{{actor.system.dodge.native}}"
-      ></td>
+      {{#if unlocked}}
+        <td>({{localize actor.system.dodge.attribut}})</td>
+      {{else}}
+        <td
+          class="dodge-roll button fas fa-dice"
+          data-attributename="{{localize 'orc.character.dodge'}}"
+          data-attributevalue="{{actor.system.dodge.value}}"
+          data-attributevaluebase="{{actor.system.dodge.native}}"
+        ></td>
+      {{/if}}
       {{#if actor.system.modifiers.deploy}}
         <td align="center">
           <input
