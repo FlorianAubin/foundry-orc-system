@@ -3,7 +3,7 @@ import * as Macro from "./commons/macro.js";
 import * as Chat from "./commons/chat.js";
 import ORCCharacterSheet from "./sheets/ORCCharacterSheet.js";
 import ORCContainerSheet from "./sheets/ORCContainerSheet.js";
-
+import ORCCombat from "./combat/combat.js";
 import ORCWeaponSheet from "./sheets/ORCWeaponSheet.js";
 import ORCAmmoSheet from "./sheets/ORCAmmoSheet.js";
 import ORCArmorSheet from "./sheets/ORCArmorSheet.js";
@@ -25,6 +25,7 @@ Hooks.once("init", async function () {
   console.log("orc | Initialising the ORC system");
 
   CONFIG.ORC = ORC;
+  CONFIG.Combat.documentClass = ORCCombat;
 
   CONFIG.Combat.initiative = {
     formula: "(@ini.ndice)d(@ini.dice) + @ini.flat",

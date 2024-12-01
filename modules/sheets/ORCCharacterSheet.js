@@ -1909,18 +1909,18 @@ export default class ORCCharacterSheet extends ActorSheet {
     //Attributes
     for (let [key, attribut] of Object.entries(actorData.attributes)) {
       if (attribut.value < 0) attribut.value = 0;
-      if (attribut.value > 100) attribut.value = 100;
+      //if (attribut.value > 100) attribut.value = 100;
     }
 
     //Attack
     if (actorData.attack.value < 0) actorData.attack.value = 0;
-    if (actorData.attack.value > 100) actorData.attack.value = 100;
+    //if (actorData.attack.value > 100) actorData.attack.value = 100;
     //Defence
     if (actorData.defence.value < -100) actorData.defence.value = -100;
-    if (actorData.defence.value > 100) actorData.defence.value = 100;
+    //if (actorData.defence.value > 100) actorData.defence.value = 100;
     //Dodge
     if (actorData.dodge.value < 0) actorData.dodge.value = 0;
-    if (actorData.dodge.value > 100) actorData.dodge.value = 100;
+    //if (actorData.dodge.value > 100) actorData.dodge.value = 100;
 
     //Food
     if (actorData.nutrition.foodNeededDay.value < 0)
@@ -1946,7 +1946,7 @@ export default class ORCCharacterSheet extends ActorSheet {
       //if the weapon is tagged as twin, cancel the ambidex malus
       if (actor.system.combatStyle.style == "ambidex" && item.system.twin)
         effectiveAttack += 20;
-      if (effectiveAttack > 100) effectiveAttack = 100;
+      //if (effectiveAttack > 100) effectiveAttack = 100;
 
       if (item.system.useAmmo) {
         let ammo = ammos.filter(function (i) {
@@ -2002,8 +2002,8 @@ export default class ORCCharacterSheet extends ActorSheet {
         effectiveControlRoll +=
           (actor.system.magic.nInvoc.invoked - 1) *
           actor.system.magic.nInvoc.controlDiffIncrease;
-      if (effectiveLaunchRoll > 100) effectiveLaunchRoll = 100;
-      if (effectiveControlRoll > 100) effectiveControlRoll = 100;
+      //if (effectiveLaunchRoll > 100) effectiveLaunchRoll = 100;
+      //if (effectiveControlRoll > 100) effectiveControlRoll = 100;
 
       item.update(
         {
