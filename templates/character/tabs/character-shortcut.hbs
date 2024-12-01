@@ -499,7 +499,7 @@
           <td
             class="capacity-status-resist-roll button fas fa-dice"
             align="center">
-            {{localize "orc.character.attributes.physical"}}
+            {{localize "orc.character.attributes.strengh"}}
           </td>
         {{/if}}
         {{#if (and 
@@ -573,12 +573,28 @@
                 data-itemid="{{item._id}}"
               ></div>
               <table>
-                {{#if item.system.enchant.physicalModif}}
+                {{#if item.system.enchant.strenghModif}}
                   <tr>
                     <td align="center">{{localize
-                        "orc.enchant.physicalModif"
+                        "orc.enchant.strenghModif"
                       }}</td>
-                    <td align="center">{{item.system.enchant.physicalModif}}</td>
+                    <td align="center">{{item.system.enchant.strenghModif}}</td>
+                  </tr>
+                {{/if}}
+                {{#if item.system.enchant.dexterityModif}}
+                  <tr>
+                    <td align="center">{{localize
+                        "orc.enchant.dexterityModif"
+                      }}</td>
+                    <td align="center">{{item.system.enchant.dexterityModif}}</td>
+                  </tr>
+                {{/if}}
+                {{#if item.system.enchant.perceptionModif}}
+                  <tr>
+                    <td align="center">{{localize
+                        "orc.enchant.perceptionModif"
+                      }}</td>
+                    <td align="center">{{item.system.enchant.perceptionModif}}</td>
                   </tr>
                 {{/if}}
                 {{#if item.system.enchant.socialModif}}
@@ -829,12 +845,28 @@
                 data-itemid="{{consumable._id}}"
               ></div>
               <table>
-                {{#if consumable.system.ifActivable.physicalModif}}
+                {{#if consumable.system.ifActivable.strenghModif}}
                   <tr>
                     <td align="center">{{localize
-                        "orc.consumable.ifActivable.physicalModif"
+                        "orc.consumable.ifActivable.strenghModif"
                       }}</td>
-                    <td align="center">{{consumable.system.ifActivable.physicalModif}}</td>
+                    <td align="center">{{consumable.system.ifActivable.strenghModif}}</td>
+                  </tr>
+                {{/if}}
+                {{#if consumable.system.ifActivable.dexterityModif}}
+                  <tr>
+                    <td align="center">{{localize
+                        "orc.consumable.ifActivable.dexterityModif"
+                      }}</td>
+                    <td align="center">{{consumable.system.ifActivable.dexterityModif}}</td>
+                  </tr>
+                {{/if}}
+                {{#if consumable.system.ifActivable.perceptionModif}}
+                  <tr>
+                    <td align="center">{{localize
+                        "orc.consumable.ifActivable.perceptionModif"
+                      }}</td>
+                    <td align="center">{{consumable.system.ifActivable.perceptionModif}}</td>
                   </tr>
                 {{/if}}
                 {{#if consumable.system.ifActivable.socialModif}}

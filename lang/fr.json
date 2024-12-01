@@ -48,7 +48,9 @@
       "ap": "Armure",
       "encumbrance": "Encombrement",
       "attributes": {
-        "physical": "Physique",
+        "strengh": "Force",
+        "dexterity": "Dexterite",
+        "perception": "Perception",
         "social": "Social",
         "intel": "Intel"
       },
@@ -165,7 +167,9 @@
         "hpMaxModif": "HP max.",
         "mpMaxModif": "MP max.",
         "apModif": "Armure",
-        "physicalModif": "Physique",
+        "strenghModif": "Force",
+        "dexterityModif": "Dexterite",
+        "perceptionModif": "Perception",
         "socialModif": "Social",
         "intelModif": "Intel",
         "attackModif": "Attaque",
@@ -221,7 +225,9 @@
       "effect": "Effets",
       "activated": "Activé",
       "activeEffect": "Enchantement à effets actifs",
-      "physicalModif": "Physique",
+      "strenghModif": "Force",
+      "dexterityModif": "Dexterite",
+      "perceptionModif": "Perception",
       "socialModif": "Social",
       "intelModif": "Intel",
       "hpMaxModif": "HP max.",
@@ -254,7 +260,9 @@
       "disableOnNewDay": "Désactivation au passage du jour"
     },
     "wound": {
-      "physicalModif": "Physique",
+      "strenghModif": "Force",
+      "dexterityModif": "Dexterite",
+      "perceptionModif": "Perception",
       "socialModif": "Social",
       "intelModif": "Intel",
       "hpMaxModif": "HP max.",

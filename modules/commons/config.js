@@ -1,5 +1,13 @@
 export const ORC = {};
 
+ORC.attributes = {
+  strengh: "orc.character.attributes.strengh",
+  dexteriy: "orc.character.attributes.dexteriy",
+  perception: "orc.character.attributes.perception",
+  social: "orc.character.attributes.social",
+  intel: "orc.character.attributes.intel",
+};
+
 ORC.combatStyleList = {
   standard: "orc.combatStyleList.standard",
   offensive: "orc.combatStyleList.offensive",

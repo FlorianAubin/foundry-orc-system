@@ -111,12 +111,28 @@
               data-itemid="{{consumable._id}}"
             ></div>
             <table>
-              {{#if consumable.system.ifActivable.physicalModif}}
+              {{#if consumable.system.ifActivable.strenghModif}}
                 <tr>
                   <td align="center">{{localize
-                      "orc.consumable.ifActivable.physicalModif"
+                      "orc.consumable.ifActivable.strenghModif"
                     }}</td>
-                  <td align="center">{{consumable.system.ifActivable.physicalModif}}</td>
+                  <td align="center">{{consumable.system.ifActivable.strenghModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if consumable.system.ifActivable.dexterityModif}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.consumable.ifActivable.dexterityModif"
+                    }}</td>
+                  <td align="center">{{consumable.system.ifActivable.dexterityModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if consumable.system.ifActivable.perceptionModif}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.consumable.ifActivable.perceptionModif"
+                    }}</td>
+                  <td align="center">{{consumable.system.ifActivable.perceptionModif}}</td>
                 </tr>
               {{/if}}
               {{#if consumable.system.ifActivable.socialModif}}
@@ -289,14 +305,30 @@
               data-itemid="{{item._id}}"
             ></div>
             <table>
-              {{#if item.system.enchant.physicalModif}}
+              {{#if item.system.enchant.strenghModif}}
                 <tr>
                   <td align="center">{{localize
-                      "orc.enchant.physicalModif"
+                      "orc.enchant.strenghModif"
                     }}</td>
-                  <td align="center">{{item.system.enchant.physicalModif}}</td>
+                  <td align="center">{{item.system.enchant.strenghModif}}</td>
                 </tr>
               {{/if}}
+              {{#if item.system.enchant.dexterityModif}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.enchant.dexterityModif"
+                    }}</td>
+                  <td align="center">{{item.system.enchant.dexterityModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if item.system.enchant.perceptionModif}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.enchant.perceptionModif"
+                    }}</td>
+                  <td align="center">{{item.system.enchant.perceptionModif}}</td>
+                </tr>
+              {{/if}}             
               {{#if item.system.enchant.socialModif}}
                 <tr>
                   <td align="center">{{localize "orc.enchant.socialModif"}}</td>
@@ -483,7 +515,7 @@
     </tr>
     <tr class="header flexrow">
       <th class="content"></th>
-      <th class="content">{{localize "orc.character.attributes.physical"}}</th>
+      <th class="content">{{localize "orc.character.attributes.strengh"}}</th>
       <th class="content">{{localize "orc.character.attack"}}</th>
       <th class="content">{{localize "orc.character.defence"}}</th>
       <th class="content">{{localize "orc.character.dodge"}}</th>
@@ -492,7 +524,7 @@
     </tr>
     <tr class="item flexrow">
       <td class="content"></td>
-      <td class="content">{{actor.system.encumbrance.malus.physical}}</td>
+      <td class="content">{{actor.system.encumbrance.malus.strengh}}</td>
       <td class="content">{{actor.system.encumbrance.malus.attack}}</td>
       <td class="content">{{actor.system.encumbrance.malus.defence}}</td>
       <td class="content">{{actor.system.encumbrance.malus.dodge}}</td>
@@ -505,7 +537,7 @@
     </tr>
     <tr class="header flexrow">
       <th class="content"></th>
-      <th class="content">{{localize "orc.character.attributes.physical"}}</th>
+      <th class="content">{{localize "orc.character.attributes.strengh"}}</th>
       <th class="content">{{localize "orc.character.attributes.social"}}</th>
       <th class="content">{{localize "orc.character.attributes.intel"}}</th>
       <th class="content">{{localize "orc.character.hp"}}</th>
@@ -513,7 +545,7 @@
     </tr>
     <tr class="item flexrow">
       <td class="content">{{localize "orc.character.food"}}</td>
-      <td class="content">{{actor.system.nutrition.foodNeededDay.malus.physical}}</td>
+      <td class="content">{{actor.system.nutrition.foodNeededDay.malus.strengh}}</td>
       <td class="content">{{actor.system.nutrition.foodNeededDay.malus.social}}</td>
       <td class="content">{{actor.system.nutrition.foodNeededDay.malus.intel}}</td>
       <td class="content">{{actor.system.nutrition.foodNeededDay.malus.hpMax}}</td>
@@ -521,7 +553,7 @@
     </tr>
     <tr class="item flexrow">
       <td class="content">{{localize "orc.character.drink"}}</td>
-      <td class="content">{{actor.system.nutrition.drinkNeededDay.malus.physical}}</td>
+      <td class="content">{{actor.system.nutrition.drinkNeededDay.malus.strengh}}</td>
       <td class="content">-</td>
       <td class="content">{{actor.system.nutrition.drinkNeededDay.malus.intel}}</td>
       <td class="content">{{actor.system.nutrition.drinkNeededDay.malus.hpMax}}</td>
@@ -565,12 +597,28 @@
               data-itemid="{{wound._id}}"
             ></div>
             <table>
-              {{#if wound.system.physicalModif}}
+              {{#if wound.system.strenghModif}}
                 <tr>
                   <td align="center">{{localize
-                      "orc.wound.physicalModif"
+                      "orc.wound.strenghModif"
                     }}</td>
-                  <td align="center">{{wound.system.physicalModif}}</td>
+                  <td align="center">{{wound.system.strenghModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if wound.system.dexterityModif}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.wound.dexterityModif"
+                    }}</td>
+                  <td align="center">{{wound.system.dexterityModif}}</td>
+                </tr>
+              {{/if}}
+              {{#if wound.system.perceptionModif}}
+                <tr>
+                  <td align="center">{{localize
+                      "orc.wound.perceptionModif"
+                    }}</td>
+                  <td align="center">{{wound.system.perceptionModif}}</td>
                 </tr>
               {{/if}}
               {{#if wound.system.socialModif}}

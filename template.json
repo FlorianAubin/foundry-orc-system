@@ -9,8 +9,18 @@
         "dice": 0
       },
       "attributes": {
-        "physical": {
-          "name": "orc.character.attributes.physical",
+        "strengh": {
+          "name": "orc.character.attributes.strengh",
+          "native": 0,
+          "value": 0
+        },
+        "dexterity": {
+          "name": "orc.character.attributes.dexterity",
+          "native": 0,
+          "value": 0
+        },
+        "perception": {
+          "name": "orc.character.attributes.perception",
           "native": 0,
           "value": 0
         },
@@ -58,7 +68,11 @@
         "limitMultiplier": 0.5,
         "limit": 0,
         "malus":{
-          "physical":0,
+          "strengh":0,
+          "dexterity":0,
+          "perception":0,
+          "social": 0,
+          "intel":0,
           "defence": 0,
           "attack":0,
           "dodge":0,
@@ -69,7 +83,9 @@
       "modifiers":{
         "deploy": false,
         "attr":{
-          "physical":0,
+          "strengh":0,
+          "dexterity":0,
+          "perception":0,
           "social": 0,
           "intel":0
         },
@@ -78,11 +94,10 @@
         "defence": 0,
         "dodge": 0,
         "damageBonus": "",
-        "powerBonus": "",
-        "initiative": 0
+        "powerBonus": ""
       },
       "attack": {
-        "attribut": "orc.character.attributes.physical",
+        "attribut": "orc.character.attributes.strengh",
         "native": 0,
         "value": 0
       },
@@ -90,7 +105,7 @@
         "value": 0
       },
       "dodge": {
-        "attribut": "orc.character.attributes.physical",
+        "attribut": "orc.character.attributes.strengh",
         "enable": false,
         "native": 0,
         "value": 0
@@ -163,17 +178,23 @@
           "native": 1,
           "value": 0,
           "malus":{
-            "physical":0,
-            "social":0,
+            "strengh":0,
+            "dexterity":0,
+            "perception":0,
+            "social": 0,
             "intel":0,
-            "hpMax":0
+            "hpMax":0,
+            "mpMax":0
           }
         },
         "drinkNeededDay": {
           "native": 1,
           "value": 0,
           "malus":{
-            "physical":0,
+            "strengh":0,
+            "dexterity":0,
+            "perception":0,
+            "social": 0,
             "intel":0,
             "hpMax":0,
             "mpMax":0
@@ -182,8 +203,13 @@
         "tips": {
           "value": 0,
           "malus":{
-            "social":0,
-            "intel":0
+            "strengh":0,
+            "dexterity":0,
+            "perception":0,
+            "social": 0,
+            "intel":0,
+            "hpMax":0,
+            "mpMax":0
           }
         },
         "optionDeploy": false
@@ -238,7 +264,9 @@
           "optionDeploy": false,
           "activeEffect": false,
           "activated": false,
-          "physicalModif": 0,
+          "strenghModif": 0,
+          "dexerityModif": 0,
+          "perceptionModif": 0,
           "socialModif": 0,
           "intelModif": 0,
           "hpMaxModif": 0,
@@ -311,6 +339,7 @@
     },
     "armor": {
       "ap": 0,
+      "apmax": 0,
       "bodyPart": "",
       "weight": 0,
       "optionDescriptionDeploy": false,
@@ -355,7 +384,9 @@
         "hpMaxModif": 0,
         "mpMaxModif": 0,
         "apModif": 0,
-        "physicalModif": 0,
+        "strenghModif": 0,
+        "dexerityModif": 0,
+        "perceptionModif": 0,
         "socialModif": 0,
         "intelModif": 0,
         "attackModif": 0,
@@ -465,7 +496,9 @@
     "wound": {
       "hpMaxModif": 0,
       "mpMaxModif": 0,
-      "physicalModif": 0,
+      "strenghModif": 0,
+      "dexerityModif": 0,
+      "perceptionModif": 0,
       "socialModif": 0,
       "intelModif": 0,
       "attackModif": 0,

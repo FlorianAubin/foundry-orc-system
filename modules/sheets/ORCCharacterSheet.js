@@ -745,7 +745,7 @@ export default class ORCCharacterSheet extends ActorSheet {
       if (itemData.type.food) newValues.foodDay += 1;
       if (itemData.type.drink) newValues.drinkDay += 1;
     }
-    //Do a physical roll and increase the actor tipsiness in case of failure
+    //Do a strengh roll and increase the actor tipsiness in case of failure
     if (itemData.tipsiness || itemData.poison) {
       let statusResistOut = DiceOrc.StatusResistRoll({
         actor: actor,
@@ -1405,7 +1405,9 @@ export default class ORCCharacterSheet extends ActorSheet {
     let actor = data.actor;
     let actorData = actor.system;
 
-    actorData.attributes.physical.value += actorData.modifiers.attr.physical;
+    actorData.attributes.strengh.value += actorData.modifiers.attr.strengh;
+    actorData.attributes.dexterity.value += actorData.modifiers.attr.dexterity;
+    actorData.attributes.perception.value += actorData.modifiers.attr.perception;
     actorData.attributes.social.value += actorData.modifiers.attr.social;
     actorData.attributes.intel.value += actorData.modifiers.attr.intel;
   }
@@ -1507,7 +1509,9 @@ export default class ORCCharacterSheet extends ActorSheet {
       if (item.type == "consumable") {
         if (itemData.isActivable && itemData.ifActivable.activated) {
           const effect = itemData.ifActivable;
-          actorData.attributes.physical.value += effect.physicalModif;
+          actorData.attributes.strengh.value += effect.strenghModif;
+          actorData.attributes.dexterity.value += effect.dexterityModif;
+          actorData.attributes.perception.value += effect.perceptionModif;
           actorData.attributes.social.value += effect.socialModif;
           actorData.attributes.intel.value += effect.intelModif;
           actorData.hp.valueMax += effect.hpMaxModif;
@@ -1541,7 +1545,9 @@ export default class ORCCharacterSheet extends ActorSheet {
       //Add the enchant
       const enchant = itemData.enchant;
       if (enchant && enchant.activated) {
-        actorData.attributes.physical.value += enchant.physicalModif;
+        actorData.attributes.strengh.value += enchant.strenghModif;
+        actorData.attributes.dexterity.value += enchant.dexterityModif;
+        actorData.attributes.perception.value += enchant.perceptionModif;
         actorData.attributes.social.value += enchant.socialModif;
         actorData.attributes.intel.value += enchant.intelModif;
         actorData.hp.valueMax += enchant.hpMaxModif;
@@ -1572,7 +1578,9 @@ export default class ORCCharacterSheet extends ActorSheet {
 
       //Wounds
       if (item.type == "wound") {
-        actorData.attributes.physical.value += itemData.physicalModif;
+        actorData.attributes.strengh.value += itemData.strenghModif;
+        actorData.attributes.dexterity.value += itemData.dexterityModif;
+        actorData.attributes.perception.value += itemData.perceptionModif;
         actorData.attributes.social.value += itemData.socialModif;
         actorData.attributes.intel.value += itemData.intelModif;
         actorData.hp.valueMax += itemData.hpMaxModif;
@@ -1605,50 +1613,56 @@ export default class ORCCharacterSheet extends ActorSheet {
       actorData.nutrition.foodNeededDay.malus.social = -5;
       actorData.nutrition.foodNeededDay.malus.intel = -5;
     } else if (food > foodNedeed + 4) {
-      actorData.nutrition.foodNeededDay.malus.physical = -10 * (food - (foodNedeed + 4));
+      actorData.nutrition.foodNeededDay.malus.strengh = -10 * (food - (foodNedeed + 4));
       actorData.nutrition.foodNeededDay.malus.social = -10;
       actorData.nutrition.foodNeededDay.malus.intel = -10 * (food - (foodNedeed + 4));
     } else if (food < 0) {
       if (food == -1) {
-        actorData.nutrition.foodNeededDay.malus.physical = -5;
+        actorData.nutrition.foodNeededDay.malus.strengh = -5;
       } else if (food == -2) {
-        actorData.nutrition.foodNeededDay.malus.physical = -10;
+        actorData.nutrition.foodNeededDay.malus.strengh = -10;
       } else if (food == -3) {
-        actorData.nutrition.foodNeededDay.malus.physical = -20;
+        actorData.nutrition.foodNeededDay.malus.strengh = -20;
       } else if (food <= -4) {
-        actorData.nutrition.foodNeededDay.malus.physical = -40;
+        actorData.nutrition.foodNeededDay.malus.strengh = -40;
         actorData.nutrition.foodNeededDay.malus.hpMax = 10 * (food + 3);
       }
     }
-    actorData.attributes.physical.value += actorData.nutrition.foodNeededDay.malus.physical;
+    actorData.attributes.strengh.value += actorData.nutrition.foodNeededDay.malus.strengh;
+    actorData.attributes.dexterity.value += actorData.nutrition.foodNeededDay.malus.dexterity;
+    actorData.attributes.perception.value += actorData.nutrition.foodNeededDay.malus.perception;
     actorData.attributes.social.value += actorData.nutrition.foodNeededDay.malus.social;
     actorData.attributes.intel.value += actorData.nutrition.foodNeededDay.malus.intel;
     actorData.hp.valueMax += actorData.nutrition.foodNeededDay.malus.hpMax;
+    actorData.mp.valueMax += actorData.nutrition.foodNeededDay.malus.mpMax;
 
     const drink = actorData.nutrition.drinkDay;
     const drinkNedeed = actorData.nutrition.drinkNeededDay.value;
     if (drink >= drinkNedeed + 4)
-      actorData.nutrition.drinkNeededDay.malus.physical = -5 * (drink - (drinkNedeed + 3));
+      actorData.nutrition.drinkNeededDay.malus.strengh = -5 * (drink - (drinkNedeed + 3));
     if (drink > drinkNedeed + 4) {
       actorData.nutrition.drinkNeededDay.malus.intel = -10 * (drink - (drinkNedeed + 4));
       actorData.nutrition.drinkNeededDay.malus.hpMax = -10 * (drink - (drinkNedeed + 4));
     } else if (drink < 0) {
       if (drink == -1) {
-        actorData.nutrition.drinkNeededDay.malus.physical = -10;
+        actorData.nutrition.drinkNeededDay.malus.strengh = -10;
         actorData.nutrition.drinkNeededDay.malus.mpMax = -2;
       } else if (drink == -2) {
-        actorData.nutrition.drinkNeededDay.malus.physical = -20;
+        actorData.nutrition.drinkNeededDay.malus.strengh = -20;
         actorData.nutrition.drinkNeededDay.malus.hpMax = -10;
         actorData.nutrition.drinkNeededDay.malus.mpMax = -5;
       } else if (drink == -3) {
-        actorData.nutrition.drinkNeededDay.malus.physical = -30;
+        actorData.nutrition.drinkNeededDay.malus.strengh = -30;
         actorData.nutrition.drinkNeededDay.malus.hpMax = -20;
         actorData.nutrition.drinkNeededDay.malus.mpMax = -10;
       } else if (drink <= -4) {
         this.takeDamage({ damageFormula: 100000 });
       }
     }
-    actorData.attributes.physical.value += actorData.nutrition.drinkNeededDay.malus.physical;
+    actorData.attributes.strengh.value += actorData.nutrition.drinkNeededDay.malus.strengh;
+    actorData.attributes.dexterity.value += actorData.nutrition.drinkNeededDay.malus.dexterity;
+    actorData.attributes.perception.value += actorData.nutrition.drinkNeededDay.malus.perception;
+    actorData.attributes.social.value += actorData.nutrition.drinkNeededDay.malus.social;
     actorData.attributes.intel.value += actorData.nutrition.drinkNeededDay.malus.intel;
     actorData.hp.valueMax += actorData.nutrition.drinkNeededDay.malus.hpMax;
     actorData.mp.valueMax += actorData.nutrition.drinkNeededDay.malus.mpMax;
@@ -1667,8 +1681,13 @@ export default class ORCCharacterSheet extends ActorSheet {
         actorData.nutrition.tips.malus.intel = -10 * (tipsiness - 1);
       }
     }
+    actorData.attributes.strengh.value += actorData.nutrition.tips.malus.strengh;
+    actorData.attributes.dexterity.value += actorData.nutrition.tips.malus.dexterity;
+    actorData.attributes.perception.value += actorData.nutrition.tips.malus.perception;
     actorData.attributes.social.value += actorData.nutrition.tips.malus.social;
     actorData.attributes.intel.value += actorData.nutrition.tips.malus.intel;
+    actorData.hp.valueMax += actorData.nutrition.tips.malus.hpMax;
+    actorData.mp.valueMax += actorData.nutrition.tips.malus.mpMax;
   }
 
   initNutritionMalus(data){
@@ -1678,18 +1697,29 @@ export default class ORCCharacterSheet extends ActorSheet {
     let drinkNeededDayMalus = actorData.nutrition.drinkNeededDay.malus;
     let tipsinessMalus = actorData.nutrition.tips.malus;
 
-    foodNeededDayMalus.physical = 0;
+    foodNeededDayMalus.strengh = 0;
+    foodNeededDayMalus.dexterity = 0;
+    foodNeededDayMalus.perception = 0;
     foodNeededDayMalus.social = 0;
     foodNeededDayMalus.intel = 0;
     foodNeededDayMalus.hpMax = 0;
+    foodNeededDayMalus.mpMax = 0;
 
-    drinkNeededDayMalus.physical = 0;
+    drinkNeededDayMalus.strengh = 0;
+    drinkNeededDayMalus.dexterity = 0;
+    drinkNeededDayMalus.perception = 0;
+    drinkNeededDayMalus.social = 0;
     drinkNeededDayMalus.intel = 0;
     drinkNeededDayMalus.hpMax = 0;
     drinkNeededDayMalus.mpMax = 0;
 
+    tipsinessMalus.strengh = 0;
+    tipsinessMalus.dexterity = 0;
+    tipsinessMalus.perception = 0;
     tipsinessMalus.social = 0;
     tipsinessMalus.intel = 0;
+    tipsinessMalus.hpMax = 0;
+    tipsinessMalus.mpMax = 0;
   }
 
   applyCapacities(data) {
@@ -1702,7 +1732,7 @@ export default class ORCCharacterSheet extends ActorSheet {
       if (item.type != "capacity") continue;
       if (itemData.activeEffect && !itemData.ifActivable.activated) continue;
       if (itemData.isRageBerserk) {
-        actorData.attributes.physical.value += Math.floor(
+        actorData.attributes.strengh.value += Math.floor(
           (actorData.hp.valueMax - actorData.hp.value) / 10
         );
       }
@@ -1724,12 +1754,12 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     //Encumbrance limit
     actorData.encumbrance.limit = Math.floor(
-      actorData.attributes.physical.value *
+      actorData.attributes.strengh.value *
         actorData.encumbrance.limitMultiplier
     );
 
     //Malus
-    actorData.encumbrance.malus.physical = 0;
+    actorData.encumbrance.malus.strengh = 0;
     actorData.encumbrance.malus.defence = 0;
     actorData.encumbrance.malus.attack = 0;
     actorData.encumbrance.malus.dodge = 0;
@@ -1773,8 +1803,8 @@ export default class ORCCharacterSheet extends ActorSheet {
     const encumbrance = actorData.encumbrance.value;
     const limit = actorData.encumbrance.limit;
     if (encumbrance > 1 * limit) {
-      //Malus in physical
-      actorData.encumbrance.malus.physical = -5 * Math.floor(10 * (encumbrance / limit - 1 + 0.1));
+      //Malus in strengh
+      actorData.encumbrance.malus.strengh = -5 * Math.floor(10 * (encumbrance / limit - 1 + 0.1));
     }
     if (encumbrance > 1.2 * limit) {
       //Malus in defence
@@ -1792,7 +1822,11 @@ export default class ORCCharacterSheet extends ActorSheet {
       actorData.encumbrance.malus.drinkNeededDay = 2;    
     }
 
-    actorData.attributes.physical.value += actorData.encumbrance.malus.physical;
+    actorData.attributes.strengh.value += actorData.encumbrance.malus.strengh;
+    actorData.attributes.dexterity.value += actorData.encumbrance.malus.dexterity;
+    actorData.attributes.perception.value += actorData.encumbrance.malus.perception;
+    actorData.attributes.social.value += actorData.encumbrance.malus.social;
+    actorData.attributes.intel.value += actorData.encumbrance.malus.intel;
     actorData.defence.value += actorData.encumbrance.malus.defence;
     actorData.nutrition.foodNeededDay.value += actorData.encumbrance.malus.foodNeededDay;
     actorData.nutrition.drinkNeededDay.value += actorData.encumbrance.malus.drinkNeededDay;
@@ -1802,13 +1836,19 @@ export default class ORCCharacterSheet extends ActorSheet {
     let actor = data.actor;
     let actorData = actor.system;
 
-    const physical = actorData.attributes.physical.value;
+    const strengh = actorData.attributes.strengh.value;
+    const dexterity = actorData.attributes.dexterity.value;
+    const perception = actorData.attributes.perception.value;
     const intel = actorData.attributes.intel.value;
     const social = actorData.attributes.social.value;
 
     //Attack
-    if (actorData.attack.attribut === "orc.character.attributes.physical") 
-      actorData.attack.native = physical;
+    if (actorData.attack.attribut === "orc.character.attributes.strengh") 
+      actorData.attack.native = strengh;
+    else if (actorData.attack.attribut === "orc.character.attributes.dexterity") 
+      actorData.attack.native = dexterity;
+    else if (actorData.attack.attribut === "orc.character.attributes.perception") 
+      actorData.attack.native = perception;
     else if (actorData.attack.attribut === "orc.character.attributes.intel") 
       actorData.attack.native = intel;
     else if (actorData.attack.attribut === "orc.character.attributes.social") 
@@ -1816,12 +1856,16 @@ export default class ORCCharacterSheet extends ActorSheet {
     actorData.attack.value = actorData.attack.native;
 
     //Dodge
-    actorData.dodge.native = physical;
+    actorData.dodge.native = strengh;
     actorData.dodge.value = actorData.dodge.native;
 
     //Roll spell value
-    if (actorData.magic.roll.attribut === "orc.character.attributes.physical") 
-      actorData.magic.roll.native = physical;
+    if (actorData.magic.roll.attribut === "orc.character.attributes.strengh") 
+      actorData.magic.roll.native = strengh;
+    else if (actorData.magic.roll.attribut === "orc.character.attributes.dexterity") 
+      actorData.magic.roll.native = dexterity;
+    else if (actorData.magic.roll.attribut === "orc.character.attributes.perception") 
+      actorData.magic.roll.native = perception;
     else if (actorData.magic.roll.attribut === "orc.character.attributes.intel") 
       actorData.magic.roll.native = intel;
     else if (actorData.magic.roll.attribut === "orc.character.attributes.social") 
@@ -2028,10 +2072,10 @@ export default class ORCCharacterSheet extends ActorSheet {
     let actor = data.actor;
     let actorData = actor.system;
 
-    const physMult = 1 / 10,
+    const dextMult = 1 / 10,
       intelMult = 1 / 5;
     actorData.ini.ndice += Math.floor(
-      physMult * actorData.attributes.physical.value
+      dextMult * actorData.attributes.dexterity.value
     );
     actorData.ini.dice = 8;
     actorData.ini.flat += Math.floor(
