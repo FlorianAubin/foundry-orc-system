@@ -236,9 +236,9 @@
               <select class="weapon-choose-ammo" name="system.ammo" align="center">
               {{#select weapon.system.ammo}} 
                 <option value=""></option>
-              {{#each ../ammos as |ammo|}}
-                <option value="{{ammo._id}}">{{ammo.name}}</option>
-              {{/each}} 
+                {{#each ../ammos as |ammo|}}
+                  <option value="{{ammo._id}}">{{ammo.name}}</option>
+                {{/each}} 
               {{/select}}
             </select>
             {{/if}}
@@ -246,15 +246,30 @@
           <td class="content">{{weapon.system.effective.damage}}</td>
           <td class="content">{{weapon.system.range}}</td>
           <td class="effect-list">{{weapon.system.effective.effect}}</td>
-          <td class="content" style="display: flex">
-            {{weapon.system.effective.attack}}
-            <span
-              class="attack-with-weapon-roll button fas fa-dice"
-              data-attributename="{{localize 'orc.character.attack'}}"
-              data-attributevalue="{{weapon.system.effective.attack}}"
-              data-attributevaluebase="{{../actor.system.attack.native}}"
-              data-weaponid="{{weapon._id}}"
-            ></span>
+          <td class="content">
+            <div>
+              <select class="weapon-choose-attribute" name="system.effective.attribut" align="center">
+                {{#select weapon.system.effective.attribut}}
+                  <option value=""></option>
+                  {{#each system.attributes as |attribut id|}}
+                    {{#if attribut.usable}}
+                      <option value="{{attribut.name}}">
+                        {{localize attribut.name}}
+                      </option>
+                    {{/if}}
+                  {{/each}}
+                {{/select}}
+              </select>
+            </div>
+            <div align="center">
+              <span class="attack-with-weapon-roll button fas fa-dice"
+                  data-attributename="{{localize 'orc.character.attack'}}"
+                  data-attributevalue="{{weapon.system.effective.attack}}"
+                  data-attributevaluebase="{{../actor.system.attack.native}}"
+                  data-weaponid="{{weapon._id}}">
+                  {{weapon.system.effective.attack}}
+              </span>
+            </div>
           </td>
         </tr>
       {{/if}}

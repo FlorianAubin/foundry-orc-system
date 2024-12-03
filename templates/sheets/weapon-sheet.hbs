@@ -96,14 +96,11 @@
           {{/if}}
         </tr>
       </table>
-      {{#if (or unlocked item.system.defenceModif item.system.attackModif)}}
+      {{#if (or unlocked item.system.defenceModif)}}
         <table>
           <tr>
             {{#if (or unlocked item.system.defenceModif)}}
               <th>{{localize "orc.weapon.defenceModif"}}</th>
-            {{/if}}
-            {{#if (or unlocked item.system.attackModif)}}
-              <th>{{localize "orc.weapon.attackModif"}}</th>
             {{/if}}
           </tr>
           <tr>
@@ -123,25 +120,66 @@
                 {{/if}}
               </td>
             {{/if}}
-            {{#if (or unlocked item.system.attackModif)}}
-              <td align="center">
-                {{#if unlocked}}
-                  <input
-                    name="system.attackModif"
-                    type="Number"
-                    value="{{item.system.attackModif}}"
-                    placeholder="0"
-                  />
-                {{else}}
-                  {{#if item.system.attackModif}}
-                    <span>{{item.system.attackModif}}</span>
-                  {{/if}}
-                {{/if}}
-              </td>
-            {{/if}}
           </tr>
         </table>
       {{/if}}
+
+      <table>
+        <tr>
+          <th colspan="5">{{localize "orc.weapon.usableCarac"}}</th>
+        </tr>
+        <tr>
+          {{#each item.system.attributes as |attribute a|}}
+            <td align="center">
+              {{localize attribute.name}}
+            </td>
+          {{/each}}
+        </tr>
+        <tr>
+          {{#each item.system.attributes as |attribute a|}}
+            <td align="center">
+              {{#if ../unlocked}}
+                <input
+                  name="system.attributes.{{a}}.usable"
+                  type="checkbox"
+                  {{checked attribute.usable}}
+                />
+              {{else}}
+                {{#if attribute.usable}}
+                    <span class="fas fa-check"></span>
+                {{/if}}
+              {{/if}}
+            </td>
+          {{/each}}
+        </tr>
+        <tr>
+          <th colspan="5">{{localize "orc.weapon.attackModif"}}</th>
+        </tr>
+        <tr>
+          {{#each item.system.attributes as |attribute a|}}
+            <td align="center">
+              {{#if ../unlocked}}
+                <input
+                  name="system.attributes.{{a}}.attackModif"
+                  type="Number"
+                  value="{{attribute.attackModif}}"
+                  placeholder="0"
+                />
+              {{else}}
+                {{#if attribute.usable}}
+                  <span align="center">
+                    {{attribute.attackModif}}
+                  </span>
+                {{/if}}
+              {{/if}}
+            </td>
+          {{/each}}
+        </tr>
+      </table>
+
+
+
+
       <table>
         <tr>
           <th>{{localize "orc.weapon.weight"}}</th>
@@ -196,26 +234,6 @@
             </td>
           {{else}}
             {{#if item.system.twin}}
-              <td align="center">
-                <span class="fas fa-check"></span>
-              </td>
-            {{/if}}
-          {{/if}}
-        </tr>
-        <tr>
-          {{#if (or unlocked item.system.allowMagic)}}
-            <th>{{localize "orc.weapon.allowMagic"}}</th>
-          {{/if}}
-          {{#if unlocked}}
-            <td align="center">
-              <input
-                name="system.allowMagic"
-                type="checkbox"
-                {{checked item.system.allowMagic}}
-              />
-            </td>
-          {{else}}
-            {{#if item.system.allowMagic}}
               <td align="center">
                 <span class="fas fa-check"></span>
               </td>

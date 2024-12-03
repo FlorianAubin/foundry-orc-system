@@ -94,10 +94,10 @@
         "defence": 0,
         "dodge": 0,
         "damageBonus": "",
-        "powerBonus": ""
+        "powerBonus": "",
+        "initiative": 0
       },
       "attack": {
-        "attribut": "orc.character.attributes.strengh",
         "native": 0,
         "value": 0
       },
@@ -121,19 +121,6 @@
         "damageBonus": 0
       },
       "magic": {
-        "canLaunchSpell": false,
-        "nSpell": {
-          "native": 0,
-          "value": 0,
-          "effective": 0
-        },
-        "nInvoc": {
-          "native": 0,
-          "value": 0,
-          "effective": 0,
-          "invoked": 0,
-          "controlDiffIncrease": 20
-        },
         "power": {
           "value": ""
         },
@@ -228,7 +215,6 @@
         "heal": "",
         "multiplier": {
           "native": 1,
-
           "value": 0
         }
       },
@@ -265,7 +251,7 @@
           "activeEffect": false,
           "activated": false,
           "strenghModif": 0,
-          "dexerityModif": 0,
+          "dexterityModif": 0,
           "perceptionModif": 0,
           "socialModif": 0,
           "intelModif": 0,
@@ -275,8 +261,6 @@
           "attackModif": 0,
           "defenceModif": 0,
           "dodgeModif": 0,
-          "nSpell": 0,
-          "nInvoc": 0,
           "magicPower": "",
           "mpReduc": 0,
           "rollSpellBonus": 0,
@@ -309,14 +293,40 @@
       "useAmmo": false,
       "ammo": "",
       "defenceModif": 0,
-      "attackModif": 0,
       "precise": false,
       "twin": false,
-      "allowMagic": false,
       "weight": 0,
       "effect": "",
       "equipped": false,
+      "attributes": {
+        "strengh": {
+          "name": "orc.character.attributes.strengh",
+          "usable": true,
+          "attackModif": 0
+        },
+        "dexterity": {
+          "name": "orc.character.attributes.dexterity",
+          "usable": false,
+          "attackModif": 0
+        },
+        "perception": {
+          "name": "orc.character.attributes.perception",
+          "usable": false,
+          "attackModif": 0
+        },
+        "social": {
+          "name": "orc.character.attributes.social",
+          "usable": false,
+          "attackModif": 0
+        },
+        "intel": {
+          "name": "orc.character.attributes.intel",
+          "usable": false,
+          "attackModif": 0
+        }
+      },
       "effective": {
+        "attribut": "orc.character.attributes.strengh",
         "damage": "",
         "effect": "",
         "attack": 0
@@ -350,8 +360,6 @@
     "equipableitem": {
       "equipped": false,
       "weight": 0,
-      "nSpell": 0,
-      "nInvoc": 0,
       "magicPower": "",
       "mpReduc": 0,
       "rollSpellBonus": 0,
