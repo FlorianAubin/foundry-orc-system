@@ -1679,7 +1679,7 @@ export default class ORCCharacterSheet extends ActorSheet {
         actorData.nutrition.drinkNeededDay.malus.hpMax = -20;
         actorData.nutrition.drinkNeededDay.malus.mpMax = -10;
       } else if (drink <= -4) {
-        this.takeDamage({ damageFormula: 100000 });
+        actorData.hp.value = actorData.hp.surplus;
       }
     }
     actorData.attributes.strengh.value += actorData.nutrition.drinkNeededDay.malus.strengh;
