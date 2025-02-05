@@ -281,6 +281,7 @@
       "weaponLocal": "Arme",
       "rangeWeapon": "Armes à distance ?",
       "nammo": "Nombre de munitions consommées",
+      "costMP": "Coût en MP",
       "isStatusResistRoll": "Jet de résistance aux effets de statut",
       "modifStatusResist": "Bonus de résistance aux effets de statut",
       "modifLocal": "Modificateur du jet",
@@ -293,25 +294,27 @@
       "activated": "Activé"
     },
     "spell": {
-      "school": "Domaine de magie",
-      "level": "Niveau du sort",
-      "noRoll": "Pas de jet?",
-      "difficulty": "Modificateur de lancer",
-      "fixed": "Fixée",
+      "type": "Type",
+      "types":{
+        "base": "Base",
+        "shape": "Forme",
+        "power": "Puissance",
+        "modif": "Modificateur"
+      },
+      "flat": "Flat",
+      "multi": "Multiplicateur",
+      "difficulty": "Bonus au lancé",
+      "power": "Puissance",
+      "precise": "Sort précis",
       "cost": " Coût en ressource",
       "useHP": "Consomme des HP",
-      "isInvoc": "Est une invocation",
-      "isRitual": "Est un rituel",
-      "power": "Puissance",
+      "MP": "MP",
+      "HP": "HP",
       "duration": "Durée",
       "durationUnit": "Durée unité",
       "range": "Portée (m)",
       "effect": "Effets",
-      "memorized": "Mémorisé",
-      "launch": "Lancer le sort",
-      "control": "Contrôler l'invocation",
-      "invoked": "Invoqué",
-      "invocDifficulty": "Modificateur de contrôle"
+      "launch": "Lancer le sort"
     },
     "combatStyleList": {
       "standard": "Standard",
@@ -349,8 +352,7 @@
         "title": "Jet de dégâts bonus :"
       },
       "rollSpell": {
-        "titleLimited": "Jet d'un sort par {actorName} :",
-        "title": "Jet du sort {spellName} par {actorName} :"
+        "title": "Jet d'un sort par {actorName} :"
       },
       "bleed": {
         "title": "{charName} saigne !"

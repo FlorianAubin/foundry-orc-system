@@ -121,16 +121,64 @@
         "damageBonus": 0
       },
       "magic": {
-        "power": {
-          "value": ""
-        },
-        "mpReduc": {
-          "value": 0
-        },
+        "powerModif": "",
+        "mpReduc": 0,
         "roll": {
           "attribut": "orc.character.attributes.intel",
           "native": 0,
-          "value": 0
+          "value": 0,
+          "formula": "",
+          "formulaValues": {}
+        },
+        "effective": {
+          "power": "",
+          "powerMult": 0,
+          "powerValues": {},
+          "effect": "",
+          "range": 0,
+          "rangeDefault": 0,
+          "cost": "",
+          "costMult": 0,
+          "costValues": {},
+          "difficulty": "",
+          "difficultyValues": {},
+          "useHP": false,
+          "duration": "",
+          "durationValues": {},
+          "durationUnit": "tr",
+          "precise": false,
+          "modif":{
+            "power": "",
+            "powerMult": 1,
+            "effect": "",
+            "range": 0,
+            "cost": "",
+            "costMult": 1,
+            "difficulty": "",
+            "duration": ""            
+          }
+        },
+        "actives":{
+          "bases": {
+            "name": "orc.spell.types.base",
+            "array": [],
+            "nmax": 1
+          },
+          "shapes": {
+            "name": "orc.spell.types.shape",
+            "array": [],
+            "nmax": 1
+          },
+          "powers": {
+            "name": "orc.spell.types.power",
+            "array": [],
+            "nmax": 1
+          },
+          "modifs": {
+            "name": "orc.spell.types.modif",
+            "array": [],
+            "nmax": 3
+          }      
         }
       },
       "details": {
@@ -448,29 +496,20 @@
       "description": ""
     },
     "spell": {
-      "school": "",
-      "difficulty": 0,
-      "noRoll": false,
-      "cost": "",
+      "type": "",
+      "difficulty": "0",
+      "cost": "0",
+      "costMult": 1,
       "useHP": false,
-      "isInvoc": false,
-      "isRitual": false,
-      "ifInvoc": { "invoked": false, "fixed": false, "difficulty": 0 },
-      "power": "",
+      "power": "0",
+      "powerMult": 1,
       "duration": "",
-      "durationUnit": "",
-      "range": 30,
+      "durationUnit": "tr",
+      "range": 0,
       "effect": "",
-      "memorized": false,
+      "precise": false,
       "optionDescriptionDeploy": false,
-      "description": "",
-      "effective": {
-        "power": "",
-        "effect": "",
-        "cost": "",
-        "rollLaunch": 0,
-        "rollControl": 0
-      }
+      "description": ""
     },
     "capacity": {
       "activeEffect": false,
@@ -484,6 +523,7 @@
         "consumeOnSpell": false,
         "disableOnNewDay": true
       },
+      "costMP": 0,
       "isRageBerserk": false,
       "isAttributRoll": false,
       "attributLocal": "",

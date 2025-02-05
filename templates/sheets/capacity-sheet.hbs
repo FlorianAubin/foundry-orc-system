@@ -133,6 +133,7 @@
           {{/if}}
         </tr>
         </table>
+
         <table>
           <tr>
             {{#if (or unlocked (isNotEmptyString item.system.ifActivable.duration))}}
@@ -451,6 +452,28 @@
             {{#if item.system.dodgeEnable}}
               <td align="center">
                 <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+
+        <tr>
+          {{#if (or unlocked item.system.costMP)}}
+            <th>{{localize "orc.capacity.costMP"}}</th>
+          {{/if}}
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.costMP"
+                type="number"
+                value="{{item.system.costMP}}"
+                placeholder="0"
+              />
+            </td>
+          {{else}}
+            {{#if item.system.costMP}}
+              <td align="center">
+                <span>{{item.system.costMP}}</span>
               </td>
             {{/if}}
           {{/if}}

@@ -109,38 +109,43 @@
     <table>
       <tr>
         {{#each actor.system.attributes as |attribute a|}}
-        <th
-          colspan="10"
-          class="attribute-roll button fas fa-dice"
-          data-attributename="{{localize attribute.name}}"
-          data-attributevalue="{{attribute.value}}"
-          data-attributevaluebase="{{attribute.native}}"
-          align="center"
-        >
-          {{localize attribute.name}}
-        </th>
+          {{#if (isAValueOf attribute.name ../config.attributes)}}
+            <th colspan="10" align="center">
+              <span
+                colspan="10"
+                class="attribute-roll button fas fa-dice"
+                data-attributename="{{localize attribute.name}}"
+                data-attributevalue="{{attribute.value}}"
+                data-attributevaluebase="{{attribute.native}}"
+                align="center">
+                  {{localize attribute.name}}  
+              </span>
+            </th>
+          {{/if}}
         {{/each}}
       </tr>
       <tr>
         {{#each actor.system.attributes as |attribute a|}}
-        <td colspan="10">
-          <h4 class="attributes-name box-title" align="center">
-            {{#if ../unlocked}}
-            <input
-              class="attributes-score"
-              type="number"
-              name="system.attributes.{{a}}.native"
-              value="{{attribute.native}}"
-              placeholder="0"
-              onClick="this.select();"
-            />
-            {{else}}
-            <span class="attribute-value" align="center">
-              {{attribute.value}}
-            </span>
-            {{/if}}
-          </h4>
-        </td>
+          {{#if (isAValueOf attribute.name ../config.attributes)}}
+            <td colspan="10">
+              <h4 class="attributes-name box-title" align="center">
+                {{#if ../unlocked}}
+                  <input
+                    class="attributes-score"
+                    type="number"
+                    name="system.attributes.{{a}}.native"
+                    value="{{attribute.native}}"
+                    placeholder="0"
+                    onClick="this.select();"
+                  />
+                {{else}}
+                  <span class="attribute-value" align="center">
+                    {{attribute.value}}
+                  </span>
+                {{/if}}
+              </h4>
+            </td>
+          {{/if}}
         {{/each}}
         <td align="center">
           {{#if actor.system.modifiers.deploy}}
@@ -150,23 +155,26 @@
           {{/if}}
         </td>
       </tr>
-      {{#if actor.system.modifiers.deploy}}
-        {{#each actor.system.modifiers.attr as |attribute a|}}
-        <td colspan="10">
-          <h4 class="attributes-name box-title" align="center">
-            <input
-              class="attributes-score"
-              type="number"
-              name="system.modifiers.attr.{{a}}"
-              value="{{attribute}}"
-              placeholder="0"
-              onClick="this.select();"
-            />
-          </h4>
-        </td>
-        {{/each}}
-
-      {{/if}}
+      <tr>
+        {{#if actor.system.modifiers.deploy}}
+          {{#each actor.system.modifiers.attr as |attribute a|}}
+            {{#if (isAKeyOf a ../config.attributes)}}
+              <td colspan="10">
+                <h4 class="attributes-name box-title" align="center">
+                  <input
+                    class="attributes-score"
+                    type="number"
+                    name="system.modifiers.attr.{{a}}"
+                    value="{{attribute}}"
+                    placeholder="0"
+                    onClick="this.select();"
+                  />
+                </h4>
+              </td>
+            {{/if}}
+          {{/each}}
+        {{/if}}
+      </tr>
     </table>
   </div>
 </div>

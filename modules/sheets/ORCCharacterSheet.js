@@ -3,6 +3,8 @@ import * as ChatOrc from "../commons/chat.js";
 import * as EnchantOrc from "../commons/enchant.js";
 import * as ItemOrc from "../commons/item.js";
 import * as ActorOrc from "../commons/actor.js";
+import { ORC } from "../commons/config.js";
+
 
 export default class ORCCharacterSheet extends ActorSheet {
   static get defaultOptions() {
@@ -79,22 +81,23 @@ export default class ORCCharacterSheet extends ActorSheet {
   }
 
   activateListeners(html) {
-    html
-      .find(".sheet-change-lock")
-      .click(ActorOrc.onSheetChangelock.bind(this));
+    html.find(".sheet-change-lock").click(ActorOrc.onSheetChangelock.bind(this));
 
     html.find(".ap-deploy").click(this._onAPDeploy.bind(this));
     html.find(".nutrition-deploy").click(this._onNutritionDeploy.bind(this));
 
+    html.find(".spell-add").click(this._onSpellAdd.bind(this));
+    html.find(".spell-remove").click(this._onSpellRemove.bind(this));
+    html.find(".spell-activate").change(this._onSpellActivate.bind(this));
+    html.find(".spell-increase-nmax").change(this._onSpellIncreaseMax.bind(this));
+    
     html.find(".item-create").click(ItemOrc.onItemCreate.bind(this));
     html.find(".item-edit").click(ItemOrc.onItemEdit.bind(this));
     html.find(".item-delete").click(ItemOrc.onItemDelete.bind(this));
     html.find(".item-split").click(ItemOrc.onItemSplit.bind(this));
 
     html.find(".item-equipped").click(this._onItemEquipped.bind(this));
-    html
-      .find(".weapon-choose-ammo")
-      .change(this._onWeaponChooseAmmo.bind(this));
+    html.find(".weapon-choose-ammo").change(this._onWeaponChooseAmmo.bind(this));
     html.find(".update-stock").change(ItemOrc.onUpdateStock.bind(this));
     html.find(".armor-equipped").change(this._onArmorEquipped.bind(this));
     html.find(".armor-update-ap").change(this._onArmorUpdateAP.bind(this));
@@ -122,52 +125,24 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     html.find(".new-day").click(this._onNewDay.bind(this));
 
-    html
-      .find(".attack-with-weapon-roll")
-      .click(this._onAttackWithWeaponRoll.bind(this));
+    html.find(".attack-with-weapon-roll").click(this._onAttackWithWeaponRoll.bind(this));
     html.find(".enchant-deploy").click(EnchantOrc.onEnchantDeploy.bind(this));
     html.find(".enchant-roll").click(EnchantOrc.onEnchantRoll.bind(this));
-    html
-      .find(".enchant-activate")
-      .click(EnchantOrc.onEnchantActivate.bind(this));
+    html.find(".enchant-activate").click(EnchantOrc.onEnchantActivate.bind(this));
     html.find(".item-consume").click(this._onItemConsume.bind(this));
-    html
-      .find(".consumable-deactivate")
-      .click(this._onConsumableDeactivate.bind(this));
-    html
-      .find(".consumable-activable-deploy")
-      .click(ItemOrc.onConsumableDeploy.bind(this));
-    html
-      .find(".consumable-activable-reduce-duration")
-      .click(this._onConsumableReduceDuration.bind(this));
-    html
-      .find(".enchant-reduce-duration")
-      .click(EnchantOrc._onEnchantReduceDuration.bind(this));
-    html
-      .find(".capacity-activable-reduce-duration")
-      .click(this._onCapacityReduceDuration.bind(this));
-    html
-      .find(".capacity-activable-activate")
-      .click(this._onCapacityActivate.bind(this));
-    html
-      .find(".capacity-activable-deactivate")
-      .click(this._onCapacityDeactivate.bind(this));
-    html
-      .find(".capacity-choose-weapon")
-      .change(this._onCapacityChooseWeapon.bind(this));
-    html
-      .find(".weapon-choose-attribute")
-      .change(this._onWeaponChooseAttribute.bind(this));
+    html.find(".consumable-deactivate").click(this._onConsumableDeactivate.bind(this));
+    html.find(".consumable-activable-deploy").click(ItemOrc.onConsumableDeploy.bind(this));
+    html.find(".consumable-activable-reduce-duration").click(this._onConsumableReduceDuration.bind(this));
+    html.find(".enchant-reduce-duration").click(EnchantOrc._onEnchantReduceDuration.bind(this));
+    html.find(".capacity-activable-reduce-duration").click(this._onCapacityReduceDuration.bind(this));
+    html.find(".capacity-activable-activate").click(this._onCapacityActivate.bind(this));
+    html.find(".capacity-activable-deactivate").click(this._onCapacityDeactivate.bind(this));
+    html.find(".capacity-choose-weapon").change(this._onCapacityChooseWeapon.bind(this));
+    html.find(".weapon-choose-attribute").change(this._onWeaponChooseAttribute.bind(this));
 
-    html
-      .find(".capacity-status-resist-roll")
-      .click(this._onCapacityStatusResistRoll.bind(this));
+    html.find(".capacity-status-resist-roll").click(this._onCapacityStatusResistRoll.bind(this));
 
-    html.find(".spell-memorized").click(this._onSpellMemorized.bind(this));
     html.find(".launch-spell-roll").click(this._onLaunchSpellRoll.bind(this));
-    html.find(".control-invoc-roll").click(this._onControlInvocRoll.bind(this));
-
-    html.find(".spell-invoc").click(this._onSpellInvoc.bind(this));
 
     html.find(".wound-deploy").click(ItemOrc.onWoundDeploy.bind(this));
 
@@ -180,7 +155,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     let actor = this.actor;
     let data = this.getData();   //Ensure that the actor is correclty initialized
 
-    actor.update({
+    return actor.update({
       system: { ap: { optionDeploy: !actor.system.ap.optionDeploy } },
     });
   }
@@ -191,7 +166,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     let actor = this.actor;
     let data = this.getData();   //Ensure that the actor is correclty initialized
 
-    actor.update({
+    return actor.update({
       system: { modifiers: { deploy: !actor.system.modifiers.deploy } },
     });
   }
@@ -202,11 +177,142 @@ export default class ORCCharacterSheet extends ActorSheet {
     let actor = this.actor;
     let data = this.getData();   //Ensure that the actor is correclty initialized
 
-    actor.update({
+    return actor.update({
       system: {
         nutrition: { optionDeploy: !actor.system.nutrition.optionDeploy },
       },
     });
+  }
+
+  _onSpellAdd(event) {
+    event.preventDefault();
+    let actor = this.actor;
+    let data = this.getData();   //Ensure that the actor is correclty initialized
+    let type = event.currentTarget.dataset.type;
+
+    if(type == ORC.spellType.base){
+      let array = actor.system.magic.actives.bases.array;
+      if(array.length >= actor.system.magic.actives.bases.nmax) return;
+      array.push("");
+      return actor.update({system: {magic: {actives: {bases: {array: array}}}}});
+    }
+    if(type == ORC.spellType.shape){
+      let array = actor.system.magic.actives.shapes.array;
+      if(array.length >= actor.system.magic.actives.shapes.nmax) return;
+      array.push("");
+      return actor.update({system: {magic: {actives: {shapes: {array: array}}}}});
+    }
+    if(type == ORC.spellType.power){
+      let array = actor.system.magic.actives.powers.array;
+      if(array.length >= actor.system.magic.actives.powers.nmax) return;
+      array.push("");
+      return actor.update({system: {magic: {actives: {powers: {array: array}}}}});
+    }
+    if(type == ORC.spellType.modif){
+      let array = actor.system.magic.actives.modifs.array;
+      if(array.length >= actor.system.magic.actives.modifs.nmax) return;
+      array.push("");
+      return actor.update({system: {magic: {actives: {modifs: {array: array}}}}});
+    }
+  }
+
+  _onSpellRemove(event) {
+    event.preventDefault();
+    let actor = this.actor;
+    let data = this.getData();   //Ensure that the actor is correclty initialized
+    let type = event.currentTarget.dataset.type;
+
+    if(type == ORC.spellType.base){
+      let array = actor.system.magic.actives.bases.array;
+      array.pop();
+      return actor.update({system: {magic: {actives: {bases: {array: array}}}}});
+    }
+    if(type == ORC.spellType.shape){
+      let array = actor.system.magic.actives.shapes.array;
+      array.pop();
+      return actor.update({system: {magic: {actives: {shapes: {array: array}}}}});
+    }
+    if(type == ORC.spellType.power){
+      let array = actor.system.magic.actives.powers.array;
+      array.pop();
+      return actor.update({system: {magic: {actives: {powers: {array: array}}}}});
+    }
+    if(type == ORC.spellType.modif){
+      let array = actor.system.magic.actives.modifs.array;
+      array.pop();
+      return actor.update({system: {magic: {actives: {modifs: {array: array}}}}});
+    }
+  }
+
+  _onSpellIncreaseMax(event) {
+    event.preventDefault();
+    let actor = this.actor;
+    let data = this.getData();   //Ensure that the actor is correclty initialized
+    let type = event.currentTarget.dataset.type;
+
+    let nmax = event.currentTarget.value;
+
+    if(type == ORC.spellType.base){
+      return actor.update({system: {magic: {actives: {bases: {nmax: nmax}}}}});
+    }
+    if(type == ORC.spellType.shape){
+      return actor.update({system: {magic: {actives: {shapes: {nmax: nmax}}}}});
+    }
+    if(type == ORC.spellType.power){
+      return actor.update({system: {magic: {actives: {powers: {nmax: nmax}}}}});
+    }
+    if(type == ORC.spellType.modif){
+      return actor.update({system: {magic: {actives: {modifs: {nmax: nmax}}}}});
+    }
+  }
+
+
+  _onSpellActivate(event){
+    event.preventDefault();
+    let actor = this.actor;
+    let data = this.getData();   //Ensure that the actor is correclty initialized
+    let type = event.currentTarget.name;
+    let value = event.currentTarget.value;
+
+    if(type == ORC.spellType.base){
+      let array = actor.system.magic.actives.bases.array;
+      let length = array.length;
+      array[length-1] = value;
+      return actor.update({system: {magic: {actives: {bases: {array: array}}}}});
+    }
+    if(type == ORC.spellType.shape){
+      let array = actor.system.magic.actives.shapes.array;
+      let length = array.length;
+      array[length-1] = value;
+      return actor.update({system: {magic: {actives: {shapes: {array: array}}}}});
+    }
+    if(type == ORC.spellType.power){
+      let array = actor.system.magic.actives.powers.array;
+      let length = array.length;
+      array[length-1] = value;
+      return actor.update({system: {magic: {actives: {powers: {array: array}}}}});
+    }
+    if(type == ORC.spellType.modif){
+      let array = actor.system.magic.actives.modifs.array;
+      let length = array.length;
+      array[length-1] = value;
+      return actor.update({system: {magic: {actives: {modifs: {array: array}}}}});
+    }
+  }
+
+  _onWeaponChooseAttribute(event) {
+    event.preventDefault();
+    let actor = this.actor;
+    let data = this.getData();   //Ensure that the actor is correclty initialized
+    let element = event.currentTarget;
+    let weaponid = event.currentTarget.dataset.weaponid;
+    if(weaponid == null)
+      weaponid = element.closest(".item").dataset.itemId;
+    let item = actor.items.get(weaponid);
+    if (item.type != "weapon") return;
+
+    let maj = { system: { effective: { attribut: event.currentTarget.value } } };
+    return item.update(maj);
   }
 
   _onItemEquipped(event) {
@@ -244,89 +350,6 @@ export default class ORCCharacterSheet extends ActorSheet {
           },
         },
       });
-    }
-
-    return;
-  }
-
-  _onSpellMemorized(event) {
-    event.preventDefault();
-    let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
-
-    //Recover the item
-    let element = event.currentTarget;
-    let itemId = element.closest(".item").dataset.itemId;
-    let item = actor.items.get(itemId);
-    if (item == null || item.type != "spell") return;
-
-    //Check if we wnat to UNmemorize the spell
-    let currentState = item.system.memorized;
-
-    //Recover the actor's number of memorzied spells
-    let n;
-    if (item.system.isInvoc) n = actor.system.magic.nInvoc;
-    else n = actor.system.magic.nSpell;
-
-    //Check if the actor can memorize more spells
-    if (!currentState && n.effective >= n.value)
-     return;
-
-    //Inverse the memorized state
-    //item.update({ system: { memorized: !item.system.memorized } });
-
-    item.update(
-      { system: { memorized: !currentState } },
-    );
-
-     //Update the actor's number of memorized spells
-    if (item.system.isInvoc)
-      actor.update({
-        system: { magic: { nInvoc: { effective: 
-          currentState
-          ? n.effective - 1
-          : n.effective + 1
-        } } },
-      });
-    else
-      actor.update({
-        system: { magic: { nSpell: { effective: 
-          currentState
-          ? n.effective - 1
-          : n.effective + 1
-        } } },
-      });
- 
-    return;
-  }
-
-  _onSpellInvoc(event) {
-    event.preventDefault();
-    let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
-    let element = event.currentTarget;
-    let itemId = element.closest(".item").dataset.itemId;
-    let nInvoked = actor.system.magic.nInvoc.invoked;
-    let item = actor.items.get(itemId);
-
-    if (item == null || item.type != "spell" || !item.system.isInvoc) return;
-
-    if (!item.system.ifInvoc.invoked) {
-      nInvoked++;
-      actor.update({
-        system: {
-          magic: { nInvoc: { invoked: nInvoked } },
-        },
-      });
-      item.update({ system: { ifInvoc: { invoked: true } } });
-    } else {
-      nInvoked--;
-      actor.update({
-        system: {
-          magic: { nInvoc: { invoked: nInvoked } },
-        },
-      });
-      item.update({ system: { ifInvoc: { invoked: false } } });
     }
 
     return;
@@ -379,8 +402,10 @@ export default class ORCCharacterSheet extends ActorSheet {
     let actor = this.actor;
     let data = this.getData();   //Ensure that the actor is correclty initialized
     let element = event.currentTarget;
-    let itemId = element.closest(".item").dataset.itemId;
-    let item = actor.items.get(itemId);
+    let weaponid = event.currentTarget.dataset.weaponid;
+    if(weaponid == null)
+      weaponid = element.closest(".item").dataset.itemId;
+    let item = actor.items.get(weaponid);
     if (item.type != "weapon") return;
 
     let maj = { system: { ammo: event.currentTarget.value } };
@@ -461,6 +486,13 @@ export default class ORCCharacterSheet extends ActorSheet {
     let actor = this.actor;
     let data = this.getData();   //Ensure that the actor is correclty initialized
 
+    let costmp = event.currentTarget.dataset.costmp;
+    if(costmp != null){
+      let newMP = actor.system.mp.value - costmp;
+      if (newMP < 0) return;
+      actor.update({system: {mp: {value: newMP}}});
+    }
+
     DiceOrc.AttributeRoll({
       actor: this.actor,
       attribute: event.currentTarget.dataset,
@@ -475,6 +507,13 @@ export default class ORCCharacterSheet extends ActorSheet {
     event.preventDefault();
     let actor = this.actor;
     let data = this.getData();   //Ensure that the actor is correclty initialized
+
+    let costmp = event.currentTarget.dataset.costmp;
+    if(costmp != null){
+      let newMP = actor.system.mp.value - costmp;
+      if (newMP < 0) return;
+      actor.update({system: {mp: {value: newMP}}});
+    }
 
     DiceOrc.AttackRoll({
       actor: this.actor,
@@ -626,6 +665,13 @@ export default class ORCCharacterSheet extends ActorSheet {
     let actor = this.actor;
     let data = this.getData();   //Ensure that the actor is correclty initialized
 
+    let costmp = event.currentTarget.dataset.costmp;
+    if(costmp != null){
+      let newMP = actor.system.mp.value - costmp;
+      if (newMP < 0) return;
+      actor.update({system: {mp: {value: newMP}}});
+    }
+
     //Recover the weapon
     const weapon = actor.items
       .filter(function (item) {
@@ -675,41 +721,12 @@ export default class ORCCharacterSheet extends ActorSheet {
     event.preventDefault();
     let actor = this.actor;
     let data = this.getData();   //Ensure that the actor is correclty initialized
-    
-    //Recover the spell
-    const spell = actor.items
-      .filter(function (item) {
-        return item.type == "spell";
-      })
-      .filter(function (item) {
-        return item._id == event.currentTarget.dataset.spellid;
-      })[0];
 
     //Do the roll
     await DiceOrc.SpellRoll({
       actor: actor,
       attribute: event.currentTarget.dataset,
       modif: actor.system.modifAllAttributes,
-      spell: spell,
-    });
-
-    //Consume enchant and capacity on spell
-    this.consumeOnRoll({ onSpell: true });
-
-    return;
-  }
-
-  async _onControlInvocRoll(event) {
-    event.preventDefault();
-    let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
-    
-    //Do the roll
-    await DiceOrc.SpellRoll({
-      actor: actor,
-      attribute: event.currentTarget.dataset,
-      modif: actor.system.modifAllAttributes,
-      spell: null,
     });
 
     //Consume enchant and capacity on spell
@@ -920,23 +937,18 @@ export default class ORCCharacterSheet extends ActorSheet {
     return item.update(maj);
   }
 
-  _onWeaponChooseAttribute(event) {
-    event.preventDefault();
-    let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
-    let element = event.currentTarget;
-    let itemId = element.closest(".item").dataset.itemId;
-    let item = actor.items.get(itemId);
-    if (item.type != "weapon") return;
-
-    let maj = { system: { effective: { attribut: event.currentTarget.value } } };
-    return item.update(maj);
-  }
-
   _onCapacityStatusResistRoll(event) {
     let actor = this.actor;
     let data = this.getData();   //Ensure that the actor is correclty initialized
     let actorData = actor.system;
+
+    let costmp = event.currentTarget.dataset.costmp;
+    if(costmp != null){
+      let newMP = actor.system.mp.value - costmp;
+      if (newMP < 0) return;
+      actor.update({system: {mp: {value: newMP}}});
+    }
+
     DiceOrc.StatusResistRoll({
       actor: actor,
       modif: actorData.modifAllAttributes + actorData.status.modifResist,
@@ -975,7 +987,11 @@ export default class ORCCharacterSheet extends ActorSheet {
     if (item == null) return;
     let itemData = item.system;
     if (!itemData.activeEffect == null) return;
-    if (itemData.ifActivable.activated) return;
+    if (itemData.activated) return;
+
+    let newMP = actor.system.mp.value - itemData.costMP;
+    if (newMP < 0) return;
+    actor.update({system: {mp: {value: newMP}}});
 
     //Roll the effective duration
     let durationEffective = 0;
@@ -1338,7 +1354,8 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     //Update the owned weapon effective values (damage, effect and attack)
     this.updateWeaponsEffectiveValues(data);
-    //Update the spell effective values (rolls, effect...)
+
+    //Update the current spell effective values (damage, effect and attack)
     this.updateSpellEffectiveValues(data);
 
     //Calculate the initative bonus
@@ -1385,9 +1402,9 @@ export default class ORCCharacterSheet extends ActorSheet {
     //Magic
     let magic = actorData.magic;
     //Magic damage and heal bonus
-    magic.power.value = "";
+    magic.powerModif = "";
     //MP reduction
-    magic.mpReduc.value = 0;
+    magic.mpReduc = 0;
 
     //Roll limits
     //Critical
@@ -1480,10 +1497,10 @@ export default class ORCCharacterSheet extends ActorSheet {
         actorData.damageBonus.value += "+" + actorData.modifiers.damageBonus;
 
     if(actorData.modifiers.powerBonus != "")
-      if(actorData.magic.power.value == "")
-        actorData.magic.power.value += actorData.modifiers.powerBonus;
+      if(actorData.magic.powerModif == "")
+        actorData.magic.powerModif += actorData.modifiers.powerBonus;
       else
-        actorData.magic.power.value += "+" + actorData.modifiers.powerBonus;
+        actorData.magic.powerModif += "+" + actorData.modifiers.powerBonus;
 
     actorData.ini.flat += actorData.modifiers.initiative;
   }
@@ -1510,10 +1527,10 @@ export default class ORCCharacterSheet extends ActorSheet {
         actorData.magic.nSpell.value += itemData.nSpell;
         actorData.magic.nInvoc.value += itemData.nInvoc;
         if (itemData.magicPower != "")
-          if (actorData.magic.power.value == "")
-            actorData.magic.power.value += itemData.magicPower;
-          else actorData.magic.power.value += "+" + itemData.magicPower;
-        actorData.magic.mpReduc.value += itemData.mpReduc;
+          if (actorData.magic.powerModif == "")
+            actorData.magic.powerModif += itemData.magicPower;
+          else actorData.magic.powerModif += "+" + itemData.magicPower;
+        actorData.magic.mpReduc += itemData.mpReduc;
       }
 
       //Activated consumables
@@ -1540,11 +1557,11 @@ export default class ORCCharacterSheet extends ActorSheet {
             else actorData.damageBonus.value += "+" + effect.damageBonusModif;
           }
           if(effect.magicPower!== "") {
-            if (actorData.magic.power.value == "")
-              actorData.magic.power.value += effect.magicPower;
-            else actorData.magic.power.value += "+" + effect.magicPower;
+            if (actorData.magic.powerModif == "")
+              actorData.magic.powerModif += effect.magicPower;
+            else actorData.magic.powerModif += "+" + effect.magicPower;
           }
-          actorData.magic.mpReduc.value += effect.mpReduc;
+          actorData.magic.mpReduc += effect.mpReduc;
         }
       }
       //All items with weight
@@ -1557,50 +1574,73 @@ export default class ORCCharacterSheet extends ActorSheet {
       //Add the enchant
       const enchant = itemData.enchant;
       if (enchant && enchant.activated) {
-        actorData.attributes.strengh.value += enchant.strenghModif;
-        actorData.attributes.dexterity.value += enchant.dexterityModif;
-        actorData.attributes.perception.value += enchant.perceptionModif;
-        actorData.attributes.social.value += enchant.socialModif;
-        actorData.attributes.intel.value += enchant.intelModif;
+        if(enchant.strenghModif)
+          actorData.attributes.strengh.value += enchant.strenghModif;
+        if(enchant.dexterityModif)
+         actorData.attributes.dexterity.value += enchant.dexterityModif;
+        if(enchant.perceptionModif)
+          actorData.attributes.perception.value += enchant.perceptionModif;
+        if(enchant.socialModif)
+          actorData.attributes.social.value += enchant.socialModif;
+        if(enchant.intelModif)
+          actorData.attributes.intel.value += enchant.intelModif;
+        if(enchant.hpMaxModif)
         actorData.hp.valueMax += enchant.hpMaxModif;
+        if(enchant.mpMaxModif)
         actorData.mp.valueMax += enchant.mpMaxModif;
-        actorData.ap.value += enchant.apModif;
+        if(enchant.apModif)
+          actorData.ap.value += enchant.apModif;
 
+        if(enchant.dexterityModif)
         actorData.defence.value += enchant.defenceModif;
 
-        actorData.roll.limitCritical += enchant.limitCriticalModif;
-        actorData.roll.limitFumble += enchant.limitFumbleModif;
-        actorData.ini.flat += enchant.initiativeModif;
+        if(enchant.limitCriticalModif)
+          actorData.roll.limitCritical += enchant.limitCriticalModif;
 
-        actorData.nutrition.foodNeededDay.value += enchant.foodNeededDayModif;
-        actorData.nutrition.drinkNeededDay.value += enchant.drinkNeededDayModif;
+        if(enchant.limitFumbleModif)
+          actorData.roll.limitFumble += enchant.limitFumbleModif;
+
+        if(enchant.initiativeModif)
+          actorData.ini.flat += enchant.initiativeModif;
+        if(enchant.foodNeededDayModif)
+          actorData.nutrition.foodNeededDay.value += enchant.foodNeededDayModif;
+        if(enchant.drinkNeededDayModif)
+          actorData.nutrition.drinkNeededDay.value += enchant.drinkNeededDayModif;
         if(enchant.damageBonusModif !== ""){
           if (actorData.damageBonus.value == "")
             actorData.damageBonus.value += enchant.damageBonusModif;
           else actorData.damageBonus.value += "+" + enchant.damageBonusModif;
         }
-        actorData.magic.nSpell.value += enchant.nSpell;
-        actorData.magic.nInvoc.value += enchant.nInvoc;
+
         if(enchant.magicPower !== ""){
-          if (actorData.magic.power.value == "")
-            actorData.magic.power.value += enchant.magicPower;
-          else actorData.magic.power.value += "+" + enchant.magicPower;
+          if (actorData.magic.powerModif == "")
+            actorData.magic.powerModif += enchant.magicPower;
+          else actorData.magic.powerModif += "+" + enchant.magicPower;
         }
-        actorData.magic.mpReduc.value += enchant.mpReduc;
+        if(enchant.mpReduc)
+          actorData.magic.mpReduc += enchant.mpReduc;
       }
 
       //Wounds
       if (item.type == "wound") {
-        actorData.attributes.strengh.value += itemData.strenghModif;
-        actorData.attributes.dexterity.value += itemData.dexterityModif;
-        actorData.attributes.perception.value += itemData.perceptionModif;
-        actorData.attributes.social.value += itemData.socialModif;
-        actorData.attributes.intel.value += itemData.intelModif;
-        actorData.hp.valueMax += itemData.hpMaxModif;
-        actorData.mp.valueMax += itemData.mpMaxModif;
-        actorData.nutrition.foodNeededDay.value += itemData.foodNeededDayModif;
-        actorData.nutrition.drinkNeededDay.value +=
-          itemData.drinkNeededDayModif;
+        if(itemData.strenghModif)
+          actorData.attributes.strengh.value += itemData.strenghModif;
+        if(itemData.dexterityModif)
+          actorData.attributes.dexterity.value += itemData.dexterityModif;
+        if(itemData.perceptionModif)
+          actorData.attributes.perception.value += itemData.perceptionModif;
+        if(itemData.socialModif)
+          actorData.attributes.social.value += itemData.socialModif;
+        if(itemData.intelModif)
+          actorData.attributes.intel.value += itemData.intelModif;
+        if(itemData.hpMaxModif)
+          actorData.hp.valueMax += itemData.hpMaxModif;
+        if(itemData.mpMaxModif)
+          actorData.mp.valueMax += itemData.mpMaxModif;
+        if(itemData.foodNeededDayModif)
+          actorData.nutrition.foodNeededDay.value += itemData.foodNeededDayModif;
+        if(itemData.drinkNeededDayModif)
+          actorData.nutrition.drinkNeededDay.value += itemData.drinkNeededDayModif;
         if(itemData.damageBonusModif != ""){
           if (actorData.damageBonus.value == "")
             actorData.damageBonus.value += itemData.damageBonusModif;
@@ -1760,6 +1800,12 @@ export default class ORCCharacterSheet extends ActorSheet {
         actorData.attributes.strengh.value += Math.floor(
           (actorData.hp.valueMax - actorData.hp.value) / 10
         );
+        actorData.attributes.dexterity.value += Math.floor(
+          (actorData.hp.valueMax - actorData.hp.value) / 10
+        );
+        //actorData.modifiers.attack += Math.floor(
+        //  (actorData.hp.valueMax - actorData.hp.value) / 10
+        //);
       }
       actorData.modifAllAttributes += itemData.modifAllAttributes;
       if (itemData.isStatusResistRoll)
@@ -2008,7 +2054,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     for (let [key, weapon] of Object.entries(weapons)) {
       let item = actor.items.get(weapon._id);
 
-      if (!item.system.equipped) continue;
+      if (!item.system.equipped) continue;  //Skip unequipped weapons
 
       let attackModif = 0;
       if (item.system.effective.attribut === "orc.character.attributes.strengh") 
@@ -2059,49 +2105,136 @@ export default class ORCCharacterSheet extends ActorSheet {
     return;
   }
 
-  updateSpellEffectiveValues(data) {
-    const actor = data.actor;
-    const spells = data.spells;
+  updateSpellEffectiveValues(data){
+    let actor = data.actor;
 
-    for (let [key, spell] of Object.entries(spells)) {
-      let item = actor.items.get(spell._id);
+    //Set defaut values
+    actor.system.magic.effective.difficulty = ""
+    actor.system.magic.effective.power = ""
+    actor.system.magic.effective.powerMult = 1
+    actor.system.magic.effective.effect = ""
+    actor.system.magic.effective.range = actor.system.magic.effective.rangeDefault;
+    actor.system.magic.effective.cost = ""
+    actor.system.magic.effective.costMult = 1
+    actor.system.magic.effective.useHP = false
+    actor.system.magic.effective.duration = ""
+    actor.system.magic.effective.precise = false
 
-      if (!item.system.memorized) continue;
+    //Loop over all active spells
+    let bases = actor.system.magic.actives.bases.array;
+    let shapes = actor.system.magic.actives.shapes.array;
+    let powers = actor.system.magic.actives.powers.array;
+    let modifs = actor.system.magic.actives.modifs.array;
+    let spells = bases.concat(shapes, powers, modifs);
+    for (const id of spells){
+      let item = actor.items.get(id);
 
-      let effectivePower = item.system.power;
-      if (actor.system.magic.power.value != "") {
-        effectivePower += "+" + actor.system.magic.power.value;
+      if(item == null)         continue;
+      if(item.type != "spell") continue;
+      
+      if (item.system.power != "" && item.system.power != "0"){
+        if(actor.system.magic.effective.power == "") actor.system.magic.effective.power = item.system.power;
+        else if(item.system.power[0] == "-") actor.system.magic.effective.power += item.system.power;
+        else                                         actor.system.magic.effective.power += " + " + item.system.power;
+      } 
+      if (item.system.effect != ""){
+        if(actor.system.magic.effective.effect == "") actor.system.magic.effective.effect = item.system.effect;
+        else                                          actor.system.magic.effective.effect += ", " + item.system.effect; 
       }
-      let effectiveEffect = item.system.effect;
-      let effectiveCost = item.system.cost;
-      if (!item.system.useHP && actor.system.magic.mpReduc.value != 0)
-        effectiveCost += "+" + actor.system.magic.mpReduc.value.toString();
-      let effectiveLaunchRoll = actor.system.magic.roll.value;
-      let effectiveControlRoll = actor.system.magic.roll.value;
-      //effectiveLaunchRoll += item.system.difficulty;
-      effectiveControlRoll += item.system.ifInvoc.difficulty;
-      if (actor.system.magic.nInvoc.invoked > 1)
-        effectiveControlRoll +=
-          (actor.system.magic.nInvoc.invoked - 1) *
-          actor.system.magic.nInvoc.controlDiffIncrease;
-      //if (effectiveLaunchRoll > 100) effectiveLaunchRoll = 100;
-      //if (effectiveControlRoll > 100) effectiveControlRoll = 100;
-
-      item.update(
-        {
-          system: {
-            effective: {
-              power: effectivePower,
-              effect: effectiveEffect,
-              cost: effectiveCost,
-              rollLaunch: effectiveLaunchRoll,
-              rollControl: effectiveControlRoll,
-            },
-          },
-        },
-        { render: item._id == spells[spells.length-1]._id ? true : false }    //Render only the last item (to avoid huge loop)
-      );
+      if (item.system.cost != "" && item.system.cost != "0"){
+        if(actor.system.magic.effective.cost == "") actor.system.magic.effective.cost = item.system.cost;
+        else if(item.system.cost[0] == "-") actor.system.magic.effective.cost += item.system.cost;
+        else                                        actor.system.magic.effective.cost += " + " + item.system.cost; 
+      }
+      if (item.system.difficulty != "" && item.system.difficulty != "0"){
+        if(actor.system.magic.effective.difficulty == "") actor.system.magic.effective.difficulty = item.system.difficulty;
+        else if(item.system.difficulty[0] == "-") actor.system.magic.effective.difficulty += item.system.difficulty;
+        else                                              actor.system.magic.effective.difficulty += " + " + item.system.difficulty; 
+      }
+      if (item.system.duration != "" && item.system.duration != "0"){
+        if(actor.system.magic.effective.duration == "") actor.system.magic.effective.duration = item.system.duration;
+        else if(item.system.duration[0] == "-") actor.system.magic.effective.duration += item.system.duration;
+        else                                            actor.system.magic.effective.duration += " + " + item.system.duration; 
+      }
+      actor.system.magic.effective.powerMult *= item.system.powerMult;
+      actor.system.magic.effective.costMult *= item.system.costMult;
+      actor.system.magic.effective.useHP += item.system.useHP;
+      actor.system.magic.effective.precise += item.system.precise;
+      actor.system.magic.effective.range += item.system.range;
     }
+
+    //Apply modificators
+    if (actor.system.magic.effective.modif.power != "" && actor.system.magic.effective.modif.power != "0"){
+      if(actor.system.magic.effective.power == "") actor.system.magic.effective.power = actor.system.magic.effective.modif.power;
+      else if(actor.system.magic.effective.modif.power[0] == "-") actor.system.magic.effective.power += actor.system.magic.effective.modif.power;
+      else                                         actor.system.magic.effective.power += " + " + actor.system.magic.effective.modif.power;
+    } 
+    if (actor.system.magic.effective.modif.effect != ""){
+      if(actor.system.magic.effective.effect == "") actor.system.magic.effective.effect = actor.system.magic.effective.modif.effect;
+      else                                          actor.system.magic.effective.effect += ", " + actor.system.magic.effective.modif.effect; 
+    }
+    if (actor.system.magic.effective.modif.cost != "" && actor.system.magic.effective.modif.cost != "0"){
+      if(actor.system.magic.effective.cost == "") actor.system.magic.effective.cost = actor.system.magic.effective.modif.cost;
+      else if(actor.system.magic.effective.modif.cost[0] == "-") actor.system.magic.effective.cost += actor.system.magic.effective.modif.cost;
+      else                                        actor.system.magic.effective.cost += " + " + actor.system.magic.effective.modif.cost; 
+    }
+    if (actor.system.magic.effective.modif.difficulty != "" && actor.system.magic.effective.modif.difficulty != "0"){
+      if(actor.system.magic.effective.difficulty == "") actor.system.magic.effective.difficulty = actor.system.magic.effective.modif.difficulty;
+      else if(actor.system.magic.effective.modif.difficulty[0] == "-") actor.system.magic.effective.difficulty += actor.system.magic.effective.modif.difficulty;
+      else                                              actor.system.magic.effective.difficulty += " + " + actor.system.magic.effective.modif.difficulty; 
+    }
+    if (actor.system.magic.effective.modif.duration != "" && actor.system.magic.effective.modif.duration != "0"){
+      if(actor.system.magic.effective.duration == "") actor.system.magic.effective.duration = actor.system.magic.effective.modif.duration;
+      else if(actor.system.magic.effective.modif.duration[0] == "-") actor.system.magic.effective.duration += actor.system.magic.effective.modif.duration;    
+      else                                            actor.system.magic.effective.duration += " + " + actor.system.magic.effective.modif.duration; 
+    }
+    if(actor.system.magic.effective.modif.powerMult)
+      actor.system.magic.effective.powerMult *= actor.system.magic.effective.modif.powerMult;
+    if(actor.system.magic.effective.modif.costMult)
+      actor.system.magic.effective.costMult *= actor.system.magic.effective.modif.costMult;
+    if(actor.system.magic.effective.modif.range)
+      actor.system.magic.effective.range += actor.system.magic.effective.modif.range;
+
+    //Set default values
+    //if (actor.system.magic.effective.power == "")  //Default power is 0
+    //actor.system.magic.effective.power = "0";
+    if (actor.system.magic.effective.cost == "") //Default cost is 0
+    actor.system.magic.effective.cost = "0";
+    if (actor.system.magic.effective.difficulty == "") //Default difficulty is 0
+    actor.system.magic.effective.difficulty = "0";
+    //if (actor.system.magic.effective.duration == "") //Default difficulty is 1 tr
+    //actor.system.magic.effective.duration = "1";
+    if (actor.system.magic.effective.range < 0)
+      actor.system.magic.effective.range = 0;
+
+    //Add braket if necessary
+    const regex = /[+]/;  
+    if(actor.system.magic.effective.cost != "" && actor.system.magic.effective.cost.search(regex) >= 0)
+      actor.system.magic.effective.cost = "(" + actor.system.magic.effective.cost + ")";
+    if(actor.system.magic.effective.power != "" && actor.system.magic.effective.power.search(regex) >= 0)
+      actor.system.magic.effective.power = "(" + actor.system.magic.effective.power + ")";
+    if(actor.system.magic.effective.difficulty != "" && actor.system.magic.effective.difficulty.search(regex) >= 0)
+      actor.system.magic.effective.difficulty = "(" + actor.system.magic.effective.difficulty + ")";    
+    if(actor.system.magic.effective.duration != "" && actor.system.magic.effective.duration.search(regex) >= 0)
+      actor.system.magic.effective.duration = "(" + actor.system.magic.effective.duration + ")";   
+
+    if (!actor.system.magic.effective.difficulty.startsWith("+") && !actor.system.magic.effective.difficulty.startsWith("-")) 
+      actor.system.magic.roll.formula = actor.system.magic.roll.value.toString() + "+" + actor.system.magic.effective.difficulty;
+    else
+      actor.system.magic.roll.formula = actor.system.magic.roll.value.toString() + actor.system.magic.effective.difficulty;
+
+    //Avoid too many digits
+    actor.system.magic.effective.costMult = Math.floor(actor.system.magic.effective.costMult * 100) / 100
+    actor.system.magic.effective.powerMult = Math.floor(actor.system.magic.effective.powerMult * 100) / 100
+    actor.system.magic.effective.range = Math.floor(actor.system.magic.effective.range * 100) / 100
+
+    
+    //Calculate min, mean and max values
+    actor.system.magic.effective.costValues = DiceOrc.CalculateValuesFromDiceFormula({formula: actor.system.magic.effective.cost, mult: actor.system.magic.effective.costMult})
+    actor.system.magic.effective.powerValues = DiceOrc.CalculateValuesFromDiceFormula({formula: actor.system.magic.effective.power, mult: actor.system.magic.effective.powerMult,  useMedian: actor.system.magic.effective.precise})
+    actor.system.magic.effective.difficultyValues = DiceOrc.CalculateValuesFromDiceFormula({formula: actor.system.magic.effective.difficulty})
+    actor.system.magic.roll.formulaValues = DiceOrc.CalculateValuesFromDiceFormula({formula: actor.system.magic.roll.formula})
+    actor.system.magic.effective.durationValues = DiceOrc.CalculateValuesFromDiceFormula({formula: actor.system.magic.effective.duration})
 
     return;
   }

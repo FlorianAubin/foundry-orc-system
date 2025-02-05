@@ -1,13 +1,19 @@
 import * as Chat from "./chat.js";
+import { ORC } from "./config.js";
 
 export function AttributeRoll({
   actor = null,
   attribute = null,
   modif = 0,
   extraMessageData = {},
-} = {}) {
-  if (attribute.attributelocalmodif != null)
-    modif += parseFloat(attribute.attributelocalmodif);
+  } = {}) {
+
+  if (attribute.attributelocalmodif != null){
+    let rollFormula = attribute.attributelocalmodif
+    let roll = new Roll(rollFormula, {}, {});
+    let rollResult = roll.roll({ async: false });
+    modif += parseFloat(rollResult.total);
+  }
 
   let rollFormula = "1d100";
   let rollData = {}; //for some reasons, rollData are not conserved on ChatMessage, use rollOptions instead
@@ -87,14 +93,11 @@ export function SpellRoll({
   actor = null,
   attribute = null,
   modif = 0,
-  spell = null,
   extraMessageData = {},
 }) {
   let costFormula, powerFormula, durationFormula;
   let costroll = null, powerroll = null, durationroll = null;
-  let costRoll = null,
-    powerRoll = null,
-    durationRoll = null;
+  let costRoll = null, powerRoll = null, durationRoll = null;
 
   let roll;
   let rollData = {}; 
@@ -102,27 +105,39 @@ export function SpellRoll({
     visibleByPlayers: actor.ownership.default,
   }; 
 
-  if (spell == null) 
-    return;
-
   let critical = null;
-  if(!spell.system.noRoll)
-    if (this.AttributeRoll({
-                actor,
-                attribute,
-                modif,
-                extraMessageData,
-              }) 
-          <= actor.system.roll.limitCritical)
+  if (this.AttributeRoll({
+        actor,
+        attribute,
+        modif,
+        extraMessageData,
+        }) 
+        <= actor.system.roll.limitCritical){
           critical = 1;
+        }
 
     //Consume ressource
-    costFormula = spell.system.effective.cost;
+    costFormula = actor.system.magic.effective.cost;
     if (typeof costFormula !== "string") costFormula = costFormula.toString();
+    //Apply multi
+    if (actor.system.magic.effective.costMult > 0){
+      costFormula = "(" + costFormula + ")"
+      costFormula += " * " + (actor.system.magic.effective.costMult).toString();
+    }
+    //Apply reductions
+    if (actor.system.magic.mpReduc > 0)
+      costFormula += " + " + (actor.system.magic.mpReduc).toString();
+    else if (actor.system.magic.mpReduc < 0)
+      costFormula += + (actor.system.magic.mpReduc).toString();
+    //Do the roll
     if (costFormula != "") {
       costroll = new Roll(costFormula, rollData, rollOptions);
       costRoll = costroll.roll({ async: false });
-      if (spell.system.useHP) {
+      //Integer cost 
+      if (costRoll._total > 0 && costRoll._total < 1) costRoll._total = 1 
+      costRoll._total = Math.floor(costRoll._total)
+      //Remove ressource from actor
+      if (actor.system.magic.effective.useHP) {
         if (actor.system.hp.value <= 0) return;
         let newValue = actor.system.hp.value - costRoll.total;
         if (newValue < actor.system.hp.surplus)
@@ -136,15 +151,25 @@ export function SpellRoll({
     }
 
     //Roll power
-    powerFormula = spell.system.effective.power;
+    powerFormula = actor.system.magic.effective.power;
+    //Apply multi
+    if (actor.system.magic.effective.powerMult > 0){
+      powerFormula = "(" + powerFormula + ")"
+      powerFormula += " * " + (actor.system.magic.effective.powerMult).toString();
+    }
+    //Apply modificators
+    if(actor.system.magic.powerModif != "")
+      powerFormula += " + " + actor.system.magic.powerModif;
+    //Convert to string
     if (typeof powerFormula !== "string")
       powerFormula = powerFormula.toString();
+    //Roll
     if (powerFormula != ""){
       powerroll = new Roll(powerFormula, rollData, rollOptions);
       powerRoll = powerroll.roll({ async: false });
     }
     if (powerRoll != null){
-      let powerMin= 0;
+      let powerMin= -10000;
       //If critical -> max power
       if (critical) {
         //Split the formula between the "+"
@@ -158,26 +183,69 @@ export function SpellRoll({
           } else powerMin += parseFloat(formulaSplitPlus[i]);
         }
       }
+      //Integer power 
       if (powerRoll._total < powerMin) powerRoll._total = powerMin;
+      powerRoll._total = Math.floor(powerRoll._total)
     }
 
-
     //Roll duration
-    durationFormula = spell.system.duration;
+    durationFormula = actor.system.magic.effective.duration;
     if (typeof durationFormula !== "string")
       durationFormula = durationFormula.toString();
     if (durationFormula != ""){
       durationroll = new Roll(durationFormula, rollData, rollOptions);
       durationRoll = durationroll.roll({ async: false });
+      //Integer duration 
+      durationRoll._total = Math.floor(durationRoll._total)
     }
 
     extraMessageData.title = game.i18n.format("orc.dialog.rollSpell.title", {
-      spellName: spell.name,
       actorName: actor.name,
     });
-    extraMessageData.effect = spell.system.effect;
-    extraMessageData.useHP = spell.system.useHP;
-    extraMessageData.durationUnit = spell.system.durationUnit;
+    extraMessageData.range = actor.system.magic.effective.range;
+    extraMessageData.effect = actor.system.magic.effective.effect;
+    extraMessageData.useHP = actor.system.magic.effective.useHP;
+    extraMessageData.durationUnit = actor.system.magic.effective.durationUnit;
+
+    //Get active spell names
+    let bases = actor.system.magic.actives.bases.array;
+    let shapes = actor.system.magic.actives.shapes.array;
+    let powers = actor.system.magic.actives.powers.array;
+    let modifs = actor.system.magic.actives.modifs.array;
+    const spells = bases.concat(shapes, powers, modifs);
+
+    let baseNames  = null;
+    let shapeNames = null;
+    let powerNames = null;
+    let modifNames = null;
+
+    for (const id of spells){
+      let item = actor.items.get(id);
+      
+      if(item == null)         continue;
+      if(item.type != "spell") continue;
+  
+      let name = item.name;
+      let type = item.system.type;
+
+      //Depending of the spell type, fill the correct string
+      if(type == ORC.spellType.base){
+        if(baseNames == null) baseNames = name;
+        else                  baseNames += ", " + name;
+      }
+      if(type == ORC.spellType.shape){
+        if(shapeNames == null) shapeNames = name;
+        else                   shapeNames += ", " + name;
+      }
+      if(type == ORC.spellType.power){
+        if(powerNames == null) powerNames = name;
+        else                   powerNames += ", " + name;
+      }
+      if(type == ORC.spellType.modif){
+        if(modifNames == null) modifNames = name;
+        else                   modifNames += ", " + name;
+      }
+    }
 
     //Display the message
     /*
@@ -191,6 +259,7 @@ export function SpellRoll({
     */
     Chat.SpellRollToCustomFullMessage(
       { costRoll, powerRoll, durationRoll },
+      {baseNames, shapeNames, powerNames, modifNames},
       { ...extraMessageData }
     );
   
@@ -212,11 +281,11 @@ export function DodgeRoll({
 }
 
 export function StatusResistRoll({ actor = null, modif = 0 }) {
-  let physical = actor.system.attributes.physical;
+  let strengh = actor.system.attributes.strengh;
   let attribute = {
-    attributename: "Physique", //physical.name,    ////c'est pas beau !
-    attributevalue: physical.value,
-    attributevaluebase: physical.native,
+    attributename: "Constitution", //strengh.name,    ////c'est pas beau !
+    attributevalue: strengh.value,
+    attributevaluebase: strengh.native,
   };
   return (
     this.AttributeRoll({
@@ -224,7 +293,7 @@ export function StatusResistRoll({ actor = null, modif = 0 }) {
       attribute: attribute,
       modif: modif,
     }) >
-    physical.value + modif
+    strengh.value + modif
   );
 }
 
@@ -517,4 +586,61 @@ export function EnchantRoll({
   });
 
   return rollResult.total;
+}
+
+// From a dice formula, calculate the min, mean and max values
+export function CalculateValuesFromDiceFormula({formula = "", mult = 1, useMedian = false}) {
+  if(formula == "")
+    return { min: 0, avg: 0, max: 0 };
+
+  // Helper function to calculate the median of a die
+  const median = (sides) => (sides % 2 === 0 ? (sides / 2 + 0.5) : Math.ceil(sides / 2));
+
+  // Parse the formula into individual components (e.g., numbers and dice rolls)
+  const parts = formula.match(/([+-]?\d+d\d+|[+-]?\d+)/g);
+
+  let min = 0, max = 0, avg = 0;
+
+  for (const part of parts) {
+    const sign = part[0] === '-' ? -1 : 1; // Determine if the part is negative
+    const cleanPart = part.startsWith("+") || part.startsWith("-") ? part.slice(1) : part;
+
+    if (cleanPart.includes("d")) {
+        // Handle dice rolls (e.g., "2d6")
+        const [count, sides] = cleanPart.split("d").map(Number);
+
+        const dieMin = useMedian ? median(sides) : 1;
+        const dieMax = sides;
+
+        // Adjust the average when using median replacement
+        let dieAvg;
+        if (useMedian) {
+            const dieMedian = median(sides);
+            const belowMedianProbability = (dieMedian - 1) / sides;
+
+            // Adjust for the group of dice
+            const adjustedAvgForGroup = belowMedianProbability * dieMedian + 
+                (1 - belowMedianProbability) * (sides + 1) / 2;
+            dieAvg = adjustedAvgForGroup * count;
+        } else {
+            dieAvg = count * (1 + sides) / 2;
+        }
+
+        // Accumulate results for the group with the appropriate sign
+        min += sign * count * dieMin;
+        max += sign * count * dieMax;
+        avg += sign * dieAvg;
+    } else {
+        // Handle fixed numbers (e.g., "6")
+        const value = Number(cleanPart);
+
+        // Add the fixed number to the results with the appropriate sign
+        min += sign * value;
+        max += sign * value;
+        avg += sign * value;
+    }
+  }
+
+  // Return the calculated results
+  return { min: Math.round(min * mult), avg: Math.round(avg * mult), max: Math.round(max * mult) };
 }

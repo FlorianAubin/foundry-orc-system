@@ -276,148 +276,188 @@
     {{/each}}
   </table>
 
-  {{#if (or actor.system.magic.nSpell.effective actor.system.magic.nInvoc.effective)}}
+
+
   <table class="item-list spell-list">
-    {{#if actor.system.magic.nSpell.effective}}
-    <tr class="main-header flexrow">
-      <th class="content">{{localize "orc.spellsMemorized"}}</th>
+    <tr class="header flexrow">
+      <th class="content" colspan="2">{{localize "orc.character.magicRoll"}}</th>
+      <th class="content"></th>   
+      <th class="content"></th>   
+      <th class="content"></th>   
+      <th class="content"></th>   
+      <td align="center">
+        {{#if actor.system.modifiers.deploy}}
+          <span class="modifier-deploy button fas fa-arrow-up-to-line" colspan="5"></span>
+        {{else}}
+          <span class="modifier-deploy button fas fa-arrow-down-short-wide" colspan="5"></span>
+        {{/if}}
+      </td>
     </tr>
     <tr class="header flexrow">
-      <th class="content"></th>
+      <th class="content">{{localize "orc.spell.difficulty"}}</th>
+      <th class="content">{{localize "orc.spell.cost"}}</th>    
       <th class="content">{{localize "orc.spell.power"}}</th>
       <th class="content">{{localize "orc.spell.range"}}</th>
-      <th class="content">{{localize "orc.spell.duration"}}</th>
-      <th class="content">{{localize "orc.spell.cost"}}</th>
+      <th class="content">{{localize "orc.spell.duration"}}</th>    
       <th class="effect-list">{{localize "orc.spell.effect"}}</th>
-      <th class="content">{{localize "orc.spell.launch"}}</th>
+      <th class="content"></th>        
     </tr>
-    {{#each spells as |spell|}}
-      {{#if (and 
-              spell.system.memorized
-              (not spell.system.isRitual) 
-              (not spell.system.isInvoc)
-            )}}
-        <tr class="item flexrow" data-item-id="{{spell._id}}">
-          <td class="content">
-            <img
-              src="{{spell.img}}"
-              data-edit="img"
-              title="{{spell.name}}"
-              height="24"
-              width="24"
-            />
-            <div>{{spell.name}}</div>
-          </td>
-          <td class="content">{{spell.system.effective.power}}</td>
-          <td class="content">{{spell.system.range}}</td>
-          <td class="content">{{spell.system.duration}}&nbsp;{{spell.system.durationUnit}}</td>
-          <td class="content">
-            {{#if spell.system.effective.cost}}
-            {{spell.system.effective.cost}}&nbsp;{{#if spell.system.useHP}}{{localize "orc.character.hp"}}{{else}}{{localize "orc.character.mp"}}{{/if}}
-            {{/if}}
-          </td>
-          <td class="effect-list">{{spell.system.effect}}</td>
-          <td class="content" style="display: flex">
-            {{#if (not spell.system.noRoll)}}
-              {{spell.system.effective.rollLaunch}}
-            {{/if}}
-            {{#if ../actor.system.magic.canLaunchSpell}}
-              <span
-                class="launch-spell-roll button fas fa-dice"
-                data-attributename="{{localize 'orc.character.magicRoll'}}"
-                data-attributevalue="{{spell.system.effective.rollLaunch}}"
-                data-attributevaluebase="{{../actor.system.magic.roll.native}}"
-                data-spellid="{{spell._id}}"
-              ></span>
-            {{/if}}
-          </td>
-        </tr>
-      {{/if}}
-    {{/each}}
+    <tr class="item flexrow", style="gap: 10px;">
+      <td class="content">{{actor.system.magic.effective.difficulty}}</td>
+      <td class="content">{{#if (isNotEmptyString actor.system.magic.effective.cost)}}{{actor.system.magic.effective.cost}}{{#if actor.system.magic.effective.costMult}} X {{actor.system.magic.effective.costMult}}{{/if}} {{#if actor.system.magic.mpReduc}} + {{actor.system.magic.mpReduc}} {{/if}} ({{#if actor.system.magic.effective.useHP}}{{localize "orc.spell.HP"}}{{else}}{{localize "orc.spell.MP"}}{{/if}}){{/if}}</td>
+      <td class="content">{{#if (isNotEmptyString actor.system.magic.effective.power)}}{{actor.system.magic.effective.power}}{{#if actor.system.magic.effective.powerMult}} X {{actor.system.magic.effective.powerMult}}{{/if}} {{#if (isNotEmptyString actor.system.magic.powerModif)}} + {{actor.system.magic.powerModif}} {{/if}}{{#if actor.system.magic.effective.precise}}({{localize "orc.spell.precise"}}){{/if}}{{/if}}</td>
+      <td class="content">{{actor.system.magic.effective.range}}</td>
+      <td class="content">{{#if actor.system.magic.effective.duration}}{{actor.system.magic.effective.duration}} {{actor.system.magic.effective.durationUnit}}{{/if}}</td>
+      <td class="effect-list">{{actor.system.magic.effective.effect}}</td>
+      <td class="content">
+        <span class="launch-spell-roll button fas fa-dice"
+          data-attributename="{{localize 'orc.character.magicRoll'}}"
+          data-attributevalue="{{actor.system.magic.roll.value}}"
+          data-attributevaluebase="{{actor.system.magic.roll.native}}"
+          data-attributelocalmodif="{{actor.system.magic.effective.difficulty}}">
+            {{actor.system.magic.roll.formula}}
+        </span>
+    </tr>
+    <tr class="item flexrow", style="gap: 10px;">
+      <td class="content">{{#if (isNotEmptyString actor.system.magic.effective.difficulty)}}[{{actor.system.magic.effective.difficultyValues.min}}, <{{actor.system.magic.effective.difficultyValues.avg}}>, {{actor.system.magic.effective.difficultyValues.max}}]{{/if}}</td>
+      <td class="content">{{#if (isNotEmptyString actor.system.magic.effective.cost)}}[{{actor.system.magic.effective.costValues.min}}, <{{actor.system.magic.effective.costValues.avg}}>, {{actor.system.magic.effective.costValues.max}}]{{/if}}</td>
+      <td class="content">{{#if (isNotEmptyString actor.system.magic.effective.power)}}[{{actor.system.magic.effective.powerValues.min}}, <{{actor.system.magic.effective.powerValues.avg}}>, {{actor.system.magic.effective.powerValues.max}}]{{/if}}</td>
+      <td class="content"></td>
+      <td class="content">{{#if (isNotEmptyString actor.system.magic.effective.duration)}}[{{actor.system.magic.effective.durationValues.min}}, <{{actor.system.magic.effective.durationValues.avg}}>, {{actor.system.magic.effective.durationValues.max}}]{{/if}}</td>
+      <td class="content"></td>
+      <td class="content">[{{actor.system.magic.roll.formulaValues.min}}, <{{actor.system.magic.roll.formulaValues.avg}}>, {{actor.system.magic.roll.formulaValues.max}}]</td>
+    </tr>
+    {{#if actor.system.modifiers.deploy}}
+      <tr class="item flexrow", style="gap: 10px;">
+        <td class="content">
+          <input
+            name="system.magic.effective.modif.difficulty"
+            type="text"
+            value="{{actor.system.magic.effective.modif.difficulty}}"
+            placeholder=""
+          />
+        </td class="content">  
+        <td class="content" style="display: flex; align-items: center;">
+          <input
+            name="system.magic.effective.modif.cost"
+            type="text"
+            value="{{actor.system.magic.effective.modif.cost}}"
+            placeholder=""
+          />
+          <input
+            name="system.magic.effective.modif.costMult"
+            type="number"
+            value="{{actor.system.magic.effective.modif.costMult}}"
+            placeholder=""
+          />
+        </td>  
+        <td class="content" style="display: flex; align-items: center;">
+          <input
+            name="system.magic.effective.modif.power"
+            type="text"
+            value="{{actor.system.magic.effective.modif.power}}"
+            placeholder=""
+          />
+          <input
+            name="system.magic.effective.modif.powerMult"
+            type="number"
+            value="{{actor.system.magic.effective.modif.powerMult}}"
+            placeholder=""
+          />
+        </td>  
+        <td class="content">
+          <input
+            name="system.magic.effective.modif.range"
+            type="number"
+            value="{{actor.system.magic.effective.modif.range}}"
+            placeholder=""
+          />
+        </td> 
+        <td class="content">
+          <input
+            name="system.magic.effective.modif.duration"
+            type="text"
+            value="{{actor.system.magic.effective.modif.duration}}"
+            placeholder=""
+          />
+        </td> 
+        <td class="effect-list">
+          <input
+            name="system.magic.effective.modif.effect"
+            type="text"
+            value="{{actor.system.magic.effective.modif.effect}}"
+            placeholder=""
+          />
+        </td>
+        <td class="content"></td>           
+      </tr>
     {{/if}}
-    {{#if actor.system.magic.nInvoc.effective}}
-    <tr class="main-header flexrow">
-      <th class="content">{{localize "orc.invocsMemorized"}}</th>
-    </tr>
-    <tr class="header flexrow">
-      <th class="content"></th>
-      <th class="content">{{localize "orc.spell.duration"}}</th>
-      <th class="content">{{localize "orc.spell.cost"}}</th>
-      <th class="content">{{localize "orc.spell.launch"}}</th>
-      <th class="content">{{localize "orc.spell.control"}}</th>
-      <th class="content">{{localize "orc.spell.invoked"}}</th>
-    </tr>
-    {{#each spells as |spell|}}
-      {{#if (and 
-              spell.system.isInvoc
-              spell.system.memorized
-            )}}
-        <tr class="item flexrow" data-item-id="{{spell._id}}">
-          <td class="content">
-            <img
-              src="{{spell.img}}"
-              data-edit="img"
-              title="{{spell.name}}"
-              height="24"
-              width="24"
-            />
-            <div>{{spell.name}}</div>
-          </td>
-          <td class="content">{{spell.system.duration}}&nbsp;{{spell.system.durationUnit}}</td>
-          <td class="content">
-            {{#if spell.system.effective.cost}}
-            {{spell.system.effective.cost}}&nbsp;{{#if spell.system.useHP}}{{localize "orc.character.hp"}}{{else}}{{localize "orc.character.mp"}}{{/if}}
-            {{/if}}
-          </td>
-          <td class="content" style="display: flex">
-            {{#if (not spell.system.ifInvoc.invoked)}}
-              {{spell.system.effective.rollLaunch}}
-              {{#if ../actor.system.magic.canLaunchSpell}}
-                <span
-                  class="launch-spell-roll button fas fa-dice"
-                  data-attributename="{{localize 'orc.character.magicRoll'}}"
-                  data-attributevalue="{{spell.system.effective.rollLaunch}}"
-                  data-attributevaluebase="{{../actor.system.magic.roll.native}}"
-                  data-spellid="{{spell._id}}"
-                ></span>
-              {{/if}}
-            {{/if}}
-          </td>
-          <td class="content" style="display: flex">
-            {{#if spell.system.ifInvoc.invoked}}
-              {{#if spell.system.ifInvoc.fixed}}
-                <span>{{localize "orc.spell.fixed"}}</span>
-              {{else}}
-                {{spell.system.effective.rollControl}}
-                {{#if ../actor.system.magic.canLaunchSpell}}
-                  <span
-                    class="control-invoc-roll button fas fa-dice"
-                    data-attributename="{{localize 'orc.character.magicRoll'}}"
-                    data-attributevalue="{{spell.system.effective.rollControl}}"
-                    data-attributevaluebase="{{../actor.system.magic.roll.native}}"
-                    data-spellid="{{spell._id}}"
-                  ></span>
+    <tr class="flexrow">
+      {{#each config.spellType as |type id|}}
+        <td>
+          <table>
+              <tr class="header flexrow">
+                <th class="content">
+                  {{localize type}}&nbsp;&nbsp;
+                  <a class="spell-add" data-type={{type}} align="center" title="Add Spell">
+                    <i class="button fas fa-plus"></i>
+                  </a>  &nbsp;
+                  <a class="spell-remove" data-type={{type}} align="center" title="Remove Spell">
+                    <i class="button fas fa-minus"></i>
+                  </a>               
+                  {{#each ../actor.system.magic.actives as |activeType|}}
+                    {{#if (eq activeType.name type)}}
+                    <span>&nbsp;&nbsp;(</span>
+                      <span>
+                        {{activeType.array.length}}&nbsp;/&nbsp;
+                      </span>
+                      {{#if ../../unlocked}}
+                        <span>
+                          <input
+                            class="spell-increase-nmax"
+                            data-type={{type}}
+                            type="number"
+                            name="activeType.nmax"
+                            value="{{activeType.nmax}}"
+                            onClick="this.select();"
+                            style="width: 30px"
+                          />
+                        </span>
+                      {{else}}
+                        {{activeType.nmax}}
+                      {{/if}}
+                      <span>)</span>
+                    {{/if}}
+                  {{/each}}
+                </th>
+              </tr>
+              {{#each ../actor.system.magic.actives as |activeType|}}
+                {{#if (eq activeType.name type)}}
+                  <tr class="content">
+                    {{#each activeType.array as |element id|}} 
+                      <tr class="item flexrow">
+                        <td class="content">
+                          <select class="spell-activate" name={{activeType.name}} align="center" title="Activate Spell">
+                            {{#select element}}   
+                              <option value=""></option>
+                              {{#each ../../../spells as |spell|}}
+                                {{#if (eq spell.system.type type)}}
+                                  <option value="{{spell._id}}">{{spell.name}}</option>
+                                {{/if}}
+                              {{/each}}
+                            {{/select}}
+                          </select>
+                        </td>
+                      </td>
+                    {{/each}}
+                  </tr>
                 {{/if}}
-              {{/if}}
-            {{/if}}
-          </td>
-           <td class="content">
-            {{#if spell.system.ifInvoc.invoked}}
-            <span
-              class="content spell-invoc button fas fa-check"
-            ></span>
-            {{else}}
-            <span
-              class="content spell-invoc button fas fa-xmark"
-            ></span>
-            {{/if}}
-          </td>
-        </tr>
-      {{/if}}
-    {{/each}}
-    {{/if}}
+              {{/each}}
+          </table>
+        </td>
+      {{/each}}
+    </tr>       
   </table>
-  {{/if}}
 
   <table class="item-list capacity-list">
     <tr class="main-header flexrow">
@@ -472,8 +512,9 @@
             data-attributevalue="{{attribute.value}}"
             data-attributevaluebase="{{attribute.native}}"
             data-attributelocalmodif="{{capacity.system.modifLocal}}"
+            data-costmp="{{capacity.system.costMP}}"
             align="center">
-            {{localize attribute.name}}
+            {{localize attribute.name}} {{#if (isLargerThan capacity.system.modifLocal 0)}} + {{capacity.system.modifLocal}} {{else}} {{#if (isLowerThan capacity.system.modifLocal 0)}} {{capacity.system.modifLocal}} {{/if}} {{/if}}
           </td>
           {{/if}}
           {{/each}}
@@ -481,7 +522,7 @@
         {{#if capacity.system.isAttackRoll}}
           <td class="content" align="center">
               {{#each ../weapons as |weapon id|}}
-              {{#if (eq weapon._id capacity.system.weaponLocal)}}
+                {{#if (eq weapon._id capacity.system.weaponLocal)}}
                   <span
                     class="content attack-with-weapon-roll button fas fa-dice"
                     data-attributename="{{localize 'orc.character.attack'}}"
@@ -490,8 +531,10 @@
                     data-attributelocalmodif="{{capacity.system.modifLocal}}"
                     data-weaponid="{{weapon._id}}"
                     data-nammo="{{capacity.system.nammo}}"
+                    data-costmp="{{capacity.system.costMP}}"
+                    data-costmp="{{capacity.system.costMP}}"
                     style="height: 15px"
-                ></span>
+                >{{#if (isLargerThan capacity.system.modifLocal 0)}} + {{capacity.system.modifLocal}} {{else}} {{#if (isLowerThan capacity.system.modifLocal 0)}} {{capacity.system.modifLocal}} {{/if}} {{/if}}</span>
                 {{/if}}
               {{/each}}
               <select class="capacity-choose-weapon" name="system.weaponLocal" align="center">
@@ -508,13 +551,43 @@
                   {{/each}}
                 {{/select}}
               </select>
+
+              {{#each ../weapons as |weapon id|}}
+                {{#if (eq weapon._id capacity.system.weaponLocal)}}
+                  {{#if weapon.system.useAmmo}}
+                    <select class="weapon-choose-ammo" data-weaponid="{{weapon._id}}" name="system.ammo" align="center">
+                      {{#select weapon.system.ammo}} 
+                        <option value=""></option>
+                        {{#each ../../ammos as |ammo|}}
+                          <option value="{{ammo._id}}">{{ammo.name}}</option>
+                        {{/each}} 
+                      {{/select}}
+                    </select>
+                  {{/if}}
+                  <select class="weapon-choose-attribute" data-weaponid="{{weapon._id}}" name="system.effective.attribut" align="center">
+                    {{#select weapon.system.effective.attribut}}
+                      <option value=""></option>
+                      {{#each system.attributes as |attribut id|}}
+                        {{#if attribut.usable}}
+                          <option value="{{attribut.name}}">
+                            {{localize attribut.name}}
+                          </option>
+                        {{/if}}
+                      {{/each}}
+                    {{/select}}
+                  </select>
+              {{/if}}
+            {{/each}}
+
+
           </td>
         {{/if}}
         {{#if capacity.system.isStatusResistRoll}}
           <td
             class="capacity-status-resist-roll button fas fa-dice"
+            data-costmp="{{capacity.system.costMP}}"
             align="center">
-            {{localize "orc.character.attributes.strengh"}}
+            {{localize "orc.character.attributes.strengh"}} + {{capacity.system.modifStatusResist}}
           </td>
         {{/if}}
         {{#if (and 
@@ -723,26 +796,6 @@
                     >{{item.system.enchant.damageBonusModif}}</td>
                   </tr>
                 {{/if}}
-                {{#if item.system.enchant.nSpell}}
-                    <tr>
-                      <td align="center">{{localize
-                          "orc.enchant.nSpell"
-                        }}</td>
-                      <td
-                        align="center"
-                      >{{item.system.enchant.nSpell}}</td>
-                    </tr>
-                  {{/if}}
-                  {{#if item.system.enchant.nInvoc}}
-                    <tr>
-                      <td align="center">{{localize
-                          "orc.enchant.nInvoc"
-                        }}</td>
-                      <td
-                        align="center"
-                      >{{item.system.enchant.nInvoc}}</td>
-                    </tr>
-                  {{/if}}
                   {{#if (isNotEmptyString item.system.enchant.magicPower)}}
                     <tr>
                       <td align="center">{{localize

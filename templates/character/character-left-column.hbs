@@ -263,16 +263,12 @@
     <tr align="center">
       <th>{{localize "orc.character.dodge"}}</th>
       <td>{{actor.system.dodge.value}}</td>
-      {{#if unlocked}}
-        <td>({{localize actor.system.dodge.attribut}})</td>
-      {{else}}
-        <td
-          class="dodge-roll button fas fa-dice"
-          data-attributename="{{localize 'orc.character.dodge'}}"
-          data-attributevalue="{{actor.system.dodge.value}}"
-          data-attributevaluebase="{{actor.system.dodge.native}}"
-        ></td>
-      {{/if}}
+      <td
+        class="dodge-roll button fas fa-dice"
+        data-attributename="{{localize 'orc.character.dodge'}}"
+        data-attributevalue="{{actor.system.dodge.value}}"
+        data-attributevaluebase="{{actor.system.dodge.native}}"
+      ></td>
       {{#if actor.system.modifiers.deploy}}
         <td align="center">
           <input
@@ -288,7 +284,7 @@
     </tr>
   {{/if}}
 
-  {{#if (or actor.system.modifiers.deploy actor.system.modifiers.damageBonus)}}
+  {{#if (or actor.system.modifiers.deploy (isZeroOrEmptyString actor.system.modifiers.damageBonus))}}
     <tr align="center">
       <th>{{localize "orc.character.damageBonus"}}</th>
         {{#if actor.system.modifiers.deploy}}
@@ -301,16 +297,14 @@
               onClick="this.select();"
               style="width: 30px"
             />
-          </td>
+        </td>
         {{else}}
-        {{#if actor.system.modifiers.damageBonus}}
           <td>{{actor.system.damageBonus.value}}</td>
         {{/if}}
-      {{/if}}
     </tr>
   {{/if}}
   
-  {{#if (or actor.system.modifiers.deploy actor.system.magic.power.value)}}
+  {{#if (or actor.system.modifiers.deploy (isZeroOrEmptyString actor.system.modifiers.powerBonus))}}
     <tr align="center">
       <th>{{localize "orc.character.magicPower"}}</th>
       {{#if actor.system.modifiers.deploy}}
@@ -325,7 +319,7 @@
           />
         </td>
       {{else}}
-        <td>{{actor.system.magic.power.value}}</td>
+        <td>{{actor.system.modifiers.powerBonus}}</td>
       {{/if}}
     </tr>
   {{/if}}
