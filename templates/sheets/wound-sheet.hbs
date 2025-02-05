@@ -38,8 +38,14 @@
     <div class="content">
       <table>
         <tr>
-          {{#if (or unlocked item.system.physicalModif)}}
-            <th>{{localize "orc.wound.physicalModif"}}</th>
+          {{#if (or unlocked item.system.strenghModif)}}
+            <th>{{localize "orc.wound.strenghModif"}}</th>
+          {{/if}}
+          {{#if (or unlocked item.system.dexterityModif)}}
+            <th>{{localize "orc.wound.dexterityModif"}}</th>
+          {{/if}}
+          {{#if (or unlocked item.system.perceptionModif)}}
+            <th>{{localize "orc.wound.perceptionModif"}}</th>
           {{/if}}
           {{#if (or unlocked item.system.socialModif)}}
             <th>{{localize "orc.wound.socialModif"}}</th>
@@ -52,9 +58,25 @@
           {{#if unlocked}}
             <td align="center">
               <input
-                name="system.physicalModif"
+                name="system.strenghModif"
                 type="number"
-                value="{{item.system.physicalModif}}"
+                value="{{item.system.strenghModif}}"
+                placeholder="0"
+              />
+            </td>
+            <td align="center">
+              <input
+                name="system.dexterityModif"
+                type="number"
+                value="{{item.system.dexterityModif}}"
+                placeholder="0"
+              />
+            </td>
+            <td align="center">
+              <input
+                name="system.perceptionModif"
+                type="number"
+                value="{{item.system.perceptionModif}}"
                 placeholder="0"
               />
             </td>
@@ -75,9 +97,19 @@
               />
             </td>
           {{else}}
-            {{#if item.system.physicalModif}}
+            {{#if item.system.strenghModif}}
               <td align="center">
-                <span>{{item.system.physicalModif}}</span>
+                <span>{{item.system.strenghModif}}</span>
+              </td>
+            {{/if}}
+            {{#if item.system.dexterityModif}}
+              <td align="center">
+                <span>{{item.system.dexterityModif}}</span>
+              </td>
+            {{/if}}
+            {{#if item.system.perceptionModif}}
+              <td align="center">
+                <span>{{item.system.perceptionModif}}</span>
               </td>
             {{/if}}
             {{#if item.system.socialModif}}

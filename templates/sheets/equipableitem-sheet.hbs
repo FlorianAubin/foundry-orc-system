@@ -38,45 +38,6 @@
     <div class="content">
       <table>
         <tr>
-          {{#if (or unlocked item.system.nSpell)}}
-          <th>{{localize "orc.equipableitem.nSpell"}}</th>
-          {{/if}}
-          {{#if (or unlocked item.system.nInvoc)}}
-          <th>{{localize "orc.equipableitem.nInvoc"}}</th>
-          {{/if}}
-        </tr>
-        <tr>
-          {{#if unlocked}}
-            <td align="center">
-              <input
-                name="system.nSpell"
-                type="number"
-                value="{{item.system.nSpell}}"
-                placeholder="0"
-              />
-            </td>
-            <td align="center">
-              <input
-                name="system.nInvoc"
-                type="number"
-                value="{{item.system.nInvoc}}"
-                placeholder="0"
-              />
-            </td>
-          {{else}}
-            {{#if item.system.nSpell}}
-            <td align="center">
-              <span>{{item.system.nSpell}}</span>
-            </td>
-            {{/if}}
-            {{#if item.system.nInvoc}}
-            <td align="center">
-              <span>{{item.system.nInvoc}}</span>
-            </td>
-            {{/if}}
-          {{/if}}
-        </tr>
-        <tr>
           {{#if (or unlocked (isNotEmptyString item.system.magicPower))}}
           <th>{{localize "orc.equipableitem.magicPower"}}</th>
           {{/if}}

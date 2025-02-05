@@ -74,9 +74,6 @@ export async function onItemDelete(event) {
   const item = actor.items.get(li.data("itemId"));
   if (item == null) return;
 
-  if (item.type == "spell" && item.system.memorized) {
-    this._onSpellMemorized(event);
-  }
   item.delete();
 
   return;

@@ -35,6 +35,8 @@ export default class ORCArmorSheet extends ItemSheet {
       relativeTo: this.item,
     });
 
+    this._prepareCharacterData(data)
+
     //console.log(data);
     return data;
   }
@@ -52,4 +54,23 @@ export default class ORCArmorSheet extends ItemSheet {
       .find(".description-deploy")
       .click(ItemOrc.onDescriptionDeploy.bind(this));
   }
+
+
+  async _prepareCharacterData(data) {
+    let itemData = data.data.system;
+
+    // max armor
+    if(itemData.ap > itemData.apmax){
+      this.item.update(
+        {
+          system: {
+            ap: itemData.apmax
+          },
+        },
+      );
+    }
+    
+  }
 }
+
+

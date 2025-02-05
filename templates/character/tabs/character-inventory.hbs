@@ -14,8 +14,8 @@
     <th class="content">{{localize "orc.weapon.damage"}}</th>
     <th class="content">{{localize "orc.weapon.range"}}</th>
     <th class="content">{{localize "orc.weapon.defenceModif"}}</th>
-    <th class="content">{{localize "orc.weapon.attackModif"}}</th>
     <th class="content">{{localize "orc.weapon.effect"}}</th>
+    <th class="content">{{localize "orc.character.attack"}}</th>
     <th class="content">{{localize "orc.weapon.weight"}}</th>
     <th class="content">{{localize "orc.weapon.equipped"}}</th>
     <th class="content"></th>
@@ -35,8 +35,32 @@
       <td class="content">{{weapon.system.damage}}</td>
       <td class="content">{{weapon.system.range}}</td>
       <td class="content">{{weapon.system.defenceModif}}</td>
-      <td class="content">{{weapon.system.attackModif}}</td>
       <td class="content">{{weapon.system.effect}}</td>
+      <td class="content">
+        <div>
+          <select class="weapon-choose-attribute" name="system.effective.attribut" align="center">
+            {{#select weapon.system.effective.attribut}}
+              <option value=""></option>
+              {{#each system.attributes as |attribut id|}}
+                {{#if attribut.usable}}
+                  <option value="{{attribut.name}}">
+                    {{localize attribut.name}}
+                  </option>
+                {{/if}}
+              {{/each}}
+            {{/select}}
+          </select>
+        </div>
+        <div align="center">
+          <span class="attack-with-weapon-roll button fas fa-dice"
+              data-attributename="{{localize 'orc.character.attack'}}"
+              data-attributevalue="{{weapon.system.effective.attack}}"
+              data-attributevaluebase="{{../actor.system.attack.native}}"
+              data-weaponid="{{weapon._id}}">
+              {{weapon.system.effective.attack}}
+          </span>
+        </div>
+      </td>
       <td class="content">{{weapon.system.weight}}</td>
       {{#if weapon.system.equipped}}
         <td class="content item-equipped button fas fa-check"></td>
@@ -173,7 +197,7 @@
         <div>{{armor.name}}</div>
       </td>
       <td class="content">{{localize armor.system.bodyPart}}</td>
-      <td class="content">{{armor.system.ap}}</td>
+      <td class="content">{{armor.system.ap}} / {{armor.system.apmax}}</td>
       <td class="content">{{armor.system.weight}}</td>
       <td class="content" align="center">
         <a class="item-edit" align="center" title="Edit Item">

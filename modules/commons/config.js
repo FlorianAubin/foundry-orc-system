@@ -1,5 +1,13 @@
 export const ORC = {};
 
+ORC.attributes = {
+  strengh: "orc.character.attributes.strengh",
+  dexterity: "orc.character.attributes.dexterity",
+  perception: "orc.character.attributes.perception",
+  social: "orc.character.attributes.social",
+  intel: "orc.character.attributes.intel",
+};
+
 ORC.combatStyleList = {
   standard: "orc.combatStyleList.standard",
   offensive: "orc.combatStyleList.offensive",
@@ -17,13 +25,9 @@ ORC.bodyPartList = {
   legs: "orc.bodyPartList.legs",
 };
 
-ORC.magicSchoolList = {
-  elem: "orc.magicSchoolList.elem",
-  demon: "orc.magicSchoolList.demon",
-  arcane: "orc.magicSchoolList.arcane",
-  rune: "orc.magicSchoolList.rune",
-  life: "orc.magicSchoolList.life",
-  death: "orc.magicSchoolList.death",
-  time: "orc.magicSchoolList.time",
-  reality: "orc.magicSchoolList.reality",
+ORC.spellType = {
+  base: "orc.spell.types.base",
+  shape: "orc.spell.types.shape",
+  power: "orc.spell.types.power",
+  modif: "orc.spell.types.modif",
 };

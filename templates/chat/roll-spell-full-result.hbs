@@ -3,6 +3,26 @@
     <tr class="title">
       <th colspan="4">{{title}}</th>
     </tr>
+    {{#if spellTypes.bases}}
+    <tr>
+      <td colspan="4">{{localize "orc.spell.types.base"}}(s): {{spellTypes.bases}}</td>
+    </tr>
+    {{/if}}
+    {{#if spellTypes.shapes}}
+    <tr>
+      <td colspan="4">{{localize "orc.spell.types.shape"}}(s): {{spellTypes.shapes}}</td>
+    </tr>
+    {{/if}}
+    {{#if spellTypes.powers}}
+    <tr>
+      <td colspan="4">{{localize "orc.spell.types.power"}}(s): {{spellTypes.powers}}</td>
+    </tr>
+    {{/if}}
+    {{#if spellTypes.modifs}}
+    <tr>
+      <td colspan="4">{{localize "orc.spell.types.modif"}}(s): {{spellTypes.modifs}}</td>
+    </tr>
+    {{/if}}
     {{#if costRoll.formula}}
       <tr>
         <th class="header">{{localize "orc.spell.cost"}}</th>
@@ -51,6 +71,13 @@
       </tr>
       <tr>{{{durationTooltip}}}</tr>
     {{/if}}
+
+    <tr>
+      <th class="header">{{localize "orc.spell.range"}}</th>
+      <td class="dice-total" colspan="3">
+        {{range}}
+      </td>
+    </tr>
 
     {{#if effect}}
       <tr class="effects">

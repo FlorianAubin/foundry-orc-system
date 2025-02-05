@@ -193,8 +193,14 @@
     </table>
     <table>
       <tr>
-        {{#if (or unlocked item.system.enchant.physicalModif)}}
-          <th>{{localize "orc.enchant.physicalModif"}}</th>
+        {{#if (or unlocked item.system.enchant.strenghModif)}}
+          <th>{{localize "orc.enchant.strenghModif"}}</th>
+        {{/if}}
+        {{#if (or unlocked item.system.enchant.dexterityModif)}}
+          <th>{{localize "orc.enchant.dexterityModif"}}</th>
+        {{/if}}
+        {{#if (or unlocked item.system.enchant.perceptionModif)}}
+          <th>{{localize "orc.enchant.perceptionModif"}}</th>
         {{/if}}
         {{#if (or unlocked item.system.enchant.socialModif)}}
           <th>{{localize "orc.enchant.socialModif"}}</th>
@@ -207,9 +213,25 @@
         {{#if unlocked}}
           <td align="center">
             <input
-              name="system.enchant.physicalModif"
+              name="system.enchant.strenghModif"
               type="number"
-              value="{{item.system.enchant.physicalModif}}"
+              value="{{item.system.enchant.strenghModif}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.enchant.dexterityModif"
+              type="number"
+              value="{{item.system.enchant.dexterityModif}}"
+              placeholder="0"
+            />
+          </td>
+          <td align="center">
+            <input
+              name="system.enchant.perceptionModif"
+              type="number"
+              value="{{item.system.enchant.perceptionModif}}"
               placeholder="0"
             />
           </td>
@@ -230,9 +252,19 @@
             />
           </td>
         {{else}}
-          {{#if item.system.enchant.physicalModif}}
+          {{#if item.system.enchant.strenghModif}}
             <td align="center">
-              <span>{{item.system.enchant.physicalModif}}</span>
+              <span>{{item.system.enchant.strenghModif}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.enchant.dexterityModif}}
+            <td align="center">
+              <span>{{item.system.enchant.dexterityModif}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.enchant.perceptionModif}}
+            <td align="center">
+              <span>{{item.system.enchant.perceptionModif}}</span>
             </td>
           {{/if}}
           {{#if item.system.enchant.socialModif}}
@@ -247,7 +279,8 @@
           {{/if}}
         {{/if}}
       </tr>
-
+    </table>
+    <table>
       <tr>
         {{#if (or unlocked item.system.enchant.hpMaxModif)}}
           <th>{{localize "orc.enchant.hpMaxModif"}}</th>
@@ -303,7 +336,6 @@
           {{/if}}
         {{/if}}
       </tr>
-
       <tr>
         {{#if (or unlocked item.system.enchant.attackModif)}}
           <th>{{localize "orc.enchant.attackModif"}}</th>
@@ -495,47 +527,6 @@
           {{#if (isNotEmptyString item.system.enchant.damageBonusModif)}}
             <td align="center">
               <span>{{item.system.enchant.damageBonusModif}}</span>
-            </td>
-          {{/if}}
-        {{/if}}
-      </tr>
-    </table>
-    <table>
-      <tr>
-        {{#if (or unlocked item.system.enchant.nSpell)}}
-          <th>{{localize "orc.enchant.nSpell"}}</th>
-        {{/if}}
-        {{#if (or unlocked item.system.enchant.nInvoc)}}
-          <th>{{localize "orc.enchant.nInvoc"}}</th>
-        {{/if}}
-      </tr>
-      <tr>
-        {{#if unlocked}}
-          <td align="center">
-            <input
-              name="system.enchant.nSpell"
-              type="number"
-              value="{{item.system.enchant.nSpell}}"
-              placeholder="0"
-            />
-          </td>
-          <td align="center">
-            <input
-              name="system.enchant.nInvoc"
-              type="number"
-              value="{{item.system.enchant.nInvoc}}"
-              placeholder="0"
-            />
-          </td>
-        {{else}}
-          {{#if item.system.enchant.nSpell}}
-            <td align="center">
-              <span>{{item.system.enchant.nSpell}}</span>
-            </td>
-          {{/if}}
-          {{#if item.system.enchant.nInvoc}}
-            <td align="center">
-              <span>{{item.system.enchant.nInvoc}}</span>
             </td>
           {{/if}}
         {{/if}}

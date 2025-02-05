@@ -44,14 +44,20 @@
         <tr>
           <td align="center">
             {{#if unlocked}}
+              max:
+              <input
+                name="system.apmax"
+                type="number"
+                value="{{item.system.apmax}}"
+                placeholder="0"
+              />
+            {{else}}
               <input
                 name="system.ap"
                 type="number"
                 value="{{item.system.ap}}"
                 placeholder="0"
-              />
-            {{else}}
-              <span>{{item.system.ap}}</span>
+              /> <span> (max: {{item.system.apmax}})</span>
             {{/if}}
           </td>
           <td align="center">

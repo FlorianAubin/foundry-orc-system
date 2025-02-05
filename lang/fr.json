@@ -48,7 +48,9 @@
       "ap": "Armure",
       "encumbrance": "Encombrement",
       "attributes": {
-        "physical": "Physique",
+        "strengh": "Constitution",
+        "dexterity": "Dexterite",
+        "perception": "Perception",
         "social": "Social",
         "intel": "Intel"
       },
@@ -70,9 +72,6 @@
       "shortcut": "Général",
       "gear": "Équipement",
       "magic": "Grimoire",
-      "nSpell": " sorts mémorisés",
-      "nInvoc": " invocations mémorisées",
-      "invocControlDiff": "Modificateur de contrôle (par invoc > 1) : ",
       "capacity": "Capacités",
       "active": "Effets actifs",
       "inventory": "Inventaire",
@@ -92,20 +91,18 @@
     "bags": "Sacs",
     "generals": "Autres objets",
     "spells": "Sorts",
-    "invocs": "Invocations",
     "capacities": "Capacités",
     "wounds": "Maladies et blessures",
     "consumablesActivated": "Effets temporaires actifs",
     "weaponsEquipped": "Armes équipées",
-    "spellsMemorized": "Sorts mémorisés",
-    "invocsMemorized": "Invocations mémorisés",
     "weapon": {
       "damage": "Dégâts",
       "range": "Portée (m)",
       "useAmmo": "Utilise des munitions ?",
       "ammo": "Munition",
-      "defenceModif": "Défense",
-      "attackModif": "Attaque",
+      "defenceModif": "Modificateur de défense",
+      "attackModif": "Modificateur d'attaque",
+      "usableCarac": "Caractéristiques utilisables",
       "precise": "Arme précise",
       "twin": "Arme jumelle",
       "allowMagic": "Permet la magie",
@@ -165,7 +162,9 @@
         "hpMaxModif": "HP max.",
         "mpMaxModif": "MP max.",
         "apModif": "Armure",
-        "physicalModif": "Physique",
+        "strenghModif": "Constitution",
+        "dexterityModif": "Dexterite",
+        "perceptionModif": "Perception",
         "socialModif": "Social",
         "intelModif": "Intel",
         "attackModif": "Attaque",
@@ -173,7 +172,7 @@
         "dodgeModif": "Esquive",
         "initiativeModif": "Initiative",
         "magicPower": "Puissance magique bonus",
-        "mpReduc": "Réduction du coût en mana des sorts et des invoc.",
+        "mpReduc": "Réduction du coût en mana des sorts",
         "rollSpellBonus": "Bonus au lancer des sorts",
         "encumbranceLimitModif": "Encombrement max.",
         "limitCriticalModif": "Limite réussite critique",
@@ -192,10 +191,8 @@
       "consume": "Consommer"
     },
     "equipableitem": {
-      "nSpell": "Nombre de sorts mémorisables supp.",
-      "nInvoc": "Nombre d'invocations mémorisables supp.",
       "magicPower": "Puissance magique bonus",
-      "mpReduc": "Réduction du coût en mana des sorts et des invoc.",
+      "mpReduc": "Réduction du coût en mana des sorts",
       "rollSpellBonus": "Bonus au lancer des sorts",
       "weight": "Poids",
       "equipped": "Équipé",
@@ -221,7 +218,9 @@
       "effect": "Effets",
       "activated": "Activé",
       "activeEffect": "Enchantement à effets actifs",
-      "physicalModif": "Physique",
+      "strenghModif": "Constitution",
+      "dexterityModif": "Dexterite",
+      "perceptionModif": "Perception",
       "socialModif": "Social",
       "intelModif": "Intel",
       "hpMaxModif": "HP max.",
@@ -237,11 +236,9 @@
       "limitCriticalModif": "Limite réussite critique",
       "limitFumbleModif": "Limite échec critique",
       "damageBonusModif": "Dégâts bonus",
-      "nSpell": "Nombre de sorts mémorisables supp.",
-      "nInvoc": "Nombre d'invocations mémorisables supp.",
       "magicPower": "Puissance magique bonus",
       "rollSpellBonus": "Bonus au lancer des sorts",
-      "mpReduc": "Réduction du coût en mana des sorts et des invoc.",
+      "mpReduc": "Réduction du coût en mana des sorts",
       "roll": "Jet",
       "addEffect": "Effets additionnels",
       "use": "Nombre d'utilisations",
@@ -254,7 +251,9 @@
       "disableOnNewDay": "Désactivation au passage du jour"
     },
     "wound": {
-      "physicalModif": "Physique",
+      "strenghModif": "Constitution",
+      "dexterityModif": "Dexterite",
+      "perceptionModif": "Perception",
       "socialModif": "Social",
       "intelModif": "Intel",
       "hpMaxModif": "HP max.",
@@ -282,6 +281,7 @@
       "weaponLocal": "Arme",
       "rangeWeapon": "Armes à distance ?",
       "nammo": "Nombre de munitions consommées",
+      "costMP": "Coût en MP",
       "isStatusResistRoll": "Jet de résistance aux effets de statut",
       "modifStatusResist": "Bonus de résistance aux effets de statut",
       "modifLocal": "Modificateur du jet",
@@ -294,25 +294,27 @@
       "activated": "Activé"
     },
     "spell": {
-      "school": "Domaine de magie",
-      "level": "Niveau du sort",
-      "noRoll": "Pas de jet?",
-      "difficulty": "Modificateur de lancer",
-      "fixed": "Fixée",
+      "type": "Type",
+      "types":{
+        "base": "Base",
+        "shape": "Forme",
+        "power": "Puissance",
+        "modif": "Modificateur"
+      },
+      "flat": "Flat",
+      "multi": "Multiplicateur",
+      "difficulty": "Bonus au lancé",
+      "power": "Puissance",
+      "precise": "Sort précis",
       "cost": " Coût en ressource",
       "useHP": "Consomme des HP",
-      "isInvoc": "Est une invocation",
-      "isRitual": "Est un rituel",
-      "power": "Puissance",
+      "MP": "MP",
+      "HP": "HP",
       "duration": "Durée",
       "durationUnit": "Durée unité",
       "range": "Portée (m)",
       "effect": "Effets",
-      "memorized": "Mémorisé",
-      "launch": "Lancer le sort",
-      "control": "Contrôler l'invocation",
-      "invoked": "Invoqué",
-      "invocDifficulty": "Modificateur de contrôle"
+      "launch": "Lancer le sort"
     },
     "combatStyleList": {
       "standard": "Standard",
@@ -321,16 +323,6 @@
       "dodge": "Esquive",
       "aggressive": "Agressif",
       "ambidex": "Ambidextrie"
-    },
-    "magicSchoolList": {
-      "elem": "Élémentaire",
-      "demon": "Démonologie",
-      "arcane": "Arcanique",
-      "rune": "Runique",
-      "life": "Vie et nature",
-      "death": "Mort et sang",
-      "time": "Temps",
-      "reality": "Réalité et chaos"
     },
     "bodyPartList": {
       "head": "Tête",
@@ -360,8 +352,7 @@
         "title": "Jet de dégâts bonus :"
       },
       "rollSpell": {
-        "titleLimited": "Jet d'un sort par {actorName} :",
-        "title": "Jet du sort {spellName} par {actorName} :"
+        "title": "Jet d'un sort par {actorName} :"
       },
       "bleed": {
         "title": "{charName} saigne !"

@@ -180,12 +180,14 @@ export async function DamageRollToCustomLimitedMessage(rollResult, extraData) {
 
 export async function SpellRollToCustomFullMessage(
   rollResults = { costRoll: null, powerRoll: null, durationRoll: null },
+  spellTypes = {base: null, shape: null, power: null, modif: null},
   extraData
 ) {
   const template = "systems/orc/templates/chat/roll-spell-full-result.hbs";
 
   let templateContext = {
     ...extraData,
+    spellTypes: spellTypes,
     costRoll: rollResults.costRoll,
     powerRoll: rollResults.powerRoll,
     durationRoll: rollResults.durationRoll,
