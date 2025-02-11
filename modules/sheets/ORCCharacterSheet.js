@@ -2113,7 +2113,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     actor.system.magic.effective.power = ""
     actor.system.magic.effective.powerMult = 1
     actor.system.magic.effective.effect = ""
-    actor.system.magic.effective.range = actor.system.magic.effective.rangeDefault;
+    actor.system.magic.effective.range = 0;
     actor.system.magic.effective.cost = ""
     actor.system.magic.effective.costMult = 1
     actor.system.magic.effective.useHP = false
@@ -2169,6 +2169,11 @@ export default class ORCCharacterSheet extends ActorSheet {
       else if(actor.system.magic.effective.modif.power[0] == "-") actor.system.magic.effective.power += actor.system.magic.effective.modif.power;
       else                                         actor.system.magic.effective.power += " + " + actor.system.magic.effective.modif.power;
     } 
+    if (actor.system.magic.powerModif != "" && actor.system.magic.powerModif != "0"){ 
+      if(actor.system.magic.effective.power == "") actor.system.magic.effective.power = actor.system.magic.powerModif;
+      else if(actor.system.magic.powerModif[0] == "-") actor.system.magic.effective.power += actor.system.magic.powerModif;
+      else                                         actor.system.magic.effective.power += " + " + actor.system.magic.powerModif;
+    }
     if (actor.system.magic.effective.modif.effect != ""){
       if(actor.system.magic.effective.effect == "") actor.system.magic.effective.effect = actor.system.magic.effective.modif.effect;
       else                                          actor.system.magic.effective.effect += ", " + actor.system.magic.effective.modif.effect; 
