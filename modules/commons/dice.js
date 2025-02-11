@@ -157,9 +157,6 @@ export function SpellRoll({
       powerFormula = "(" + powerFormula + ")"
       powerFormula += " * " + (actor.system.magic.effective.powerMult).toString();
     }
-    //Apply modificators
-    if(actor.system.magic.powerModif != "")
-      powerFormula += " + " + actor.system.magic.powerModif;
     //Convert to string
     if (typeof powerFormula !== "string")
       powerFormula = powerFormula.toString();
