@@ -305,8 +305,7 @@
     <tr class="item flexrow", style="gap: 10px;">
       <td class="content">{{actor.system.magic.effective.difficulty}}</td>
       <td class="content">{{#if (isNotEmptyString actor.system.magic.effective.cost)}}{{actor.system.magic.effective.cost}}{{#if actor.system.magic.effective.costMult}} X {{actor.system.magic.effective.costMult}}{{/if}} {{#if actor.system.magic.mpReduc}} + {{actor.system.magic.mpReduc}} {{/if}} ({{#if actor.system.magic.effective.useHP}}{{localize "orc.spell.HP"}}{{else}}{{localize "orc.spell.MP"}}{{/if}}){{/if}}</td>
-      <td class="content">{{#if (isNotEmptyString actor.system.magic.effective.power)}}{{actor.system.magic.effective.power}}{{#if actor.system.magic.effective.powerMult}} X {{actor.system.magic.effective.powerMult}}{{/if}} {{#if actor.system.magic.effective.precise}}({{localize "orc.spell.precise"}}){{/if}}{{/if}}</td>
-      <td class="content">{{actor.system.magic.effective.range}}</td>
+      <td class="content">{{#if (isNotEmptyString actor.system.magic.effective.power)}}{{actor.system.magic.effective.power}}{{#if actor.system.magic.effective.powerMult}} X {{actor.system.magic.effective.powerMult}}{{/if}} {{#if (isNotEmptyString actor.system.magic.powerModif)}} + {{actor.system.magic.powerModif}} {{/if}}{{#if actor.system.magic.effective.precise}}({{localize "orc.spell.precise"}}){{/if}}{{/if}}</td>      <td class="content">{{actor.system.magic.effective.range}}</td>
       <td class="content">{{#if actor.system.magic.effective.duration}}{{actor.system.magic.effective.duration}} {{actor.system.magic.effective.durationUnit}}{{/if}}</td>
       <td class="effect-list">{{actor.system.magic.effective.effect}}</td>
       <td class="content">
