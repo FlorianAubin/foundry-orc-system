@@ -242,6 +242,25 @@
   </tr>
 
   <tr align="center">
+    {{#if actor.system.modifiers.deploy}}
+      <th>{{localize "orc.character.attribute"}} {{localize "orc.character.magicRoll"}}</th>
+      <td align="center">
+        <select name="system.magic.roll.attribut" align="center">
+          {{#select system.magic.roll.attribut}}
+            {{#each system.attributes as |attribut id|}}
+              {{#if attribut.usable}}
+                <option value="{{attribut.name}}">
+                  {{localize attribut.name}}
+                </option>
+              {{/if}}
+            {{/each}}
+          {{/select}}
+        </select>
+      </td>
+    {{/if}}
+  </tr>
+
+  <tr align="center">
     <th>{{localize "orc.character.defence"}}</th>
     {{#if actor.system.modifiers.deploy}}
       <td align="center">

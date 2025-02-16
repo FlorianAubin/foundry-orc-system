@@ -47,6 +47,7 @@
       "mp": "MP",
       "ap": "Armure",
       "encumbrance": "Encombrement",
+      "attribute" : "Attribut",
       "attributes": {
         "strengh": "Constitution",
         "dexterity": "Dexterite",
