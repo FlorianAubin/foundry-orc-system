@@ -248,7 +248,7 @@
         <select name="system.magic.roll.attribut" align="center">
           {{#select system.magic.roll.attribut}}
             <option value=""></option>
-            {{#each attributes as |attribut|}}
+            {{#each ../attributes as |attribut|}}
               <option
                 value="{{attribut.name}}"
               >{{localize attribut.name}}</option>
