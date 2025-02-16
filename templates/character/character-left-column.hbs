@@ -243,19 +243,25 @@
 
   <tr align="center">
     {{#if actor.system.modifiers.deploy}}
-      <th>{{localize "orc.character.magicRoll"}} : {{localize "orc.character.attribute"}}</th>
-      <td align="center">
-        <select name="system.magic.roll.attribut" align="center">
-          {{#select actor.system.magic.roll.attribut}}
-            <option value=""></option>
-            {{#each config.attributes as |attribut|}}
-              <option
-                value="{{attribut}}"
-              >{{localize attribut}}</option>
-            {{/each}}
-          {{/select}}
-        </select>
-      </td>
+      {{#if unlocked}}
+        <th>{{localize "orc.character.magicRoll"}} : {{localize "orc.character.attribute"}}</th>
+        <td align="center">
+          <select name="system.magic.roll.attribut" align="center">
+            {{#select actor.system.magic.roll.attribut}}
+              <option value=""></option>
+              {{#each config.attributes as |attribut|}}
+                <option
+                  value="{{attribut}}"
+                >{{localize attribut}}</option>
+              {{/each}}
+            {{/select}}
+          </select>
+        </td>
+      {{else}}
+        <td align="center">
+          {{localize actor.system.magic.roll.attribut}}
+        </td>
+      {{/if}}
     {{/if}}
   </tr>
 
