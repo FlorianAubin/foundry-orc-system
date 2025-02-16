@@ -247,12 +247,11 @@
       <td align="center">
         <select name="system.magic.roll.attribut" align="center">
           {{#select system.magic.roll.attribut}}
-            {{#each system.attributes as |attribut id|}}
-              {{#if attribut.usable}}
-                <option value="{{attribut.name}}">
-                  {{localize attribut.name}}
-                </option>
-              {{/if}}
+            <option value=""></option>
+            {{#each attributes as |attribut|}}
+              <option
+                value="{{attribut.name}}"
+              >{{localize attribut.name}}</option>
             {{/each}}
           {{/select}}
         </select>
