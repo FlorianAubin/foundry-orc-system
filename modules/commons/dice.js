@@ -125,10 +125,10 @@ export function SpellRoll({
       costFormula += " * " + (actor.system.magic.effective.costMult).toString();
     }
     //Apply reductions
-    if (actor.system.magic.mpReduc > 0)
-      costFormula += " + " + (actor.system.magic.mpReduc).toString();
-    else if (actor.system.magic.mpReduc < 0)
-      costFormula += + (actor.system.magic.mpReduc).toString();
+    //if (actor.system.magic.mpReduc > 0)
+    //  costFormula += " + " + (actor.system.magic.mpReduc).toString();
+    //else if (actor.system.magic.mpReduc < 0)
+    //  costFormula += + (actor.system.magic.mpReduc).toString();
     //Do the roll
     if (costFormula != "") {
       costroll = new Roll(costFormula, rollData, rollOptions);
@@ -158,8 +158,8 @@ export function SpellRoll({
       powerFormula += " * " + (actor.system.magic.effective.powerMult).toString();
     }
     //Apply modificators
-    if(actor.system.magic.powerModif != "")
-      powerFormula += " + " + actor.system.magic.powerModif;
+    //if(actor.system.magic.powerModif != "")
+    //  powerFormula += " + " + actor.system.magic.powerModif;
     //Convert to string
     if (typeof powerFormula !== "string")
       powerFormula = powerFormula.toString();

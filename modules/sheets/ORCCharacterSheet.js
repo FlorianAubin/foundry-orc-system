@@ -2169,6 +2169,11 @@ export default class ORCCharacterSheet extends ActorSheet {
       else if(actor.system.magic.effective.modif.power[0] == "-") actor.system.magic.effective.power += actor.system.magic.effective.modif.power;
       else                                         actor.system.magic.effective.power += " + " + actor.system.magic.effective.modif.power;
     } 
+    if (actor.system.magic.powerModif != "" && actor.system.magic.powerModif != "0"){ 
+      if(actor.system.magic.effective.power == "") actor.system.magic.effective.power = actor.system.magic.powerModif;
+      else if(actor.system.magic.powerModif[0] == "-") actor.system.magic.effective.power += actor.system.magic.powerModif;
+      else                                         actor.system.magic.effective.power += " + " + actor.system.magic.powerModif;
+    }
     if (actor.system.magic.effective.modif.effect != ""){
       if(actor.system.magic.effective.effect == "") actor.system.magic.effective.effect = actor.system.magic.effective.modif.effect;
       else                                          actor.system.magic.effective.effect += ", " + actor.system.magic.effective.modif.effect; 
@@ -2177,6 +2182,10 @@ export default class ORCCharacterSheet extends ActorSheet {
       if(actor.system.magic.effective.cost == "") actor.system.magic.effective.cost = actor.system.magic.effective.modif.cost;
       else if(actor.system.magic.effective.modif.cost[0] == "-") actor.system.magic.effective.cost += actor.system.magic.effective.modif.cost;
       else                                        actor.system.magic.effective.cost += " + " + actor.system.magic.effective.modif.cost; 
+    }
+    if (actor.system.magic.mpReduc != 0){
+      if(actor.system.magic.mpReduc > 0) actor.system.magic.effective.power += " + " + (actor.system.magic.mpReduc).toString();
+      if(actor.system.magic.mpReduc < 0) actor.system.magic.effective.power += (actor.system.magic.mpReduc).toString();
     }
     if (actor.system.magic.effective.modif.difficulty != "" && actor.system.magic.effective.modif.difficulty != "0"){
       if(actor.system.magic.effective.difficulty == "") actor.system.magic.effective.difficulty = actor.system.magic.effective.modif.difficulty;
