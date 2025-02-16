@@ -246,11 +246,11 @@
       <th>{{localize "orc.character.magicRoll"}} : {{localize "orc.character.attribute"}}</th>
       <td align="center">
         <select name="system.magic.roll.attribut" align="center">
-          {{#select system.magic.roll.attribut}}
+          {{#select actor.system.magic.roll.attribut}}
             <option value=""></option>
             {{#each config.attributes as |attribut|}}
               <option
-                value="{{attribut.name}}"
+                value="{{attribut}}"
               >{{localize attribut}}</option>
             {{/each}}
           {{/select}}
