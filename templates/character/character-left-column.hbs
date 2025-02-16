@@ -242,13 +242,16 @@
   </tr>
 
   <tr align="center">
+                {{#each attributes as |attribut|}}
+              {{localize attribut.name}}
+            {{/each}}
     {{#if actor.system.modifiers.deploy}}
       <th>{{localize "orc.character.attribute"}} {{localize "orc.character.magicRoll"}}</th>
       <td align="center">
         <select name="system.magic.roll.attribut" align="center">
           {{#select system.magic.roll.attribut}}
             <option value=""></option>
-            {{#each ../attributes as |attribut|}}
+            {{#each attributes as |attribut|}}
               <option
                 value="{{attribut.name}}"
               >{{localize attribut.name}}</option>
