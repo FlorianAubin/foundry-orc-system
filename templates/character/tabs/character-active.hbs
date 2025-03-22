@@ -43,27 +43,17 @@
     </tr>
     <tr class="header flexrow">
       <th class="content"></th>
-      <th class="content">{{localize "orc.equipableitem.nSpell"}}</th>
-      <th class="content">{{localize "orc.equipableitem.nInvoc"}}</th>
       <th class="content">{{localize "orc.equipableitem.magicPower"}}</th>
       <th class="content">{{localize "orc.equipableitem.mpReduc"}}</th>
       <th class="content">{{localize "orc.equipableitem.rollSpellBonus"}}</th>
     </tr>
     {{#each equipableitems as |equipableitem id|}}
     {{#if (and equipableitem.system.equipped
-              (or equipableitem.system.nSpell 
-                  equipableitem.system.nInvoc 
-                  (isNotEmptyString equipableitem.system.magicPower)
+              (or (isNotEmptyString equipableitem.system.magicPower)
                   equipableitem.system.mpReduc 
                   equipableitem.system.rollSpellBonus))}}
     <tr class="item flexrow">
       <td class="content">{{equipableitem.name}}</td>
-      {{#if equipableitem.system.nSpell}}
-        <td class="content">{{equipableitem.system.nSpell}}</td>
-      {{/if}}
-      {{#if equipableitem.system.nInvoc}}
-        <td class="content">{{equipableitem.system.nInvoc}}</td>
-      {{/if}}
       {{#if (isNotEmptyString equipableitem.system.magicPower)}}
         <td class="content">{{equipableitem.system.magicPower}}</td>
       {{/if}}
@@ -440,26 +430,6 @@
                   >{{item.system.enchant.damageBonusModif}}</td>
                 </tr>
               {{/if}}
-              {{#if item.system.enchant.nSpell}}
-                <tr>
-                  <td align="center">{{localize
-                      "orc.enchant.nSpell"
-                    }}</td>
-                  <td
-                    align="center"
-                  >{{item.system.enchant.nSpell}}</td>
-                </tr>
-              {{/if}}
-              {{#if item.system.enchant.nInvoc}}
-                <tr>
-                  <td align="center">{{localize
-                      "orc.enchant.nInvoc"
-                    }}</td>
-                  <td
-                    align="center"
-                  >{{item.system.enchant.nInvoc}}</td>
-                </tr>
-              {{/if}}
               {{#if (isNotEmptyString item.system.enchant.magicPower)}}
                 <tr>
                   <td align="center">{{localize
@@ -515,7 +485,7 @@
     </tr>
     <tr class="header flexrow">
       <th class="content"></th>
-      <th class="content">{{localize "orc.character.attributes.strengh"}}</th>
+      <th class="content">{{localize "orc.character.attributes.dexterity"}}</th>
       <th class="content">{{localize "orc.character.attack"}}</th>
       <th class="content">{{localize "orc.character.defence"}}</th>
       <th class="content">{{localize "orc.character.dodge"}}</th>
@@ -524,7 +494,7 @@
     </tr>
     <tr class="item flexrow">
       <td class="content"></td>
-      <td class="content">{{actor.system.encumbrance.malus.strengh}}</td>
+      <td class="content">{{actor.system.encumbrance.malus.dexterity}}</td>
       <td class="content">{{actor.system.encumbrance.malus.attack}}</td>
       <td class="content">{{actor.system.encumbrance.malus.defence}}</td>
       <td class="content">{{actor.system.encumbrance.malus.dodge}}</td>
@@ -538,6 +508,8 @@
     <tr class="header flexrow">
       <th class="content"></th>
       <th class="content">{{localize "orc.character.attributes.strengh"}}</th>
+      <th class="content">{{localize "orc.character.attributes.dexterity"}}</th>
+      <th class="content">{{localize "orc.character.attributes.perception"}}</th>
       <th class="content">{{localize "orc.character.attributes.social"}}</th>
       <th class="content">{{localize "orc.character.attributes.intel"}}</th>
       <th class="content">{{localize "orc.character.hp"}}</th>
@@ -546,6 +518,8 @@
     <tr class="item flexrow">
       <td class="content">{{localize "orc.character.food"}}</td>
       <td class="content">{{actor.system.nutrition.foodNeededDay.malus.strengh}}</td>
+      <td class="content">{{actor.system.nutrition.foodNeededDay.malus.dexterity}}</td>
+      <td class="content">-</td>
       <td class="content">{{actor.system.nutrition.foodNeededDay.malus.social}}</td>
       <td class="content">{{actor.system.nutrition.foodNeededDay.malus.intel}}</td>
       <td class="content">{{actor.system.nutrition.foodNeededDay.malus.hpMax}}</td>
@@ -554,7 +528,9 @@
     <tr class="item flexrow">
       <td class="content">{{localize "orc.character.drink"}}</td>
       <td class="content">{{actor.system.nutrition.drinkNeededDay.malus.strengh}}</td>
+      <td class="content">{{actor.system.nutrition.drinkNeededDay.malus.dexterity}}</td>
       <td class="content">-</td>
+      <td class="content">{{actor.system.nutrition.drinkNeededDay.malus.social}}</td>
       <td class="content">{{actor.system.nutrition.drinkNeededDay.malus.intel}}</td>
       <td class="content">{{actor.system.nutrition.drinkNeededDay.malus.hpMax}}</td>
       <td class="content">{{actor.system.nutrition.drinkNeededDay.malus.mpMax}}</td>
@@ -562,6 +538,8 @@
     <tr class="item flexrow">
       <td class="content">{{localize "orc.character.tipsiness"}}</td>
       <td class="content">-</td>
+      <td class="content">-</td>
+      <td class="content">{{actor.system.nutrition.tips.malus.perception}}</td>
       <td class="content">{{actor.system.nutrition.tips.malus.social}}</td>
       <td class="content">{{actor.system.nutrition.tips.malus.intel}}</td>
       <td class="content">-</td>

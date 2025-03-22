@@ -1471,7 +1471,7 @@ export default class ORCCharacterSheet extends ActorSheet {
       actorData.combatStyle.attack = -20;
     }
 
-    actorData.attack.value += actorData.combatStyle.attack;
+    //actorData.attack.value += actorData.combatStyle.attack;
     actorData.defence.value += actorData.combatStyle.defence;
     actorData.dodge.value += actorData.combatStyle.dodge;
     if(actorData.combatStyle.damageBonus != "")
@@ -1731,6 +1731,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     actorData.mp.valueMax += actorData.nutrition.drinkNeededDay.malus.mpMax;
 
     const tipsiness = actorData.nutrition.tips.value;
+
     if (tipsiness > 0) {
       if (tipsiness == 1) {
         actorData.nutrition.tips.malus.social = +5;
@@ -1995,7 +1996,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     }
 
     actorData.dodge.value += actorData.encumbrance.malus.dodge;
-    actorData.attack.value += actorData.encumbrance.malus.attack;
+    //actorData.attack.value += actorData.encumbrance.malus.attack;
   }
 
   /////////////////////
@@ -2054,7 +2055,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     for (let [key, weapon] of Object.entries(weapons)) {
       let item = actor.items.get(weapon._id);
 
-      if (!item.system.equipped) continue;  //Skip unequipped weapons
+      //if (!item.system.equipped) continue;  //Skip unequipped weapons
 
       let attackModif = 0;
       if (item.system.effective.attribut === "orc.character.attributes.strengh") 
@@ -2070,10 +2071,12 @@ export default class ORCCharacterSheet extends ActorSheet {
 
       let effectiveDamage = item.system.damage;
       let effectiveEffect = item.system.effect;
-      let effectiveAttack = actor.system.attack.value + attackModif;
+
+      let effectiveAttack = actor.system.attack.value + attackModif + actor.system.combatStyle.attack + actor.system.encumbrance.malus.attack;
       //if the weapon is tagged as twin, cancel the ambidex malus
       if (actor.system.combatStyle.style == "ambidex" && item.system.twin)
         effectiveAttack += 20;
+      if (effectiveAttack < 0) effectiveAttack = 0;
       //if (effectiveAttack > 100) effectiveAttack = 100;
 
       if (item.system.useAmmo) {
