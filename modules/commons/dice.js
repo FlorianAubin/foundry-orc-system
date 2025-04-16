@@ -642,5 +642,5 @@ export function CalculateValuesFromDiceFormula({formula = "", mult = 1, useMedia
   }
 
   // Return the calculated results
-  return { min: Math.round(min * mult), avg: Math.round(avg * mult), max: Math.round(max * mult) };
+  return { min: Math.floor(min * mult), avg: Math.floor(avg * mult), max: Math.floor(max * mult) };
 }
