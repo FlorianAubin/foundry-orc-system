@@ -589,7 +589,7 @@ export function EnchantRoll({
 }
 
 // From a dice formula, calculate the min, mean and max values
-export function CalculateValuesFromDiceFormula({formula = "", mult = 1, useMedian = false}) {
+export function CalculateValuesFromDiceFormula({formula = "", mult = 1, useMedian = false, min_val = null}) {
   if(formula == "")
     return { min: 0, avg: 0, max: 0 };
 
@@ -641,6 +641,20 @@ export function CalculateValuesFromDiceFormula({formula = "", mult = 1, useMedia
     }
   }
 
+  min = Math.floor(min * mult);
+  avg = Math.floor(avg * mult);
+  max = Math.floor(max * mult)
+
+  if (min_val != null){
+    if (min < min_val) min = min_val;
+    if (max < min_val) max = min_val;
+    if (avg < min_val) avg = min_val;
+  }
+
+  console.log(min_val)
+  console.log(min)
+
+
   // Return the calculated results
-  return { min: Math.floor(min * mult), avg: Math.floor(avg * mult), max: Math.floor(max * mult) };
+  return { min: min, avg: avg, max: max };
 }

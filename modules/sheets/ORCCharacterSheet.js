@@ -767,7 +767,7 @@ export default class ORCCharacterSheet extends ActorSheet {
       if (itemData.type.drink) newValues.drinkDay += 1;
     }
     //Do a strengh roll and increase the actor tipsiness in case of failure
-    if (itemData.tipsiness || itemData.poison) {
+    if ( (itemData.tipsiness && itemData.tipsiness > 0) || (itemData.poison && itemData.poison > 0) ) {
       let statusResistOut = DiceOrc.StatusResistRoll({
         actor: actor,
         modif: actorData.modifAllAttributes + actorData.status.modifResist,
@@ -782,15 +782,10 @@ export default class ORCCharacterSheet extends ActorSheet {
       }
     }
     //Recover the HP and MP
-    //HP or MP recovery through food only applies from excess meals
     if (
       item.type != "food" ||
-      (itemData.type.food &&
-        actorData.nutrition.foodDay >=
-          actorData.nutrition.foodNeededDay.value) ||
-      (itemData.type.drink &&
-        actorData.nutrition.drinkDay >=
-          actorData.nutrition.drinkNeededDay.value)
+      (itemData.type.food) ||
+      (itemData.type.drink)
     ) {
       if (itemData.hp != "")
         await this.takeHeal({
@@ -2187,8 +2182,8 @@ export default class ORCCharacterSheet extends ActorSheet {
       else                                        actor.system.magic.effective.cost += " + " + actor.system.magic.effective.modif.cost; 
     }
     if (actor.system.magic.mpReduc != 0){
-      if(actor.system.magic.mpReduc > 0) actor.system.magic.effective.power += " + " + (actor.system.magic.mpReduc).toString();
-      if(actor.system.magic.mpReduc < 0) actor.system.magic.effective.power += (actor.system.magic.mpReduc).toString();
+      if(actor.system.magic.mpReduc > 0) actor.system.magic.effective.cost += " + " + (actor.system.magic.mpReduc).toString();
+      if(actor.system.magic.mpReduc < 0) actor.system.magic.effective.cost += (actor.system.magic.mpReduc).toString();
     }
     if (actor.system.magic.effective.modif.difficulty != "" && actor.system.magic.effective.modif.difficulty != "0"){
       if(actor.system.magic.effective.difficulty == "") actor.system.magic.effective.difficulty = actor.system.magic.effective.modif.difficulty;
@@ -2242,11 +2237,13 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     
     //Calculate min, mean and max values
-    actor.system.magic.effective.costValues = DiceOrc.CalculateValuesFromDiceFormula({formula: actor.system.magic.effective.cost, mult: actor.system.magic.effective.costMult})
-    actor.system.magic.effective.powerValues = DiceOrc.CalculateValuesFromDiceFormula({formula: actor.system.magic.effective.power, mult: actor.system.magic.effective.powerMult,  useMedian: actor.system.magic.effective.precise})
-    actor.system.magic.effective.difficultyValues = DiceOrc.CalculateValuesFromDiceFormula({formula: actor.system.magic.effective.difficulty})
-    actor.system.magic.roll.formulaValues = DiceOrc.CalculateValuesFromDiceFormula({formula: actor.system.magic.roll.formula})
-    actor.system.magic.effective.durationValues = DiceOrc.CalculateValuesFromDiceFormula({formula: actor.system.magic.effective.duration})
+    let min_cost = 1
+    if (actor.system.magic.effective.cost == '0') min_cost = 0
+    actor.system.magic.effective.costValues = DiceOrc.CalculateValuesFromDiceFormula({formula: actor.system.magic.effective.cost, mult: actor.system.magic.effective.costMult, min_val: min_cost})
+    actor.system.magic.effective.powerValues = DiceOrc.CalculateValuesFromDiceFormula({formula: actor.system.magic.effective.power, mult: actor.system.magic.effective.powerMult,  useMedian: actor.system.magic.effective.precise, min_val: 0})
+    actor.system.magic.effective.difficultyValues = DiceOrc.CalculateValuesFromDiceFormula({formula: actor.system.magic.effective.difficulty, min_val: 0})
+    actor.system.magic.roll.formulaValues = DiceOrc.CalculateValuesFromDiceFormula({formula: actor.system.magic.roll.formula, min_val: 0})
+    actor.system.magic.effective.durationValues = DiceOrc.CalculateValuesFromDiceFormula({formula: actor.system.magic.effective.duration, min_val: 0})
 
     return;
   }
