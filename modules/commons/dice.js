@@ -472,7 +472,7 @@ export function DamageRoll({
   return rollResult.total;
 }
 
-export function BleedPoisonRoll({
+export function BleedRoll({
   actor = null,
   type = null,
   extraMessageData = {},
@@ -483,12 +483,7 @@ export function BleedPoisonRoll({
     extraMessageData.title = game.i18n.format("orc.dialog.bleed.title", {
       charName: actor.name,
     });
-  } else if (type === "poison") {
-    ndice = actor.system.status.poison;
-    extraMessageData.title = game.i18n.format("orc.dialog.poison.title", {
-      charName: actor.name,
-    });
-  } else {
+  }  else {
     return 0;
   }
 
@@ -508,6 +503,39 @@ export function BleedPoisonRoll({
 
   return rollResult.total;
 }
+
+export function PoisonRoll({
+  actor = null,
+  type = null,
+  extraMessageData = {},
+}) {
+  let ndice = 0;
+  if (type === "poison") {
+    ndice = actor.system.status.poison;
+    extraMessageData.title = game.i18n.format("orc.dialog.poison.title", {
+      charName: actor.name,
+    });
+  } else {
+    return 0;
+  }
+
+  let rollFormula = (Math.floor(actor.system.hp.valueMax * 10./ 100.)).toString();
+  let rollData = {}; //for some reasons, rollData are not conserved on ChatMessage, use rollOptions instead
+  let rollOptions = {
+    actorName: actor.name,
+    visibleByPlayers: actor.ownership.default,
+  };
+
+  let roll = new Roll(rollFormula, rollData, rollOptions);
+  let rollResult = roll.roll({ async: false });
+
+  Chat.StatusRollToCustomMessage(rollResult, {
+    ...extraMessageData,
+  });
+
+  return rollResult.total;
+}
+
 
 export function BurnRoll({ actor = null, extraMessageData = {} }) {
   let rollFormula = "1d100";
@@ -651,8 +679,6 @@ export function CalculateValuesFromDiceFormula({formula = "", mult = 1, useMedia
     if (avg < min_val) avg = min_val;
   }
 
-  console.log(min_val)
-  console.log(min)
 
 
   // Return the calculated results

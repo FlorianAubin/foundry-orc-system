@@ -557,16 +557,30 @@ export default class ORCCharacterSheet extends ActorSheet {
     event.preventDefault();
     let actor = this.actor;
     let data = this.getData();   //Ensure that the actor is correclty initialized
+
+    let take_damage = true;
+
+    // Do a status resistance roll if needed
+    if (actor.system.status.autoRoll){
+      take_damage = DiceOrc.StatusResistRoll({
+        actor: actor,
+        modif: actor.system.modifAllAttributes + actor.system.status.modifResist,
+      });
+    }
     
-    let damage = DiceOrc.BleedPoisonRoll({
-      actor: actor,
-      type: event.currentTarget.dataset.type,
-    });
-    await this.takeDamage({
-      damageFormula: damage,
-      resistance: actor.system.resistances.poison, 
-      vulnerability: actor.system.vulnerabilities.poison,
-    });
+    if (take_damage){
+      let damage = DiceOrc.PoisonRoll({
+        actor: actor,
+        type: event.currentTarget.dataset.type,
+      });
+      await this.takeDamage({
+        damageFormula: damage,
+        resistance: actor.system.resistances.bleed, 
+        vulnerability: actor.system.vulnerabilities.bleed,
+      });
+  
+    }
+
     await actor.update({ system: { status: { poison: this.actor.system.status.poison - 1 } } });
   }
 
@@ -574,16 +588,28 @@ export default class ORCCharacterSheet extends ActorSheet {
     event.preventDefault();
     let actor = this.actor;
     let data = this.getData();   //Ensure that the actor is correclty initialized
+
+    let take_damage = true;
+
+    // Do a status resistance roll if needed
+    if (actor.system.status.autoRoll){
+      take_damage = DiceOrc.StatusResistRoll({
+        actor: actor,
+        modif: actor.system.modifAllAttributes + actor.system.status.modifResist,
+      });
+    }
     
-    let damage = DiceOrc.BleedPoisonRoll({
-      actor: actor,
-      type: event.currentTarget.dataset.type,
-    });
-    await this.takeDamage({
-      damageFormula: damage,
-      resistance: actor.system.resistances.bleed, 
-      vulnerability: actor.system.vulnerabilities.bleed,
-    });
+    if (take_damage){
+      let damage = DiceOrc.BleedRoll({
+        actor: actor,
+        type: event.currentTarget.dataset.type,
+      });
+      await this.takeDamage({
+        damageFormula: damage,
+        resistance: actor.system.resistances.bleed, 
+        vulnerability: actor.system.vulnerabilities.bleed,
+      });
+    }
   }
 
   async _onBurnRoll(event) {
@@ -638,17 +664,29 @@ export default class ORCCharacterSheet extends ActorSheet {
     event.preventDefault();
     let actor = this.actor;
     let data = this.getData();   //Ensure that the actor is correclty initialized
+
+    let take_damage = true;
+
+    // Do a status resistance roll if needed
+    if (actor.system.status.autoRoll){
+      take_damage = DiceOrc.StatusResistRoll({
+        actor: actor,
+        modif: actor.system.modifAllAttributes + actor.system.status.modifResist,
+      });
+    }
     
-    let damage = actor.system.status.burn;
-    await this.takeDamage({
-      damageFormula: damage,
-      applyArmor: true,
-      resistance: actor.system.resistances.fire, 
-      vulnerability: actor.system.vulnerabilities.fire,
-    });
+    if (take_damage){
+      let damage = actor.system.status.burn;
+      await this.takeDamage({
+        damageFormula: damage,
+        applyArmor: true,
+        resistance: actor.system.resistances.fire, 
+        vulnerability: actor.system.vulnerabilities.fire,
+      });
+    }
 
     //Add 5 burn stacks
-    await this.actor.update({ system: { status: { burn: damage + 5 } } });
+    await this.actor.update({ system: { status: { burn: actor.system.status.burn + 5 } } });
 
     return;
   }
@@ -1380,6 +1418,9 @@ export default class ORCCharacterSheet extends ActorSheet {
     //All attributes roll modifier
     actorData.modifAllAttributes = 0;
 
+    // Automatic status resistance roll
+    actorData.status.autoRoll = false;
+
     //Status resistance roll modifier
     actorData.status.modifResist = 0;
 
@@ -1804,8 +1845,10 @@ export default class ORCCharacterSheet extends ActorSheet {
         //);
       }
       actorData.modifAllAttributes += itemData.modifAllAttributes;
-      if (itemData.isStatusResistRoll)
+      if (itemData.isStatusResistRoll){
         actorData.status.modifResist += itemData.modifStatusResist;
+        actorData.status.autoRoll = true
+      }
 
       if (itemData.dodgeEnable) actorData.dodge.enable = true;
       if (itemData.damageBonusModif != "")

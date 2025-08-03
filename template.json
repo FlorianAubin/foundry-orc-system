@@ -191,7 +191,8 @@
         "bleed": 0,
         "poison": 0,
         "onfire": false,
-        "modifResist": 0
+        "modifResist": 0,
+        "autoRoll": false
       },
       "resistances":{
         "fire": false,
