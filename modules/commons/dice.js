@@ -486,7 +486,7 @@ export function BleedRoll({
   }  else {
     return 0;
   }
-//test
+
   let rollFormula = ndice + "d6";
   let rollData = {}; //for some reasons, rollData are not conserved on ChatMessage, use rollOptions instead
   let rollOptions = {
