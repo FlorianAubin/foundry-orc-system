@@ -190,6 +190,7 @@
         "burn": 0,
         "bleed": 0,
         "poison": 0,
+        "poisonDamage": 0,
         "onfire": false,
         "modifResist": 0,
         "autoRoll": false

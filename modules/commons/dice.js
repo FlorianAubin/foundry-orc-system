@@ -519,7 +519,7 @@ export function PoisonRoll({
     return 0;
   }
 
-  let rollFormula = (Math.floor(actor.system.hp.valueMax * 10./ 100.)).toString();
+  let rollFormula = (actor.system.status.poisonDamage).toString();
   let rollData = {}; //for some reasons, rollData are not conserved on ChatMessage, use rollOptions instead
   let rollOptions = {
     actorName: actor.name,

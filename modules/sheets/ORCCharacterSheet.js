@@ -1397,6 +1397,8 @@ export default class ORCCharacterSheet extends ActorSheet {
     //Delete items with 0 stock
     ActorOrc.removeItemsWithoutStock(data);
 
+    this.calculatePoisonDamage(data);
+
     return;
   }
 
@@ -2310,6 +2312,25 @@ export default class ORCCharacterSheet extends ActorSheet {
       && (actorData.ini.flat == 0) )
       actorData.ini.flat = 1;
   }
+
+    calculatePoisonDamage(data){
+      let actor = data.actor;
+      let actorData = actor.system;
+
+      const HP = actorData.hp.valueMax;
+      const C = actorData.attributes.strengh.value;
+      if (C >= 150){
+        actorData.status.poisonDamage = 0;
+        return;
+      }
+      
+      const A = 200. * Math.sqrt(1. - C/150.);
+
+      actorData.status.poisonDamage = Math.floor((HP * A)/(HP + 10*A))
+
+      if (actorData.status.poisonDamage < 0) actorData.status.poisonDamage = 0;
+    }
+
 
   async _onDropItem(event, data) {
     return ActorOrc.onDropItem(event, data, this);
