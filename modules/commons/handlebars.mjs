@@ -15,6 +15,8 @@ export const RegisterHandlebars = function () {
     return true;
   });
 
+
+
   Handlebars.registerHelper("isZeroOrEmptyString", function (value) {
     if (value === null) return false;
     if (value === "") return false;

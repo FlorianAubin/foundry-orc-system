@@ -49,11 +49,57 @@
                 {{checked item.system.activeEffect}}
               />
             </td>
+            {{#if item.system.activeEffect}}
+            <th>{{localize "orc.capacity.sanguinChargeCost"}}</th>
+            <td align="center">
+              <input
+                type="text"
+                name="system.ifActivable.sanguinChargeCost"
+                value="{{item.system.ifActivable.sanguinChargeCost}}"
+                placeholder="0"
+                onClick="this.select();"
+                style="width: 30px"
+              />
+            </td>
+            <th>{{localize "orc.capacity.sanguinChargeGain"}}</th>
+            <td align="center">
+              <input
+                type="text"
+                name="system.ifActivable.sanguinChargeGain"
+                value="{{item.system.ifActivable.sanguinChargeGain}}"
+                placeholder="0"
+                onClick="this.select();"
+                style="width: 30px"
+              />
+            </td>
+            <th>{{localize "orc.capacity.sanguinRmAll"}}</th>
+            <td align="center">
+              <input
+                name="system.ifActivable.rmAllSanguinChargeWhenDeactivated"
+                type="checkbox"
+                {{checked item.system.ifActivable.rmAllSanguinChargeWhenDeactivated}}
+              />
+            </td>            
+            {{/if}}  
           {{else}}
             {{#if item.system.activeEffect}}
               <td align="center">
                 <span class="fas fa-check"></span>
               </td>
+              {{#if (isZeroOrEmptyString item.system.ifActivable.sanguinChargeCost)}}
+                <th>{{localize "orc.capacity.sanguinChargeCost"}}</th>
+                <td align="center">{{item.system.ifActivable.sanguinChargeCost}}</td>
+              {{/if}}  
+              {{#if (isZeroOrEmptyString item.system.ifActivable.sanguinChargeGain)}}
+                <th>{{localize "orc.capacity.sanguinChargeGain"}}</th>
+                <td align="center">{{item.system.ifActivable.sanguinChargeGain}}</td>
+              {{/if}}  
+              {{#if item.system.ifActivable.rmAllSanguinChargeWhenDeactivated}}
+                <th>{{localize "orc.capacity.sanguinRmAll"}}</th>
+                <td align="center">
+                  <span class="fas fa-check"></span>
+                </td>
+              {{/if}}  
             {{/if}}
           {{/if}}
         </tr>
@@ -168,6 +214,48 @@
             {{/if}}
           </tr>
         {{/if}}
+        </table>
+
+        <table>
+          <tr>
+            {{#if (or unlocked item.system.isSanguinCharge)}}
+              <th>{{localize "orc.capacity.isSanguinCharge"}}</th>
+            {{/if}}
+            {{#if unlocked}}
+              <td align="center">
+                <input
+                  name="system.isSanguinCharge"
+                  type="checkbox"
+                  {{checked item.system.isSanguinCharge}}
+                />
+              </td>
+              {{#if item.system.isSanguinCharge}}
+                <th>{{localize "orc.capacity.improved"}}</th>
+                <td align="center">
+                  <input
+                    name="system.isSanguinChargeImproved"
+                    type="checkbox"
+                    {{checked item.system.isSanguinChargeImproved}}
+                  />
+                </td>
+              {{/if}}
+            {{else}}
+              {{#if item.system.isSanguinCharge}}
+                <td align="center">
+                  <span class="fas fa-check"></span>
+                </td>
+                {{#if item.system.isSanguinChargeImproved}}
+                  <th>{{localize "orc.capacity.improved"}}</th>
+                  <td align="center">
+                    <span class="fas fa-check"></span>
+                  </td>
+                {{/if}}
+              {{/if}}
+            {{/if}}
+          </tr>
+        </table>
+
+        <table>
         <tr>
           {{#if (or unlocked item.system.isRageBerserk)}}
             <th>{{localize "orc.capacity.isRageBerserk"}}</th>
@@ -188,7 +276,32 @@
             {{/if}}
           {{/if}}
         </tr>
+
         <tr class="sep"></tr>
+
+        <tr>
+          {{#if (or unlocked item.system.isBloodArmor)}}
+            <th>{{localize "orc.capacity.isBloodArmor"}}</th>
+          {{/if}}
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.isBloodArmor"
+                type="checkbox"
+                {{checked item.system.isBloodArmor}}
+              />
+            </td>
+          {{else}}
+            {{#if item.system.isBloodArmor}}
+              <td align="center">
+                <span class="fas fa-check"></span>
+              </td>
+            {{/if}}
+          {{/if}}
+        </tr>
+
+        <tr class="sep"></tr>
+        
         <tr>
           {{#if (or unlocked item.system.isAttributRoll)}}
             <th>{{localize "orc.capacity.isAttributRoll"}}</th>

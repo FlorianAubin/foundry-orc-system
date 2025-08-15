@@ -84,7 +84,7 @@
           </tr>
         </table>
       </td>
-      {{#if (not (eq actor.system.ap.native actor.system.ap.value))}}
+      {{#if (not (eq actor.system.ap.nativeEff actor.system.ap.value))}}
       <td class="table-container">
         <table class="take-damage-table">
           <tr><th colspan="3">{{localize "orc.takeDamageOnArmor"}}</th></tr>
@@ -474,7 +474,8 @@
       <th class="content">{{localize "orc.capacity.duration"}}</th>    
       <th class="content">{{localize "orc.capacity.roll"}}</th>
       <th class="effect-list">{{localize "orc.capacity.addEffect"}}</th>    
-      <th class="content">{{localize "orc.capacity.activated"}}</th>    
+      <th class="content">{{localize "orc.capacity.activated"}}</th>   
+      <th class="content"></th> 
       <th class="content"></th>
     </tr>
     {{#each capacities as |capacity id|}}
@@ -610,6 +611,55 @@
               data-itemid="{{capacity._id}}"></span>
           {{/if}}
         {{/if}}
+        </td>
+        <td class="content" align="center">
+          {{#if capacity.system.isSanguinCharge}}
+            <span>{{../actor/system.sanguinCharge.value}}</span>
+            <table>
+              <tr>
+                <td align="center">{{../actor/system.sanguinCharge.gain}}
+                  <a class="capacity-up-SC" align="center" title="Up sanguin charges">
+                    <i class="button fas fa-up"></i>
+                  </a>
+                </td>
+                <td align="center">{{../actor/system.sanguinCharge.loss}}
+                  <a class="capacity-down-SC" align="center" title="Down sanguin charges">
+                    <i class="button fas fa-down"></i>
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td align="center">+1
+                  <a class="capacity-plus-SC" align="center" title="Plus sanguin charges">
+                    <i class="button fas fa-plus"></i>
+                  </a>
+                </td>
+                <td align="center">-1
+                  <a class="capacity-minus-SC" align="center" title="Minus sanguin charges">
+                    <i class="button fas fa-minus"></i>
+                  </a>
+                </td>
+              </tr>
+            </table>
+          {{/if}}
+
+          {{#if capacity.system.isBloodArmor}}
+            <span>{{../actor/system.bloodArmor.value}}</span>
+            <table>
+              <tr>
+                <td align="center">+1
+                  <a class="capacity-up-BA" align="center" title="Up blood armor">
+                    <i class="button fas fa-up"></i>
+                  </a>
+                </td>
+                <td align="center">-1
+                  <a class="capacity-down-BA" align="center" title="Down blood armor">
+                    <i class="button fas fa-down"></i>
+                  </a>
+                </td>
+              </tr>
+            </table>
+          {{/if}}
         </td>
         <td class="content" align="center">
           <a class="item-edit" align="center" title="Edit Item">

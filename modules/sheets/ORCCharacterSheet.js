@@ -90,7 +90,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     html.find(".spell-remove").click(this._onSpellRemove.bind(this));
     html.find(".spell-activate").change(this._onSpellActivate.bind(this));
     html.find(".spell-increase-nmax").change(this._onSpellIncreaseMax.bind(this));
-    
+   
     html.find(".item-create").click(ItemOrc.onItemCreate.bind(this));
     html.find(".item-edit").click(ItemOrc.onItemEdit.bind(this));
     html.find(".item-delete").click(ItemOrc.onItemDelete.bind(this));
@@ -134,10 +134,19 @@ export default class ORCCharacterSheet extends ActorSheet {
     html.find(".consumable-activable-deploy").click(ItemOrc.onConsumableDeploy.bind(this));
     html.find(".consumable-activable-reduce-duration").click(this._onConsumableReduceDuration.bind(this));
     html.find(".enchant-reduce-duration").click(EnchantOrc._onEnchantReduceDuration.bind(this));
+
     html.find(".capacity-activable-reduce-duration").click(this._onCapacityReduceDuration.bind(this));
     html.find(".capacity-activable-activate").click(this._onCapacityActivate.bind(this));
     html.find(".capacity-activable-deactivate").click(this._onCapacityDeactivate.bind(this));
     html.find(".capacity-choose-weapon").change(this._onCapacityChooseWeapon.bind(this));
+    html.find(".capacity-up-SC").click(this._onCapacityUpSC.bind(this));
+    html.find(".capacity-down-SC").click(this._onCapacityDownSC.bind(this));
+    html.find(".capacity-plus-SC").click(this._onCapacityPlusSC.bind(this));
+    html.find(".capacity-minus-SC").click(this._onCapacityMinusSC.bind(this));
+
+    html.find(".capacity-up-BA").click(this._onCapacityUpBA.bind(this));
+    html.find(".capacity-down-BA").click(this._onCapacityDownBA.bind(this));
+
     html.find(".weapon-choose-attribute").change(this._onWeaponChooseAttribute.bind(this));
 
     html.find(".capacity-status-resist-roll").click(this._onCapacityStatusResistRoll.bind(this));
@@ -970,6 +979,86 @@ export default class ORCCharacterSheet extends ActorSheet {
     return item.update(maj);
   }
 
+  _onCapacityUpSC(event){
+    event.preventDefault();
+    let actor = this.actor;
+    let data = this.getData();  
+
+    let rollFormula = actor.system.sanguinCharge.gain;
+    let rollData = {};
+    let rollOptions = {};
+    let roll = new Roll(rollFormula, rollData, rollOptions);
+    let rollResult = roll.roll({ async: false });
+
+    let newValue = actor.system.sanguinCharge.value + rollResult.total;
+    if (newValue < 0)
+      newValue = 0;
+
+    return actor.update({system: {sanguinCharge: {value: newValue}}});
+  }
+
+  _onCapacityDownSC(event){
+    event.preventDefault();
+    let actor = this.actor;
+    let data = this.getData(); 
+    
+    let rollFormula = actor.system.sanguinCharge.loss;
+    let rollData = {};
+    let rollOptions = {};
+    let roll = new Roll(rollFormula, rollData, rollOptions);
+    let rollResult = roll.roll({ async: false });
+
+    let newValue = actor.system.sanguinCharge.value + rollResult.total;
+    if (newValue < 0)
+      newValue = 0;
+    
+    return actor.update({system: {sanguinCharge: {value: newValue}}});
+  }
+
+  _onCapacityPlusSC(event){
+    event.preventDefault();
+    let actor = this.actor;
+
+    let newValue = actor.system.sanguinCharge.value + 1;
+    if (newValue < 0)
+      newValue = 0;
+
+    return actor.update({system: {sanguinCharge: {value: newValue}}});
+  }
+
+  _onCapacityMinusSC(event){
+    event.preventDefault();
+    let actor = this.actor;
+
+    let newValue = actor.system.sanguinCharge.value - 1;
+    if (newValue < 0)
+      newValue = 0;
+    
+    return actor.update({system: {sanguinCharge: {value: newValue}}});
+  }
+
+  _onCapacityUpBA(event){
+    event.preventDefault();
+    let actor = this.actor;
+
+    let newBA = actor.system.bloodArmor.value + 1;
+    if (newBA < 0)
+      return;
+
+    return actor.update({system: {bloodArmor: {value: newBA}}});
+  }
+
+  _onCapacityDownBA(event){
+    event.preventDefault();
+    let actor = this.actor;
+
+    let newBA = actor.system.bloodArmor.value - 1;
+    if (newBA < 0)
+      return;
+
+    return actor.update({system: {bloodArmor: {value: newBA}}});
+  }
+
   _onCapacityStatusResistRoll(event) {
     let actor = this.actor;
     let data = this.getData();   //Ensure that the actor is correclty initialized
@@ -1022,9 +1111,32 @@ export default class ORCCharacterSheet extends ActorSheet {
     if (!itemData.activeEffect == null) return;
     if (itemData.activated) return;
 
+
     let newMP = actor.system.mp.value - itemData.costMP;
     if (newMP < 0) return;
+
+    let newSanguinCharges = actor.system.sanguinCharge.value;
+
+    let rollFormula = itemData.ifActivable.sanguinChargeCost;
+    let rollData = {};
+    let rollOptions = {};
+    let roll = new Roll(rollFormula, rollData, rollOptions);
+    let rollResult = roll.roll({ async: false });
+    newSanguinCharges += rollResult.total;
+    if (newSanguinCharges < 0) return;
+
+    rollFormula = itemData.ifActivable.sanguinChargeGain;
+    rollData = {}; 
+    rollOptions = {};
+    roll = new Roll(rollFormula, rollData, rollOptions);
+    rollResult = roll.roll({ async: false });
+    newSanguinCharges += rollResult.total;
+
+    if (newSanguinCharges < 0)
+      newSanguinCharges = 0;
+
     actor.update({system: {mp: {value: newMP}}});
+    actor.update({system: {sanguinCharge: {value: newSanguinCharges}}});
 
     //Roll the effective duration
     let durationEffective = 0;
@@ -1061,6 +1173,9 @@ export default class ORCCharacterSheet extends ActorSheet {
     let itemData = item.system;
     if (!itemData.activeEffect || !itemData.ifActivable.activated) return;
 
+    if (itemData.ifActivable.rmAllSanguinChargeWhenDeactivated)
+      actor.update({system: {sanguinCharge: {value: 0}}});
+    
     //Deactivate the item
     item.update({
       system: {
@@ -1162,6 +1277,9 @@ export default class ORCCharacterSheet extends ActorSheet {
     //Roll the damage
     if (typeof damageFormula !== "string")
       damageFormula = damageFormula.toString();
+    //Add extra damage
+    //Roll
+    damageFormula += actor.system.damageTaken.value;
     let roll = new Roll(damageFormula).roll({ async: false });
     let damage = roll.total;
     //If the formula is not trivial, display the roll in the chat
@@ -1170,7 +1288,7 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     //Apply the armor
     if (applyArmor) damage -= actorData.ap.value;
-    else if(applyNativeArmor) damage -= actorData.ap.native;
+    else if(applyNativeArmor) damage -= actorData.ap.nativeEff;
     if (damage <= 0) return;
 
     //Apply possible resistance or vulnerability
@@ -1411,7 +1529,8 @@ export default class ORCCharacterSheet extends ActorSheet {
     //MP
     actorData.mp.valueMax = actorData.mp.valueMaxNative;
     //AP
-    actorData.ap.value = actorData.ap.native;
+    actorData.ap.nativeEff = actorData.ap.native;
+    actorData.ap.value = actorData.ap.nativeEff;
 
     //Attributes
     for (let [key, attribut] of Object.entries(actorData.attributes)){
@@ -1436,6 +1555,9 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     //Damage bonus
     actorData.damageBonus.value = "";
+
+    //Damage taken
+    actorData.damageTaken.value = "";
 
     //Magic
     let magic = actorData.magic;
@@ -1528,13 +1650,13 @@ export default class ORCCharacterSheet extends ActorSheet {
     actorData.defence.value += actorData.modifiers.defence;
     actorData.dodge.value += actorData.modifiers.dodge;
 
-    if(actorData.modifiers.damageBonus != "")
+    if(actorData.modifiers.damageBonus != "" && actorData.modifiers.damageBonus != "0")
       if(actorData.damageBonus.value == "")
         actorData.damageBonus.value += actorData.modifiers.damageBonus;
       else
         actorData.damageBonus.value += "+" + actorData.modifiers.damageBonus;
 
-    if(actorData.modifiers.powerBonus != "")
+    if(actorData.modifiers.powerBonus != "" && actorData.modifiers.powerBonus != "0")
       if(actorData.magic.powerModif == "")
         actorData.magic.powerModif += actorData.modifiers.powerBonus;
       else
@@ -1853,10 +1975,40 @@ export default class ORCCharacterSheet extends ActorSheet {
       }
 
       if (itemData.dodgeEnable) actorData.dodge.enable = true;
-      if (itemData.damageBonusModif != "")
+      if (itemData.damageBonusModif != "" && itemData.damageBonusModif != "0")
         if (actorData.damageBonus.value == "")
           actorData.damageBonus.value += itemData.damageBonusModif;
         else actorData.damageBonus.value += "+" + itemData.damageBonusModif;
+
+      if (itemData.isSanguinCharge){
+        const nChagres = actorData.sanguinCharge.value;
+        if (itemData.isSanguinChargeImproved){
+          actorData.hp.valueMax += 5 * nChagres;
+          actorData.modifiers.damageBonus += (5 * nChagres).toString();
+          actorData.damageTaken.value += (2 * nChagres).toString();
+          actorData.modifiers.defence -= Math.floor(nChagres / 2.);
+          actorData.modifiers.dodge -= Math.floor(nChagres / 2.);
+          actorData.modifiers.attack += Math.floor(nChagres / 2.);
+          actorData.sanguinCharge.gain = '+1';
+          actorData.sanguinCharge.loss = '-(1d2-1)';
+        }
+        else{
+          actorData.hp.valueMax += 3 * nChagres;
+          actorData.modifiers.damageBonus += (3 * nChagres).toString();
+          actorData.damageTaken.value += (1 * nChagres).toString();
+          actorData.modifiers.defence -= Math.floor(nChagres / 2.);
+          actorData.modifiers.dodge -= Math.floor(nChagres / 2.);
+          actorData.sanguinCharge.gain = '+1';
+          actorData.sanguinCharge.loss = '-1';
+        }
+      }
+
+      if(itemData.isBloodArmor){
+        const nBA = actor.system.bloodArmor.value;
+        actorData.hp.valueMax -= 5 * nBA;
+        actorData.ap.value += nBA;
+        actorData.ap.nativeEff += nBA;
+      }
     }
   }
 
@@ -2127,7 +2279,7 @@ export default class ORCCharacterSheet extends ActorSheet {
           effectiveDamage += "+" + ammo.system.damage;
           effectiveEffect += " " + ammo.system.effect;
         }
-      } else if (actor.system.damageBonus.value != "") {
+      } else if (actor.system.damageBonus.value != "" && actor.system.damageBonus.value != "0") {
         effectiveDamage += "+" + actor.system.damageBonus.value;
       }
 

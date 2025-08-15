@@ -76,7 +76,8 @@
       "capacity": "Capacités",
       "active": "Effets actifs",
       "inventory": "Inventaire",
-      "biography": "Biographie"
+      "biography": "Biographie",
+      "sanguinCharge": "Charges sanguines"
     },
     "container": {
       "capacity": "Capacité du conteneur : ",
@@ -275,7 +276,7 @@
       "consumeOnAttack": "Consommé après une attaque",
       "consumeOnSpell": "Consommé après un sort",
       "disableOnNewDay": "Désactivation au passage du jour",
-      "isRageBerserk": "Bonus de Physique de la rage Berserk",
+      "isRageBerserk": "Bonus de la rage Berserk",
       "isAttributRoll": "Jet d'attribut",
       "attributLocal": "Attribut",
       "isAttackRoll": "Attaque avec une arme",
@@ -292,7 +293,13 @@
       "addEffect": "Effets additionnels",
       "descripton": "Description",
       "roll": "Jet",
-      "activated": "Activé"
+      "activated": "Activé",
+      "isBloodArmor": "Armure de sang",
+      "isSanguinCharge": "Bonus des charges sanguines",
+      "sanguinChargeCost": "Coût en charges sanguines",
+      "sanguinChargeGain": "Gain de charges sanguines",
+      "sanguinRmAll": "Perte de toutes les charges sanguines quand désactivée ?",
+      "improved": "Version améliorée"
     },
     "spell": {
       "type": "Type",

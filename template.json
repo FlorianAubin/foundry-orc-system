@@ -54,6 +54,7 @@
       },
       "ap": {
         "native": 0,
+        "nativeEff": 0,
         "value": 0,
         "bodyParts": {
           "head": "",
@@ -111,6 +112,9 @@
         "value": 0
       },
       "damageBonus": {
+        "value": ""
+      },
+      "damageTaken":{
         "value": ""
       },
       "combatStyle": {
@@ -270,7 +274,16 @@
       "recoverMP": {
         "heal": ""
       },
-      "biography": ""
+      "biography": "",
+      "bloodArmor":{
+        "value": 0
+      },
+      "sanguinCharge":{
+        "value": 0,
+        "newValue": 0,
+        "gain": "+1",
+        "loss": "-1"
+      }
     },
     "container": {
       "capacity": 0,
@@ -522,7 +535,10 @@
         "consumeOnRoll": false,
         "consumeOnAttack": false,
         "consumeOnSpell": false,
-        "disableOnNewDay": true
+        "disableOnNewDay": true,
+        "sanguinChargeGain": "0",
+        "sanguinChargeCost": "0",
+        "rmAllSanguinChargeWhenDeactivated": false
       },
       "costMP": 0,
       "isRageBerserk": false,
@@ -540,7 +556,10 @@
       "dodgeEnable": false,
       "addEffect": "",
       "optionDescriptionDeploy": false,
-      "description": ""
+      "description": "",
+      "isSanguinCharge":false,
+      "isSanguinChargeImproved": false,
+      "isBloodArmor": false
     },
     "wound": {
       "hpMaxModif": 0,

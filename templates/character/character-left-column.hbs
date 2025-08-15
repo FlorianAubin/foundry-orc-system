@@ -74,6 +74,7 @@
     {{#if unlocked}}
       <th>{{localize "orc.native"}}</th>
     {{else}}
+      <th>{{localize "orc.native"}}</th>
       <th>{{localize "orc.effective"}}</th>
     {{/if}}
     <th></th>
@@ -91,6 +92,9 @@
         />
       </td>
     {{else}}
+      <td align="center">
+        <span>{{actor.system.ap.nativeEff}}</span>
+      </td>
       <td align="center">
         <span>{{actor.system.ap.value}}</span>
       </td>
@@ -378,6 +382,35 @@
       </td>
     {{/if}}
   </tr>
+
+
+
+
+    {{#if unlocked}}    
+      <tr align="center">
+      <th>{{localize "orc.character.sanguinCharge"}}</th>
+      <td align="center">
+        <input
+          type="number"
+          name="system.sanguinCharge.value"
+          value="{{actor.system.sanguinCharge.value}}"
+          placeholder="0"
+          onClick="this.select();"
+          style="width: 30px"
+        />
+      </td>
+      </tr>
+    {{else}}
+      {{#if (isLargerThan actor.system.sanguinCharge.value 0)}}
+        <tr align="center">
+        <th>{{localize "orc.character.sanguinCharge"}}</th>
+        <td align="center">
+          <span>{{actor.system.sanguinCharge.value}} </span>
+        </td>
+        </tr>
+      {{/if}}
+    {{/if}}
+ 
 
   <tr align="center">
     {{#if actor.system.modifiers.deploy}}
