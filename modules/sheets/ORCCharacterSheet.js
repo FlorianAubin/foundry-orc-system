@@ -1981,10 +1981,11 @@ export default class ORCCharacterSheet extends ActorSheet {
         else actorData.damageBonus.value += "+" + itemData.damageBonusModif;
 
       if (itemData.isSanguinCharge){
+        let sanguinCharge_damageBonus = ""
         const nChagres = actorData.sanguinCharge.value;
         if (itemData.isSanguinChargeImproved){
           actorData.hp.valueMax += 5 * nChagres;
-          actorData.modifiers.damageBonus += (5 * nChagres).toString();
+          sanguinCharge_damageBonus = (5 * nChagres).toString();
           actorData.damageTaken.value += (2 * nChagres).toString();
           actorData.modifiers.defence -= Math.floor(nChagres / 2.);
           actorData.modifiers.dodge -= Math.floor(nChagres / 2.);
@@ -1994,13 +1995,17 @@ export default class ORCCharacterSheet extends ActorSheet {
         }
         else{
           actorData.hp.valueMax += 3 * nChagres;
-          actorData.modifiers.damageBonus += (3 * nChagres).toString();
+          sanguinCharge_damageBonus = (3 * nChagres).toString();
           actorData.damageTaken.value += (1 * nChagres).toString();
           actorData.modifiers.defence -= Math.floor(nChagres / 2.);
           actorData.modifiers.dodge -= Math.floor(nChagres / 2.);
           actorData.sanguinCharge.gain = '+1';
           actorData.sanguinCharge.loss = '-1';
         }
+        if (sanguinCharge_damageBonus != "" && sanguinCharge_damageBonus != "0")
+          if (actorData.damageBonus.value == "")
+            actorData.damageBonus.value += sanguinCharge_damageBonus;
+          else actorData.damageBonus.value += "+" + sanguinCharge_damageBonus;
       }
 
       if(itemData.isBloodArmor){
