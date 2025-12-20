@@ -1697,19 +1697,31 @@ export default class ORCCharacterSheet extends ActorSheet {
       if (item.type == "consumable") {
         if (itemData.isActivable && itemData.ifActivable.activated) {
           const effect = itemData.ifActivable;
-          actorData.attributes.strengh.value += effect.strenghModif;
-          actorData.attributes.dexterity.value += effect.dexterityModif;
-          actorData.attributes.perception.value += effect.perceptionModif;
-          actorData.attributes.social.value += effect.socialModif;
-          actorData.attributes.intel.value += effect.intelModif;
-          actorData.hp.valueMax += effect.hpMaxModif;
-          actorData.mp.valueMax += effect.mpMaxModif;
-          actorData.ap.value += effect.apModif;
+          if (effect.strenghModif)
+            actorData.attributes.strengh.value += effect.strenghModif;
+          if (effect.dexterityModif)
+            actorData.attributes.dexterity.value += effect.dexterityModif;
+          if (effect.perceptionModif)
+            actorData.attributes.perception.value += effect.perceptionModif;
+          if (effect.socialModif)
+            actorData.attributes.social.value += effect.socialModif;
+          if (effect.intelModif)
+            actorData.attributes.intel.value += effect.intelModif;
+          if (effect.hpMaxModif)
+            actorData.hp.valueMax += effect.hpMaxModif;
+          if (effect.mpMaxModif)
+            actorData.mp.valueMax += effect.mpMaxModif;
+          if (effect.apModif)
+            actorData.ap.value += effect.apModif;
 
-          actorData.defence.value += effect.defenceModif;
-          actorData.roll.limitCritical += effect.limitCriticalModif;
-          actorData.roll.limitFumble += effect.limitFumbleModif;
-          actorData.ini.flat += effect.initiativeModif;
+          if (effect.defenceModif)
+            actorData.defence.value += effect.defenceModif;
+          if (effect.limitCriticalModif)
+            actorData.roll.limitCritical += effect.limitCriticalModif;
+          if (effect.limitFumbleModif)
+            actorData.roll.limitFumble += effect.limitFumbleModif;
+          if (effect.initiativeModif)
+            actorData.ini.flat += effect.initiativeModif;
 
           if(effect.damageBonusModif !== "") {
             if (actorData.damageBonus.value == "")
@@ -1721,7 +1733,8 @@ export default class ORCCharacterSheet extends ActorSheet {
               actorData.magic.powerModif += effect.magicPower;
             else actorData.magic.powerModif += "+" + effect.magicPower;
           }
-          actorData.magic.mpReduc += effect.mpReduc;
+          if (effect.mpReduc)
+            actorData.magic.mpReduc += effect.mpReduc;
         }
       }
       //All items with weight
