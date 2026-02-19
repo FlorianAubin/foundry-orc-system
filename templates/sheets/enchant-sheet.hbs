@@ -535,11 +535,11 @@
     <table>
       <tr>
         {{#if
-          (or unlocked (isNotEmptyString item.system.enchant.magicPower))
+          (or unlocked (or (isNotZeroNorEmptyString item.system.enchant.magicPower) (isDiffOf item.system.enchant.magicPowerMult 1)))
         }}
           <th colspan="2">{{localize "orc.enchant.magicPower"}}</th>
         {{/if}}
-        {{#if (or unlocked item.system.enchant.mpReduc)}}
+        {{#if (or unlocked (or (isNotZeroNorEmptyString item.system.enchant.mpReduc) (isDiffOf item.system.enchant.mpCostMult 1)))}}
           <th colspan="2">{{localize "orc.enchant.mpReduc"}}</th>
         {{/if}}
         {{#if (or unlocked item.system.enchant.rollSpellBonus)}}
