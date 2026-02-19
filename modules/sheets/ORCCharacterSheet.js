@@ -1697,16 +1697,16 @@ export default class ORCCharacterSheet extends ActorSheet {
         actorData.magic.nSpell.value += itemData.nSpell;
         actorData.magic.nInvoc.value += itemData.nInvoc;
 
-        if (itemData.magicPower != "")
-          if (actorData.magic.powerModif == "")
+        if (itemData.magicPower != ""  && itemData.magicPower != "0")
+          if (actorData.magic.powerModif == "" || itemData.magicPower[0] == "-")
             actorData.magic.powerModif += itemData.magicPower;
           else actorData.magic.powerModif += "+" + itemData.magicPower;
 
-        if(itemData.mpReduc)
+        if(itemData.mpReduc != 0)
           actorData.magic.mpCostModif += "+" + itemData.mpReduc.toString();
 
-        if(itemData.rollSpellBonus != ""){
-          if (actor.system.magic.effective.modif.difficulty == "")
+        if(itemData.rollSpellBonus != ""  && itemData.rollSpellBonus != "0"){
+          if (actor.system.magic.effective.modif.difficulty == "" || itemData.rollSpellBonus[0] == "-")
             actor.system.magic.effective.modif.difficulty += itemData.rollSpellBonus;
           else actor.system.magic.effective.modif.difficulty += "+" + itemData.rollSpellBonus;
         }
@@ -1747,16 +1747,16 @@ export default class ORCCharacterSheet extends ActorSheet {
               actorData.damageBonus.value += effect.damageBonusModif;
             else actorData.damageBonus.value += "+" + effect.damageBonusModif;
           }
-          if(effect.magicPower!== "") {
-            if (actorData.magic.powerModif == "")
+          if(effect.magicPower!== "" && effect.magicPower != "0") {
+            if (actorData.magic.powerModif == "" || effect.magicPower[0] == "-")
               actorData.magic.powerModif += effect.magicPower;
             else actorData.magic.powerModif += "+" + effect.magicPower;
           }
-          if (effect.mpReduc !== "")
+          if (effect.mpReduc !== 0)
             actorData.magic.mpCostModif += "+" + effect.mpReduc.toString();
 
-          if(effect.rollSpellBonus != ""){
-            if (actor.system.magic.effective.modif.difficulty == "")
+          if(effect.rollSpellBonus != "" && effect.rollSpellBonus != "0"){
+            if (actor.system.magic.effective.modif.difficulty == "" || effect.rollSpellBonus[0] == "-")
               actor.system.magic.effective.modif.difficulty += effect.rollSpellBonus;
             else actor.system.magic.effective.modif.difficulty += "+" + effect.rollSpellBonus;
           }
@@ -1810,22 +1810,22 @@ export default class ORCCharacterSheet extends ActorSheet {
           else actorData.damageBonus.value += "+" + enchant.damageBonusModif;
         }
 
-        if(enchant.magicPower !== ""){
-          if (actorData.magic.powerModif == "")
+        if(enchant.magicPower !== "" && enchant.magicPower !== "0"){
+          if (actorData.magic.powerModif == "" || enchant.magicPower[0] == "-")
             actorData.magic.powerModif += enchant.magicPower;
           else actorData.magic.powerModif += "+" + enchant.magicPower;
         }
         actor.system.magic.effective.modif.powerMult *= enchant.magicPowerMult;
 
-        if(enchant.mpReduc !== ""){
-          if (actorData.magic.mpCostModif == "")
+        if(enchant.mpReduc !== "" && enchant.mpReduc !== "0"){
+          if (actorData.magic.mpCostModif == "" || enchant.mpReduc[0] == "-")
             actorData.magic.mpCostModif += enchant.mpReduc;
           else actorData.magic.mpCostModif += "+" + enchant.mpReduc;
         }
         actor.system.magic.effective.modif.costMult *= enchant.mpCostMult;
 
-        if(enchant.rollSpellBonus != ""){
-          if (actor.system.magic.effective.modif.difficulty == "")
+        if(enchant.rollSpellBonus != "" && enchant.rollSpellBonus != "0"){
+          if (actor.system.magic.effective.modif.difficulty == "" || enchant.rollSpellBonus[0] == "-")
             actor.system.magic.effective.modif.difficulty += enchant.rollSpellBonus;
           else actor.system.magic.effective.modif.difficulty += "+" + enchant.rollSpellBonus;
         }
