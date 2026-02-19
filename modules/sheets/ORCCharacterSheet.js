@@ -1810,14 +1810,14 @@ export default class ORCCharacterSheet extends ActorSheet {
           else actorData.damageBonus.value += "+" + enchant.damageBonusModif;
         }
 
-        if(enchant.magicPower !== "" && enchant.magicPower !== "0"){
+        if(enchant.magicPower !== "" && enchant.magicPower != "0"){
           if (actorData.magic.powerModif == "" || enchant.magicPower[0] == "-")
             actorData.magic.powerModif += enchant.magicPower;
           else actorData.magic.powerModif += "+" + enchant.magicPower;
         }
         actor.system.magic.effective.modif.powerMult *= enchant.magicPowerMult;
 
-        if(enchant.mpReduc !== "" && enchant.mpReduc !== "0"){
+        if(enchant.mpReduc !== "" && enchant.mpReduc != "0"){
           if (actorData.magic.mpCostModif == "" || enchant.mpReduc[0] == "-")
             actorData.magic.mpCostModif += enchant.mpReduc;
           else actorData.magic.mpCostModif += "+" + enchant.mpReduc;

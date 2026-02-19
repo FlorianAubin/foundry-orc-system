@@ -611,12 +611,12 @@
 
       <tr>
         {{#if (or unlocked (isNotEmptyString item.system.enchant.addEffect))}}
-          <th colspan="3">{{localize "orc.enchant.addEffect"}}</th>
+          <th colspan="5">{{localize "orc.enchant.addEffect"}}</th>
         {{/if}}
       </tr>
       <tr>
         {{#if unlocked}}
-          <td align="center" colspan="3">
+          <td align="center" colspan="5">
             <input
               name="system.enchant.addEffect"
               type="text"
@@ -626,7 +626,7 @@
           </td>
         {{else}}
           {{#if (isNotEmptyString item.system.enchant.addEffect)}}
-            <td align="center" colspan="3">
+            <td align="center" colspan="5">
               <span>{{item.system.enchant.addEffect}}</span>
             </td>
           {{/if}}
