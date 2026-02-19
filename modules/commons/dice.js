@@ -133,7 +133,8 @@ export function SpellRoll({
     if (costFormula != "") {
       costroll = new Roll(costFormula, rollData, rollOptions);
       costRoll = costroll.roll({ async: false });
-      // Minimal cost is 1
+      // Minimal cost
+      // if (costRoll._total < 0) costRoll._total = 0 
       if (costRoll._total < 1) costRoll._total = 1 
       //Integer cost 
       costRoll._total = Math.floor(costRoll._total)
