@@ -2454,6 +2454,7 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     if(actor.system.magic.effective.modif.costMult)
       actor.system.magic.effective.costMult *= actor.system.magic.effective.modif.costMult;
+    console.log(actor.system.magic.effective)
 
     if(actor.system.magic.effective.modif.range)
       actor.system.magic.effective.range += actor.system.magic.effective.modif.range;
