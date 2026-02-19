@@ -596,9 +596,19 @@
               <span>{{item.system.enchant.magicPower}}</span>
             </td>
           {{/if}}
-          {{#if item.system.enchant.mpReduc}}
+          {{#if item.system.enchant.magicPowerMult}}
+            <td align="center">
+              <span>{{item.system.enchant.magicPowerMult}}</span>
+            </td>
+          {{/if}}
+          {{#if (isNotEmptyString item.system.enchant.mpReduc)}}
             <td align="center">
               <span>{{item.system.enchant.mpReduc}}</span>
+            </td>
+          {{/if}}
+          {{#if item.system.enchant.mpCostMult}}
+            <td align="center">
+              <span>{{item.system.enchant.mpCostMult}}</span>
             </td>
           {{/if}}
           {{#if item.system.enchant.rollSpellBonus}}
