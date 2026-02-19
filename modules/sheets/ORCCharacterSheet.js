@@ -1573,8 +1573,12 @@ export default class ORCCharacterSheet extends ActorSheet {
     let magic = actorData.magic;
     //Magic damage and heal bonus
     magic.powerModif = "";
+    magic.effective.modif.powerMult = 1;
     //MP reduction
     magic.mpCostModif = "";
+    magic.effective.modif.costMult = 1;
+    // Difficulty
+    magic.effective.modif.difficulty = "";
 
     //Roll limits
     //Critical

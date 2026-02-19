@@ -120,7 +120,6 @@ export function SpellRoll({
     costFormula = actor.system.magic.effective.cost;
     if (typeof costFormula !== "string") costFormula = costFormula.toString();
     //Apply multi
-    console.log(actor.system.magic)
     if (actor.system.magic.effective.costMult > 0){
       costFormula = "(" + costFormula + ")"
       costFormula += " * " + (actor.system.magic.effective.costMult).toString();
