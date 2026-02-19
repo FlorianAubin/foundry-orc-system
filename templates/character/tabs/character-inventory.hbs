@@ -58,6 +58,9 @@
               data-attributevaluebase="{{../actor.system.attack.native}}"
               data-weaponid="{{weapon._id}}">
               {{weapon.system.effective.attack}}
+              {{#if weapon.system.mpCost}}
+                  <br>-{{weapon.system.mpCost}} MP
+              {{/if}}
           </span>
         </div>
       </td>

@@ -46,6 +46,7 @@
           {{#if (and item.system.useAmmo (not unlocked))}}
             <th>{{localize "orc.weapon.ammo"}}</th>
           {{/if}}
+          <th>{{localize "orc.weapon.mpCost"}}</th>
         </tr>
         <tr>
           <td align="center">
@@ -94,6 +95,18 @@
               </select>
             </td>
           {{/if}}
+          <td align="center">
+            {{#if unlocked}}
+              <input
+                name="system.mpCost"
+                type="Number"
+                value="{{item.system.mpCost}}"
+                placeholder="0"
+              />
+            {{else}}
+              <span>{{item.system.mpCost}}</span>
+            {{/if}}
+          </td>
         </tr>
       </table>
       {{#if (or unlocked item.system.defenceModif)}}

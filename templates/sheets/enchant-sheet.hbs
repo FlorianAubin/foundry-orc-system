@@ -537,10 +537,10 @@
         {{#if
           (or unlocked (isNotEmptyString item.system.enchant.magicPower))
         }}
-          <th>{{localize "orc.enchant.magicPower"}}</th>
+          <th colspan="2">{{localize "orc.enchant.magicPower"}}</th>
         {{/if}}
         {{#if (or unlocked item.system.enchant.mpReduc)}}
-          <th>{{localize "orc.enchant.mpReduc"}}</th>
+          <th colspan="2">{{localize "orc.enchant.mpReduc"}}</th>
         {{/if}}
         {{#if (or unlocked item.system.enchant.rollSpellBonus)}}
           <th>{{localize "orc.enchant.rollSpellBonus"}}</th>
@@ -557,11 +557,29 @@
             />
           </td>
           <td align="center">
+            Mult: 
+            <input
+              name="system.enchant.magicPowerMult"
+              type="number"
+              value="{{item.system.enchant.magicPowerMult}}"
+              placeholder=1
+            />
+          </td>
+          <td align="center">
             <input
               name="system.enchant.mpReduc"
-              type="number"
+              type="text"
               value="{{item.system.enchant.mpReduc}}"
               placeholder="0"
+            />
+          </td>
+          <td align="center">
+            Mult: 
+            <input
+              name="system.enchant.mpCostMult"
+              type="number"
+              value="{{item.system.enchant.mpCostMult}}"
+              placeholder=1
             />
           </td>
           <td align="center">

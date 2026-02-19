@@ -102,6 +102,7 @@
       "range": "Portée (m)",
       "useAmmo": "Utilise des munitions ?",
       "ammo": "Munition",
+      "mpCost": "Coût en MP",
       "defenceModif": "Modificateur de défense",
       "attackModif": "Modificateur d'attaque",
       "usableCarac": "Caractéristiques utilisables",

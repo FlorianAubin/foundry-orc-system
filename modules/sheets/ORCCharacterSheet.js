@@ -712,6 +712,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     let actor = this.actor;
     let data = this.getData();   //Ensure that the actor is correclty initialized
 
+      // Apply local MP cost (for capacity)
     let costmp = event.currentTarget.dataset.costmp;
     if(costmp != null){
       let newMP = actor.system.mp.value - costmp;
@@ -727,6 +728,15 @@ export default class ORCCharacterSheet extends ActorSheet {
       .filter(function (item) {
         return item._id == event.currentTarget.dataset.weaponid;
       })[0];
+
+
+    // Apply MP cost of the weapon
+    costmp = weapon.system.mpCost;
+    if(costmp != null && costmp > 0){
+      let newMP = actor.system.mp.value - costmp;
+      if (newMP < 0) return;
+      actor.update({system: {mp: {value: newMP}}});
+    }
 
     //Recover the ammo
     const ammo = actor.items
@@ -1564,7 +1574,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     //Magic damage and heal bonus
     magic.powerModif = "";
     //MP reduction
-    magic.mpReduc = 0;
+    magic.mpCostModif = "";
 
     //Roll limits
     //Critical
@@ -1686,11 +1696,20 @@ export default class ORCCharacterSheet extends ActorSheet {
       if (item.type == "equipableitem" && itemData.equipped) {
         actorData.magic.nSpell.value += itemData.nSpell;
         actorData.magic.nInvoc.value += itemData.nInvoc;
+
         if (itemData.magicPower != "")
           if (actorData.magic.powerModif == "")
             actorData.magic.powerModif += itemData.magicPower;
           else actorData.magic.powerModif += "+" + itemData.magicPower;
-        actorData.magic.mpReduc += itemData.mpReduc;
+
+        if(itemData.mpReduc)
+          actorData.magic.mpCostModif += "+" + itemData.mpReduc.toString();
+
+        if(itemData.rollSpellBonus != ""){
+          if (actor.system.magic.effective.modif.difficulty == "")
+            actor.system.magic.effective.modif.difficulty += itemData.rollSpellBonus;
+          else actor.system.magic.effective.modif.difficulty += "+" + itemData.rollSpellBonus;
+        }
       }
 
       //Activated consumables
@@ -1733,8 +1752,14 @@ export default class ORCCharacterSheet extends ActorSheet {
               actorData.magic.powerModif += effect.magicPower;
             else actorData.magic.powerModif += "+" + effect.magicPower;
           }
-          if (effect.mpReduc)
-            actorData.magic.mpReduc += effect.mpReduc;
+          if (effect.mpReduc !== "")
+            actorData.magic.mpCostModif += "+" + effect.mpReduc.toString();
+
+          if(effect.rollSpellBonus != ""){
+            if (actor.system.magic.effective.modif.difficulty == "")
+              actor.system.magic.effective.modif.difficulty += effect.rollSpellBonus;
+            else actor.system.magic.effective.modif.difficulty += "+" + effect.rollSpellBonus;
+          }
         }
       }
       //All items with weight
@@ -1790,8 +1815,20 @@ export default class ORCCharacterSheet extends ActorSheet {
             actorData.magic.powerModif += enchant.magicPower;
           else actorData.magic.powerModif += "+" + enchant.magicPower;
         }
-        if(enchant.mpReduc)
-          actorData.magic.mpReduc += enchant.mpReduc;
+        actor.system.magic.effective.modif.powerMult *= enchant.magicPowerMult;
+
+        if(enchant.mpReduc !== ""){
+          if (actorData.magic.mpCostModif == "")
+            actorData.magic.mpCostModif += enchant.mpReduc;
+          else actorData.magic.mpCostModif += "+" + enchant.mpReduc;
+        }
+        actor.system.magic.effective.modif.costMult *= enchant.mpCostMult;
+
+        if(enchant.rollSpellBonus != ""){
+          if (actor.system.magic.effective.modif.difficulty == "")
+            actor.system.magic.effective.modif.difficulty += enchant.rollSpellBonus;
+          else actor.system.magic.effective.modif.difficulty += "+" + enchant.rollSpellBonus;
+        }
       }
 
       //Wounds
@@ -2167,8 +2204,8 @@ export default class ORCCharacterSheet extends ActorSheet {
       const itemData = item.system;
 
       //Equipable items
-      if (item.type == "equipableitem" && itemData.equipped)
-        actorData.magic.roll.value += itemData.rollSpellBonus;
+      // if (item.type == "equipableitem" && itemData.equipped)
+        // actorData.magic.roll.value += itemData.rollSpellBonus;
 
       //Activated consumables
       if (item.type == "consumable") {
@@ -2176,7 +2213,7 @@ export default class ORCCharacterSheet extends ActorSheet {
           const effect = itemData.ifActivable;
           actorData.attack.value += effect.attackModif;
           actorData.dodge.value += effect.dodgeModif;
-          actorData.magic.roll.value += effect.rollSpellBonus;
+          // actorData.magic.roll.value += effect.rollSpellBonus;
         }
       }
 
@@ -2185,7 +2222,7 @@ export default class ORCCharacterSheet extends ActorSheet {
       if (enchant && enchant.activated) {
         actorData.attack.value += enchant.attackModif;
         actorData.dodge.value += enchant.dodgeModif;
-        actorData.magic.roll.value += enchant.rollSpellBonus;
+        // actorData.magic.roll.value += enchant.rollSpellBonus;
       }
     }
   }
@@ -2396,9 +2433,11 @@ export default class ORCCharacterSheet extends ActorSheet {
       else if(actor.system.magic.effective.modif.cost[0] == "-") actor.system.magic.effective.cost += actor.system.magic.effective.modif.cost;
       else                                        actor.system.magic.effective.cost += " + " + actor.system.magic.effective.modif.cost; 
     }
-    if (actor.system.magic.mpReduc != 0){
-      if(actor.system.magic.mpReduc > 0) actor.system.magic.effective.cost += " + " + (actor.system.magic.mpReduc).toString();
-      if(actor.system.magic.mpReduc < 0) actor.system.magic.effective.cost += (actor.system.magic.mpReduc).toString();
+    if (actor.system.magic.mpCostModif != "" && actor.system.magic.mpCostModif != "0"){
+      if(actor.system.magic.mpCostModif[0] == "-")
+        actor.system.magic.effective.cost +=  actor.system.magic.mpCostModif;
+      else
+        actor.system.magic.effective.cost +=  "+" + actor.system.magic.mpCostModif;
     }
     if (actor.system.magic.effective.modif.difficulty != "" && actor.system.magic.effective.modif.difficulty != "0"){
       if(actor.system.magic.effective.difficulty == "") actor.system.magic.effective.difficulty = actor.system.magic.effective.modif.difficulty;
@@ -2412,8 +2451,10 @@ export default class ORCCharacterSheet extends ActorSheet {
     }
     if(actor.system.magic.effective.modif.powerMult)
       actor.system.magic.effective.powerMult *= actor.system.magic.effective.modif.powerMult;
+
     if(actor.system.magic.effective.modif.costMult)
       actor.system.magic.effective.costMult *= actor.system.magic.effective.modif.costMult;
+
     if(actor.system.magic.effective.modif.range)
       actor.system.magic.effective.range += actor.system.magic.effective.modif.range;
 
@@ -2483,23 +2524,23 @@ export default class ORCCharacterSheet extends ActorSheet {
       actorData.ini.flat = 1;
   }
 
-    calculatePoisonDamage(data){
-      let actor = data.actor;
-      let actorData = actor.system;
+  calculatePoisonDamage(data){
+    let actor = data.actor;
+    let actorData = actor.system;
 
-      const HP = actorData.hp.valueMax;
-      const C = actorData.attributes.strengh.value;
-      if (C >= 150){
-        actorData.status.poisonDamage = 0;
-        return;
-      }
-      
-      const A = 200. * Math.sqrt(1. - C/150.);
-
-      actorData.status.poisonDamage = Math.floor((HP * A)/(HP + 10*A))
-
-      if (actorData.status.poisonDamage < 0) actorData.status.poisonDamage = 0;
+    const HP = actorData.hp.valueMax;
+    const C = actorData.attributes.strengh.value;
+    if (C >= 150){
+      actorData.status.poisonDamage = 0;
+      return;
     }
+    
+    const A = 200. * Math.sqrt(1. - C/150.);
+
+    actorData.status.poisonDamage = Math.floor((HP * A)/(HP + 10*A))
+
+    if (actorData.status.poisonDamage < 0) actorData.status.poisonDamage = 0;
+  }
 
 
   async _onDropItem(event, data) {
