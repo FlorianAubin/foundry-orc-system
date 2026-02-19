@@ -591,24 +591,24 @@
             />
           </td>
         {{else}}
-          {{#if (isNotEmptyString item.system.enchant.magicPower)}}
+          {{#if (isNotZeroNorEmptyString item.system.enchant.magicPower)}}
             <td align="center">
               <span>{{item.system.enchant.magicPower}}</span>
             </td>
           {{/if}}
-          {{#if item.system.enchant.magicPowerMult}}
+          {{#if (isDiffOf item.system.enchant.magicPowerMult 1)}}
             <td align="center">
-              <span>{{item.system.enchant.magicPowerMult}}</span>
+              <span>Mult: {{item.system.enchant.magicPowerMult}}</span>
             </td>
           {{/if}}
-          {{#if (isNotEmptyString item.system.enchant.mpReduc)}}
+          {{#if (isNotZeroNorEmptyString item.system.enchant.mpReduc)}}
             <td align="center">
               <span>{{item.system.enchant.mpReduc}}</span>
             </td>
           {{/if}}
-          {{#if item.system.enchant.mpCostMult}}
+          {{#if (isDiffOf item.system.enchant.mpCostMult 1)}}
             <td align="center">
-              <span>{{item.system.enchant.mpCostMult}}</span>
+              <span>Mult: {{item.system.enchant.mpCostMult}}</span>
             </td>
           {{/if}}
           {{#if item.system.enchant.rollSpellBonus}}

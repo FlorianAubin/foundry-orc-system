@@ -86,11 +86,11 @@
               <td align="center">
                 <span class="fas fa-check"></span>
               </td>
-              {{#if (isZeroOrEmptyString item.system.ifActivable.sanguinChargeCost)}}
+              {{#if (isNotZeroNorEmptyString item.system.ifActivable.sanguinChargeCost)}}
                 <th>{{localize "orc.capacity.sanguinChargeCost"}}</th>
                 <td align="center">{{item.system.ifActivable.sanguinChargeCost}}</td>
               {{/if}}  
-              {{#if (isZeroOrEmptyString item.system.ifActivable.sanguinChargeGain)}}
+              {{#if (isNotZeroNorEmptyString item.system.ifActivable.sanguinChargeGain)}}
                 <th>{{localize "orc.capacity.sanguinChargeGain"}}</th>
                 <td align="center">{{item.system.ifActivable.sanguinChargeGain}}</td>
               {{/if}}  

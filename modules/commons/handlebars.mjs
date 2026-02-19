@@ -1,4 +1,9 @@
 export const RegisterHandlebars = function () {
+  Handlebars.registerHelper("isDiffOf", function (value, compare) {
+    if (value == compare) return false;
+    return true;
+  });
+
   Handlebars.registerHelper("isLowerThan", function (value, compare) {
     if (value < compare) return true;
     return false;
@@ -17,12 +22,13 @@ export const RegisterHandlebars = function () {
 
 
 
-  Handlebars.registerHelper("isZeroOrEmptyString", function (value) {
+  Handlebars.registerHelper("isNotZeroNorEmptyString", function (value) {
     if (value === null) return false;
     if (value === "") return false;
     if (parseFloat(value) === 0) return false;
     return true;
   });
+
 
   Handlebars.registerHelper("isAValueOf", function (value, dict) {
     for(var i in dict)

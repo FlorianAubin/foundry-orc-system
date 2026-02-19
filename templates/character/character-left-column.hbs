@@ -312,7 +312,7 @@
     </tr>
   {{/if}}
 
-  {{#if (or actor.system.modifiers.deploy (isZeroOrEmptyString actor.system.modifiers.damageBonus))}}
+  {{#if (or actor.system.modifiers.deploy (isNotZeroNorEmptyString actor.system.modifiers.damageBonus))}}
     <tr align="center">
       <th>{{localize "orc.character.damageBonus"}}</th>
         {{#if actor.system.modifiers.deploy}}
@@ -332,7 +332,7 @@
     </tr>
   {{/if}}
   
-  {{#if (or actor.system.modifiers.deploy (isZeroOrEmptyString actor.system.modifiers.powerBonus))}}
+  {{#if (or actor.system.modifiers.deploy (isNotZeroNorEmptyString actor.system.modifiers.powerBonus))}}
     <tr align="center">
       <th>{{localize "orc.character.magicPower"}}</th>
       {{#if actor.system.modifiers.deploy}}
