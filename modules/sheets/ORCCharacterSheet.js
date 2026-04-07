@@ -2038,18 +2038,16 @@ export default class ORCCharacterSheet extends ActorSheet {
         let sanguinCharge_damageBonus = ""
         const nChagres = actorData.sanguinCharge.value;
         if (itemData.isSanguinChargeImproved){
-          actorData.hp.valueMax += 5 * nChagres;
-          sanguinCharge_damageBonus = (5 * nChagres).toString();
+          sanguinCharge_damageBonus = (4 * nChagres).toString();
           actorData.damageTaken.value += (2 * nChagres).toString();
-          actorData.modifiers.defence -= Math.floor(nChagres / 2.);
-          actorData.modifiers.dodge -= Math.floor(nChagres / 2.);
+          actorData.modifiers.defence -= Math.floor(nChagres);
+          actorData.modifiers.dodge -= Math.floor(nChagres);
           actorData.modifiers.attack += Math.floor(nChagres / 2.);
-          actorData.sanguinCharge.gain = '+1';
+          actorData.sanguinCharge.gain = '+1'; //1d2 (lvl 8)
           actorData.sanguinCharge.loss = '-(1d2-1)';
         }
         else{
-          actorData.hp.valueMax += 3 * nChagres;
-          sanguinCharge_damageBonus = (3 * nChagres).toString();
+          sanguinCharge_damageBonus = (2 * nChagres).toString();
           actorData.damageTaken.value += (1 * nChagres).toString();
           actorData.modifiers.defence -= Math.floor(nChagres / 2.);
           actorData.modifiers.dodge -= Math.floor(nChagres / 2.);
