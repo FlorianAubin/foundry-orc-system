@@ -840,7 +840,7 @@
                     >{{item.system.enchant.limitFumbleModif}}</td>
                   </tr>
                 {{/if}}
-                {{#if (isNotEmptyString item.system.enchant.damageBonusModif)}}
+                {{#if (isNotZeroNorEmptyString item.system.enchant.damageBonusModif)}}
                   <tr>
                     <td align="center">{{localize
                         "orc.enchant.damageBonusModif"
@@ -850,7 +850,7 @@
                     >{{item.system.enchant.damageBonusModif}}</td>
                   </tr>
                 {{/if}}
-                  {{#if (isNotEmptyString item.system.enchant.magicPower)}}
+                  {{#if (isNotZeroNorEmptyString item.system.enchant.magicPower)}}
                     <tr>
                       <td align="center">{{localize
                           "orc.enchant.magicPower"
@@ -860,7 +860,7 @@
                       >{{item.system.enchant.magicPower}}</td>
                     </tr>
                   {{/if}}
-                  {{#if (isNotEmptyString item.system.enchant.mpReduc)}}
+                  {{#if (isNotZeroNorEmptyString item.system.enchant.mpReduc)}}
                     <tr>
                       <td align="center">{{localize
                           "orc.enchant.mpReduc"
@@ -870,7 +870,7 @@
                       >{{item.system.enchant.mpReduc}}</td>
                     </tr>
                   {{/if}}
-                  {{#if (isNotEmptyString item.system.enchant.rollSpellBonus)}}
+                  {{#if (isNotZeroNorEmptyString item.system.enchant.rollSpellBonus)}}
                     <tr>
                       <td align="center">{{localize
                           "orc.enchant.rollSpellBonus"
