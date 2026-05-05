@@ -1793,7 +1793,7 @@ export default class ORCCharacterSheet extends ActorSheet {
         if(enchant.apModif)
           actorData.ap.value += enchant.apModif;
 
-        if(enchant.dexterityModif)
+        if(enchant.defenceModif)
         actorData.defence.value += enchant.defenceModif;
 
         if(enchant.limitCriticalModif)
