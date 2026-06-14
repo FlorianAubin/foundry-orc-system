@@ -54,7 +54,8 @@
       },
       "es":{
         "value": 0,
-        "valueMax": 0
+        "valueMax": 0,
+        "gs": ""
       },
       "ap": {
         "native": 0,

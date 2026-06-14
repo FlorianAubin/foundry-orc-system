@@ -70,7 +70,7 @@
     </td>
   </tr>
   {{/if}}
- {{#if (or unlocked actor.system.es.valueMaxNative)}}
+ {{#if (or unlocked actor.system.es.valueMax)}}
   <tr>
     <th>{{localize "orc.character.es"}}</th>
     <td align="center">
@@ -84,11 +84,20 @@
       />
     </td>
     <td align="center">
+      <input
+        type="text"
+        name="system.es.gs"
+        value="{{actor.system.es.gs}}"
+        placeholder=""
+        onClick="this.select();"
+      />
+    </td>
+    <td align="center">
       {{#if unlocked}}
         <input
           type="number"
-          name="system.es.valueMaxNative"
-          value="{{actor.system.es.valueMaxNative}}"
+          name="system.es.valueMax"
+          value="{{actor.system.es.valueMax}}"
           placeholder="0"
           onClick="this.select();"
           style="width: 40px"
