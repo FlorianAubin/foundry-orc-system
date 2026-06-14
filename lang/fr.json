@@ -45,6 +45,7 @@
       "faction": "Faction",
       "hp": "HP",
       "mp": "MP",
+      "es": "ES",
       "ap": "Armure",
       "encumbrance": "Encombrement",
       "attribute" : "Attribut",

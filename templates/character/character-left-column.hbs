@@ -70,6 +70,35 @@
     </td>
   </tr>
   {{/if}}
+ {{#if (or unlocked actor.system.es.valueMaxNative)}}
+  <tr>
+    <th>{{localize "orc.character.es"}}</th>
+    <td align="center">
+      <input
+        type="number"
+        name="system.es.value"
+        value="{{actor.system.es.value}}"
+        placeholder="0"
+        onClick="this.select();"
+        style="width: 40px"
+      />
+    </td>
+    <td align="center">
+      {{#if unlocked}}
+        <input
+          type="number"
+          name="system.es.valueMaxNative"
+          value="{{actor.system.es.valueMaxNative}}"
+          placeholder="0"
+          onClick="this.select();"
+          style="width: 40px"
+        />
+      {{else}}
+        <span>{{actor.system.es.valueMax}}</span>
+      {{/if}}
+    </td>
+  </tr>
+  {{/if}}
     <th></th>
     {{#if unlocked}}
       <th>{{localize "orc.native"}}</th>

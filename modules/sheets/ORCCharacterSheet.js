@@ -2272,6 +2272,12 @@ export default class ORCCharacterSheet extends ActorSheet {
       actorData.mp.value = actorData.mp.valueMax;
     if (actorData.mp.value < 0) actorData.mp.value = 0;
 
+    //ES
+    if (actorData.es.valueMax < 0) actorData.es.valueMax = 0;
+    if (actorData.es.value > actorData.es.valueMax)
+      actorData.es.value = actorData.es.valueMax;
+    if (actorData.es.value < 0) actorData.es.value = 0;
+
     //Attributes
     for (let [key, attribut] of Object.entries(actorData.attributes)) {
       if (attribut.value < 0) attribut.value = 0;

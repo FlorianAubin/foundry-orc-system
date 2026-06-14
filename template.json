@@ -52,6 +52,10 @@
         "valueMax": 0,
         "surplus": 0
       },
+      "es":{
+        "value": 0,
+        "valueMax": 0
+      },
       "ap": {
         "native": 0,
         "nativeEff": 0,
