@@ -46,6 +46,7 @@
       "hp": "HP",
       "mp": "MP",
       "es": "ES",
+      "gs": "Groupe sanguin",
       "ap": "Armure",
       "encumbrance": "Encombrement",
       "attribute" : "Attribut",

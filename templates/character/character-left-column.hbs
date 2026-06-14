@@ -84,15 +84,6 @@
       />
     </td>
     <td align="center">
-      <input
-        type="text"
-        name="system.es.gs"
-        value="{{actor.system.es.gs}}"
-        placeholder=""
-        onClick="this.select();"
-      />
-    </td>
-    <td align="center">
       {{#if unlocked}}
         <input
           type="number"
@@ -108,14 +99,28 @@
     </td>
   </tr>
   {{/if}}
-    <th></th>
-    {{#if unlocked}}
-      <th>{{localize "orc.native"}}</th>
-    {{else}}
-      <th>{{localize "orc.native"}}</th>
-      <th>{{localize "orc.effective"}}</th>
-    {{/if}}
-    <th></th>
+  <th></th>
+  {{#if (actor.system.es.valueMax)}}
+  <th>{{localize "orc.character.gs"}}</th>
+  <tr>
+    <td align="center">
+      <input
+        type="text"
+        name="system.es.gs"
+        value="{{actor.system.es.gs}}"
+        placeholder=""
+        onClick="this.select();"
+      />
+    </td>
+  {{/if}}
+  <th></th>
+  {{#if unlocked}}
+    <th>{{localize "orc.native"}}</th>
+  {{else}}
+    <th>{{localize "orc.native"}}</th>
+    <th>{{localize "orc.effective"}}</th>
+  {{/if}}
+  <th></th>
   <tr>
     <th>{{localize "orc.character.ap"}}</th>
     {{#if unlocked}}
