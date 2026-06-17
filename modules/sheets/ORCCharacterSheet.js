@@ -851,6 +851,10 @@ export default class ORCCharacterSheet extends ActorSheet {
         });
       if (itemData.mp != "")
         await this.takeHeal({ healFormula: itemData.mp, onMP: true });
+      if (itemData.es > 0){
+        actorData.es.value += itemData.es;
+        if (actorData.es.value > actorData.es.valueMax) actorData.es.value = actorData.es.valueMax;
+      }
     }
     //Apply the status healing
     if (itemData.healBleed) this._onBleedOff();

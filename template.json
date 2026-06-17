@@ -440,6 +440,7 @@
     "food": {
       "hp": "",
       "mp": "",
+      "es": 0,
       "tipsiness": 0,
       "poison": 0,
       "weight": {
