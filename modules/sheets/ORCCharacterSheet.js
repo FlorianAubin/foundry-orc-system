@@ -852,8 +852,12 @@ export default class ORCCharacterSheet extends ActorSheet {
       if (itemData.mp != "")
         await this.takeHeal({ healFormula: itemData.mp, onMP: true });
       if (itemData.es > 0){
-        actorData.es.value += itemData.es;
-        if (actorData.es.value > actorData.es.valueMax) actorData.es.value = actorData.es.valueMax;
+        newValue = actorData.es.value + itemData.es;
+        if (newValue > actorData.es.valueMax) newValue = actorData.es.valueMax;
+        let maj = {
+          system: { es: { value: newValue } },
+        };
+        await actor.update(maj);
       }
     }
     //Apply the status healing
