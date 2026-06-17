@@ -852,10 +852,10 @@ export default class ORCCharacterSheet extends ActorSheet {
       if (itemData.mp != "")
         await this.takeHeal({ healFormula: itemData.mp, onMP: true });
       if (itemData.es > 0){
-        newValue = actorData.es.value + itemData.es;
-        if (newValue > actorData.es.valueMax) newValue = actorData.es.valueMax;
+        let newESValue = actorData.es.value + itemData.es;
+        if (newESValue > actorData.es.valueMax) newESValue = actorData.es.valueMax;
         let maj = {
-          system: { es: { value: newValue } },
+          system: { es: { value: newESValue } },
         };
         await actor.update(maj);
       }
