@@ -44,6 +44,9 @@
           {{#if (or unlocked item.system.mp)}}
             <th>{{localize "orc.food.mp"}}</th>
           {{/if}}
+          {{#if (or unlocked item.system.es)}}
+            <th>{{localize "orc.food.es"}}</th>
+          {{/if}}
         </tr>
         <tr>
           {{#if unlocked}}
@@ -72,6 +75,19 @@
           {{else}}
             {{#if item.system.mp}}
               <td align="center">{{item.system.mp}}</td>
+            {{/if}}
+          {{/if}}
+          {{#if unlocked}}
+            <td align="center">
+              <input
+                name="system.es"
+                type="number"
+                value="{{item.system.es}}"
+              />
+            </td>
+          {{else}}
+            {{#if item.system.es}}
+              <td align="center">{{item.system.es}}</td>
             {{/if}}
           {{/if}}
           </td>
