@@ -25,8 +25,8 @@ export default class ORCCharacterSheet extends ActorSheet {
     return `systems/orc/templates/sheets/character-sheet.hbs`;
   }
 
-  getData(options = {}) {
-    const data = super.getData(options);
+  async getData(options = {}) {
+    const data = await super.getData(options);
 
     data.config = CONFIG.ORC;
 
@@ -66,7 +66,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     });
 
     //Enrich the html to be able to link objects
-    data.biographyHTML = TextEditor.enrichHTML(data.actor.system.biography, {
+    data.biographyHTML = await TextEditor.enrichHTML(data.actor.system.biography, {
       secrets: this.actor.isOwner,
       async: false,
       relativeTo: this.actor,
@@ -76,7 +76,8 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     this._prepareCharacterData(data);
 
-    //console.log(data);
+    // console.log(data);
+
     return data;
   }
 
@@ -162,7 +163,6 @@ export default class ORCCharacterSheet extends ActorSheet {
     event.preventDefault();
 
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
 
     return actor.update({
       system: { ap: { optionDeploy: !actor.system.ap.optionDeploy } },
@@ -173,7 +173,6 @@ export default class ORCCharacterSheet extends ActorSheet {
     event.preventDefault();
 
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
 
     return actor.update({
       system: { modifiers: { deploy: !actor.system.modifiers.deploy } },
@@ -184,7 +183,6 @@ export default class ORCCharacterSheet extends ActorSheet {
     event.preventDefault();
 
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
 
     return actor.update({
       system: {
@@ -196,7 +194,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   _onSpellAdd(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
     let type = event.currentTarget.dataset.type;
 
     if(type == ORC.spellType.base){
@@ -228,7 +225,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   _onSpellRemove(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
     let type = event.currentTarget.dataset.type;
 
     if(type == ORC.spellType.base){
@@ -256,7 +252,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   _onSpellIncreaseMax(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
     let type = event.currentTarget.dataset.type;
 
     let nmax = event.currentTarget.value;
@@ -279,7 +274,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   _onSpellActivate(event){
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
     let type = event.currentTarget.name;
     let value = event.currentTarget.value;
 
@@ -312,7 +306,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   _onWeaponChooseAttribute(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
     let element = event.currentTarget;
     let weaponid = event.currentTarget.dataset.weaponid;
     if(weaponid == null)
@@ -324,10 +317,9 @@ export default class ORCCharacterSheet extends ActorSheet {
     return item.update(maj);
   }
 
-  _onItemEquipped(event) {
+  async _onItemEquipped(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
     let element = event.currentTarget;
     let itemId = element.closest(".item").dataset.itemId;
     let item = actor.items.get(itemId);
@@ -338,7 +330,8 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     //If the item (weapon) needs ammo, if there is no linked ammo, and if the actor has ammo, use the first one by default
     if (item.system.useAmmo && item.system.ammo == "") {
-      const defaultAmmo = this.getData().ammos[0];
+      const data = await this.getData();
+      const defaultAmmo = data.ammos[0];
       if (defaultAmmo) item.update({ system: { ammo: defaultAmmo._id } });
     }
 
@@ -367,7 +360,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   _onArmorEquipped(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
     let element = event.currentTarget;
     let itemId = element.value;
     let items = actor.items;
@@ -409,7 +401,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   _onWeaponChooseAmmo(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
     let element = event.currentTarget;
     let weaponid = event.currentTarget.dataset.weaponid;
     if(weaponid == null)
@@ -424,7 +415,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   _onArmorUpdateAP(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
     let element = event.currentTarget;
     let itemId = element.closest(".item").dataset.itemId;
     let item = actor.items.get(itemId);
@@ -437,7 +427,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   _onTakeDamage(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
     
     const damage = event.currentTarget.dataset.damage;
     const applyArmor = event.currentTarget.dataset.applyarmor === "true";
@@ -456,8 +445,6 @@ export default class ORCCharacterSheet extends ActorSheet {
 
   _onTakeDamageArmor(event) {
     event.preventDefault();
-    let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
 
     const damage = event.currentTarget.dataset.damage;
     const armorId = event.currentTarget.dataset.armorid;
@@ -471,8 +458,6 @@ export default class ORCCharacterSheet extends ActorSheet {
 
   _onRecoverHP(event) {
     event.preventDefault();
-    let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
 
     const heal = event.currentTarget.dataset.heal;
     const multiplier = event.currentTarget.dataset.multiplier;
@@ -482,8 +467,6 @@ export default class ORCCharacterSheet extends ActorSheet {
 
   _onRecoverMP(event) {
     event.preventDefault();
-    let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
 
     const heal = event.currentTarget.dataset.heal;
     if (!heal) return;
@@ -493,7 +476,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   async _onAttributeRoll(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
 
     let costmp = event.currentTarget.dataset.costmp;
     if(costmp != null){
@@ -515,7 +497,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   async _onAttackRoll(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
 
     let costmp = event.currentTarget.dataset.costmp;
     if(costmp != null){
@@ -538,8 +519,6 @@ export default class ORCCharacterSheet extends ActorSheet {
 
   async _onDodgeRoll(event) {
     event.preventDefault();
-    let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
 
     DiceOrc.DodgeRoll({
       actor: this.actor,
@@ -554,7 +533,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   async _onDamageRoll(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
     
     DiceOrc.DamageRoll({
       actor: actor,
@@ -565,7 +543,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   async _onPoisonRoll(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
 
     let take_damage = true;
 
@@ -596,7 +573,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   async _onBleedRoll(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
 
     let take_damage = true;
 
@@ -624,7 +600,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   async _onBurnRoll(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
     
     const rollResult = DiceOrc.BurnRoll({
       actor: actor,
@@ -645,7 +620,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   async _onBleedOff(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
 
     await actor.update({ system: { status: { bleed: 0 } } });
     return;
@@ -654,7 +628,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   async _onPoisonOff(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
 
     await actor.update({ system: { status: { poison: 0 } } });
     return;
@@ -663,7 +636,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   async _onBurnOff(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
 
     await actor.update({ system: { status: { burn: 0, onfire: false } } });
     return;
@@ -672,7 +644,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   async _onBurnDamage(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
 
     let take_damage = true;
 
@@ -710,7 +681,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   async _onAttackWithWeaponRoll(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
 
       // Apply local MP cost (for capacity)
     let costmp = event.currentTarget.dataset.costmp;
@@ -777,7 +747,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   async _onLaunchSpellRoll(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
 
     //Do the roll
     await DiceOrc.SpellRoll({
@@ -795,7 +764,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   async _onItemConsume(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
     
     //Retrive the actor and the item
     let element = event.currentTarget;
@@ -902,7 +870,7 @@ export default class ORCCharacterSheet extends ActorSheet {
       let durationFormula = itemData.ifActivable.duration;
       if (typeof durationFormula !== "string")
         durationFormula = durationFormula.toString();
-      let roll = new Roll(durationFormula).roll({ async: false });
+      const roll = await new Roll(durationFormula).roll();
       let duration = roll.total;
       //If the formula is not trivial, display the roll in the chat
       if (durationFormula.includes("d") || durationFormula.includes("+"))
@@ -930,7 +898,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   async _onConsumableReduceDuration(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
     
     //Retrive the item
     let item = actor.items.get(event.currentTarget.dataset.itemid);
@@ -960,7 +927,7 @@ export default class ORCCharacterSheet extends ActorSheet {
   async _onCapacityReduceDuration(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
+
     //Retrive the item
     let item = actor.items.get(event.currentTarget.dataset.itemid);
     //Does nothing if no item has been found
@@ -987,7 +954,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   _onCapacityChooseWeapon(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
     let element = event.currentTarget;
     let itemId = element.closest(".item").dataset.itemId;
     let item = actor.items.get(itemId);
@@ -997,16 +963,15 @@ export default class ORCCharacterSheet extends ActorSheet {
     return item.update(maj);
   }
 
-  _onCapacityUpSC(event){
+  async _onCapacityUpSC(event){
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();  
 
     let rollFormula = actor.system.sanguinCharge.gain;
     let rollData = {};
     let rollOptions = {};
     let roll = new Roll(rollFormula, rollData, rollOptions);
-    let rollResult = roll.roll({ async: false });
+    let rollResult = await roll.roll();
 
     let newValue = actor.system.sanguinCharge.value + rollResult.total;
     if (newValue < 0)
@@ -1015,16 +980,15 @@ export default class ORCCharacterSheet extends ActorSheet {
     return actor.update({system: {sanguinCharge: {value: newValue}}});
   }
 
-  _onCapacityDownSC(event){
+  async _onCapacityDownSC(event){
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData(); 
     
     let rollFormula = actor.system.sanguinCharge.loss;
     let rollData = {};
     let rollOptions = {};
     let roll = new Roll(rollFormula, rollData, rollOptions);
-    let rollResult = roll.roll({ async: false });
+    let rollResult = await roll.roll();
 
     let newValue = actor.system.sanguinCharge.value + rollResult.total;
     if (newValue < 0)
@@ -1079,7 +1043,6 @@ export default class ORCCharacterSheet extends ActorSheet {
 
   _onCapacityStatusResistRoll(event) {
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
     let actorData = actor.system;
 
     let costmp = event.currentTarget.dataset.costmp;
@@ -1103,7 +1066,7 @@ export default class ORCCharacterSheet extends ActorSheet {
   async _onConsumableDeactivate(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
+
     //Retrive the item
     let element = event.currentTarget;
     let itemId = element.closest(".item").dataset.itemId;
@@ -1121,7 +1084,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   async _onCapacityActivate(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
     let item = actor.items.get(event.currentTarget.dataset.itemid);
     //Does nothing if no item or no enchant has been found
     if (item == null) return;
@@ -1139,7 +1101,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     let rollData = {};
     let rollOptions = {};
     let roll = new Roll(rollFormula, rollData, rollOptions);
-    let rollResult = roll.roll({ async: false });
+    let rollResult = await roll.roll();
     newSanguinCharges += rollResult.total;
     if (newSanguinCharges < 0) return;
 
@@ -1147,7 +1109,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     rollData = {}; 
     rollOptions = {};
     roll = new Roll(rollFormula, rollData, rollOptions);
-    rollResult = roll.roll({ async: false });
+    rollResult = await roll.roll();
     newSanguinCharges += rollResult.total;
 
     if (newSanguinCharges < 0)
@@ -1162,7 +1124,7 @@ export default class ORCCharacterSheet extends ActorSheet {
       let durationFormula = itemData.ifActivable.duration;
       if (typeof durationFormula !== "string")
         durationFormula = durationFormula.toString();
-      let roll = new Roll(durationFormula).roll({ async: false });
+      let roll = await new Roll(durationFormula).roll();
       durationEffective = roll.total;
       //If the formula is not trivial, display the roll in the chat
       if (durationFormula.includes("d") || durationFormula.includes("+"))
@@ -1181,7 +1143,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   async _onCapacityDeactivate(event) {
     event.preventDefault();
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
     //Retrive the item
     let element = event.currentTarget;
     let itemId = element.closest(".item").dataset.itemId;
@@ -1203,9 +1164,11 @@ export default class ORCCharacterSheet extends ActorSheet {
     return;
   }
 
-  consumeOnRoll({ onRoll = false, onAttack = false, onSpell = false }) {
+  async consumeOnRoll({ onRoll = false, onAttack = false, onSpell = false }) {
     let actor = this.actor;
-    let items = this.getData().items;
+    let data = await this.getData()
+    let items = data.items;
+
     for (let [key, it] of Object.entries(items)) {
       let item = actor.items.get(it._id);
       let itemData = item.system;
@@ -1290,7 +1253,6 @@ export default class ORCCharacterSheet extends ActorSheet {
     //Recover the actor informations
     let actor = this.actor;
     let actorData = actor.system;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
 
     //Roll the damage
     if (typeof damageFormula !== "string")
@@ -1298,7 +1260,7 @@ export default class ORCCharacterSheet extends ActorSheet {
     //Add extra damage
     //Roll
     damageFormula += actor.system.damageTaken.value;
-    let roll = new Roll(damageFormula).roll({ async: false });
+    let roll = await new Roll(damageFormula).roll();
     let damage = roll.total;
     //If the formula is not trivial, display the roll in the chat
     if (damageFormula.includes("d") || damageFormula.includes("+"))
@@ -1373,7 +1335,6 @@ export default class ORCCharacterSheet extends ActorSheet {
   async takeHeal({ healFormula, multiplier = 1, onMP = false }) {
     //Recover the actor informations
     let actor = this.actor;
-    let data = this.getData();   //Ensure that the actor is correclty initialized
     let actorData = actor.system;
     let value, limitValue;
     value = actorData.hp.value;
@@ -1385,7 +1346,7 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     //Roll the heal
     if (typeof healFormula !== "string") healFormula = healFormula.toString();
-    let roll = new Roll(healFormula).roll({ async: false });
+    let roll = await new Roll(healFormula).roll();
     let heal = roll.total;
     //If the formula is not trivial, display the roll in the chat
     if (healFormula.includes("d") || healFormula.includes("+"))
@@ -1406,9 +1367,10 @@ export default class ORCCharacterSheet extends ActorSheet {
     return heal;
   }
 
-  newDay() {
+  async newDay() {
     let actor = this.actor;
-    let items = this.getData().items;
+    let data = await this.getData()
+    let items = data.items;
 
     //Update the owned items
     for (let [key, it] of Object.entries(items)) {

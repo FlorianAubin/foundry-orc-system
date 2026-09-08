@@ -1,5 +1,6 @@
 export async function AttributeRollToCustomFullMessage(rollResult, extraData) {
   const template = "systems/orc/templates/chat/roll-attribute-full-result.hbs";
+  rollResult = await rollResult;
 
   let templateContext = {
     ...extraData,
@@ -33,6 +34,7 @@ export async function AttributeRollToCustomLimitedMessage(
 ) {
   const template =
     "systems/orc/templates/chat/roll-attribute-limited-result.hbs";
+  rollResult = await rollResult;
 
   let templateContext = {
     ...extraData,
@@ -99,6 +101,7 @@ export const highlightSuccessFailure = function (message, html, data) {
 
 export async function StatusRollToCustomMessage(rollResult, extraData) {
   const template = "systems/orc/templates/chat/roll-status-result.hbs";
+  rollResult = await rollResult;
 
   let templateContext = {
     ...extraData,
@@ -128,6 +131,7 @@ export async function StatusRollToCustomMessage(rollResult, extraData) {
 
 export async function DamageRollToCustomFullMessage(rollResult, extraData) {
   const template = "systems/orc/templates/chat/roll-damage-full-result.hbs";
+  rollResult = await rollResult;
 
   let templateContext = {
     ...extraData,
@@ -159,6 +163,7 @@ export async function DamageRollToCustomFullMessage(rollResult, extraData) {
 
 export async function DamageRollToCustomLimitedMessage(rollResult, extraData) {
   const template = "systems/orc/templates/chat/roll-damage-limited-result.hbs";
+  rollResult = await rollResult;
 
   let templateContext = {
     ...extraData,
@@ -184,6 +189,7 @@ export async function SpellRollToCustomFullMessage(
   extraData
 ) {
   const template = "systems/orc/templates/chat/roll-spell-full-result.hbs";
+  rollResult = await rollResult;
 
   let templateContext = {
     ...extraData,
@@ -233,6 +239,7 @@ export async function SpellRollToCustomLimitedMessage(
   extraData
 ) {
   const template = "systems/orc/templates/chat/roll-spell-limited-result.hbs";
+  rollResult = await rollResult;
 
   let templateContext = {
     ...extraData,
@@ -262,7 +269,8 @@ export async function SpellRollToCustomLimitedMessage(
 }
 
 export async function EnchantRollToCustomMessage(rollResult, extraData) {
-  const template = "systems/orc/templates/chat/roll-enchant-result.hbs";
+  const template = "systems/orc/templates/chat/roll-enchant-result.hbs"
+  rollResult = await rollResult;
 
   let templateContext = {
     ...extraData,

@@ -1,7 +1,7 @@
 import * as Chat from "./chat.js";
 import { ORC } from "./config.js";
 
-export function AttributeRoll({
+export async function AttributeRoll({
   actor = null,
   attribute = null,
   modif = 0,
@@ -27,12 +27,13 @@ export function AttributeRoll({
   };
 
   let roll = new Roll(rollFormula, rollData, rollOptions);
-  let rollResult = roll.roll({ async: false });
+  let rollResult = await roll.roll({ async: false });
 
   extraMessageData.title = game.i18n.format("orc.dialog.attribute.title", {
     charName: actor.name,
     attributeName: attribute.attributename,
   });
+
   extraMessageData.attributeValue = {
     base: attribute.attributevaluebase,
     modif: (
@@ -48,10 +49,12 @@ export function AttributeRoll({
     ).toString(),
   };
 
-  if (rollResult.total <= rollResult.options.actorLimitCritical) {
+  if (rollResult.total <= actor.system.roll.limitCritical) {
     extraMessageData.message = "orc.dialog.criticalSuccess";
-  } else if (rollResult.total >= rollResult.options.actorLimitFumble) {
+    extraMessageData.color = "critical";
+  } else if (rollResult.total >= actor.system.roll.limitFumble) {
     extraMessageData.message = "orc.dialog.fumbleFailure";
+    extraMessageData.color = "fumble";
   } else if (
     rollResult.total <= parseFloat(extraMessageData.attributeValue.value)
   ) {

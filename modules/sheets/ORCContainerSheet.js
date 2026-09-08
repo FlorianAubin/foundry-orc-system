@@ -20,8 +20,8 @@ export default class ORCContainerSheet extends ActorSheet {
     return `systems/orc/templates/sheets/container-sheet.hbs`;
   }
 
-  getData(options) {
-    const data = super.getData(options);
+  async getData(options) {
+    const data = await super.getData(options);
 
     //If default img, change for sword
     if (data.actor.img == "icons/svg/mystery-man.svg")
@@ -30,7 +30,7 @@ export default class ORCContainerSheet extends ActorSheet {
     data.config = CONFIG.ORC;
 
     //Enrich the html to be able to link objects
-    data.biographyHTML = TextEditor.enrichHTML(data.actor.system.biography, {
+    data.biographyHTML = await TextEditor.enrichHTML(data.actor.system.biography, {
       secrets: this.actor.isOwner,
       async: false,
       relativeTo: this.actor,

@@ -19,8 +19,8 @@ export default class ORCWeaponSheet extends ItemSheet {
   /*  Override general functions                  */
   /* -------------------------------------------- */
 
-  getData(options) {
-    const data = super.getData(options);
+  async getData(options) {
+    const data = await super.getData(options);
 
     //If default img, change for sword
     if (data.item.img == "icons/svg/item-bag.svg")
@@ -38,7 +38,7 @@ export default class ORCWeaponSheet extends ItemSheet {
     }
 
     //Enrich the html to be able to link objects
-    data.descriptionHTML = TextEditor.enrichHTML(data.item.system.description, {
+    data.descriptionHTML = await TextEditor.enrichHTML(data.item.system.description, {
       secrets: data.item.isOwner,
       async: false,
       relativeTo: this.item,
