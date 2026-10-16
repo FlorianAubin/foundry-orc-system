@@ -184,29 +184,33 @@ export async function DamageRollToCustomLimitedMessage(rollResult, extraData) {
 }
 
 export async function SpellRollToCustomFullMessage(
-  rollResults = { costRoll: null, powerRoll: null, durationRoll: null },
+  rollResults = { costroll: null, powerroll: null, durationroll: null },
   spellTypes = {base: null, shape: null, power: null, modif: null},
   extraData
 ) {
   const template = "systems/orc/templates/chat/roll-spell-full-result.hbs";
-  rollResult = await rollResult;
+  console.log(rollResults)
+  console.log(rollResults.costroll)
+
 
   let templateContext = {
     ...extraData,
     spellTypes: spellTypes,
-    costRoll: rollResults.costRoll,
-    powerRoll: rollResults.powerRoll,
-    durationRoll: rollResults.durationRoll,
-    costTooltip: rollResults.costRoll
-      ? await rollResults.costRoll.getTooltip()
+    costRoll: rollResults.costroll,
+    powerRoll: rollResults.powerroll,
+    durationRoll: rollResults.durationroll,
+    costTooltip: rollResults.costroll
+      ? await rollResults.costroll.getTooltip()
       : null,
-    powerTooltip: rollResults.powerRoll
-      ? await rollResults.powerRoll.getTooltip()
+    powerTooltip: rollResults.powerroll
+      ? await rollResults.powerroll.getTooltip()
       : null,
-    durationTooltip: rollResults.durationRoll
-      ? await rollResults.durationRoll.getTooltip()
+    durationTooltip: rollResults.durationroll
+      ? await rollResults.durationroll.getTooltip()
       : null,
   };
+
+
 
   let chatData = {
     user: game.user._id,
@@ -217,12 +221,12 @@ export async function SpellRollToCustomFullMessage(
   };
   //only visible to the GM and GM assistants
   let visibleByPlayers = 1;
-  if (rollResults.costRoll != null)
-    visibleByPlayers = rollResults.costRoll.options.visibleByPlayers;
-  else if (rollResults.powerRoll != null)
-    visibleByPlayers = rollResults.powerRoll.options.visibleByPlayers;
-  else if (rollResults.durationRoll != null)
-    visibleByPlayers = rollResults.durationRoll.options.visibleByPlayers;
+  if (rollResults.costroll != null)
+    visibleByPlayers = rollResults.costroll.options.visibleByPlayers;
+  else if (rollResults.powerroll != null)
+    visibleByPlayers = rollResults.powerroll.options.visibleByPlayers;
+  else if (rollResults.durationroll != null)
+    visibleByPlayers = rollResults.durationroll.options.visibleByPlayers;
   if(visibleByPlayers == 0) {
     chatData.blind = true;
     chatData.whisper = game.users.filter(function (user) {
@@ -235,7 +239,7 @@ export async function SpellRollToCustomFullMessage(
 }
 
 export async function SpellRollToCustomLimitedMessage(
-  rollResults = { costRoll: null, powerRoll: null, durationRoll: null },
+  rollResults = { costroll: null, powerroll: null, durationroll: null },
   extraData
 ) {
   const template = "systems/orc/templates/chat/roll-spell-limited-result.hbs";
@@ -243,17 +247,17 @@ export async function SpellRollToCustomLimitedMessage(
 
   let templateContext = {
     ...extraData,
-    costRoll: rollResults.costRoll,
-    powerRoll: rollResults.powerRoll,
-    durationRoll: rollResults.durationRoll,
-    costTooltip: rollResults.costRoll
-      ? await rollResults.costRoll.getTooltip()
+    costRoll: rollResults.costroll,
+    powerRoll: rollResults.powerroll,
+    durationRoll: rollResults.durationroll,
+    costTooltip: rollResults.costroll
+      ? await rollResults.costroll.getTooltip()
       : null,
-    powerTooltip: rollResults.powerRoll
-      ? await rollResults.powerRoll.getTooltip()
+    powerTooltip: rollResults.powerroll
+      ? await rollResults.powerroll.getTooltip()
       : null,
-    durationTooltip: rollResults.durationRoll
-      ? await rollResults.durationRoll.getTooltip()
+    durationTooltip: rollResults.durationroll
+      ? await rollResults.durationroll.getTooltip()
       : null,
   };
 
@@ -298,13 +302,32 @@ export async function EnchantRollToCustomMessage(rollResult, extraData) {
   await ChatMessage.create(chatData);
 }
 
-export async function RollToSimpleCustomMessage({ roll = null }) {
+export async function RollToSimpleCustomMessage({ roll = null }, extraData = null) {
+  const template = "systems/orc/templates/chat/std.hbs"
+
+  let templateContext = {
+    ...extraData,
+    roll: roll,
+    tooltip: await roll.getTooltip(),
+  };
+
+
+  console.log(roll)
   let chatData = {
     user: game.user._id,
     speaker: ChatMessage.getSpeaker(),
     roll: roll,
     sound: CONFIG.sounds.dice,
+    content: await renderTemplate(template, templateContext),
     type: CONST.CHAT_MESSAGE_TYPES.ROLL,
   };
+  //only visible to the GM and GM assistants
+  if (roll.options.visibleByPlayers == 0) {
+    chatData.blind = true;
+    chatData.whisper = game.users.filter(function (user) {
+      return user.role > 2;
+    });
+    chatData.type = CONST.CHAT_MESSAGE_TYPES.BLIND;
+  }
   await ChatMessage.create(chatData);
 }

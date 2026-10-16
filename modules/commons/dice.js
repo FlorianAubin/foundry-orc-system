@@ -11,8 +11,8 @@ export async function AttributeRoll({
   if (attribute.attributelocalmodif != null){
     let rollFormula = attribute.attributelocalmodif
     let roll = new Roll(rollFormula, {}, {});
-    let rollResult = roll.roll({ async: false });
-    modif += parseFloat(rollResult.total);
+    await roll.evaluate();
+    modif += parseFloat(roll.total);
   }
 
   let rollFormula = "1d100";
@@ -27,7 +27,7 @@ export async function AttributeRoll({
   };
 
   let roll = new Roll(rollFormula, rollData, rollOptions);
-  let rollResult = await roll.roll({ async: false });
+  await roll.evaluate()
 
   extraMessageData.title = game.i18n.format("orc.dialog.attribute.title", {
     charName: actor.name,
@@ -45,37 +45,37 @@ export async function AttributeRoll({
     diff: (
       parseFloat(attribute.attributevalue) +
       modif -
-      parseFloat(rollResult.total)
+      parseFloat(roll.total)
     ).toString(),
   };
 
-  if (rollResult.total <= actor.system.roll.limitCritical) {
+  if (roll.total <= actor.system.roll.limitCritical) {
     extraMessageData.message = "orc.dialog.criticalSuccess";
     extraMessageData.color = "critical";
-  } else if (rollResult.total >= actor.system.roll.limitFumble) {
+  } else if (roll.total >= actor.system.roll.limitFumble) {
     extraMessageData.message = "orc.dialog.fumbleFailure";
     extraMessageData.color = "fumble";
   } else if (
-    rollResult.total <= parseFloat(extraMessageData.attributeValue.value)
+    roll.total <= parseFloat(extraMessageData.attributeValue.value)
   ) {
     extraMessageData.message = "orc.dialog.Success";
   } else if (
-    rollResult.total > parseFloat(extraMessageData.attributeValue.value)
+    roll.total > parseFloat(extraMessageData.attributeValue.value)
   ) {
     extraMessageData.message = "orc.dialog.Failure";
   }
 
   //Display a limited message if the player is not allowed to see the form
   if (rollOptions.visibleByPlayers == 0) {
-    Chat.AttributeRollToCustomLimitedMessage(rollResult, {
+    Chat.AttributeRollToCustomLimitedMessage(roll, {
       ...extraMessageData,
     });
   }
-  Chat.AttributeRollToCustomFullMessage(rollResult, {
+  Chat.AttributeRollToCustomFullMessage(roll, {
     ...extraMessageData,
   });
 
-  return rollResult.total;
+  return roll.total;
 }
 
 export function AttackRoll({
@@ -92,7 +92,7 @@ export function AttackRoll({
   });
 }
 
-export function SpellRoll({
+export async function SpellRoll({
   actor = null,
   attribute = null,
   modif = 0,
@@ -135,21 +135,22 @@ export function SpellRoll({
     //Do the roll
     if (costFormula != "") {
       costroll = new Roll(costFormula, rollData, rollOptions);
-      costRoll = costroll.roll({ async: false });
+      await costroll.evaluate()
+
       // Minimal cost
       // if (costRoll._total < 0) costRoll._total = 0 
-      if (costRoll._total < 1) costRoll._total = 1 
+      if (costroll._total < 1) costroll._total = 1 
       //Integer cost 
-      costRoll._total = Math.floor(costRoll._total)
+      costroll._total = Math.floor(costroll.total)
       //Remove ressource from actor
       if (actor.system.magic.effective.useHP) {
         if (actor.system.hp.value <= 0) return;
-        let newValue = actor.system.hp.value - costRoll.total;
+        let newValue = actor.system.hp.value - costroll.total;
         if (newValue < actor.system.hp.surplus)
           newValue = actor.system.hp.surplus;
         actor.update({ system: { hp: { value: newValue } } });
       } else {
-        let newValue = actor.system.mp.value - costRoll.total;
+        let newValue = actor.system.mp.value - costroll.total;
         if (newValue < 0) return;
         actor.update({ system: { mp: { value: newValue } } });
       }
@@ -171,9 +172,9 @@ export function SpellRoll({
     //Roll
     if (powerFormula != ""){
       powerroll = new Roll(powerFormula, rollData, rollOptions);
-      powerRoll = powerroll.roll({ async: false });
+      await powerroll.evaluate()
     }
-    if (powerRoll != null){
+    if (powerroll != null){
       let powerMin= -10000;
       //If critical -> max power
       if (critical) {
@@ -189,8 +190,8 @@ export function SpellRoll({
         }
       }
       //Integer power 
-      if (powerRoll._total < powerMin) powerRoll._total = powerMin;
-      powerRoll._total = Math.floor(powerRoll._total)
+      if (powerroll._total < powerMin) powerroll._total = powerMin;
+      powerroll._total = Math.floor(powerroll._total)
     }
 
     //Roll duration
@@ -199,9 +200,9 @@ export function SpellRoll({
       durationFormula = durationFormula.toString();
     if (durationFormula != ""){
       durationroll = new Roll(durationFormula, rollData, rollOptions);
-      durationRoll = durationroll.roll({ async: false });
+      await durationroll.evaluate()
       //Integer duration 
-      durationRoll._total = Math.floor(durationRoll._total)
+      durationroll._total = Math.floor(durationroll._total)
     }
 
     extraMessageData.title = game.i18n.format("orc.dialog.rollSpell.title", {
@@ -257,13 +258,13 @@ export function SpellRoll({
     //Display a limited message if the player is not allowed to see the form
     if (rollOptions.visibleByPlayers == 0) {
       Chat.SpellRollToCustomLimitedMessage(
-        { costRoll, powerRoll, durationRoll },
+        { costroll, powerroll, durationroll },
         { ...extraMessageData }
       );
     }
     */
     Chat.SpellRollToCustomFullMessage(
-      { costRoll, powerRoll, durationRoll },
+      { costroll, powerroll, durationroll },
       {baseNames, shapeNames, powerNames, modifNames},
       { ...extraMessageData }
     );
@@ -302,7 +303,7 @@ export function StatusResistRoll({ actor = null, modif = 0 }) {
   );
 }
 
-export function DamageRoll({
+export async function DamageRoll({
   actor = null,
   weapon = null,
   attribute = null,
@@ -458,26 +459,26 @@ export function DamageRoll({
 
   //Do the roll
   let roll = new Roll(rollFormula, rollData, rollOptions);
-  let rollResult = roll.roll({ async: false });
+  await roll.evaluate()
   //Apply the min damage
-  if (rollResult._total < damageMin) rollResult._total = damageMin;
+  if (roll._total < damageMin) roll._total = damageMin;
 
   //Display the message
   //Display a limited message if the player is not allowed to see the form
   if (rollOptions.visibleByPlayers == 0) {
-    Chat.DamageRollToCustomLimitedMessage(rollResult, {
+    Chat.DamageRollToCustomLimitedMessage(roll, {
       ...extraMessageData,
     });
   }
-  Chat.DamageRollToCustomFullMessage(rollResult, {
+  Chat.DamageRollToCustomFullMessage(roll, {
     ...extraMessageData,
   });
 
 
-  return rollResult.total;
+  return roll.total;
 }
 
-export function BleedRoll({
+export async function BleedRoll({
   actor = null,
   type = null,
   extraMessageData = {},
@@ -500,16 +501,16 @@ export function BleedRoll({
   };
 
   let roll = new Roll(rollFormula, rollData, rollOptions);
-  let rollResult = roll.roll({ async: false });
+  await roll.evaluate()
 
-  Chat.StatusRollToCustomMessage(rollResult, {
+  Chat.StatusRollToCustomMessage(roll, {
     ...extraMessageData,
   });
 
-  return rollResult.total;
+  return roll.total;
 }
 
-export function PoisonRoll({
+export async function PoisonRoll({
   actor = null,
   type = null,
   extraMessageData = {},
@@ -532,17 +533,17 @@ export function PoisonRoll({
   };
 
   let roll = new Roll(rollFormula, rollData, rollOptions);
-  let rollResult = roll.roll({ async: false });
+  await roll.evaluate()
 
-  Chat.StatusRollToCustomMessage(rollResult, {
+  Chat.StatusRollToCustomMessage(roll, {
     ...extraMessageData,
   });
 
-  return rollResult.total;
+  return roll.total;
 }
 
 
-export function BurnRoll({ actor = null, extraMessageData = {} }) {
+export async function  BurnRoll({ actor = null, extraMessageData = {} }) {
   let rollFormula = "1d100";
   let rollData = {}; //for some reasons, rollData are not conserved on ChatMessage, use rollOptions instead
   let rollOptions = {
@@ -551,12 +552,12 @@ export function BurnRoll({ actor = null, extraMessageData = {} }) {
   };
 
   let roll = new Roll(rollFormula, rollData, rollOptions);
-  let rollResult = roll.roll({ async: false });
+  await roll.evaluate()
 
   extraMessageData.title = game.i18n.format("orc.dialog.burn.title", {
     charName: actor.name,
   });
-  if (rollResult.total <= actor.system.status.burn) {
+  if (roll.total <= actor.system.status.burn) {
     extraMessageData.info = game.i18n.format("orc.dialog.burn.onFire", {
       charName: actor.name,
     });
@@ -564,14 +565,14 @@ export function BurnRoll({ actor = null, extraMessageData = {} }) {
   else
     actor.update({ system: { status: { burn: actor.system.status.burn - 5 } } });
 
-  Chat.StatusRollToCustomMessage(rollResult, {
+  Chat.StatusRollToCustomMessage(roll, {
     ...extraMessageData,
   });
 
-  return rollResult.total;
+  return roll.total;
 }
 
-export function EnchantRoll({
+export async function EnchantRoll({
   actor = null,
   item = null,
   attribute = null,
@@ -598,7 +599,7 @@ export function EnchantRoll({
   let rollData = {};
   let rollOptions = {};
   let roll = new Roll(rollFormula, rollData, rollOptions);
-  let rollResult = roll.roll({ async: false });
+  await roll.evaluate()
 
   if (actor) {
     extraMessageData.title = game.i18n.format("orc.dialog.enchant.title", {
@@ -614,11 +615,11 @@ export function EnchantRoll({
     );
   }
 
-  Chat.EnchantRollToCustomMessage(rollResult, {
+  Chat.EnchantRollToCustomMessage(roll, {
     ...extraMessageData,
   });
 
-  return rollResult.total;
+  return roll.total;
 }
 
 // From a dice formula, calculate the min, mean and max values

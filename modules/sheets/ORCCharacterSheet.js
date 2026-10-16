@@ -870,7 +870,8 @@ export default class ORCCharacterSheet extends ActorSheet {
       let durationFormula = itemData.ifActivable.duration;
       if (typeof durationFormula !== "string")
         durationFormula = durationFormula.toString();
-      const roll = await new Roll(durationFormula).roll();
+      let roll = new Roll(durationFormula);
+      await  roll.evaluate();
       let duration = roll.total;
       //If the formula is not trivial, display the roll in the chat
       if (durationFormula.includes("d") || durationFormula.includes("+"))
@@ -971,9 +972,9 @@ export default class ORCCharacterSheet extends ActorSheet {
     let rollData = {};
     let rollOptions = {};
     let roll = new Roll(rollFormula, rollData, rollOptions);
-    let rollResult = await roll.roll();
+    await  roll.evaluate();
 
-    let newValue = actor.system.sanguinCharge.value + rollResult.total;
+    let newValue = actor.system.sanguinCharge.value + roll.total;
     if (newValue < 0)
       newValue = 0;
 
@@ -988,9 +989,9 @@ export default class ORCCharacterSheet extends ActorSheet {
     let rollData = {};
     let rollOptions = {};
     let roll = new Roll(rollFormula, rollData, rollOptions);
-    let rollResult = await roll.roll();
+    await  roll.evaluate();
 
-    let newValue = actor.system.sanguinCharge.value + rollResult.total;
+    let newValue = actor.system.sanguinCharge.value + roll.total;
     if (newValue < 0)
       newValue = 0;
     
@@ -1101,16 +1102,16 @@ export default class ORCCharacterSheet extends ActorSheet {
     let rollData = {};
     let rollOptions = {};
     let roll = new Roll(rollFormula, rollData, rollOptions);
-    let rollResult = await roll.roll();
-    newSanguinCharges += rollResult.total;
+    await  roll.evaluate();
+    newSanguinCharges += roll.total;
     if (newSanguinCharges < 0) return;
 
     rollFormula = itemData.ifActivable.sanguinChargeGain;
     rollData = {}; 
     rollOptions = {};
     roll = new Roll(rollFormula, rollData, rollOptions);
-    rollResult = await roll.roll();
-    newSanguinCharges += rollResult.total;
+    await  roll.evaluate();
+    newSanguinCharges += roll.total;
 
     if (newSanguinCharges < 0)
       newSanguinCharges = 0;
@@ -1124,7 +1125,8 @@ export default class ORCCharacterSheet extends ActorSheet {
       let durationFormula = itemData.ifActivable.duration;
       if (typeof durationFormula !== "string")
         durationFormula = durationFormula.toString();
-      let roll = await new Roll(durationFormula).roll();
+      let roll = new Roll(durationFormula);
+      await  roll.evaluate();
       durationEffective = roll.total;
       //If the formula is not trivial, display the roll in the chat
       if (durationFormula.includes("d") || durationFormula.includes("+"))
@@ -1260,7 +1262,8 @@ export default class ORCCharacterSheet extends ActorSheet {
     //Add extra damage
     //Roll
     damageFormula += actor.system.damageTaken.value;
-    let roll = await new Roll(damageFormula).roll();
+    let roll = new Roll(damageFormula);
+    await  roll.evaluate();
     let damage = roll.total;
     //If the formula is not trivial, display the roll in the chat
     if (damageFormula.includes("d") || damageFormula.includes("+"))
@@ -1346,7 +1349,8 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     //Roll the heal
     if (typeof healFormula !== "string") healFormula = healFormula.toString();
-    let roll = await new Roll(healFormula).roll();
+    let roll = new Roll(healFormula);
+    await  roll.evaluate();
     let heal = roll.total;
     //If the formula is not trivial, display the roll in the chat
     if (healFormula.includes("d") || healFormula.includes("+"))
