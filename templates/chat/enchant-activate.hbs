@@ -20,10 +20,6 @@
       <small>{{actorName}}</small>
     </div>
 
-    <span class="enchant-badge {{#if activated}}is-active{{else}}is-inactive{{/if}}">
-      <span class="enchant-status-dot"></span>
-      {{#if activated}}ACTIF{{else}}INACTIF{{/if}}
-    </span>
   </header>
 
   <section class="enchant-content">
@@ -43,7 +39,6 @@
             <span class="stat-label">Utilisations restantes</span>
             <strong class="stat-value">{{usesAfter}}</strong>
           </div>
-          <span class="stat-corner">✦</span>
         </div>
 
         {{#if hasDuration}}
@@ -55,7 +50,6 @@
                 {{duration}} <span class="duration-unit">{{durationUnit}}</span>
               </strong>
             </div>
-            <span class="stat-corner">✦</span>
           </div>
         {{/if}}
 

@@ -2,10 +2,6 @@
 <div class="orc spell-roll dice-roll spell-card">
   <header class="spell-header">
     <div class="spell-icon">✧</div>
-    <div class="spell-heading">
-      <h3 class="spell-title">{{title}}</h3>
-      <span class="spell-subtitle">Grimoire des arcanes</span>
-    </div>
   </header>
 
   <section class="spell-types">
@@ -60,12 +56,6 @@
             {{/if}}
           </span>
         </div>
-        {{#if costTooltip}}
-          <details class="spell-roll-details">
-            <summary>Détails du jet</summary>
-            <div class="spell-tooltip">{{{costTooltip}}}</div>
-          </details>
-        {{/if}}
       </div>
     {{/if}}
 
@@ -79,12 +69,6 @@
         <div class="stat-result">
           <strong>{{powerRoll.total}}</strong>
         </div>
-        {{#if powerTooltip}}
-          <details class="spell-roll-details">
-            <summary>Détails du jet</summary>
-            <div class="spell-tooltip">{{{powerTooltip}}}</div>
-          </details>
-        {{/if}}
       </div>
     {{/if}}
 
@@ -99,12 +83,6 @@
           <strong>{{durationRoll.total}}</strong>
           <span>{{durationUnit}}</span>
         </div>
-        {{#if durationTooltip}}
-          <details class="spell-roll-details">
-            <summary>Détails du jet</summary>
-            <div class="spell-tooltip">{{{durationTooltip}}}</div>
-          </details>
-        {{/if}}
       </div>
     {{/if}}
   </section>

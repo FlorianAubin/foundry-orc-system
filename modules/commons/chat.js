@@ -16,14 +16,22 @@ export async function AttributeRollToCustomFullMessage(rollResult, extraData) {
     content: await renderTemplate(template, templateContext),
     type: CONST.CHAT_MESSAGE_TYPES.ROLL,
   };
-  //only visible to the GM and GM assistants
-  if (rollResult.options.visibleByPlayers == 0) {
-    chatData.blind = true;
-    chatData.whisper = game.users.filter(function (user) {
-      return user.role > 2;
-    });
-    chatData.type = CONST.CHAT_MESSAGE_TYPES.BLIND;
-  }
+
+  const actor = extraData.actor;
+
+  chatData.whisper = game.users
+    .filter(user =>
+      user.isGM ||
+      (
+        actor &&
+        actor.testUserPermission(
+          user,
+          CONST.DOCUMENT_OWNERSHIP_LEVELS.LIMITED
+        )
+      )
+    )
+    .map(user => user.id);
+
 
   await ChatMessage.create(chatData);
 }
@@ -117,14 +125,21 @@ export async function StatusRollToCustomMessage(rollResult, extraData) {
     content: await renderTemplate(template, templateContext),
     type: CONST.CHAT_MESSAGE_TYPES.ROLL,
   };
-  //only visible to the GM and GM assistants
-  if (rollResult.options.visibleByPlayers == 0) {
-    chatData.blind = true;
-    chatData.whisper = game.users.filter(function (user) {
-      return user.role > 2;
-    });
-    chatData.type = CONST.CHAT_MESSAGE_TYPES.BLIND;
-  }
+
+  const actor = extraData.actor;
+
+  chatData.whisper = game.users
+    .filter(user =>
+      user.isGM ||
+      (
+        actor &&
+        actor.testUserPermission(
+          user,
+          CONST.DOCUMENT_OWNERSHIP_LEVELS.LIMITED
+        )
+      )
+    )
+    .map(user => user.id);
 
   await ChatMessage.create(chatData);
 }
@@ -139,35 +154,52 @@ export async function DamageRollToCustomFullMessage(
 
   rollResult = await rollResult;
 
+  const tooltip = rollResult
+    ? await rollResult.getTooltip()
+    : null;
+
+  console.log("Tooltip HTML :", tooltip);
+
   const templateContext = {
     ...extraData,
     roll: rollResult,
-    tooltip: rollResult
-      ? await rollResult.getTooltip()
-      : null,
+    tooltip: tooltip || "",
   };
+
+  const content = await renderTemplate(template, templateContext);
+
+  console.log("HTML rendu :", content);
 
   const chatData = {
     user: game.user.id,
-    speaker: ChatMessage.getSpeaker(),
+    speaker: ChatMessage.getSpeaker({
+      actor: extraData.actor ?? null,
+    }),
     roll: rollResult,
     sound: CONFIG.sounds.dice,
-    content: await renderTemplate(template, templateContext),
+    content,
     type: CONST.CHAT_MESSAGE_TYPES.ROLL,
   };
 
-  // Message visible uniquement par le MJ et les assistants MJ
-  if (rollResult?.options?.visibleByPlayers == 0) {
-    chatData.blind = true;
-    chatData.whisper = game.users
-      .filter(user => user.role > 2)
-      .map(user => user.id);
+  const actor = extraData.actor;
 
-    chatData.type = CONST.CHAT_MESSAGE_TYPES.BLIND;
-  }
+  chatData.whisper = game.users
+    .filter(user =>
+      user.isGM ||
+      (
+        actor &&
+        actor.testUserPermission(
+          user,
+          CONST.DOCUMENT_OWNERSHIP_LEVELS.LIMITED
+        )
+      )
+    )
+    .map(user => user.id);
 
-  await ChatMessage.create(chatData);
+  return ChatMessage.create(chatData);
 }
+
+
 
 
 export async function DamageRollToCustomLimitedMessage(rollResult, extraData) {
@@ -198,8 +230,6 @@ export async function SpellRollToCustomFullMessage(
   extraData
 ) {
   const template = "systems/orc/templates/chat/roll-spell-full-result.hbs";
-  console.log(rollResults)
-  console.log(rollResults.costroll)
 
 
   let templateContext = {
@@ -228,117 +258,57 @@ export async function SpellRollToCustomFullMessage(
     content: await renderTemplate(template, templateContext),
     type: CONST.CHAT_MESSAGE_TYPES.ROLL,
   };
-  //only visible to the GM and GM assistants
-  let visibleByPlayers = 1;
-  if (rollResults.costroll != null)
-    visibleByPlayers = rollResults.costroll.options.visibleByPlayers;
-  else if (rollResults.powerroll != null)
-    visibleByPlayers = rollResults.powerroll.options.visibleByPlayers;
-  else if (rollResults.durationroll != null)
-    visibleByPlayers = rollResults.durationroll.options.visibleByPlayers;
-  if(visibleByPlayers == 0) {
-    chatData.blind = true;
-    chatData.whisper = game.users.filter(function (user) {
-      return user.role > 2;
-    });
-    chatData.type = CONST.CHAT_MESSAGE_TYPES.BLIND;
-  }
+
+
+  chatData.whisper = game.users
+    .filter(user =>
+      user.isGM ||
+      extraData.actor.testUserPermission(user, CONST.DOCUMENT_OWNERSHIP_LEVELS.LIMITED)
+    )
+    .map(user => user.id);
+
 
   await ChatMessage.create(chatData);
 }
 
-export async function SpellRollToCustomLimitedMessage(
-  rollResults = { costroll: null, powerroll: null, durationroll: null },
-  extraData
-) {
-  const template = "systems/orc/templates/chat/roll-spell-limited-result.hbs";
+
+export async function EnchantRollToCustomMessage(rollResult, extraData = {}) {
+  const template = "systems/orc/templates/chat/enchant-roll.hbs";
   rollResult = await rollResult;
 
-  let templateContext = {
-    ...extraData,
-    costRoll: rollResults.costroll,
-    powerRoll: rollResults.powerroll,
-    durationRoll: rollResults.durationroll,
-    costTooltip: rollResults.costroll
-      ? await rollResults.costroll.getTooltip()
-      : null,
-    powerTooltip: rollResults.powerroll
-      ? await rollResults.powerroll.getTooltip()
-      : null,
-    durationTooltip: rollResults.durationroll
-      ? await rollResults.durationroll.getTooltip()
-      : null,
-  };
-
-  let chatData = {
-    user: game.user._id,
-    speaker: ChatMessage.getSpeaker(),
-    sound: CONFIG.sounds.dice,
-    content: await renderTemplate(template, templateContext),
-    type: CONST.CHAT_MESSAGE_TYPES.ROLL,
-  };
-
-  await ChatMessage.create(chatData);
-}
-
-export async function EnchantRollToCustomMessage(rollResult, extraData) {
-  const template = "systems/orc/templates/chat/enchant-roll.hbs"
-  rollResult = await rollResult;
-
-  let templateContext = {
+  const templateContext = {
     ...extraData,
     roll: rollResult,
-    tooltip: await rollResult.getTooltip(),
+    tooltip: rollResult ? await rollResult.getTooltip() : null,
   };
 
-  let chatData = {
-    user: game.user._id,
-    speaker: ChatMessage.getSpeaker(),
+  const chatData = {
+    user: game.user.id,
+    speaker: ChatMessage.getSpeaker({
+      actor: extraData.actor ?? null,
+    }),
     roll: rollResult,
     sound: CONFIG.sounds.dice,
     content: await renderTemplate(template, templateContext),
     type: CONST.CHAT_MESSAGE_TYPES.ROLL,
   };
-  //only visible to the GM and GM assistants
-  if (rollResult.options.visibleByPlayers == 0) {
-    chatData.blind = true;
-    chatData.whisper = game.users.filter(function (user) {
-      return user.role > 2;
-    });
-    chatData.type = CONST.CHAT_MESSAGE_TYPES.BLIND;
-  }
 
-  await ChatMessage.create(chatData);
-}
+  const actor = extraData.actor;
 
-export async function RollToSimpleCustomMessage({ roll = null }, extraData = null) {
-  const template = "systems/orc/templates/chat/std.hbs"
+  chatData.whisper = game.users
+    .filter(user =>
+      user.isGM ||
+      (
+        actor &&
+        actor.testUserPermission(
+          user,
+          CONST.DOCUMENT_OWNERSHIP_LEVELS.LIMITED
+        )
+      )
+    )
+    .map(user => user.id);
 
-  let templateContext = {
-    ...extraData,
-    roll: roll,
-    tooltip: await roll.getTooltip(),
-  };
-
-
-  console.log(roll)
-  let chatData = {
-    user: game.user._id,
-    speaker: ChatMessage.getSpeaker(),
-    roll: roll,
-    sound: CONFIG.sounds.dice,
-    content: await renderTemplate(template, templateContext),
-    type: CONST.CHAT_MESSAGE_TYPES.ROLL,
-  };
-  //only visible to the GM and GM assistants
-  if (roll.options.visibleByPlayers == 0) {
-    chatData.blind = true;
-    chatData.whisper = game.users.filter(function (user) {
-      return user.role > 2;
-    });
-    chatData.type = CONST.CHAT_MESSAGE_TYPES.BLIND;
-  }
-  await ChatMessage.create(chatData);
+  return ChatMessage.create(chatData);
 }
 
 
@@ -348,11 +318,28 @@ export async function createNewDayCustomMessage(report) {
     report
   );
 
-  await ChatMessage.create({
+  let chatData = {
     speaker: ChatMessage.getSpeaker({ actor: this.actor }),
     content,
     style: CONST.CHAT_MESSAGE_STYLES.OTHER,
-  });
+  }
+
+  const actor = report.actor;
+
+  chatData.whisper = game.users
+    .filter(user =>
+      user.isGM ||
+      (
+        actor &&
+        actor.testUserPermission(
+          user,
+          CONST.DOCUMENT_OWNERSHIP_LEVELS.LIMITED
+        )
+      )
+    )
+    .map(user => user.id);
+
+  await ChatMessage.create(chatData);
 }
 
 
@@ -362,11 +349,22 @@ export async function createConsumeCustomMessage(data) {
     data
   );
 
-  return ChatMessage.create({
+  let chatData = {
     speaker: ChatMessage.getSpeaker({ actor: data.actor }),
     content,
     style: CONST.CHAT_MESSAGE_STYLES.OTHER,
-  });
+  }
+
+
+  chatData.whisper = game.users
+    .filter(user =>
+      user.isGM ||
+      data.actor.testUserPermission(user, CONST.DOCUMENT_OWNERSHIP_LEVELS.LIMITED)
+    )
+    .map(user => user.id);
+
+
+  return ChatMessage.create(chatData);
 }
 
 
@@ -389,11 +387,21 @@ export async function createDeactivateCustomMessage({
     }
   );
 
-  return ChatMessage.create({
+  let chatData = {
     speaker: ChatMessage.getSpeaker({ actor }),
     content,
     style: CONST.CHAT_MESSAGE_STYLES.OTHER,
-  });
+  }
+
+  chatData.whisper = game.users
+    .filter(user =>
+      user.isGM ||
+      actor.testUserPermission(user, CONST.DOCUMENT_OWNERSHIP_LEVELS.LIMITED)
+    )
+    .map(user => user.id);
+
+
+  return ChatMessage.create(chatData);
 }
 
 export async function createReduceDurationMessage({
@@ -418,11 +426,22 @@ export async function createReduceDurationMessage({
     }
   );
 
-  return ChatMessage.create({
+
+  const chatData = {
     speaker: ChatMessage.getSpeaker({ actor }),
     content,
     style: CONST.CHAT_MESSAGE_STYLES.OTHER,
-  });
+  };
+
+
+  chatData.whisper = game.users
+    .filter(user =>
+      user.isGM ||
+      actor.testUserPermission(user, CONST.DOCUMENT_OWNERSHIP_LEVELS.LIMITED)
+    )
+    .map(user => user.id);
+
+  return ChatMessage.create(chatData);
 }
 
 export async function createActivateCapacityMessage(data) {
@@ -431,11 +450,21 @@ export async function createActivateCapacityMessage(data) {
     data
   );
 
-  return ChatMessage.create({
+  let chatData = {
     speaker: ChatMessage.getSpeaker({ actor: data.actor }),
     content,
     style: CONST.CHAT_MESSAGE_STYLES.OTHER,
-  });
+  }
+
+  chatData.whisper = game.users
+    .filter(user =>
+      user.isGM ||
+      data.actor.testUserPermission(user, CONST.DOCUMENT_OWNERSHIP_LEVELS.LIMITED)
+    )
+    .map(user => user.id);
+
+
+  return ChatMessage.create(chatData);
 }
 
 export async function  createEnchantActivateMessage  (data) {
@@ -444,9 +473,18 @@ export async function  createEnchantActivateMessage  (data) {
     data
   );
 
-  return ChatMessage.create({
+  let chatData = {
     speaker: ChatMessage.getSpeaker({ actor: data.actor }),
     content,
     style: CONST.CHAT_MESSAGE_STYLES.OTHER,
-  });
+  }
+
+  chatData.whisper = game.users
+    .filter(user =>
+      user.isGM ||
+      data.actor.testUserPermission(user, CONST.DOCUMENT_OWNERSHIP_LEVELS.LIMITED)
+    )
+    .map(user => user.id);
+
+  return ChatMessage.create(chatData);
 };

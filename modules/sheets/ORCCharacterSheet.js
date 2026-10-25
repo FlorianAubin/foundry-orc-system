@@ -1604,6 +1604,7 @@ async _onCapacityDeactivate(event) {
     const actor = this.actor;
 
     const report = {
+      actor: actor,
       actorName: actor.name,
       food: {},
       drink: {},
@@ -1691,6 +1692,7 @@ async _onCapacityDeactivate(event) {
         } else {
           report.other.push({
             name: item.name,
+            enchantName: enchant.name,
             message: "Enchantement réinitialisé et désactivé",
             usesBefore,
             usesAfter: usesPerDay,

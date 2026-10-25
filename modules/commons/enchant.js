@@ -72,12 +72,6 @@ export async function onEnchantActivate(event) {
       const roll = await new Roll(durationFormula).evaluate();
       durationEffective = roll.total;
 
-      if (
-        durationFormula.includes("d") ||
-        durationFormula.includes("+")
-      ) {
-        Chat.RollToSimpleCustomMessage({ roll });
-      }
     }
 
     await item.update({

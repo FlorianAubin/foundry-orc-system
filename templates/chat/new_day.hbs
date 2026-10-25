@@ -153,6 +153,9 @@
         {{#each other}}
           <li>
             <strong>{{#if itemName}}{{itemName}}{{else}}{{name}}{{/if}}</strong>
+            {{#if enchantName}}
+              — {{enchantName}}
+            {{/if}}
             : {{message}}
 
             {{#if usesPerDay}}

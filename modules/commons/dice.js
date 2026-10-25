@@ -66,14 +66,19 @@ export async function AttributeRoll({
   }
 
   //Display a limited message if the player is not allowed to see the form
+  /**/
   if (rollOptions.visibleByPlayers == 0) {
     Chat.AttributeRollToCustomLimitedMessage(roll, {
       ...extraMessageData,
     });
   }
+  /**/
+
+  extraMessageData.actor = actor;
   Chat.AttributeRollToCustomFullMessage(roll, {
     ...extraMessageData,
   });
+
 
   return roll.total;
 }
@@ -100,9 +105,7 @@ export async function SpellRoll({
 }) {
   let costFormula, powerFormula, durationFormula;
   let costroll = null, powerroll = null, durationroll = null;
-  let costRoll = null, powerRoll = null, durationRoll = null;
 
-  let roll;
   let rollData = {}; 
   let rollOptions = {
     visibleByPlayers: actor.ownership.default,
@@ -254,15 +257,7 @@ export async function SpellRoll({
     }
 
     //Display the message
-    /*
-    //Display a limited message if the player is not allowed to see the form
-    if (rollOptions.visibleByPlayers == 0) {
-      Chat.SpellRollToCustomLimitedMessage(
-        { costroll, powerroll, durationroll },
-        { ...extraMessageData }
-      );
-    }
-    */
+    extraMessageData.actor = actor;
     Chat.SpellRollToCustomFullMessage(
       { costroll, powerroll, durationroll },
       {baseNames, shapeNames, powerNames, modifNames},
@@ -470,13 +465,16 @@ export async function DamageRoll({
   }
 
   // Message limité pour les joueurs sans permission
+  /**/ 
   if (rollOptions.visibleByPlayers == 0) {
     await Chat.DamageRollToCustomLimitedMessage(roll, {
       ...extraMessageData,
     });
   }
+  /**/
 
-  // Message complet
+    // Message complet
+  extraMessageData.actor = actor;
   await Chat.DamageRollToCustomFullMessage(roll, {
     ...extraMessageData,
   });
@@ -510,6 +508,8 @@ export async function BleedRoll({
   let roll = new Roll(rollFormula, rollData, rollOptions);
   await roll.evaluate()
 
+  extraMessageData.actor = actor
+
   Chat.StatusRollToCustomMessage(roll, {
     ...extraMessageData,
   });
@@ -542,6 +542,9 @@ export async function PoisonRoll({
   let roll = new Roll(rollFormula, rollData, rollOptions);
   await roll.evaluate()
 
+  extraMessageData.actor = actor
+
+
   Chat.StatusRollToCustomMessage(roll, {
     ...extraMessageData,
   });
@@ -572,12 +575,17 @@ export async function  BurnRoll({ actor = null, extraMessageData = {} }) {
   else
     actor.update({ system: { status: { burn: actor.system.status.burn - 5 } } });
 
+  extraMessageData.actor = actor
+
+
   Chat.StatusRollToCustomMessage(roll, {
     ...extraMessageData,
   });
 
   return roll.total;
 }
+
+
 export async function EnchantRoll({
   actor = null,
   item = null,
@@ -601,6 +609,7 @@ export async function EnchantRoll({
 
   const messageData = {
     ...extraMessageData,
+    actor,
     itemName: item.name,
     enchantName: enchant.name,
     rollFormula,
@@ -615,6 +624,7 @@ export async function EnchantRoll({
         enchantName: enchant.name,
       }
     );
+
     messageData.actorName = actor.name;
   } else {
     messageData.title = game.i18n.format(
@@ -623,6 +633,7 @@ export async function EnchantRoll({
         enchantName: enchant.name,
       }
     );
+
     messageData.actorName = null;
   }
 
