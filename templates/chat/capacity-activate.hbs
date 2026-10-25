@@ -1,0 +1,96 @@
+
+<div class="orc-chat-card consume-message capacity-activate-card">
+
+  <header class="capacity-header">
+    <div class="capacity-eyebrow">
+      <span class="header-line"></span>
+      ACTIVATION DE CAPACITÉ
+      <span class="header-line"></span>
+    </div>
+
+    <h2 class="capacity-title">{{itemName}}</h2>
+    <div class="capacity-actor">{{actorName}}</div>
+  </header>
+
+  <section class="capacity-status">
+    <div class="capacity-status-icon">✧</div>
+    <div class="capacity-status-label">Capacité activée</div>
+    <div class="capacity-status-subtitle">Le pouvoir entre en action</div>
+  </section>
+
+  {{#if mpCost}}
+    <section class="capacity-section mana-section">
+      <div class="section-heading">
+        <span class="section-icon">💧</span>
+        <h3>Énergie magique</h3>
+      </div>
+
+      <div class="resource-row">
+        <span>Points de magie</span>
+        <strong class="resource-values">
+          {{mpBefore}} <span class="resource-arrow">→</span> {{mpAfter}}
+        </strong>
+      </div>
+
+      <div class="section-footer">
+        <span>Coût d'activation</span>
+        <strong>−{{mpCost}} MP</strong>
+      </div>
+    </section>
+  {{/if}}
+
+  {{#if chargesCostRoll}}
+    <section class="capacity-section blood-section">
+      <div class="section-heading">
+        <span class="section-icon">🩸</span>
+        <h3>Charges sanguines</h3>
+      </div>
+
+      <div class="resource-row">
+        <span>Réserve initiale</span>
+        <strong>{{chargesBefore}}</strong>
+      </div>
+
+      <div class="resource-row">
+        <span>Coût du jet</span>
+        <strong class="blood-value">−{{chargesCostRoll}}</strong>
+      </div>
+
+      <div class="resource-row">
+        <span>Gain du jet</span>
+        <strong class="gain-value">+{{chargesGainRoll}}</strong>
+      </div>
+
+      <div class="resource-total">
+        <span>Réserve finale</span>
+        <strong>{{chargesAfter}}</strong>
+      </div>
+    </section>
+  {{/if}}
+
+  {{#if hasDuration}}
+    <section class="capacity-section duration-section">
+      <div class="section-heading">
+        <span class="section-icon">⏳</span>
+        <h3>Durée effective</h3>
+      </div>
+
+      <div class="duration-value">
+        <strong>{{duration}}</strong>
+        <span>{{durationUnit}}</span>
+      </div>
+
+      {{#if durationFormula}}
+        <div class="duration-formula">
+          <span>Formule</span>
+          <code>{{durationFormula}}</code>
+        </div>
+      {{/if}}
+    </section>
+  {{/if}}
+
+  <footer class="capacity-footer">
+    <span>✦</span> Pouvoir activé <span>✦</span>
+  </footer>
+
+</div>

@@ -1,0 +1,54 @@
+
+<div class="chat-card consume-message">
+
+  <header style="text-align: center; padding: 14px 10px; border-bottom: 2px solid #8b6b55; margin-bottom: 14px;">
+    <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.7;">
+      Gestion de durée
+    </div>
+
+    <h2 style="margin: 8px 0; border: none; font-size: 1.5em;">
+      {{itemName}}
+    </h2>
+
+    <div style="font-size: 12px; opacity: 0.8;">
+      {{actorName}} · {{itemType}}
+    </div>
+  </header>
+
+  <section style="text-align: center; padding: 14px 10px; margin-bottom: 14px; border-radius: 6px; border: 1px solid #8b6b55; background: rgba(139, 107, 85, 0.10);">
+
+    {{#if deactivated}}
+      <div style="font-size: 30px; margin-bottom: 8px;">⌛</div>
+      <h3 style="margin: 0 0 8px; border: none;">Effet expiré</h3>
+      <p style="margin: 0; opacity: 0.85;">
+        La durée est arrivée à son terme. L'effet a été désactivé.
+      </p>
+    {{else}}
+      <div style="font-size: 30px; margin-bottom: 8px;">⏳</div>
+      <h3 style="margin: 0 0 8px; border: none;">Durée réduite</h3>
+      <p style="margin: 0; opacity: 0.85;">
+        L'effet est toujours actif.
+      </p>
+    {{/if}}
+
+  </section>
+
+  <section style="padding: 12px; border-radius: 6px; background: rgba(100, 100, 100, 0.08);">
+
+    <h3 style="margin: 0 0 12px; border-bottom: 1px solid #8b6b55; padding-bottom: 6px;">
+      🕰️ Temps restant
+    </h3>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin: 8px 0;">
+      <span>Durée restante</span>
+      <strong>{{durationBefore}} → {{durationAfter}} {{durationUnit}}</strong>
+    </div>
+
+    <div style="height: 6px; margin-top: 12px; border-radius: 4px; background: rgba(128, 128, 128, 0.2); overflow: hidden;">
+      <div style="height: 100%; width: {{durationPercent}}%; background: #9b835c; border-radius: 4px;"></div>
+    </div>
+
+  </section>
+
+
+</div>

@@ -1,0 +1,38 @@
+
+<div class="orc-chat-card enchant-card enchant-roll-card">
+  <header class="card-header">
+    <div class="enchant-icon">✧</div>
+
+    <div class="enchant-heading">
+      <h3>Jet d'enchantement</h3>
+      <p class="item-name">{{enchantName}}</p>
+
+      {{#if actorName}}
+        <small>{{actorName}}</small>
+      {{/if}}
+    </div>
+  </header>
+
+  <section class="enchant-content">
+    {{#if rollFormula}}
+      <div class="enchant-roll-formula">
+        <span>Formule</span>
+        <strong>{{rollFormula}}</strong>
+      </div>
+    {{/if}}
+
+    <div class="enchant-roll-result">
+      <span>Résultat du jet</span>
+      <strong>{{roll.total}}</strong>
+    </div>
+
+    {{#if tooltip}}
+      <details class="enchant-roll-details">
+        <summary>Détails du jet</summary>
+        <div class="enchant-roll-tooltip">
+          {{{tooltip}}}
+        </div>
+      </details>
+    {{/if}}
+  </section>
+</div>

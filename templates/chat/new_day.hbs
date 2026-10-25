@@ -1,0 +1,174 @@
+
+<div class="new-day-report">
+
+  <header class="new-day-header">
+    <h2>☀️ Nouveau jour</h2>
+    <p><strong>{{actorName}}</strong> passe un nouveau jour.</p>
+  </header>
+
+  {{!-- Nourriture --}}
+  <section class="new-day-section">
+    <h3>🍖 Nourriture</h3>
+    <p>
+      Consommation :
+      <strong>{{food.consumed}} / {{food.needed}}</strong>
+    </p>
+    {{#if food.sufficient}}
+      <p class="new-day-success">
+        ✓ Rations suffisantes. Le compteur repasse à 0.
+      </p>
+    {{else}}
+      <p class="new-day-warning">
+        ⚠ Nourriture insuffisante !
+        Manque : {{food.deficit}}.
+        Valeur après calcul : {{food.remaining}}.
+      </p>
+    {{/if}}
+  </section>
+
+  {{!-- Boisson --}}
+  <section class="new-day-section">
+    <h3>💧 Boisson</h3>
+    <p>
+      Consommation :
+      <strong>{{drink.consumed}} / {{drink.needed}}</strong>
+    </p>
+    {{#if drink.sufficient}}
+      <p class="new-day-success">
+        ✓ Boisson suffisante. Le compteur repasse à 0.
+      </p>
+    {{else}}
+      <p class="new-day-warning">
+        ⚠ Boisson insuffisante !
+        Manque : {{drink.deficit}}.
+        Valeur après calcul : {{drink.remaining}}.
+      </p>
+    {{/if}}
+  </section>
+
+  {{!-- Points de magie --}}
+  <section class="new-day-section">
+    <h3>✨ Points de magie</h3>
+    <p>
+      {{mp.before}} → <strong>{{mp.after}} / {{mp.max}} MP</strong>
+    </p>
+    <p class="new-day-success">
+      +{{mp.recovered}} MP récupéré(s).
+    </p>
+  </section>
+
+  {{!-- Effets désactivés --}}
+  {{#if disabledItems.length}}
+    <section class="new-day-section">
+      <h3>⏸️ Effets désactivés</h3>
+      <ul>
+        {{#each disabledItems}}
+          <li>
+            <strong>{{#if itemName}}{{itemName}}{{else}}{{name}}{{/if}}</strong>
+            {{#if enchantName}}
+              — {{enchantName}}
+            {{/if}}
+            {{#if type}}
+              <span>({{type}})</span>
+            {{/if}}
+
+            {{#if usesPerDay}}
+              <div class="new-day-uses">
+                Utilisations :
+                {{usesBefore}} → {{usesAfter}} / {{usesPerDay}}
+              </div>
+            {{/if}}
+          </li>
+        {{/each}}
+      </ul>
+    </section>
+  {{/if}}
+
+  {{!-- Effets toujours actifs --}}
+  {{#if activeItems.length}}
+    <section class="new-day-section">
+      <h3>🔋 Effets toujours actifs</h3>
+      <ul>
+        {{#each activeItems}}
+          <li>
+            <strong>{{#if itemName}}{{itemName}}{{else}}{{name}}{{/if}}</strong>
+            {{#if enchantName}}
+              — {{enchantName}}
+            {{/if}}
+            {{#if type}}
+              <span>({{type}})</span>
+            {{/if}}
+
+            {{#if usesPerDay}}
+              <div class="new-day-uses">
+                Utilisations :
+                {{usesBefore}} → {{usesAfter}} / {{usesPerDay}}
+              </div>
+            {{/if}}
+          </li>
+        {{/each}}
+      </ul>
+    </section>
+  {{/if}}
+
+  {{!-- Capacités --}}
+  {{#if capacities.length}}
+    <section class="new-day-section">
+      <h3>📖 Capacités</h3>
+      <ul>
+        {{#each capacities}}
+          <li>
+            <strong>{{name}}</strong> :
+            {{#if disabled}}
+              désactivée
+            {{else}}
+              reste active
+            {{/if}}
+          </li>
+        {{/each}}
+      </ul>
+    </section>
+  {{/if}}
+
+  {{!-- Consommables supprimés --}}
+  {{#if consumables.length}}
+    <section class="new-day-section">
+      <h3>🧪 Consommables supprimés</h3>
+      <ul>
+        {{#each consumables}}
+          <li>
+            <strong>{{name}}</strong>
+            — supprimé au changement de jour
+          </li>
+        {{/each}}
+      </ul>
+    </section>
+  {{/if}}
+
+  {{!-- Autres changements --}}
+  {{#if other.length}}
+    <section class="new-day-section">
+      <h3>ℹ️ Autres changements</h3>
+      <ul>
+        {{#each other}}
+          <li>
+            <strong>{{#if itemName}}{{itemName}}{{else}}{{name}}{{/if}}</strong>
+            : {{message}}
+
+            {{#if usesPerDay}}
+              <div class="new-day-uses">
+                Utilisations :
+                {{usesBefore}} → {{usesAfter}} / {{usesPerDay}}
+              </div>
+            {{/if}}
+          </li>
+        {{/each}}
+      </ul>
+    </section>
+  {{/if}}
+
+  <footer class="new-day-footer">
+    <em>Les effets journaliers ont été actualisés.</em>
+  </footer>
+
+</div>

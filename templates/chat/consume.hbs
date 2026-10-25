@@ -1,0 +1,165 @@
+
+<div class="orc-chat-card consume-message consume-card">
+
+  <header class="consume-header">
+    <div class="consume-eyebrow">
+      <span class="header-line"></span>
+      CONSOMMATION D'OBJET
+      <span class="header-line"></span>
+    </div>
+
+    <h2 class="consume-title">{{itemName}}</h2>
+    <div class="consume-actor">{{actorName}}</div>
+  </header>
+
+  {{#if isFood}}
+    <section class="consume-section food-section">
+      <div class="consume-section-heading">
+        <span class="section-icon">🍖</span>
+        <h3>Nutrition</h3>
+      </div>
+
+      <div class="consume-row">
+        <span>🍗 Repas du jour</span>
+        <strong>{{foodDayBefore}} <span class="consume-arrow">→</span> {{foodDayAfter}}</strong>
+      </div>
+
+      <div class="consume-row">
+        <span>🍷 Boissons du jour</span>
+        <strong>{{drinkDayBefore}} <span class="consume-arrow">→</span> {{drinkDayAfter}}</strong>
+      </div>
+    </section>
+  {{/if}}
+
+  <section class="consume-section status-section">
+    <div class="consume-section-heading">
+      <span class="section-icon">✨</span>
+      <h3>État du personnage</h3>
+    </div>
+
+    {{#if showHP}}
+      <div class="resource-card hp-card">
+        <div class="resource-heading">
+          <span>❤️ Points de vie</span>
+          <strong>{{hpAfter}}{{#if hpMax}} / {{hpMax}}{{/if}}</strong>
+        </div>
+        <div class="resource-track">
+          <div class="resource-track-fill hp-fill" style="width: {{#if hpMax}}{{multiply (divide hpAfter hpMax) 100}}{{else}}0{{/if}}%;"></div>
+        </div>
+        <div class="resource-details">
+          <span>{{hpBefore}} → {{hpAfter}}</span>
+          <strong>{{hpDeltaText}}</strong>
+        </div>
+      </div>
+    {{/if}}
+
+    {{#if showMP}}
+      <div class="resource-card mp-card">
+        <div class="resource-heading">
+          <span>💧 Points de magie</span>
+          <strong>{{mpAfter}}{{#if mpMax}} / {{mpMax}}{{/if}}</strong>
+        </div>
+        <div class="resource-track">
+          <div class="resource-track-fill mp-fill" style="width: {{#if mpMax}}{{multiply (divide mpAfter mpMax) 100}}{{else}}0{{/if}}%;"></div>
+        </div>
+        <div class="resource-details">
+          <span>{{mpBefore}} → {{mpAfter}}</span>
+          <strong>{{mpDeltaText}}</strong>
+        </div>
+      </div>
+    {{/if}}
+
+    {{#if showES}}
+      <div class="resource-card es-card">
+        <div class="resource-heading">
+          <span>🔮 Essences sanguines</span>
+          <strong>{{esAfter}}</strong>
+        </div>
+        <div class="resource-details">
+          <span>{{esBefore}} → {{esAfter}}</span>
+          <strong>{{esDeltaText}}</strong>
+        </div>
+      </div>
+    {{/if}}
+  </section>
+
+  {{#if showTipsiness}}
+    <section class="consume-section tipsiness-section">
+      <div class="consume-section-heading">
+        <span class="section-icon">🍷</span>
+        <h3>Ébriété</h3>
+      </div>
+
+      <div class="consume-row">
+        <span>Jet de résistance</span>
+        <strong>{{resistanceResult}}</strong>
+      </div>
+
+      <div class="consume-row">
+        <span>Niveau</span>
+        <strong>{{tipsinessBefore}} → {{tipsinessAfter}}</strong>
+      </div>
+
+      <div class="consume-delta">{{tipsinessDeltaText}}</div>
+    </section>
+  {{/if}}
+
+  {{#if showPoison}}
+    <section class="consume-section poison-section">
+      <div class="consume-section-heading">
+        <span class="section-icon">☠️</span>
+        <h3>Poison</h3>
+      </div>
+
+      <div class="consume-row">
+        <span>Niveau</span>
+        <strong>{{poisonBefore}} → {{poisonAfter}}</strong>
+      </div>
+
+      <div class="consume-delta">{{poisonDeltaText}}</div>
+    </section>
+  {{/if}}
+
+  {{#if duration}}
+    <section class="consume-section duration-section">
+      <div class="consume-section-heading">
+        <span class="section-icon">⏳</span>
+        <h3>Activation</h3>
+      </div>
+
+      <div class="duration-value">
+        <strong>{{duration}}</strong>
+        <span>{{durationUnit}}</span>
+      </div>
+
+      {{#if durationFormula}}
+        <div class="duration-formula">
+          <span>Formule</span>
+          <code>{{durationFormula}}</code>
+        </div>
+      {{/if}}
+    </section>
+  {{/if}}
+
+  {{#if effects.length}}
+    <section class="consume-section effects-section">
+      <div class="consume-section-heading">
+        <span class="section-icon">⚔️</span>
+        <h3>Effets appliqués</h3>
+      </div>
+
+      <ul class="consume-effects-list">
+        {{#each effects}}
+          <li><span class="effect-bullet">✦</span>{{this}}</li>
+        {{/each}}
+      </ul>
+    </section>
+  {{/if}}
+
+  <footer class="consume-footer">
+    <span class="footer-icon">🎒</span>
+    <span>Stock restant</span>
+    <strong>{{stockAfter}}</strong>
+  </footer>
+
+</div>

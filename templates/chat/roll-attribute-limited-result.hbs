@@ -1,9 +1,25 @@
-<div class="orc attribute-roll dice-roll">
-  <div class="title">{{title}}</div>
-  {{{tooltip}}}
-  <table class="results">
-    <tr class="dice-total">
-      <td>{{roll.total}}</td>
-    </tr>
-  </table>
+
+<div class="orc attribute-roll dice-roll simple-roll">
+  <header class="roll-header">
+    <div class="roll-icon">✧</div>
+    <div class="roll-heading">
+      <h3 class="title">{{title}}</h3>
+      <span class="roll-subtitle">Résultat du jet</span>
+    </div>
+  </header>
+
+  <div class="roll-tooltip">
+    {{{tooltip}}}
+  </div>
+
+  <div class="roll-result">
+    <div class="result-decoration">✦</div>
+    <table class="results">
+      <tbody>
+        <tr class="dice-total">
+          <td class="result-total">{{roll.total}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

@@ -1,28 +1,62 @@
+
 <div class="orc attribute-roll dice-roll">
-  <div class="title">{{title}}</div>
-  {{{tooltip}}}
-  <table class="results">
-    <tr class="dice-total {{color}}">
-      <td>{{roll.total}}</td>
-      <td>{{localize message}}</td>
-    </tr>
-  </table>
-  <div class="add-info">
-    <table>
-      <tr>
-        <td class="header">{{localize "orc.dialog.attribute.base"}}</td>
-        <td class="value">{{attributeValue.base}}</td>
-      </tr>
-      <tr>
-        <td class="header">{{localize "orc.dialog.attribute.modif"}}</td>
-        <td class="value">{{attributeValue.modif}}</td>
-      </tr>
-      <tr>
-        <td class="header">{{localize "orc.dialog.attribute.value"}}</td>
-        <td class="value">{{attributeValue.value}}</td>
+  <header class="roll-header">
+    <div class="roll-icon">✧</div>
+    <div class="roll-heading">
+      <h3 class="title">{{title}}</h3>
+      <span class="roll-subtitle">Résultat du test</span>
+    </div>
+  </header>
+
+  <div class="roll-tooltip">
+    {{{tooltip}}}
+  </div>
+
+  <section class="roll-result">
+    <div class="result-decoration">✦</div>
+    <table class="results">
+      <tr class="dice-total {{color}}">
+        <td class="result-total">{{roll.total}}</td>
+        <td class="result-message">{{localize message}}</td>
       </tr>
     </table>
-  </div>
-  <div class="text">{{localize "orc.dialog.attribute.excess"}}</div>
-  <div class="dice-excess">{{attributeValue.diff}}</div>
+  </section>
+
+  <section class="add-info">
+    <h4 class="section-title">Détail des caractéristiques</h4>
+
+    <table class="attribute-table">
+      <tbody>
+        <tr>
+          <td class="header">
+            <span class="stat-symbol">◇</span>
+            {{localize "orc.dialog.attribute.base"}}
+          </td>
+          <td class="value">{{attributeValue.base}}</td>
+        </tr>
+        <tr>
+          <td class="header">
+            <span class="stat-symbol">⚒</span>
+            {{localize "orc.dialog.attribute.modif"}}
+          </td>
+          <td class="value">{{attributeValue.modif}}</td>
+        </tr>
+        <tr class="final-value">
+          <td class="header">
+            <span class="stat-symbol">✧</span>
+            {{localize "orc.dialog.attribute.value"}}
+          </td>
+          <td class="value">{{attributeValue.value}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="excess-section">
+    <div class="excess-heading">
+      <span class="excess-icon">❖</span>
+      <span>{{localize "orc.dialog.attribute.excess"}}</span>
+    </div>
+    <div class="dice-excess">{{attributeValue.diff}}</div>
+  </section>
 </div>

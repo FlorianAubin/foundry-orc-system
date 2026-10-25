@@ -1,12 +1,31 @@
-<div class="orc status-roll dice-roll">
-  <div class="title">{{title}}</div>
-  {{{tooltip}}}
-  <table class="results">
-    <tr class="dice-total">
-      <td>{{roll.total}}</td>
-      {{#if info}}
-        <td>{{info}}</td>
-      {{/if}}
-    </tr>
-  </table>
+
+<div class="orc status-roll dice-roll status-card">
+  <header class="status-header">
+    <div class="status-icon">❖</div>
+    <div class="status-heading">
+      <h3 class="title">{{title}}</h3>
+      <span class="status-subtitle">Effet de statut</span>
+    </div>
+  </header>
+
+  {{#if tooltip}}
+    <div class="status-tooltip">
+      {{{tooltip}}}
+    </div>
+  {{/if}}
+
+  <section class="status-result">
+    <div class="result-decoration">✦</div>
+    <div class="result-label">Résultat</div>
+
+    <div class="results">
+      <div class="dice-total">
+        <strong class="result-total">{{roll.total}}</strong>
+
+        {{#if info}}
+          <span class="result-info">{{info}}</span>
+        {{/if}}
+      </div>
+    </div>
+  </section>
 </div>

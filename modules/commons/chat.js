@@ -129,18 +129,26 @@ export async function StatusRollToCustomMessage(rollResult, extraData) {
   await ChatMessage.create(chatData);
 }
 
-export async function DamageRollToCustomFullMessage(rollResult, extraData) {
-  const template = "systems/orc/templates/chat/roll-damage-full-result.hbs";
+
+export async function DamageRollToCustomFullMessage(
+  rollResult,
+  extraData = {}
+) {
+  const template =
+    "systems/orc/templates/chat/roll-damage-full-result.hbs";
+
   rollResult = await rollResult;
 
-  let templateContext = {
+  const templateContext = {
     ...extraData,
     roll: rollResult,
-    tooltip: rollResult ? await rollResult.getTooltip() : null,
+    tooltip: rollResult
+      ? await rollResult.getTooltip()
+      : null,
   };
 
-  let chatData = {
-    user: game.user._id,
+  const chatData = {
+    user: game.user.id,
     speaker: ChatMessage.getSpeaker(),
     roll: rollResult,
     sound: CONFIG.sounds.dice,
@@ -148,12 +156,13 @@ export async function DamageRollToCustomFullMessage(rollResult, extraData) {
     type: CONST.CHAT_MESSAGE_TYPES.ROLL,
   };
 
-   //only visible to the GM and GM assistants
-   if (rollResult.options.visibleByPlayers == 0) {
+  // Message visible uniquement par le MJ et les assistants MJ
+  if (rollResult?.options?.visibleByPlayers == 0) {
     chatData.blind = true;
-    chatData.whisper = game.users.filter(function (user) {
-      return user.role > 2;
-    });
+    chatData.whisper = game.users
+      .filter(user => user.role > 2)
+      .map(user => user.id);
+
     chatData.type = CONST.CHAT_MESSAGE_TYPES.BLIND;
   }
 
@@ -273,7 +282,7 @@ export async function SpellRollToCustomLimitedMessage(
 }
 
 export async function EnchantRollToCustomMessage(rollResult, extraData) {
-  const template = "systems/orc/templates/chat/roll-enchant-result.hbs"
+  const template = "systems/orc/templates/chat/enchant-roll.hbs"
   rollResult = await rollResult;
 
   let templateContext = {
@@ -331,3 +340,113 @@ export async function RollToSimpleCustomMessage({ roll = null }, extraData = nul
   }
   await ChatMessage.create(chatData);
 }
+
+
+export async function createNewDayCustomMessage(report) {
+  const content = await renderTemplate(
+    "systems/orc/templates/chat/new_day.hbs",
+    report
+  );
+
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+    content,
+    style: CONST.CHAT_MESSAGE_STYLES.OTHER,
+  });
+}
+
+
+export async function createConsumeCustomMessage(data) {
+  const content = await renderTemplate(
+    "systems/orc/templates/chat/consume.hbs",
+    data
+  );
+
+  return ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor: data.actor }),
+    content,
+    style: CONST.CHAT_MESSAGE_STYLES.OTHER,
+  });
+}
+
+
+export async function createDeactivateCustomMessage({
+  actor,
+  itemName,
+  itemType,
+  duration = null,
+  effects = [],
+}) {
+  const content = await renderTemplate(
+    "systems/orc/templates/chat/deactivate.hbs",
+    {
+      actor,
+      actorName: actor.name,
+      itemName,
+      itemType,
+      duration,
+      effects,
+    }
+  );
+
+  return ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content,
+    style: CONST.CHAT_MESSAGE_STYLES.OTHER,
+  });
+}
+
+export async function createReduceDurationMessage({
+  actor,
+  itemName,
+  itemType,
+  durationBefore,
+  durationAfter,
+  durationUnit,
+  deactivated = false,
+}) {
+  const content = await renderTemplate(
+    "systems/orc/templates/chat/reduce-duration.hbs",
+    {
+      actorName: actor.name,
+      itemName,
+      itemType,
+      durationBefore,
+      durationAfter,
+      durationUnit,
+      deactivated,
+    }
+  );
+
+  return ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content,
+    style: CONST.CHAT_MESSAGE_STYLES.OTHER,
+  });
+}
+
+export async function createActivateCapacityMessage(data) {
+  const content = await renderTemplate(
+    "systems/orc/templates/chat/capacity-activate.hbs",
+    data
+  );
+
+  return ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor: data.actor }),
+    content,
+    style: CONST.CHAT_MESSAGE_STYLES.OTHER,
+  });
+}
+
+export async function  createEnchantActivateMessage  (data) {
+  const content = await renderTemplate(
+    "systems/orc/templates/chat/enchant-activate.hbs",
+    data
+  );
+
+  return ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor: data.actor }),
+    content,
+    style: CONST.CHAT_MESSAGE_STYLES.OTHER,
+  });
+};

@@ -1,57 +1,42 @@
-<div class="orc spell-roll dice-roll">
-  <table class="results">
-    <tr class="title">
-      <th colspan="4">{{title}}</th>
-    </tr>
-    <!--
-    {{#if costRoll.formula}}
-      <tr>
-        <th class="header">{{localize "orc.spell.cost"}}</th>
-        <td class="dice-total">
-          {{costRoll.total}}
-        </td>
-        <td class="add-info">
-          {{#if useHP}}
-            {{localize "orc.character.hp"}}
-          {{else}}
-            {{localize "orc.character.mp"}}
-          {{/if}}
-        </td>
-      </tr>
-      <tr>{{{costTooltip}}}</tr>
-    {{/if}}
-    -->
 
-    {{#if powerRoll.formula}}
-      <tr>
-        <th class="header">{{localize "orc.spell.power"}}</th>
-        <td class="dice-total" colspan="2">
-          {{powerRoll.total}}
-        </td>
-      </tr>
-      <tr>{{{powerTooltip}}}</tr>
-    {{/if}}
+<div class="orc spell-roll dice-roll spell-power-card">
+  <header class="spell-header">
+    <div class="spell-icon">✧</div>
+    <div class="spell-heading">
+      <h3 class="spell-title">{{title}}</h3>
+      <span class="spell-subtitle">Manifestation arcanique</span>
+    </div>
+  </header>
 
-  <!--
-    {{#if durationRoll.formula}}
-      <tr>
-        <th class="header">{{localize "orc.spell.duration"}}</th>
-        <td class="dice-total">
-          {{durationRoll.total}}
-        </td>
-        <td class="add-info">
-          {{durationUnit}}
-        </td>
-      </tr>
-      <tr>{{{durationTooltip}}}</tr>
-    {{/if}}
-  -->
+  {{#if powerRoll.formula}}
+    <section class="power-section">
+      <div class="power-heading">
+        <span class="power-icon">✦</span>
+        <span>{{localize "orc.spell.power"}}</span>
+      </div>
 
-    {{#if effect}}
-      <tr class="effects">
-        <td colspan="4">{{effect}}</td>
-      </tr>
-    {{/if}}
-  
-  </table>
+      <div class="power-result">
+        <strong>{{powerRoll.total}}</strong>
+      </div>
+
+      {{#if powerTooltip}}
+        <details class="power-details">
+          <summary>Détails du jet</summary>
+          <div class="power-tooltip">
+            {{{powerTooltip}}}
+          </div>
+        </details>
+      {{/if}}
+    </section>
+  {{/if}}
+
+  {{#if effect}}
+    <footer class="spell-effects">
+      <div class="effect-icon">❖</div>
+      <div class="effect-content">
+        <span class="effect-label">Effets du sort</span>
+        <div class="effect-text">{{effect}}</div>
+      </div>
+    </footer>
+  {{/if}}
 </div>

@@ -1,0 +1,68 @@
+
+<div class="orc-chat-card enchant-card">
+
+  <header class="card-header enchant-header">
+    <div class="enchant-icon {{#if activated}}is-active{{else}}is-inactive{{/if}}">
+      {{#if activated}}✧{{else}}☾{{/if}}
+    </div>
+
+    <div class="enchant-heading">
+
+      <h3>
+        {{#if activated}}
+          Enchantement activé
+        {{else}}
+          Enchantement désactivé
+        {{/if}}
+      </h3>
+
+      <p class="item-name">{{itemName}}</p>
+      <small>{{actorName}}</small>
+    </div>
+
+    <span class="enchant-badge {{#if activated}}is-active{{else}}is-inactive{{/if}}">
+      <span class="enchant-status-dot"></span>
+      {{#if activated}}ACTIF{{else}}INACTIF{{/if}}
+    </span>
+  </header>
+
+  <section class="enchant-content">
+    {{#if activated}}
+
+      <div class="enchant-section-title">
+        <span class="enchant-section-line"></span>
+        <span>ÉTAT DE L'ENCHANTEMENT</span>
+        <span class="enchant-section-line"></span>
+      </div>
+
+      <div class="enchant-stats">
+
+        <div class="enchant-stat">
+          <div class="enchant-stat-icon uses-icon">◈</div>
+          <div class="stat-details">
+            <span class="stat-label">Utilisations restantes</span>
+            <strong class="stat-value">{{usesAfter}}</strong>
+          </div>
+          <span class="stat-corner">✦</span>
+        </div>
+
+        {{#if hasDuration}}
+          <div class="enchant-stat duration-stat">
+            <div class="enchant-stat-icon duration-icon">⌛</div>
+            <div class="stat-details">
+              <span class="stat-label">Durée de l'effet</span>
+              <strong class="stat-value">
+                {{duration}} <span class="duration-unit">{{durationUnit}}</span>
+              </strong>
+            </div>
+            <span class="stat-corner">✦</span>
+          </div>
+        {{/if}}
+
+      </div>
+
+    {{else}}
+
+    {{/if}}
+  </section>
+</div>

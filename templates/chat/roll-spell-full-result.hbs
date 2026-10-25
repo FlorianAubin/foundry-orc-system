@@ -1,88 +1,129 @@
-<div class="orc spell-roll dice-roll">
-  <table class="results">
-    <tr class="title">
-      <th colspan="4">{{title}}</th>
-    </tr>
+
+<div class="orc spell-roll dice-roll spell-card">
+  <header class="spell-header">
+    <div class="spell-icon">✧</div>
+    <div class="spell-heading">
+      <h3 class="spell-title">{{title}}</h3>
+      <span class="spell-subtitle">Grimoire des arcanes</span>
+    </div>
+  </header>
+
+  <section class="spell-types">
     {{#if spellTypes.bases}}
-    <tr>
-      <td colspan="4">{{localize "orc.spell.types.base"}}(s): {{spellTypes.bases}}</td>
-    </tr>
+      <div class="spell-type-row">
+        <span class="type-icon">◇</span>
+        <span class="type-label">{{localize "orc.spell.types.base"}}(s)</span>
+        <strong>{{spellTypes.bases}}</strong>
+      </div>
     {{/if}}
+
     {{#if spellTypes.shapes}}
-    <tr>
-      <td colspan="4">{{localize "orc.spell.types.shape"}}(s): {{spellTypes.shapes}}</td>
-    </tr>
+      <div class="spell-type-row">
+        <span class="type-icon">⬡</span>
+        <span class="type-label">{{localize "orc.spell.types.shape"}}(s)</span>
+        <strong>{{spellTypes.shapes}}</strong>
+      </div>
     {{/if}}
+
     {{#if spellTypes.powers}}
-    <tr>
-      <td colspan="4">{{localize "orc.spell.types.power"}}(s): {{spellTypes.powers}}</td>
-    </tr>
+      <div class="spell-type-row">
+        <span class="type-icon">✦</span>
+        <span class="type-label">{{localize "orc.spell.types.power"}}(s)</span>
+        <strong>{{spellTypes.powers}}</strong>
+      </div>
     {{/if}}
+
     {{#if spellTypes.modifs}}
-    <tr>
-      <td colspan="4">{{localize "orc.spell.types.modif"}}(s): {{spellTypes.modifs}}</td>
-    </tr>
+      <div class="spell-type-row">
+        <span class="type-icon">⚙</span>
+        <span class="type-label">{{localize "orc.spell.types.modif"}}(s)</span>
+        <strong>{{spellTypes.modifs}}</strong>
+      </div>
     {{/if}}
+  </section>
+
+  <section class="spell-stats">
     {{#if costRoll.formula}}
-      <tr>
-        <th class="header">{{localize "orc.spell.cost"}}</th>
-        <td class="dice-formula">
-          {{costRoll.formula}}
-        </td>
-        <td class="dice-total">
-          {{costRoll.total}}
-        </td>
-        <td class="add-info">
-          {{#if useHP}}
-            {{localize "orc.character.hp"}}
-          {{else}}
-            {{localize "orc.character.mp"}}
-          {{/if}}
-        </td>
-      </tr>
-      <tr>{{{costTooltip}}}</tr>
+      <div class="spell-stat cost-stat">
+        <div class="stat-heading">
+          <span class="stat-icon">◈</span>
+          <span>{{localize "orc.spell.cost"}}</span>
+        </div>
+        <div class="stat-formula">{{costRoll.formula}}</div>
+        <div class="stat-result">
+          <strong>{{costRoll.total}}</strong>
+          <span>
+            {{#if useHP}}
+              {{localize "orc.character.hp"}}
+            {{else}}
+              {{localize "orc.character.mp"}}
+            {{/if}}
+          </span>
+        </div>
+        {{#if costTooltip}}
+          <details class="spell-roll-details">
+            <summary>Détails du jet</summary>
+            <div class="spell-tooltip">{{{costTooltip}}}</div>
+          </details>
+        {{/if}}
+      </div>
     {{/if}}
 
     {{#if powerRoll.formula}}
-      <tr>
-        <th class="header">{{localize "orc.spell.power"}}</th>
-        <td class="dice-formula">
-          {{powerRoll.formula}}
-        </td>
-        <td class="dice-total" colspan="2">
-          {{powerRoll.total}}
-        </td>
-      </tr>
-      <tr>{{{powerTooltip}}}</tr>
+      <div class="spell-stat power-stat">
+        <div class="stat-heading">
+          <span class="stat-icon">✦</span>
+          <span>{{localize "orc.spell.power"}}</span>
+        </div>
+        <div class="stat-formula">{{powerRoll.formula}}</div>
+        <div class="stat-result">
+          <strong>{{powerRoll.total}}</strong>
+        </div>
+        {{#if powerTooltip}}
+          <details class="spell-roll-details">
+            <summary>Détails du jet</summary>
+            <div class="spell-tooltip">{{{powerTooltip}}}</div>
+          </details>
+        {{/if}}
+      </div>
     {{/if}}
 
     {{#if durationRoll.formula}}
-      <tr>
-        <th class="header">{{localize "orc.spell.duration"}}</th>
-        <td class="dice-formula">
-          {{durationRoll.formula}}
-        </td>
-        <td class="dice-total">
-          {{durationRoll.total}}
-        </td>
-        <td class="add-info">
-          {{durationUnit}}
-        </td>
-      </tr>
-      <tr>{{{durationTooltip}}}</tr>
+      <div class="spell-stat duration-stat">
+        <div class="stat-heading">
+          <span class="stat-icon">⌛</span>
+          <span>{{localize "orc.spell.duration"}}</span>
+        </div>
+        <div class="stat-formula">{{durationRoll.formula}}</div>
+        <div class="stat-result">
+          <strong>{{durationRoll.total}}</strong>
+          <span>{{durationUnit}}</span>
+        </div>
+        {{#if durationTooltip}}
+          <details class="spell-roll-details">
+            <summary>Détails du jet</summary>
+            <div class="spell-tooltip">{{{durationTooltip}}}</div>
+          </details>
+        {{/if}}
+      </div>
     {{/if}}
+  </section>
 
-    <tr>
-      <th class="header">{{localize "orc.spell.range"}}</th>
-      <td class="dice-total" colspan="3">
-        {{range}}
-      </td>
-    </tr>
+  <section class="spell-range">
+    <span class="range-icon">◎</span>
+    <div class="range-info">
+      <span class="range-label">{{localize "orc.spell.range"}}</span>
+      <strong>{{range}}</strong>
+    </div>
+  </section>
 
-    {{#if effect}}
-      <tr class="effects">
-        <td colspan="4">{{effect}}</td>
-      </tr>
-    {{/if}}
-  </table>
+  {{#if effect}}
+    <footer class="spell-effects">
+      <span class="effect-icon">✧</span>
+      <div>
+        <span class="effect-label">Effets du sort</span>
+        <p>{{effect}}</p>
+      </div>
+    </footer>
+  {{/if}}
 </div>

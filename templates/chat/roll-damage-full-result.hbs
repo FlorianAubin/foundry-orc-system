@@ -1,24 +1,90 @@
-<div class="orc attack-roll dice-roll">
-  <table class="results weapon-damage">
-  <tr class="title"><th>{{title}}</th></tr>
-  {{#if (eq ammoTag 2)}}
-    <tr class="ammo"><td>{{ammo}}</td></tr>
-  {{else}}
-    {{#if (eq ammoTag 1)}}
-    <tr class="ammo"><td>{{ammo}}</td></tr>
-    {{/if}}
-      <tr class="dice-formula">
-        <td>{{roll.formula}}</td>
-      </tr>
-      <tr class="dice-total">
-        <td>{{roll.total}}</td>
-      </tr>
-      {{#if effect}}
-        <tr class="effects">
-          <td>{{effect}}</td>
-        </tr>
+
+<div class="orc attack-roll dice-roll weapon-damage-card">
+
+  <header class="damage-header">
+    <div class="damage-icon">⚔</div>
+    <div class="damage-heading">
+      <h3 class="damage-title">{{title}}</h3>
+      <span class="damage-subtitle">Dégâts de l'attaque</span>
+    </div>
+  </header>
+
+  {{!-- Informations sur l'arme --}}
+  {{#if (or range showAmmoAfter)}}
+    <div class="damage-weapon-info">
+
+      {{#if range}}
+        <div class="damage-info-item">
+          <span class="damage-info-icon">◎</span>
+          <div>
+            <span class="damage-info-label">Portée</span>
+            <strong>{{range}} m</strong>
+          </div>
+        </div>
       {{/if}}
-    </table>
-    {{{tooltip}}}
+
+      {{#if showAmmoAfter}}
+        <div class="damage-info-item">
+          <span class="damage-info-icon">➤</span>
+          <div>
+            <span class="damage-info-label">Munitions restantes</span>
+            <strong>{{ammoAfter}}</strong>
+          </div>
+        </div>
+      {{/if}}
+
+    </div>
+  {{/if}}
+
+  {{!-- Munitions --}}
+  {{#if (eq ammoTag 2)}}
+    <div class="ammo-notice ammo-warning">
+      <span class="ammo-icon">⚠</span>
+      <span>{{ammo}}</span>
+    </div>
+  {{else}}
+
+    {{#if (eq ammoTag 1)}}
+      <div class="ammo-notice">
+        <span class="ammo-icon">➤</span>
+        <span>{{ammo}}</span>
+      </div>
+    {{/if}}
+
+    {{!-- Résultat des dégâts --}}
+    <section class="damage-result">
+
+      <div class="damage-formula">
+        <span>Formule des dégâts</span>
+        <strong>{{roll.formula}}</strong>
+      </div>
+
+      <div class="damage-total">
+        <span class="damage-total-label">Dégâts infligés</span>
+        <strong>{{roll.total}}</strong>
+      </div>
+
+      {{#if effect}}
+        <div class="damage-effects">
+          <span class="effect-icon">✦</span>
+          <span>{{effect}}</span>
+        </div>
+      {{/if}}
+
+    </section>
+
+    {{!-- Détails du jet --}}
+    {{#if tooltip}}
+      <details class="damage-details">
+        <summary>
+          <span>◈</span>
+          Détails des dés
+        </summary>
+        <div class="damage-tooltip">
+          {{{tooltip}}}
+        </div>
+      </details>
+    {{/if}}
+
   {{/if}}
 </div>

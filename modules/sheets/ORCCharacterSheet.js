@@ -678,71 +678,84 @@ export default class ORCCharacterSheet extends ActorSheet {
     return;
   }
 
-  async _onAttackWithWeaponRoll(event) {
-    event.preventDefault();
-    let actor = this.actor;
 
-      // Apply local MP cost (for capacity)
-    let costmp = event.currentTarget.dataset.costmp;
-    if(costmp != null){
-      let newMP = actor.system.mp.value - costmp;
-      if (newMP < 0) return;
-      actor.update({system: {mp: {value: newMP}}});
-    }
+async _onAttackWithWeaponRoll(event) {
+  event.preventDefault();
 
-    //Recover the weapon
-    const weapon = actor.items
-      .filter(function (item) {
-        return item.type == "weapon";
-      })
-      .filter(function (item) {
-        return item._id == event.currentTarget.dataset.weaponid;
-      })[0];
+  const actor = this.actor;
+  const dataset = event.currentTarget.dataset;
 
+  // Récupérer l'arme
+  const weapon = actor.items.find(
+    item => item.type === "weapon" &&
+            item.id === dataset.weaponid
+  );
 
-    // Apply MP cost of the weapon
-    costmp = weapon.system.mpCost;
-    if(costmp != null && costmp > 0){
-      let newMP = actor.system.mp.value - costmp;
-      if (newMP < 0) return;
-      actor.update({system: {mp: {value: newMP}}});
-    }
+  if (!weapon) return;
 
-    //Recover the ammo
-    const ammo = actor.items
-    .filter(function (item) {
-      return item.type == "ammo";
-    })
-    .filter(function (item) {
-      return item._id == weapon.system.ammo;
-    })[0];
-    if(weapon.system.useAmmo){
-      if(ammo == null) //Range weapon without ammo
-        return;
-      else if(ammo.system.stock < event.currentTarget.dataset.nammo)  //Range weapon with not enough ammo in stock
-        return;
-    }
+  // Vérifier le coût total en MP avant toute dépense
+  const localMPCost = Number(dataset.costmp ?? 0);
+  const weaponMPCost = Number(weapon.system.mpCost ?? 0);
+  const totalMPCost = localMPCost + weaponMPCost;
+  const currentMP = Number(actor.system.mp.value ?? 0);
 
-    //Do the rolls
-    let critical = null;
-    if (await DiceOrc.AttackRoll({
-          actor: actor,
-          attribute: event.currentTarget.dataset,
-          modif: actor.system.modifAllAttributes,
-        }) 
-        <= actor.system.roll.limitCritical)
-      critical = 1;
-    await DiceOrc.DamageRoll({
-      actor: actor,
-      attribute: event.currentTarget.dataset,
-      critical: critical
+  if (totalMPCost > currentMP) return;
+
+  // Dépenser les MP en une seule mise à jour
+  if (totalMPCost > 0) {
+    await actor.update({
+      "system.mp.value": currentMP - totalMPCost
     });
-    
-    //Consume enchant and capacity on attack
-    this.consumeOnRoll({ onAttack: true });
-
-    return;
   }
+
+  // Vérifier les munitions sans les consommer ici
+  if (weapon.system.useAmmo) {
+    const ammo = actor.items.find(
+      item => item.type === "ammo" &&
+              item.id === weapon.system.ammo
+    );
+
+    if (!ammo) return;
+
+    const ammoCost = Number(dataset.nammo ?? 1);
+    const currentStock = Number(ammo.system.stock ?? 0);
+
+    // Empêcher le tir si le stock est insuffisant
+    if (currentStock < ammoCost) return;
+  }
+
+  // Portée de l'arme
+  const range = weapon.system.range ?? "";
+
+  // Jet d'attaque
+  let critical = null;
+
+  const attackResult = await DiceOrc.AttackRoll({
+    actor,
+    attribute: dataset,
+    modif: actor.system.modifAllAttributes,
+  });
+
+  if (attackResult <= actor.system.roll.limitCritical) {
+    critical = 1;
+  }
+
+  // Jet de dégâts : DamageRoll consomme les munitions
+  await DiceOrc.DamageRoll({
+    actor,
+    weapon,
+    attribute: dataset,
+    critical,
+    extraMessageData: {
+      range,
+    },
+  });
+
+  // Consommer les enchantements et capacités liés à l'attaque
+  await this.consumeOnRoll({ onAttack: true });
+
+  return;
+}
 
   async _onLaunchSpellRoll(event) {
     event.preventDefault();
@@ -760,197 +773,350 @@ export default class ORCCharacterSheet extends ActorSheet {
 
     return;
   }
+async _onItemConsume(event) {
+  event.preventDefault();
 
-  async _onItemConsume(event) {
-    event.preventDefault();
-    let actor = this.actor;
-    
-    //Retrive the actor and the item
-    let element = event.currentTarget;
-    let itemId = element.closest(".item").dataset.itemId;
-    let actorData = actor.system;
-    let item = actor.items.get(itemId);
-    let itemData = item.system;
-    let weightIndiv = itemData.weight.indiv;
-    let weightTotal = itemData.weight.total;
-    let stock = itemData.stock;
-    //Not enough items
-    if (stock <= 0) {
-      await item.delete();
-      return;
-    }
+  const actor = this.actor;
+  const element = event.currentTarget;
+  const itemId = element.closest(".item").dataset.itemId;
+  const item = actor.items.get(itemId);
 
-    //New values
-    let newValues = {
-      foodDay: actorData.nutrition.foodDay,
-      drinkDay: actorData.nutrition.drinkDay,
-      tipsiness: actorData.nutrition.tips.value,
-      poison: actorData.status.poison,
-    };
-    if (item.type == "food") {
-      if (itemData.type.food) newValues.foodDay += 1;
-      if (itemData.type.drink) newValues.drinkDay += 1;
+  if (!item) return;
+
+  const itemData = item.system;
+  const actorData = actor.system;
+
+  const weightIndiv = itemData.weight.indiv;
+  const weightTotal = itemData.weight.total;
+  const stock = itemData.stock;
+
+  if (stock <= 0) {
+    await item.delete();
+    return;
+  }
+
+  // État avant consommation
+  const before = {
+    hp: actorData.hp?.value ?? null,
+    mp: actorData.mp?.value ?? null,
+    es: actorData.es?.value ?? null,
+    tipsiness: actorData.nutrition.tips.value,
+    poison: actorData.status.poison,
+    foodDay: actorData.nutrition.foodDay,
+    drinkDay: actorData.nutrition.drinkDay,
+  };
+
+  let resistanceResult = "";
+  let duration = null;
+  let durationFormula = null;
+  let durationUnit = ""
+  const effects = [];
+
+  const newValues = {
+    foodDay: before.foodDay,
+    drinkDay: before.drinkDay,
+    tipsiness: before.tipsiness,
+    poison: before.poison,
+  };
+
+  // Nutrition
+  if (item.type === "food") {
+    if (itemData.type.food) newValues.foodDay++;
+    if (itemData.type.drink) newValues.drinkDay++;
+  }
+
+  // Jet de résistance
+  if (
+    (itemData.tipsiness > 0) ||
+    (itemData.poison > 0)
+  ) {
+    const result = await DiceOrc.StatusResistRoll({
+      actor,
+      modif:
+        actorData.modifAllAttributes +
+        actorData.status.modifResist,
+    });
+
+
+    this.consumeOnRoll({ onRoll: true });
+
+    resistanceResult = (result ? "Réussite" : "Echec");
+
+    if (!result) {
+      if (itemData.tipsiness)
+      newValues.tipsiness += parseInt(itemData.tipsiness);
+      if (itemData.poison)
+      newValues.poison += parseInt(itemData.poison);
     }
-    //Do a strengh roll and increase the actor tipsiness in case of failure
-    if ( (itemData.tipsiness && itemData.tipsiness > 0) || (itemData.poison && itemData.poison > 0) ) {
-      let statusResistOut = DiceOrc.StatusResistRoll({
-        actor: actor,
-        modif: actorData.modifAllAttributes + actorData.status.modifResist,
+  }
+
+  // Soins HP / MP / ES
+  if (
+    item.type !== "food" ||
+    itemData.type.food ||
+    itemData.type.drink
+  ) {
+    if (itemData.hp != null && itemData.hp !== "") {
+      await this.takeHeal({
+        healFormula: itemData.hp,
+        multiplier: actorData.recoverHP.multiplier.value,
       });
-
-      //Consume enchant and capacity on roll
-      this.consumeOnRoll({ onRoll: true });
-
-      if (statusResistOut) {
-        newValues.tipsiness += itemData.tipsiness;
-        newValues.poison += itemData.poison;
-      }
     }
-    //Recover the HP and MP
-    if (
-      item.type != "food" ||
-      (itemData.type.food) ||
-      (itemData.type.drink)
-    ) {
-      if (itemData.hp != "")
-        await this.takeHeal({
-          healFormula: itemData.hp,
-          multiplier: actorData.recoverHP.multiplier.value,
-        });
-      if (itemData.mp != "")
-        await this.takeHeal({ healFormula: itemData.mp, onMP: true });
-      if (itemData.es > 0){
-        let newESValue = actorData.es.value + itemData.es;
-        if (newESValue > actorData.es.valueMax) newESValue = actorData.es.valueMax;
-        let maj = {
-          system: { es: { value: newESValue } },
-        };
-        await actor.update(maj);
-      }
+
+    if (itemData.mp != null && itemData.mp !== "") {
+      await this.takeHeal({
+        healFormula: itemData.mp,
+        onMP: true,
+      });
     }
-    //Apply the status healing
-    if (itemData.healBleed) this._onBleedOff();
-    if (itemData.healPoison) this._onPoisonOff();
-    if (itemData.healBurn) this._onBurnOff();
 
-    //Take the damage
-    if (itemData.damage != null && itemData.damage != "")
-      await this.takeDamage({ damageFormula: itemData.damage});
-    if (itemData.damageMP != null && itemData.damageMP != "")
-      await this.takeDamage({ damageFormula: itemData.damageMP, onMP: true });
-
-    //Update the actor
-    await actor.update({
-      system: {
-        nutrition: {
-          tips: {value: newValues.tipsiness},
-          foodDay: newValues.foodDay,
-          drinkDay: newValues.drinkDay,
-        },
-        status: {
-          poison: newValues.poison,
-        },
-      },
-    });
-
-    //Update the item
-    //Update stock and weight
-    await item.update({
-      system: {
-        stock: stock - 1,
-        weight: {
-          total: Math.floor(100 * (weightTotal - weightIndiv)) / 100,
-        },
-      },
-    });
-
-    //If the item is tagged as activable, create a copy tagged as activated
-    if (itemData.isActivable) {
-      //Roll the effective duration
-      let durationFormula = itemData.ifActivable.duration;
-      if (typeof durationFormula !== "string")
-        durationFormula = durationFormula.toString();
-      let roll = new Roll(durationFormula);
-      await  roll.evaluate();
-      let duration = roll.total;
-      //If the formula is not trivial, display the roll in the chat
-      if (durationFormula.includes("d") || durationFormula.includes("+"))
-        ChatOrc.RollToSimpleCustomMessage({ roll: roll });
-
-      //Create a copy of the item tagged as activated, with the proper duration and no weight
-      await item.clone(
-        {
-          "system.ifActivable.activated": true,
-          "system.ifActivable.duration": duration.toString(),
-          "system.stock": 1,
-          "system.weight.indiv": 0,
-          "system.weight.total": 0,
-        },
-        { save: true }
+    if (itemData.es > 0) {
+      const es = Math.min(
+        actorData.es.value + itemData.es,
+        actorData.es.valueMax
       );
+
+      await actor.update({ "system.es.value": es });
     }
+  }
 
-    //Delete the item if the stock goes to 0
-    if (item.system.stock <= 0) await item.delete();
+  // États soignés
+  if (itemData.healBleed) {
+    this._onBleedOff();
+    effects.push("Saignement soigné");
+  }
 
+  if (itemData.healPoison) {
+    this._onPoisonOff();
+    effects.push("Poison soigné");
+  }
+
+  if (itemData.healBurn) {
+    this._onBurnOff();
+    effects.push("Brûlure soignée");
+  }
+
+  // Dégâts
+  if (itemData.damage != null && itemData.damage !== "") {
+    await this.takeDamage({ damageFormula: itemData.damage });
+    effects.push(`Dégâts HP : ${itemData.damage}`);
+  }
+
+  if (itemData.damageMP != null && itemData.damageMP !== "") {
+    await this.takeDamage({
+      damageFormula: itemData.damageMP,
+      onMP: true,
+    });
+    effects.push(`Dégâts MP : ${itemData.damageMP}`);
+  }
+
+  // Mise à jour du personnage
+  await actor.update({
+    "system.nutrition.tips.value": newValues.tipsiness,
+    "system.nutrition.foodDay": newValues.foodDay,
+    "system.nutrition.drinkDay": newValues.drinkDay,
+    "system.status.poison": newValues.poison,
+  });
+
+  // Durée d'activation
+  if (itemData.isActivable) {
+    durationFormula = String(itemData.ifActivable.duration);
+
+    const roll = await new Roll(durationFormula).evaluate();
+    duration = roll.total;
+
+    durationUnit = itemData.ifActivable.durationUnit;
+
+    await item.clone(
+      {
+        "system.ifActivable.activated": true,
+        "system.ifActivable.duration": String(duration),
+        "system.stock": 1,
+        "system.weight.indiv": 0,
+        "system.weight.total": 0,
+      },
+      { save: true }
+    );
+  }
+
+  // Stock et poids
+  await item.update({
+    "system.stock": stock - 1,
+    "system.weight.total":
+      Math.floor(100 * (weightTotal - weightIndiv)) / 100,
+  });
+
+  const stockAfter = item.system.stock;
+
+  if (stockAfter <= 0) {
+    await item.delete();
+  }
+
+  // État après consommation
+  const after = {
+    hp: actor.system.hp?.value ?? null,
+    mp: actor.system.mp?.value ?? null,
+    es: actor.system.es?.value ?? null,
+    tipsiness: actor.system.nutrition.tips.value,
+    poison: actor.system.status.poison,
+    foodDay: actor.system.nutrition.foodDay,
+    drinkDay: actor.system.nutrition.drinkDay,
+  };
+
+  const delta = (a, b) =>
+    a == null || b == null ? 0 : b - a;
+
+  const signed = value =>
+    value > 0 ? `+${value}` : String(value);
+
+  await ChatOrc.createConsumeCustomMessage({
+    actor,
+    actorName: actor.name,
+    itemName: item.name,
+    itemType: item.type,
+    isFood: item.type === "food",
+
+    hpBefore: before.hp,
+    hpAfter: after.hp,
+    hpDeltaText: signed(delta(before.hp, after.hp)),
+    showHP: before.hp != after.hp ,
+
+    mpBefore: before.mp,
+    mpAfter: after.mp,
+    mpDeltaText: signed(delta(before.mp, after.mp)),
+    showMP: before.mp != after.mp ,
+
+    esBefore: before.es,
+    esAfter: after.es,
+    esDeltaText: signed(delta(before.es, after.es)),
+    showES: before.es != after.es,
+
+    tipsinessBefore: before.tipsiness,
+    tipsinessAfter: after.tipsiness,
+    tipsinessDeltaText: signed(
+      delta(before.tipsiness, after.tipsiness)
+    ),
+    showTipsiness:
+      before.tipsiness !== after.tipsiness ||
+      Boolean(itemData.tipsiness),
+
+    poisonBefore: before.poison,
+    poisonAfter: after.poison,
+    poisonDeltaText: signed(delta(before.poison, after.poison)),
+    showPoison: before.poison !== after.poison,
+
+    resistanceResult,
+    duration,
+    durationUnit,
+    durationFormula,
+
+    foodDayBefore: before.foodDay,
+    foodDayAfter: after.foodDay,
+    drinkDayBefore: before.drinkDay,
+    drinkDayAfter: after.drinkDay,
+
+    effects,
+    stockAfter: Math.max(0, stockAfter),
+  });
+}
+
+async _onConsumableReduceDuration(event) {
+  event.preventDefault();
+
+  const actor = this.actor;
+  const item = actor.items.get(event.currentTarget.dataset.itemid);
+
+  if (!item || item.type !== "consumable") return;
+
+  const itemData = item.system;
+
+  if (!itemData.isActivable || !itemData.ifActivable.activated) {
     return;
   }
 
-  async _onConsumableReduceDuration(event) {
-    event.preventDefault();
-    let actor = this.actor;
-    
-    //Retrive the item
-    let item = actor.items.get(event.currentTarget.dataset.itemid);
-    //Does nothing if no item has been found
-    if (item == null) return;
-    //Does nothing if the item is not a consumable
-    if (item.type != "consumable") return;
-    let itemData = item.system;
-    //Does nothing if the item is not tagged as activable
-    if (!itemData.isActivable) return;
+  const durationBefore = Number(itemData.ifActivable.duration);
+  const newDuration = durationBefore - 1;
 
-    let newDuration = itemData.ifActivable.duration - 1;
-    if (newDuration <= 0) {
-      this._onConsumableDeactivate(event);
-      return;
-    }
+  const durationUnit = itemData.ifActivable.durationUnit;
 
-    await item.update({
-      system: {
-        ifActivable: { duration: newDuration },
-      },
+
+  if (newDuration <= 0) {
+    await ChatOrc.createReduceDurationMessage({
+      actor,
+      itemName: item.name,
+      itemType: "Consommable",
+      durationBefore,
+      durationAfter: 0,
+      durationUnit:durationUnit,
+      deactivated: true,
     });
 
+    await this._onConsumableDeactivate(event);
     return;
   }
 
-  async _onCapacityReduceDuration(event) {
-    event.preventDefault();
-    let actor = this.actor;
+  await item.update({
+    "system.ifActivable.duration": newDuration,
+  });
 
-    //Retrive the item
-    let item = actor.items.get(event.currentTarget.dataset.itemid);
-    //Does nothing if no item has been found
-    if (item == null) return;
-    //Does nothing if the item is not a capacity
-    if (item.type != "capacity") return;
-    let itemData = item.system;
-    //Does nothing if the item is not tagged as activable
-    if (!itemData.activeEffect || !itemData.ifActivable.activated) return;
+  await ChatOrc.createReduceDurationMessage({
+    actor,
+    itemName: item.name,
+    itemType: "Consommable",
+    durationBefore,
+    durationAfter: newDuration,
+    durationUnit:durationUnit,
+    deactivated: false,
+  });
+}
 
-    let newDuration = itemData.ifActivable.durationEffective - 1;
-    if (newDuration <= 0) {
-      this._onCapacityDeactivate(event);
-      return;
-    }
-    await item.update({
-      system: {
-        ifActivable: { durationEffective: newDuration },
-      },
+async _onCapacityReduceDuration(event) {
+  event.preventDefault();
+
+  const actor = this.actor;
+  const item = actor.items.get(event.currentTarget.dataset.itemid);
+
+  if (!item || item.type !== "capacity") return;
+
+  const itemData = item.system;
+
+  if (!itemData.activeEffect || !itemData.ifActivable.activated) {
+    return;
+  }
+
+  const durationBefore = Number(itemData.ifActivable.durationEffective);
+  const newDuration = durationBefore - 1;
+  const durationUnit = itemData.ifActivable.durationUnit;
+
+  if (newDuration <= 0) {
+    await ChatOrc.createReduceDurationMessage({
+      actor,
+      itemName: item.name,
+      itemType: "Capacité",
+      durationBefore,
+      durationAfter: 0,
+      durationUnit:durationUnit,
+      deactivated: true,
     });
+
+    await this._onCapacityDeactivate(event);
     return;
   }
+
+  await item.update({
+    "system.ifActivable.durationEffective": newDuration,
+  });
+
+  await ChatOrc.createReduceDurationMessage({
+    actor,
+    itemName: item.name,
+    itemType: "Capacité",
+    durationBefore,
+    durationAfter: newDuration,
+    durationUnit:durationUnit,
+    deactivated: false,
+  });
+}
 
   _onCapacityChooseWeapon(event) {
     event.preventDefault();
@@ -1064,107 +1230,170 @@ export default class ORCCharacterSheet extends ActorSheet {
     return;
   }
 
-  async _onConsumableDeactivate(event) {
-    event.preventDefault();
-    let actor = this.actor;
 
-    //Retrive the item
-    let element = event.currentTarget;
-    let itemId = element.closest(".item").dataset.itemId;
-    let item = actor.items.get(itemId);
-    if (item.type != "consumable") return;
-    let itemData = item.system;
-    if (!itemData.isActivable || !itemData.ifActivable.activated) return;
+async _onConsumableDeactivate(event) {
+  event.preventDefault();
 
-    //Delete the item
-    await item.delete();
+  const actor = this.actor;
+  const element = event.currentTarget;
+  const itemId = element.closest(".item").dataset.itemId;
+  const item = actor.items.get(itemId);
 
+  if (!item || item.type !== "consumable") return;
+
+  const itemData = item.system;
+
+  if (!itemData.isActivable || !itemData.ifActivable.activated) {
     return;
   }
 
-  async _onCapacityActivate(event) {
-    event.preventDefault();
-    let actor = this.actor;
-    let item = actor.items.get(event.currentTarget.dataset.itemid);
-    //Does nothing if no item or no enchant has been found
-    if (item == null) return;
-    let itemData = item.system;
-    if (!itemData.activeEffect == null) return;
-    if (itemData.activated) return;
+  const itemName = item.name;
+  const duration = itemData.ifActivable.duration;
+
+  await item.delete();
+
+  await ChatOrc.createDeactivateCustomMessage({
+    actor,
+    itemName,
+    itemType: "Consommable",
+    duration,
+    effects: ["Objet activé supprimé de l'inventaire"],
+  });
+}
 
 
-    let newMP = actor.system.mp.value - itemData.costMP;
-    if (newMP < 0) return;
+async _onCapacityActivate(event) {
+  event.preventDefault();
 
-    let newSanguinCharges = actor.system.sanguinCharge.value;
+  const actor = this.actor;
+  const item = actor.items.get(event.currentTarget.dataset.itemid);
 
-    let rollFormula = itemData.ifActivable.sanguinChargeCost;
-    let rollData = {};
-    let rollOptions = {};
-    let roll = new Roll(rollFormula, rollData, rollOptions);
-    await  roll.evaluate();
-    newSanguinCharges += roll.total;
-    if (newSanguinCharges < 0) return;
+  if (!item) return;
 
-    rollFormula = itemData.ifActivable.sanguinChargeGain;
-    rollData = {}; 
-    rollOptions = {};
-    roll = new Roll(rollFormula, rollData, rollOptions);
-    await  roll.evaluate();
-    newSanguinCharges += roll.total;
+  const itemData = item.system;
 
-    if (newSanguinCharges < 0)
-      newSanguinCharges = 0;
+  if (!itemData.activeEffect) return;
+  if (itemData.ifActivable.activated) return;
 
-    actor.update({system: {mp: {value: newMP}}});
-    actor.update({system: {sanguinCharge: {value: newSanguinCharges}}});
+  // État initial
+  const mpBefore = actor.system.mp.value;
+  const chargesBefore = actor.system.sanguinCharge.value;
 
-    //Roll the effective duration
-    let durationEffective = 0;
-    if (itemData.ifActivable.duration != "") {
-      let durationFormula = itemData.ifActivable.duration;
-      if (typeof durationFormula !== "string")
-        durationFormula = durationFormula.toString();
-      let roll = new Roll(durationFormula);
-      await  roll.evaluate();
-      durationEffective = roll.total;
-      //If the formula is not trivial, display the roll in the chat
-      if (durationFormula.includes("d") || durationFormula.includes("+"))
-        ChatOrc.RollToSimpleCustomMessage({ roll: roll });
-    }
+  // Vérifier le coût en MP
+  const mpCost = Number(itemData.costMP) || 0;
+  const newMP = mpBefore - mpCost;
 
-    item.update({
-      system: {
-        ifActivable: { activated: true, durationEffective: durationEffective },
-      },
+  if (newMP < 0) return;
+
+  // Jet de coût en charges sanguines
+  let rollFormula = String(itemData.ifActivable.sanguinChargeCost);
+  let roll = await new Roll(rollFormula).evaluate();
+  const chargesCostRoll = roll.total;
+
+  let newSanguinCharges = chargesBefore + chargesCostRoll;
+
+  if (newSanguinCharges < 0) return;
+
+  // Jet de gain en charges sanguines
+  rollFormula = String(itemData.ifActivable.sanguinChargeGain);
+  roll = await new Roll(rollFormula).evaluate();
+  const chargesGainRoll = roll.total;
+
+  newSanguinCharges += chargesGainRoll;
+
+  if (newSanguinCharges < 0) {
+    newSanguinCharges = 0;
+  }
+
+  // Calcul de la durée effective
+  let durationEffective = 0;
+  let durationFormula = null;
+
+  if (
+    itemData.ifActivable.duration !== "" &&
+    itemData.ifActivable.duration != null
+  ) {
+    durationFormula = String(itemData.ifActivable.duration);
+
+    const durationRoll = await new Roll(durationFormula).evaluate();
+    durationEffective = durationRoll.total;
+  }
+
+  // Mise à jour du personnage
+  await actor.update({
+    "system.mp.value": newMP,
+    "system.sanguinCharge.value": newSanguinCharges,
+  });
+
+  // Activation de la capacité
+  await item.update({
+    "system.ifActivable.activated": true,
+    "system.ifActivable.durationEffective": durationEffective,
+  });
+
+  // Message de chat
+  await ChatOrc.createActivateCapacityMessage({
+    actor,
+    actorName: actor.name,
+    itemName: item.name,
+
+    mpBefore,
+    mpAfter: actor.system.mp.value,
+    mpCost,
+
+    chargesBefore,
+    chargesCostRoll,
+    chargesGainRoll,
+    chargesAfter: actor.system.sanguinCharge.value,
+
+    duration: durationEffective,
+    durationFormula,
+    durationUnit : itemData.ifActivable.durationUnit,
+    hasDuration: Boolean(durationFormula),
+  });
+}
+
+
+async _onCapacityDeactivate(event) {
+  event.preventDefault();
+
+  const actor = this.actor;
+  const element = event.currentTarget;
+  const itemId = element.closest(".item").dataset.itemId;
+  const item = actor.items.get(itemId);
+
+  if (!item || item.type !== "capacity") return;
+
+  const itemData = item.system;
+
+  if (!itemData.activeEffect || !itemData.ifActivable.activated) {
+    return;
+  }
+
+  const effects = [];
+
+  if (itemData.ifActivable.rmAllSanguinChargeWhenDeactivated) {
+    await actor.update({
+      "system.sanguinCharge.value": 0,
     });
 
-    return;
+    effects.push("Toutes les charges sanguines ont été supprimées");
   }
 
-  async _onCapacityDeactivate(event) {
-    event.preventDefault();
-    let actor = this.actor;
-    //Retrive the item
-    let element = event.currentTarget;
-    let itemId = element.closest(".item").dataset.itemId;
-    let item = actor.items.get(itemId);
+  await item.update({
+    "system.ifActivable.activated": false,
+  });
 
-    if (item.type != "capacity") return;
-    let itemData = item.system;
-    if (!itemData.activeEffect || !itemData.ifActivable.activated) return;
+  effects.push("Capacité désactivée");
 
-    if (itemData.ifActivable.rmAllSanguinChargeWhenDeactivated)
-      actor.update({system: {sanguinCharge: {value: 0}}});
-    
-    //Deactivate the item
-    item.update({
-      system: {
-        ifActivable: { activated: false },
-      },
-    });
-    return;
-  }
+  await ChatOrc.createDeactivateCustomMessage({
+    actor,
+    itemName: item.name,
+    itemType: "Capacité",
+    duration: itemData.ifActivable.duration ?? null,
+    effects,
+  });
+}
 
   async consumeOnRoll({ onRoll = false, onAttack = false, onSpell = false }) {
     let actor = this.actor;
@@ -1372,91 +1601,179 @@ export default class ORCCharacterSheet extends ActorSheet {
   }
 
   async newDay() {
-    let actor = this.actor;
-    let data = await this.getData()
-    let items = data.items;
+    const actor = this.actor;
 
-    //Update the owned items
-    for (let [key, it] of Object.entries(items)) {
-      let item = actor.items.get(it._id);
-      //Deactivate and reset enchants
-      if (item.system.enchant != null) {
-        if (
-          item.system.enchant.activeEffect &&
-          item.system.enchant.use.perDay > 0
-        ) {
-          item.update(
-            {
-              system: {
-                enchant: {
-                  use: { available: item.system.enchant.use.perDay },
-                  activated: item.system.enchant.use.disableOnNewDay
-                    ? false
-                    : true,
-                },
-              },
-            },
-          );
+    const report = {
+      actorName: actor.name,
+      food: {},
+      drink: {},
+      mp: {},
+      disabledItems: [],
+      activeItems: [],
+      capacities: [],
+      consumables: [],
+      other: [],
+    };
+
+    // Food
+    const food = actor.system.nutrition.foodDay;
+    const foodNeeded = actor.system.nutrition.foodNeededDay.value;
+
+    report.food = {
+      consumed: food,
+      needed: foodNeeded,
+      sufficient: food >= foodNeeded,
+      deficit: Math.max(0, foodNeeded - food),
+      remaining: food >= foodNeeded ? 0 : food - foodNeeded,
+    };
+
+    // Drink
+    const drink = actor.system.nutrition.drinkDay;
+    const drinkNeeded = actor.system.nutrition.drinkNeededDay.value;
+
+    report.drink = {
+      consumed: drink,
+      needed: drinkNeeded,
+      sufficient: drink >= drinkNeeded,
+      deficit: Math.max(0, drinkNeeded - drink),
+      remaining: drink >= drinkNeeded ? 0 : drink - drinkNeeded,
+    };
+
+    // MP
+    const mpBefore = actor.system.mp.value;
+    const mpMax = actor.system.mp.valueMax;
+    const mpRecovered = Math.min(10, Math.max(0, mpMax - mpBefore));
+    const mpAfter = mpBefore + mpRecovered;
+
+    report.mp = {
+      before: mpBefore,
+      recovered: mpRecovered,
+      after: mpAfter,
+      max: mpMax,
+    };
+
+    const updates = [];
+    const deletions = [];
+
+    for (const item of actor.items) {
+      const system = item.system;
+
+      // Enchantments
+      if (
+        system.enchant &&
+        system.enchant.activeEffect &&
+        system.enchant.use?.perDay > 0
+      ) {
+        const enchant = system.enchant;
+        const shouldDisable = enchant.use.disableOnNewDay;
+        const usesBefore = enchant.use.available;
+        const usesPerDay = enchant.use.perDay;
+
+        updates.push({
+          _id: item.id,
+          "system.enchant.use.available": usesPerDay,
+          "system.enchant.activated": !shouldDisable,
+        });
+
+        const entry = {
+          itemName: item.name,
+          enchantName: enchant.name,
+          usesBefore,
+          usesAfter: usesPerDay,
+          usesPerDay,
+          disabled: shouldDisable,
+        };
+
+        if (shouldDisable && enchant.activated) {
+          report.disabledItems.push(entry);
+        } else if (!shouldDisable) {
+          report.activeItems.push(entry);
+        } else {
+          report.other.push({
+            name: item.name,
+            message: "Enchantement réinitialisé et désactivé",
+            usesBefore,
+            usesAfter: usesPerDay,
+            usesPerDay,
+          });
         }
       }
-      //Deactivate capacities
+
+      // Capacities
       if (
-        item.type == "capacity" &&
-        item.system.activeEffect &&
-        item.system.ifActivable.activated
+        item.type === "capacity" &&
+        system.activeEffect &&
+        system.ifActivable?.activated
       ) {
-        item.update(
-          {
-            system: {
-              ifActivable: {
-                activated: item.system.ifActivable.disableOnNewDay
-                  ? false
-                  : true,
-              },
-            },
-          },
-        );
+        const shouldDisable = system.ifActivable.disableOnNewDay;
+
+        if (shouldDisable){
+          updates.push({
+            _id: item.id,
+            "system.ifActivable.activated": false,
+          });
+        }
+
+        const entry = {
+          name: item.name,
+          disabled: shouldDisable,
+        };
+
+        if (shouldDisable) {
+          report.disabledItems.push(entry);
+        } else {
+          report.activeItems.push(entry);
+        }
+
+        report.capacities.push(entry);
       }
 
-      //Delete activated consumables
-      if (
-        item.type == "consumable" &&
-        item.system.ifActivable.activated &&
-        item.system.ifActivable.disableOnNewDay
-      ) {
-        item.delete();
+
+      // Consumables to delete
+      if (item.type === "consumable") {
+        const activable = system.ifActivable;
+
+        if (
+          activable?.activated &&
+          activable?.disableOnNewDay
+        ) {
+          report.consumables.push({
+            name: item.name,
+            deleted: true,
+          });
+
+          deletions.push(item);
+        }
       }
     }
 
-    //Update the actor
-    //Add 10 MP
-    const valueMP = actor.system.mp.value;
-    const limitValueMP = actor.system.mp.valueMax;
-    let newValueMP = valueMP + 10;
-    if (newValueMP > limitValueMP) newValueMP = limitValueMP;
+    console.log("Consumables to delete:", report.consumables);
 
-    //Update the foods and drinks
-    const food = actor.system.nutrition.foodDay;
-    const foodNeeded = actor.system.nutrition.foodNeededDay.value;
-    let newFood = food >= foodNeeded ? 0 : food - foodNeeded;
-    const drink = actor.system.nutrition.drinkDay;
-    const drinkNeeded = actor.system.nutrition.drinkNeededDay.value;
-    let newDrink = drink >= drinkNeeded ? 0 : drink - drinkNeeded;
+    // Update items
+    if (updates.length) {
+      await actor.updateEmbeddedDocuments("Item", updates);
+    }
 
-    //Do the maj
-    actor.update({
-      system: {
-        mp: { value: newValueMP },
-        nutrition: {
-          foodDay: newFood,
-          drinkDay: newDrink,
-          tips: {value: 0},
-        },
-      },
+    // Delete consumables
+    if (deletions.length) {
+      await actor.deleteEmbeddedDocuments(
+        "Item",
+        deletions.map(item => item.id)
+      );
+    }
+
+    // Update the actor
+    await actor.update({
+      "system.mp.value": mpAfter,
+      "system.nutrition.foodDay": report.food.remaining,
+      "system.nutrition.drinkDay": report.drink.remaining,
+      "system.nutrition.tips.value": 0,
     });
 
-    return;
+    // Display on chat
+    await ChatOrc.createNewDayCustomMessage(report);
   }
+
 
   /**
    * Calculate the actor derived values

@@ -1,17 +1,35 @@
-<div class="orc attack-roll dice-roll">
-  <table class="results weapon-damage">
-  <tr class="title"><th>{{titleLimited}}</th></tr>
-  {{#if (eq ammoTag 2)}}
-    <tr class="ammo"><td>{{ammo}}</td></tr>
-  {{else}}
-      <tr class="dice-total">
-        <td>{{roll.total}}</td>
-      </tr>
-      {{#if effect}}
-        <tr class="effects">
-          <td>{{effect}}</td>
-        </tr>
+
+<div class="orc attack-roll dice-roll weapon-damage-card">
+  <header class="damage-header">
+    <div class="damage-icon">⚔</div>
+    <div class="damage-heading">
+      <h3 class="damage-title">{{titleLimited}}</h3>
+      {{#if (eq ammoTag 2)}}
+        <span class="damage-subtitle">Munitions</span>
+      {{else}}
+        <span class="damage-subtitle">Résultat de l'attaque</span>
       {{/if}}
-    </table>
+    </div>
+  </header>
+
+  {{#if (eq ammoTag 2)}}
+    <div class="ammo-notice">
+      <span class="ammo-icon">➤</span>
+      <span>{{ammo}}</span>
+    </div>
+  {{else}}
+    <section class="damage-result">
+      <div class="damage-total">
+        <span class="damage-total-label">Dégâts infligés</span>
+        <strong>{{roll.total}}</strong>
+      </div>
+
+      {{#if effect}}
+        <div class="damage-effects">
+          <span class="effect-icon">✦</span>
+          <span>{{effect}}</span>
+        </div>
+      {{/if}}
+    </section>
   {{/if}}
 </div>

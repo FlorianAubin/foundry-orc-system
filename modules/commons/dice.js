@@ -303,180 +303,187 @@ export function StatusResistRoll({ actor = null, modif = 0 }) {
   );
 }
 
+
 export async function DamageRoll({
   actor = null,
   weapon = null,
-  attribute = null,
+  attribute = {},
   critical = null,
   extraMessageData = {},
 } = {}) {
-  //Init
   let ammo = null;
   let rollFormula = "";
-  extraMessageData.effect = "";
   let rollData = {};
-  let rollOptions = {
-    visibleByPlayers: actor == null ? 1 : actor.ownership.default,
-  };
   let precise = false;
   let damageMin = 0;
 
-  //If neither an actor or a weapon is provided, exit the function
-  if (!actor && !weapon) {
-    return 0;
+  extraMessageData.effect = extraMessageData.effect ?? "";
+
+  const rollOptions = {
+    visibleByPlayers: actor == null ? 1 : actor.ownership.default,
+  };
+
+  // Aucun acteur ni aucune arme : quitter
+  if (!actor && !weapon) return 0;
+
+  // Récupérer l'arme depuis son identifiant
+  if (actor && attribute?.weaponid && !weapon) {
+    weapon = actor.items.find(
+      item => item.type === "weapon" &&
+              item.id === attribute.weaponid
+    );
   }
 
-  //If an actor and a weapon id is provided, recover his weapon
-  if (actor && attribute.weaponid) {
-    //Recover the weapon
-    weapon = actor.items
-      .filter(function (item) {
-        return item.type == "weapon";
-      })
-      .filter(function (item) {
-        return item._id == attribute.weaponid;
-      })[0];
-  }
-
-  //If no weapon is provide, simply do a bonus damage roll
+  // Dégâts bonus sans arme
   if (!weapon) {
     extraMessageData.title = game.i18n.format(
       "orc.dialog.damageBonus.title",
       {}
     );
-    rollFormula += actor.system.damageBonus.value;
+
+    rollFormula += String(actor.system.damageBonus.value);
   } else {
-    //Add the weapon to the formula
+    // Formule et effets de l'arme
     rollFormula += weapon.system.damage;
-    //Add the weapon effects to the message
-    extraMessageData.effect += weapon.system.effect;
+    extraMessageData.effect += weapon.system.effect ?? "";
+    extraMessageData.range =
+      extraMessageData.range ?? weapon.system.range ?? "";
+
     precise = precise || weapon.system.precise;
 
-    //If it is an actor that does the roll, add the extra damage and effects
     if (actor) {
-      //If the weapon use an ammo, recover it
       if (weapon.system.useAmmo) {
-        ammo = actor.items
-          .filter(function (item) {
-            return item.type == "ammo";
-          })
-          .filter(function (item) {
-            return item._id == weapon.system.ammo;
-          })[0];
-        if (ammo == null) return;
+        // Récupérer les munitions
+        ammo = actor.items.find(
+          item => item.type === "ammo" &&
+                  item.id === weapon.system.ammo
+        );
 
-        const ammoStock = ammo.system.stock;
-        let maj;
-        if (ammoStock > 0) {
-          if (ammo.system.damage)
-            //Add the ammo to the formula
-            rollFormula += "+" + ammo.system.damage;
-          //Add the weapon effects to the message
-          if (ammo.system.effect)
-            extraMessageData.effect += " " + ammo.system.effect;
-          precise = precise || ammo.system.precise;
-          //Remove one ammo
-          if(attribute.nammo == null)
-            maj = { system: { stock: ammoStock - 1 } };
-          else
-            maj = { system: { stock: ammoStock - attribute.nammo } };
-          ammo.update(maj);
-          //Add the ammo information to the message
-          extraMessageData.ammoTag = 1;
-          extraMessageData.ammo = game.i18n.format(
-            "orc.dialog.damageFromWeapon.ammo",
-            {
-              ammoName: ammo.name,
-            }
-          );
+        if (!ammo) return 0;
+
+        const ammoStock = Number(ammo.system.stock ?? 0);
+        const ammoCost = Number(attribute?.nammo ?? 1);
+
+        extraMessageData.showAmmoAfter = true;
+
+        // Sécurité : ne pas tirer avec un stock insuffisant
+        if (ammoStock < ammoCost) return 0;
+
+        // Ajouter les dégâts et effets des munitions
+        if (ammo.system.damage) {
+          rollFormula += "+" + ammo.system.damage;
         }
-        //Add the not enough ammo message
-        else {
-          extraMessageData.ammoTag = 2;
-          extraMessageData.ammo = game.i18n.format(
-            "orc.dialog.damageFromWeapon.notEnoughAmmo",
-            {
-              ammoName: ammo.name,
-            }
-          );
+
+        if (ammo.system.effect) {
+          extraMessageData.effect += " " + ammo.system.effect;
         }
-      }
-      //If the weapon don't use ammo
-      else {
-        //Tag the message as "no ammo used"
+
+        precise = precise || ammo.system.precise;
+
+        // Consommer les munitions une seule fois
+        const ammoAfter = ammoStock - ammoCost;
+
+        await ammo.update({
+          "system.stock": ammoAfter,
+        });
+
+        // Données de la carte
+        extraMessageData.ammoAfter = ammoAfter;
+        extraMessageData.ammoTag = 1;
+        extraMessageData.ammo = game.i18n.format(
+          "orc.dialog.damageFromWeapon.ammo",
+          {
+            ammoName: ammo.name,
+          }
+        );
+      } else {
+        // Arme sans munitions
         extraMessageData.ammoTag = 0;
-        //Add the actor damage bonus
-        if (actor.system.damageBonus.value)
+        extraMessageData.showAmmoAfter = false;
+
+        if (actor.system.damageBonus.value) {
           rollFormula += "+" + actor.system.damageBonus.value;
+        }
       }
     }
 
-    //If precise attack, set a min damage
+    // Dégâts minimum d'une arme précise
     if (precise) {
-      //Split the formula between the "+"
-      let formulaSplitPlus = rollFormula.split("+");
-      for (let i = 0; i < formulaSplitPlus.length; i++) {
-        //Split the sub-formula related to dices between the "d"
-        if (formulaSplitPlus[i].includes("d")) {
-          let formulatSplitDice = formulaSplitPlus[i].split("d");
+      const formulaSplitPlus = rollFormula.split("+");
+
+      for (const part of formulaSplitPlus) {
+        if (part.includes("d")) {
+          const [numberOfDice, diceFaces] = part.split("d");
+
           damageMin +=
-            parseFloat(formulatSplitDice[0]) *
-            (Math.floor(parseFloat(formulatSplitDice[1]) / 2) + 0.5);
-        } else damageMin += parseFloat(formulaSplitPlus[i]);
+            parseFloat(numberOfDice) *
+            (Math.floor(parseFloat(diceFaces) / 2) + 0.5);
+        } else {
+          damageMin += parseFloat(part);
+        }
       }
+
       damageMin = Math.floor(damageMin);
     }
 
-    //If critical -> deal max damage
+    // Dégâts maximum en cas de critique
     if (critical) {
-      //Split the formula between the "+"
-      let formulaSplitPlus = rollFormula.split("+");
-      for (let i = 0; i < formulaSplitPlus.length; i++) {
-        //Split the sub-formula related to dices between the "d"
-        if (formulaSplitPlus[i].includes("d")) {
-          let formulatSplitDice = formulaSplitPlus[i].split("d");
-          damageMin +=
-            parseFloat(formulatSplitDice[0]) * parseFloat(formulatSplitDice[1]);
-        } else damageMin += parseFloat(formulaSplitPlus[i]);
+      let criticalDamage = 0;
+
+      for (const part of rollFormula.split("+")) {
+        if (part.includes("d")) {
+          const [numberOfDice, diceFaces] = part.split("d");
+          criticalDamage +=
+            parseFloat(numberOfDice) * parseFloat(diceFaces);
+        } else {
+          criticalDamage += parseFloat(part);
+        }
       }
+
+      damageMin = Math.max(damageMin, criticalDamage);
     }
 
-    //Define the message title
+    // Titres du message
     extraMessageData.titleLimited = game.i18n.format(
       "orc.dialog.damageFromWeapon.titleLimited",
       {
-        actorName: actor == null ? "XXX" : actor.name,
+        actorName: actor?.name ?? "XXX",
       }
     );
+
     extraMessageData.title = game.i18n.format(
       "orc.dialog.damageFromWeapon.title",
       {
-        actorName: actor == null ? "XXX" : actor.name,
+        actorName: actor?.name ?? "XXX",
         weaponName: weapon.name,
       }
     );
   }
 
-  //Do the roll
-  let roll = new Roll(rollFormula, rollData, rollOptions);
-  await roll.evaluate()
-  //Apply the min damage
-  if (roll._total < damageMin) roll._total = damageMin;
+  // Effectuer le jet
+  const roll = new Roll(rollFormula, rollData, rollOptions);
+  await roll.evaluate();
 
-  //Display the message
-  //Display a limited message if the player is not allowed to see the form
+  // Appliquer les dégâts minimums
+  if (roll.total < damageMin) {
+    roll._total = damageMin;
+  }
+
+  // Message limité pour les joueurs sans permission
   if (rollOptions.visibleByPlayers == 0) {
-    Chat.DamageRollToCustomLimitedMessage(roll, {
+    await Chat.DamageRollToCustomLimitedMessage(roll, {
       ...extraMessageData,
     });
   }
-  Chat.DamageRollToCustomFullMessage(roll, {
+
+  // Message complet
+  await Chat.DamageRollToCustomFullMessage(roll, {
     ...extraMessageData,
   });
 
-
   return roll.total;
 }
+
 
 export async function BleedRoll({
   actor = null,
@@ -571,53 +578,55 @@ export async function  BurnRoll({ actor = null, extraMessageData = {} }) {
 
   return roll.total;
 }
-
 export async function EnchantRoll({
   actor = null,
   item = null,
   attribute = null,
   extraMessageData = {},
 } = {}) {
-  //If neither an actor or a item is provided, exit the function
-  if (!actor && !item) {
-    return 0;
+  if (!actor && !item) return 0;
+
+  // Récupération de l'objet depuis la fiche du personnage
+  if (actor && attribute?.itemid) {
+    item = actor.items.get(attribute.itemid);
   }
 
-  //If an actor and a item id is provided, recover his weapon
-  if (actor && attribute.itemid) {
-    //Recover the item
-    item = actor.items.filter(function (item) {
-      return item._id == attribute.itemid;
-    })[0];
-  }
-
-  //No item?
   if (!item) return 0;
 
-  let enchant = item.system.enchant;
-  let rollFormula = enchant.roll;
-  let rollData = {};
-  let rollOptions = {};
-  let roll = new Roll(rollFormula, rollData, rollOptions);
-  await roll.evaluate()
+  const enchant = item.system.enchant;
+  if (!enchant?.roll) return 0;
+
+  const rollFormula = enchant.roll;
+  const roll = await new Roll(rollFormula).evaluate();
+
+  const messageData = {
+    ...extraMessageData,
+    itemName: item.name,
+    enchantName: enchant.name,
+    rollFormula,
+    rollTotal: roll.total,
+  };
 
   if (actor) {
-    extraMessageData.title = game.i18n.format("orc.dialog.enchant.title", {
-      charName: actor.name,
-      enchantName: enchant.name,
-    });
+    messageData.title = game.i18n.format(
+      "orc.dialog.enchant.title",
+      {
+        charName: actor.name,
+        enchantName: enchant.name,
+      }
+    );
+    messageData.actorName = actor.name;
   } else {
-    extraMessageData.title = game.i18n.format(
+    messageData.title = game.i18n.format(
       "orc.dialog.enchant.titleNoActor",
       {
         enchantName: enchant.name,
       }
     );
+    messageData.actorName = null;
   }
 
-  Chat.EnchantRollToCustomMessage(roll, {
-    ...extraMessageData,
-  });
+  await Chat.EnchantRollToCustomMessage(roll, messageData);
 
   return roll.total;
 }
